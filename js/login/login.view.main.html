@@ -1,3 +1,57 @@
 <div ng-clear>
-	<a href="#/create">Create Account</a>
+	<div class='container'>
+		<div class='row'>
+			<div class='col-md-offset-4 col-md-4'>
+				<br>
+				<div class="panel panel-default">
+					<div class="panel-body">
+
+						<!--Need to block HTML5 validation so it does not conflict with angular-->
+						<form name='loginForm' novalidate>
+
+							<!--Highlight input only when value is invalid and input is dirty-->
+							<div class='form-group' ng-class='{"has-error": !loginForm.username.$valid && loginForm.username.$dirty}'>
+								<label for='username'>Username</label>
+
+								<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
+								<input type='text' ng-model='username' ng-pattern='/^[a-zA-Z0-9_-]*$/' class='form-control' id='username' name='username' required>
+
+								<!--Show error messages for username-->
+								<!--Invalid username message, if required error exists, show that instead-->
+								<div class='alert alert-danger' ng-show='loginForm.username.$error.pattern && !loginForm.username.$error.required'>
+									Username can only contain alphanumeric characters, dashes, and underscores
+								</div>
+
+								<!--Required error message, only show when dirty-->
+								<div class='alert alert-danger' ng-show='loginForm.username.$error.required && loginForm.username.$dirty'>
+									Username is required
+								</div>
+							</div>
+
+							<!--Input error for password-->
+							<div class='form-group' ng-class='{"has-error": !loginForm.password.$valid && loginForm.password.$dirty}'>
+								<label for='password'>Password</label>
+								<input type='password' class='form-control' ng-model='password' id='password' name='password' required>
+
+								<!--required error message-->
+								<div class='alert alert-danger' ng-show='loginForm.password.$error.required && loginForm.password.$dirty'>
+									Password is required
+								</div>
+							</div>
+
+							<div class='form-group pull-right'>
+								<a href="#/create">Create Account</a>
+							</div>
+							
+							<div class='form-group'>
+								<!--Pass in loginForm.$valid to see if input fields are empty-->
+								<button class='btn btn-default' ng-click='login(loginForm.$valid)'>Log In</button>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
