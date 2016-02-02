@@ -18,14 +18,14 @@
 
 								<!--Show error messages for username-->
 								<!--Invalid username message, if required error exists, show that instead-->
-								<div class='alert alert-danger' ng-show='loginForm.username.$error.pattern && !loginForm.username.$error.required'>
+								<error-message ng-show='loginForm.username.$error.pattern && !loginForm.username.$error.required'>
 									Username can only contain alphanumeric characters, dashes, and underscores
-								</div>
+								</error-message>
 
 								<!--Required error message, only show when dirty-->
-								<div class='alert alert-danger' ng-show='loginForm.username.$error.required && loginForm.username.$dirty'>
+								<error-message ng-show='loginForm.username.$error.required && loginForm.username.$dirty'>
 									Username is required
-								</div>
+								</error-message>
 							</div>
 
 							<!--Input error for password-->
@@ -34,9 +34,9 @@
 								<input type='password' class='form-control' ng-model='password' id='password' name='password' required>
 
 								<!--required error message-->
-								<div class='alert alert-danger' ng-show='loginForm.password.$error.required && loginForm.password.$dirty'>
+								<error-message ng-show='loginForm.password.$error.required && loginForm.password.$dirty'>
 									Password is required
-								</div>
+								</error-message>
 							</div>
 
 							<div class='form-group pull-right'>
@@ -47,7 +47,6 @@
 								<!--Pass in loginForm.$valid to see if input fields are empty-->
 								<button class='btn btn-default' ng-click='login(loginForm.$valid)'>Log In</button>
 							</div>
-
 						</form>
 					</div>
 				</div>
