@@ -15,7 +15,13 @@
 						field.$setDirty()
 					})
 				}
+				// $scope.loginForm.username.$setValidity('auth', false)
+			}
 
+			$scope.resetAuthError = function(element) {
+				if (element.$error.auth) {
+					element.$setValidity('auth', true)
+				}
 			}
 			
 		})
