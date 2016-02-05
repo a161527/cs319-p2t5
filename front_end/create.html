@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+</head>
+<body>
+    <div ui-view>
+        <div class="form-group">
+            <label for="create-object" class="col-sm-2 control-label">Create new:</label>
+            <div class="col-sm-10">
+                <select id="create-object" class="form-control" onchange="getCreateForm();">
+                    <option>Conference</option>
+                    <option>Event</option>
+                    <option>Flight</option>
+                    <option>Boarding Accommodation</option>
+                    <option>Transportation</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <br>
+        <form id="create-conference-form" class="create-form">
+            <div class="form-group">
+                <label for="conference-name" class="col-sm-2 control-label">Conference Name:</label>
+                <div class="col-sm-10">
+                    <input name="conference-name"></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="conference-start" class="col-sm-2 control-label">Start:</label>
+                <div class="col-sm-10">
+                    <input type="date" name="conference-start"></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="conference-finish" class="col-sm-2 control-label">Finish:</label>
+                <div class="col-sm-10">
+                    <input type="date" name="conference-finish"></input>
+                </div>
+            </div>
+        </form>
+        <form id="create-event-form" class="create-form" style="display:none;">
+            <div class="form-group">
+                <label for="event-name" class="col-sm-2 control-label">Event Name:</label>
+                <div class="col-sm-10">
+                    <input name="event-name"></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="event-date" class="col-sm-2 control-label">Date:</label>
+                <div class="col-sm-10">
+                    <input type="date" name="event-start"></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="event-time" class="col-sm-2 control-label">Time:</label>
+                <div class="col-sm-10">
+                    <input type="time" name="event-finish"></input>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script type='text/javascript' src='lib/jquery-2.2.0.min.js'></script>
+    <script type='text/javascript' src='lib/angular.min.js'></script>
+    <script type='text/javascript' src='lib/angular-ui-router.min.js'></script>
+    <script type='text/javascript' src='lib/bootstrap.min.js'></script>
+
+    <script type='text/javascript' src='js/app/app.module.js' defer></script>
+    <script type='text/javascript' src='js/app/app.config.js' defer></script>
+
+    <script type='text/javascript' src='js/login/login.controller.js' defer></script>
+    <script type='text/javascript' src='js/login/login.service.js' defer></script>
+    <script type='text/javascript' src='js/login/login.directive.errorMessage.js' defer></script>
+
+    <script type="text/javascript">
+        function getCreateForm() {
+            var obj = $('#create-object option:selected').html();
+            $('.create-form').hide();
+
+            switch(obj.toLowerCase()) {
+                case 'conference':
+                    $('#create-conference-form').show();
+                    break;
+                case 'event':
+                    $('#create-event-form').show();
+                    break;
+                default:
+                    window.alert('TBD');
+            }
+        }
+    </script>
+
+</body>
+</html>
