@@ -6,8 +6,8 @@
 <body>
     <div ui-view>
         <div class="form-group">
-            <label for="create-object" class="col-sm-2 control-label">Create new:</label>
-            <div class="col-sm-10">
+            <label for="create-object" class="control-label">Create new:</label>
+            
                 <select id="create-object" class="form-control" onchange="getCreateForm();">
                     <option>Conference</option>
                     <option>Event</option>
@@ -21,42 +21,30 @@
         <br>
         <form id="create-conference-form" class="create-form">
             <div class="form-group">
-                <label for="conference-name" class="col-sm-2 control-label">Conference Name:</label>
-                <div class="col-sm-10">
-                    <input name="conference-name"></input>
-                </div>
+                <label for="conference-name" class="control-label">Conference Name:</label>
+                <input type="text" name="conference-name" class="form-control"></input> 
             </div>
             <div class="form-group">
-                <label for="conference-start" class="col-sm-2 control-label">Start:</label>
-                <div class="col-sm-10">
-                    <input type="date" name="conference-start"></input>
-                </div>
+                <label for="conference-start" class="control-label">Start:</label>
+                <input type="date" name="conference-start" class="form-control"></input>
             </div>
             <div class="form-group">
-                <label for="conference-finish" class="col-sm-2 control-label">Finish:</label>
-                <div class="col-sm-10">
-                    <input type="date" name="conference-finish"></input>
-                </div>
+                <label for="conference-finish" class="control-label">Finish:</label>
+                <input type="date" name="conference-finish" class="form-control"></input>
             </div>
         </form>
         <form id="create-event-form" class="create-form" style="display:none;">
             <div class="form-group">
-                <label for="event-name" class="col-sm-2 control-label">Event Name:</label>
-                <div class="col-sm-10">
-                    <input name="event-name"></input>
-                </div>
+                <label for="event-name" class="control-label">Event Name:</label>
+                <input type="text" name="event-name" class="form-control"></input>
             </div>
             <div class="form-group">
-                <label for="event-date" class="col-sm-2 control-label">Date:</label>
-                <div class="col-sm-10">
-                    <input type="date" name="event-start"></input>
-                </div>
+                <label for="event-date" class="control-label">Date:</label>
+                <input type="date" name="event-start" class="form-control"></input>
             </div>
             <div class="form-group">
-                <label for="event-time" class="col-sm-2 control-label">Time:</label>
-                <div class="col-sm-10">
-                    <input type="time" name="event-finish"></input>
-                </div>
+                <label for="event-time" class="control-label">Time:</label>
+                <input type="time" name="event-finish" class="form-control"></input>
             </div>
         </form>
     </div>
