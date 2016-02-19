@@ -13,7 +13,8 @@
 
 				.state('loggedIn', {
 					url: '/create',
-					templateUrl: 'js/login/login.view.create.html'
+					templateUrl: 'js/login/login.view.create.html',
+					controller: 'createAcctCtrl'
 				})
 
 		})
