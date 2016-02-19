@@ -1,13 +1,12 @@
 <div class='container'>
 	<br>
 	<div class='row'>
-		<form name='createAcctForm' novalidate>
 
-			<div class='col-md-offset-3 col-md-6'>
-				<h4>Account Information</h4>
-				<div class="panel panel-default">
-					<div class="panel-body">
-
+		<div class='col-md-offset-3 col-md-6'>
+			<h4>Account Information</h4>
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<form name='createAcctForm' novalidate>
 						<div class='row'>
 							<div class='col-md-6'>
 								<div class='form-group' ng-class='{"has-error": !createAcctForm.username.$valid && createAcctForm.username.$dirty}'>
@@ -28,11 +27,11 @@
 							</div>
 
 							<div class='col-md-6'>
-								<div class='form-group' ng-class='{"has-error": createAcctForm.email.$error.email, "has-success": createAcctForm.email.$valid}'>
+								<div class='form-group' ng-class='{"has-error": createAcctForm.email.$error.email}'>
 									<label for='email'>Email</label>
 
 									<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
-									<input type='email' ng-model='email' ng-model-options='{updateOn: "blur"}' class='form-control' id='email' name='email' required>
+									<input type='email' ng-model='email' class='form-control' id='email' name='email'>
 									
 									<error-message ng-show='createAcctForm.email.$error.email && createAcctForm.email.$touched'>
 										Not a valid email
@@ -47,7 +46,7 @@
 									<label for='password'>Password</label>
 
 									<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
-									<input type='password' ng-model='password'  ng-model-options='{updateOn: "blur"}' ng-minlength='8' class='form-control' id='password' name='password' required>
+									<input type='password' ng-model='password' ng-change='checkPasswordMatch(createAcctForm.confirmPassword)' ng-minlength='8' class='form-control' id='password' name='password' required>
 
 									<!--Show error messages for password-->
 									<!--Invalid password message, if required error exists, show that instead-->
@@ -63,18 +62,21 @@
 							</div>
 
 							<div class='col-md-6'>
-								<div class='form-group'>
+								<div class='form-group' ng-class='{"has-error": !createAcctForm.confirmPassword.$valid && createAcctForm.confirmPassword.$dirty}'>
 									<label for='confirmPassword'>Confirm Password</label>
 
 									<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
-									<input type='password' ng-model='confirmPassword'  ng-model-options='{updateOn: "blur"}' ng-minlength='8' class='form-control' id='confirmPassword' name='confirmPassword' required>
+									<input type='password' ng-model='confirmPassword' ng-change='checkPasswordMatch(createAcctForm.confirmPassword)' class='form-control' id='confirmPassword' name='confirmPassword' required>
 
 									<!--Show error messages for confirmPassword-->
 									<!--Invalid confirmPassword message, if required error exists, show that instead-->
-									<error-message ng-hide='true'>
+									<error-message ng-show='createAcctForm.confirmPassword.$error.pwMatch && !createAcctForm.confirmPassword.$error.required'>
 										Password does not match
 									</error-message>
-									
+
+									<error-message ng-show='createAcctForm.confirmPassword.$error.required && createAcctForm.confirmPassword.$dirty'>
+										Password confirmation is required
+									</error-message>
 								</div>
 							</div>
 						</div>
@@ -94,7 +96,13 @@
 								</div>
 							</div>
 						</div>
+					</form>
 
+					<div class='form-group'>
+						<label class='checkbox-inline'><input type='checkbox' ng-model='transfer'>Transfer account?</label>
+					</div>
+
+					<div ng-hide='transfer'>
 						<div class='row'>
 							<div class='col-md-8'>
 								<h4>Dependents</h4>
@@ -106,30 +114,31 @@
 								<button class='btn btn-default btn-block' ng-click='deleteLastPerson()'>Delete</button> 
 							</div>
 						</div>
+						<form name='dependentsForm' novalidate>
+							<div ng-repeat='idx in dependentIndices'>
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div class='row'>
+											<div class='col-md-6'>
+												<required-input model='firstname[idx]' validation='dependentsForm' identifier='firstname{{idx}}'>First Name</required-input>
+											</div>
 
-						
-						<div ng-repeat='idx in dependentIndices'>
-							<div class="panel panel-default">
-								<div class="panel-body">
-									<div class='row'>
-										<div class='col-md-6'>
-											<required-input model='firstname[idx]' validation='createAcctForm' identifier='firstname{{idx}}'>First Name</required-input>
-										</div>
-
-										<div class='col-md-6'>
-											<required-input model='lastname[idx]' validation='createAcctForm' identifier='lastname{{idx}}'>Last Name</required-input>
+											<div class='col-md-6'>
+												<required-input model='lastname[idx]' validation='dependentsForm' identifier='lastname{{idx}}'>Last Name</required-input>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					
+						</form>
 					</div>
-				</div>
-			
-				<button class='btn btn-default pull-right' ng-click='createAccount(createAcctForm)'>Create Account</button>
 				
+				</div>
 			</div>
-		</form>
+		
+			<button class='btn btn-default pull-right' ng-click='createAccount(createAcctForm, dependentsForm)'>Create Account</button>
+			
+		</div>
+		
 	</div>
 </div>

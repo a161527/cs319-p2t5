@@ -9,19 +9,27 @@
 			$scope.firstname = {}
 			$scope.lastname = {}
 
-			$scope.createAccount = function(createAcctForm) {
-				if (createAcctForm.$valid) {
-
+			$scope.createAccount = function(createAcctForm, dependentsForm) {
+				var dependentsHandled = dependentsForm.$valid || $scope.transfer
+				if (createAcctForm.$valid && dependentsHandled) {
+					alert('success')
 				} else {
+					alert('failure')
 					angular.forEach(createAcctForm.$error.required, function(field) {
+						field.$setDirty()
+					})
+
+					angular.forEach(dependentsForm.$error.required, function(field) {
 						field.$setDirty()
 					})
 				}
 			}
 
-			$scope.resetAuthError = function(element) {
-				if (element.$error.auth) {
-					element.$setValidity('auth', true)
+			$scope.checkPasswordMatch = function(pwValidation) {
+				if ($scope.confirmPassword != $scope.password) {
+					pwValidation.$setValidity('pwMatch', false)
+				} else {
+					pwValidation.$setValidity('pwMatch', true)
 				}
 			}
 
