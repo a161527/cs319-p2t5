@@ -1,7 +1,7 @@
 (function() {
 	'use strict'
 
-	angular.module('login')
+	angular.module('forms')
 		.directive('requiredInput', function() {
 			return {
 				restrict: 'E',
@@ -12,7 +12,7 @@
 					model: '=',
 					identifier: '@'
 				},
-				templateUrl: 'js/login/login.view.requiredInput.html'
+				templateUrl: 'js/forms/forms.view.requiredInput.html'
 			}
 		})
 

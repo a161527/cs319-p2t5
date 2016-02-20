@@ -1,7 +1,7 @@
 (function() {
 	'use strict'
 
-	angular.module('login')
+	angular.module('createAcct')
 		.controller('createAcctCtrl', function($scope) {
 
 			var dependentIndex = 1
