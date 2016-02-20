@@ -14,8 +14,8 @@ class CreateTableTaxiBus extends Migration
     {
         Schema::create('taxiBus', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('TaxiBusNumber');
-          $table->integer('Capacity');
+          $table->string('taxiBusNumber');
+          $table->integer('capacity');
         });
     }
 

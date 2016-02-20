@@ -14,10 +14,10 @@ class CreateTableConference extends Migration
     {
         Schema::create('conference', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('ConferenceName');
-          $table->string('Date Start');
-          $table->string('Date End');
-          $table->string('Location');
+          $table->string('conferenceName');
+          $table->string('dateStart');
+          $table->string('dateEnd');
+          $table->string('location');
         });
     }
 

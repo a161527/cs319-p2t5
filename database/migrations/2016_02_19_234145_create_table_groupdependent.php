@@ -14,9 +14,9 @@ class CreateTableGroupdependent extends Migration
     {
         Schema::create('groupdependent', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('DateOfBirth');
-          $table->string('FirstName');
-          $table->string('LastName');
+          $table->string('dateOfBirth');
+          $table->string('firstName');
+          $table->string('lastName');
           $table->integer('userID')->unsigned();
           $table->foreign('userID')
                 ->references('id')->on('user')

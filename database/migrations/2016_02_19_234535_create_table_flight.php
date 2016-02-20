@@ -14,11 +14,11 @@ class CreateTableFlight extends Migration
     {
         Schema::create('flight', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('FlightNumber');
-          $table->string('FlightDate');
-          $table->string('Airlines');
-          $table->string('ArrivalTime');
-          $table->integer('PassengerCount')->unsigned();
+          $table->string('flightNumber');
+          $table->string('flightDate');
+          $table->string('airlines');
+          $table->string('arrivalTime');
+          $table->integer('passengerCount')->unsigned();
         });
 
 
