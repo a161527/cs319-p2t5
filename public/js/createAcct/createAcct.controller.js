@@ -6,15 +6,13 @@
 
 			var dependentIndex = 1
 			$scope.dependentIndices = [dependentIndex]
-			$scope.firstname = {}
-			$scope.lastname = {}
+			$scope.dependents = {}
 
 			$scope.createAccount = function(createAcctForm, dependentsForm) {
 				var dependentsHandled = dependentsForm.$valid || $scope.transfer
 				if (createAcctForm.$valid && dependentsHandled) {
-					alert('success')
+
 				} else {
-					alert('failure')
 					angular.forEach(createAcctForm.$error.required, function(field) {
 						field.$setDirty()
 					})
@@ -40,6 +38,7 @@
 
 			$scope.deleteLastPerson = function() {
 				if (dependentIndex != 1) {
+					delete $scope.dependents[dependentIndex]
 					dependentIndex -= 1
 					$scope.dependentIndices.pop()
 				}

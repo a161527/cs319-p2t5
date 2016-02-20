@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('login')
-		.controller('loginCtrl', function($scope, loginService) {
+		.controller('loginCtrl', function($scope, $http, loginService) {
 
 			$scope.login = function(fieldsFilled) {
 

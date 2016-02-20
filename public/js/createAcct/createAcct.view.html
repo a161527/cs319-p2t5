@@ -114,17 +114,18 @@
 								<button class='btn btn-default btn-block' ng-click='deleteLastPerson()'>Delete</button> 
 							</div>
 						</div>
+						{{dependents}}
 						<form name='dependentsForm' novalidate>
 							<div ng-repeat='idx in dependentIndices'>
 								<div class="panel panel-default">
 									<div class="panel-body">
-										<div class='row'>
+										<div class='row' ng-model='dependents[idx]'>
 											<div class='col-md-6'>
-												<required-input model='firstname[idx]' validation='dependentsForm' identifier='firstname{{idx}}'>First Name</required-input>
+												<required-input model='dependents[idx].firstname' validation='dependentsForm' identifier='firstname{{idx}}'>First Name</required-input>
 											</div>
 
 											<div class='col-md-6'>
-												<required-input model='lastname[idx]' validation='dependentsForm' identifier='lastname{{idx}}'>Last Name</required-input>
+												<required-input model='dependents[idx].lastname' validation='dependentsForm' identifier='lastname{{idx}}'>Last Name</required-input>
 											</div>
 										</div>
 									</div>
