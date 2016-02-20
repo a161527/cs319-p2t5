@@ -1,7 +1,7 @@
 (function() {
 	'use strict'
 
-	angular.module('login')
+	angular.module('forms')
 		.directive('errorMessage', function() {
 			return {
 				restrict: 'E',
