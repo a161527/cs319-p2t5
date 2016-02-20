@@ -13,7 +13,7 @@
 									<label for='username'>Username</label>
 
 									<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
-									<input type='text' ng-model='username' ng-pattern='/^[a-zA-Z0-9_-]*$/' class='form-control' id='username' name='username' required>
+									<input type='text' ng-model-options='{updateOn: "blur"}' ng-model='username' ng-pattern='/^[a-zA-Z0-9_-]*$/' class='form-control' id='username' name='username' required>
 
 									<error-message ng-show='createAcctForm.username.$error.pattern && !createAcctForm.username.$error.required'>
 										Username can only contain alphanumeric characters, dashes, and underscores
@@ -31,9 +31,9 @@
 									<label for='email'>Email</label>
 
 									<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
-									<input type='email' ng-model='email' class='form-control' id='email' name='email'>
+									<input type='email' ng-model-options='{updateOn: "blur"}' ng-model='email' class='form-control' id='email' name='email'>
 									
-									<error-message ng-show='createAcctForm.email.$error.email && createAcctForm.email.$touched'>
+									<error-message ng-show='createAcctForm.email.$error.email && createAcctForm.email.$dirty'>
 										Not a valid email
 									</error-message>
 								</div>
@@ -46,7 +46,7 @@
 									<label for='password'>Password</label>
 
 									<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
-									<input type='password' ng-model='password' ng-change='checkPasswordMatch(createAcctForm.confirmPassword)' ng-minlength='8' class='form-control' id='password' name='password' required>
+									<input type='password' ng-model-options='{updateOn: "blur"}' ng-model='password' ng-change='checkPasswordMatch(createAcctForm.confirmPassword)' ng-minlength='8' class='form-control' id='password' name='password' required>
 
 									<!--Show error messages for password-->
 									<!--Invalid password message, if required error exists, show that instead-->
@@ -66,7 +66,7 @@
 									<label for='confirmPassword'>Confirm Password</label>
 
 									<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
-									<input type='password' ng-model='confirmPassword' ng-change='checkPasswordMatch(createAcctForm.confirmPassword)' class='form-control' id='confirmPassword' name='confirmPassword' required>
+									<input type='password' ng-model-options='{updateOn: "blur"}' ng-model='confirmPassword' ng-change='checkPasswordMatch(createAcctForm.confirmPassword)' class='form-control' id='confirmPassword' name='confirmPassword' required>
 
 									<!--Show error messages for confirmPassword-->
 									<!--Invalid confirmPassword message, if required error exists, show that instead-->
@@ -87,7 +87,7 @@
 									<label for='phone'>Phone</label>
 
 									<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
-									<input type='text' ng-pattern='/^(\d+(-\d+)?)*$/' ng-model='phone' class='form-control' id='phone' name='phone'>
+									<input type='text' ng-model-options='{updateOn: "blur"}' ng-pattern='/^(\d+(-\d+)?)*$/' ng-model='phone' class='form-control' id='phone' name='phone'>
 
 									<!--Required error message, only show when dirty-->
 									<error-message ng-show='createAcctForm.phone.$error.pattern'>
