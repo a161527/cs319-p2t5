@@ -17,8 +17,11 @@ Route::get('/', function()
     return File::get(public_path() . '/login.html');
 });
 
-Route::get('/test/hi', function() {
-	return "Hello world";
+Route::group(['prefix' => 'conferences'], function () {
+    Route::post('', 'ConferenceController@createNew');
+    Route::get('{confId}', 'ConferenceController@getInfo');
+    Route::put('{confId}', 'ConferenceController@replace');
+    Route::delete('{confId}', 'ConferenceController@delete');
 });
 
 // Route::get('/', function () {
