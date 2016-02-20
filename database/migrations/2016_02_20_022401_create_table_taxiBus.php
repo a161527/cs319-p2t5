@@ -12,7 +12,7 @@ class CreateTableTaxiBus extends Migration
      */
     public function up()
     {
-        Schema::create('taxiBus', function (Blueprint $table) {
+        Schema::create('taxiBuses', function (Blueprint $table) {
           $table->increments('id');
           $table->string('taxiBusNumber');
           $table->integer('capacity');
@@ -27,7 +27,7 @@ class CreateTableTaxiBus extends Migration
     public function down()
     {
       DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-      Schema::drop('taxiBus');
+      Schema::drop('taxiBuses');
       DB::statement('SET FOREIGN_KEY_CHECKS = 1');
        }
 }

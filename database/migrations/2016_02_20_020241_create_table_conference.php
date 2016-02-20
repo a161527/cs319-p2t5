@@ -12,7 +12,7 @@ class CreateTableConference extends Migration
      */
     public function up()
     {
-        Schema::create('conference', function (Blueprint $table) {
+        Schema::create('conferences', function (Blueprint $table) {
           $table->increments('id');
           $table->string('conferenceName');
           $table->string('dateStart');
@@ -29,7 +29,7 @@ class CreateTableConference extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('conference');
+        Schema::drop('conferences');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

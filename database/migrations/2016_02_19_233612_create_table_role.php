@@ -12,12 +12,12 @@ class CreateTableRole extends Migration
      */
     public function up()
     {
-        Schema::create('role', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
           $table->increments('id');
           $table->string('role');
           $table->integer('userID')->unsigned();
           $table->foreign('userID')
-                ->references('id')->on('user')
+                ->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -31,7 +31,7 @@ class CreateTableRole extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('role');
+        Schema::drop('roles');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

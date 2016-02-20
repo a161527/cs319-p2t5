@@ -12,21 +12,21 @@ class CreateTableRequire extends Migration
      */
     public function up()
     {
-        Schema::create('require', function (Blueprint $table) {
+        Schema::create('requires', function (Blueprint $table) {
           $table->increments('id');
           $table->integer('userID')->unsigned();
           $table->integer('conferenceID')->unsigned();
           $table->integer('eventID')->unsigned();
           $table->foreign('userID')
-                ->references('id')->on('user')
+                ->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
           $table->foreign('conferenceID')
-                ->references('id')->on('conference')
+                ->references('id')->on('conferences')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
           $table->foreign('eventID')
-                ->references('id')->on('event')
+                ->references('id')->on('events')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -40,7 +40,7 @@ class CreateTableRequire extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('require');
+        Schema::drop('requires');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

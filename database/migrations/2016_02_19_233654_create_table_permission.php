@@ -12,17 +12,17 @@ class CreateTablePermission extends Migration
      */
     public function up()
     {
-        Schema::create('permission', function (Blueprint $table) {
+        Schema::create('permissions', function (Blueprint $table) {
           $table->increments('id');
           $table->string('permission');
           $table->integer('userID')->unsigned();
           $table->foreign('userID')
-                ->references('userID')->on('role')
+                ->references('userID')->on('roles')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
           $table->integer('roleID')->unsigned();
           $table->foreign('roleID')
-                ->references('id')->on('role')
+                ->references('id')->on('roles')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -36,7 +36,7 @@ class CreateTablePermission extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('permission');
+        Schema::drop('permissions');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

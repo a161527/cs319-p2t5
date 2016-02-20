@@ -12,14 +12,14 @@ class CreateTableGroupdependent extends Migration
      */
     public function up()
     {
-        Schema::create('groupdependent', function (Blueprint $table) {
+        Schema::create('groupdependents', function (Blueprint $table) {
           $table->increments('id');
           $table->string('dateOfBirth');
           $table->string('firstName');
           $table->string('lastName');
           $table->integer('userID')->unsigned();
           $table->foreign('userID')
-                ->references('id')->on('user')
+                ->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -33,7 +33,7 @@ class CreateTableGroupdependent extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('groupdependent');
+        Schema::drop('groupdependents');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }
