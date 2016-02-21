@@ -12,16 +12,16 @@ class CreateTableVisit extends Migration
      */
     public function up()
     {
-        Schema::create('visit', function (Blueprint $table) {
+        Schema::create('visits', function (Blueprint $table) {
           $table->increments('id');
           $table->integer('userID')->unsigned();
           $table->integer('eventID')->unsigned();
           $table->foreign('userID')
-                ->references('id')->on('user')
+                ->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
           $table->foreign('eventID')
-                ->references('id')->on('event')
+                ->references('id')->on('events')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -35,7 +35,7 @@ class CreateTableVisit extends Migration
     public function down()
     {
       DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-      Schema::drop('visit');
+      Schema::drop('visits');
       DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

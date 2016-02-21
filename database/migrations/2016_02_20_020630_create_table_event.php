@@ -12,16 +12,16 @@ class CreateTableEvent extends Migration
      */
     public function up()
     {
-        Schema::create('event', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('EventName');
-          $table->string('Date');
-          $table->string('Location');
-          $table->string('Time');
-          $table->integer('SeatsCount');
+          $table->string('eventName');
+          $table->string('date');
+          $table->string('location');
+          $table->string('time');
+          $table->integer('seatsCount');
           $table->integer('conferenceID')->unsigned();
           $table->foreign('conferenceID')
-                ->references('id')->on('conference')
+                ->references('id')->on('conferences')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -35,7 +35,7 @@ class CreateTableEvent extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('event');
+        Schema::drop('events');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

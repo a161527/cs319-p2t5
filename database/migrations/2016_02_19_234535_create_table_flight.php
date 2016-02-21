@@ -12,13 +12,13 @@ class CreateTableFlight extends Migration
      */
     public function up()
     {
-        Schema::create('flight', function (Blueprint $table) {
+        Schema::create('flights', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('FlightNumber');
-          $table->string('FlightDate');
-          $table->string('Airlines');
-          $table->string('ArrivalTime');
-          $table->integer('PassengerCount')->unsigned();
+          $table->string('flightNumber');
+          $table->string('flightDate');
+          $table->string('airlines');
+          $table->string('arrivalTime');
+          $table->integer('passengerCount')->unsigned();
         });
 
 
@@ -32,7 +32,7 @@ class CreateTableFlight extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('flight');
+        Schema::drop('flights');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }
