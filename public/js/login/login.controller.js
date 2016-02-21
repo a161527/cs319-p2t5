@@ -2,12 +2,16 @@
 	'use strict'
 
 	angular.module('login')
-		.controller('loginCtrl', function($scope, $http, loginService) {
+		.controller('loginCtrl', function($scope, $http, $auth) {
+
+			$scope.credentials = {}
 
 			$scope.login = function(fieldsFilled) {
 
 				if (fieldsFilled) {
-					loginService.login('username', 'password').then(function(resData) {
+					$auth.login($scope.credentials).then(function(resData) {
+						console.log(resData)
+					}, function(resData) {
 						console.log(resData)
 					})
 				} else {

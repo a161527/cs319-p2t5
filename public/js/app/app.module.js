@@ -9,6 +9,7 @@
 		'login',
 		'forms',
 		'createAcct',
+		'satellizer',
 		'ui.router'
 	])
 })()

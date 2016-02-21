@@ -2,7 +2,9 @@
 	'use strict'
 
 	angular.module('app')
-		.config(function($stateProvider, $urlRouterProvider) {
+		.config(function($stateProvider, $urlRouterProvider, $authProvider) {
+
+			$authProvider.loginUrl = '/api/login';
 
 			$stateProvider
 				.state('preLogin', {

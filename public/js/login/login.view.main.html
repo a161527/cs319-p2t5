@@ -14,7 +14,7 @@
 								<label for='username'>Username</label>
 
 								<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
-								<input type='text' ng-model='username' ng-change='resetAuthError(loginForm.username)' ng-pattern='/^[a-zA-Z0-9_-]*$/' class='form-control' id='username' name='username' required>
+								<input type='text' ng-model='credentials.username' ng-change='resetAuthError(loginForm.username)' class='form-control' id='username' name='username' required>
 
 								<!--Show error messages for username-->
 								<!--Invalid username message, if required error exists, show that instead-->
@@ -31,7 +31,7 @@
 							<!--Input error for password-->
 							<div class='form-group' ng-class='{"has-error": !loginForm.password.$valid && loginForm.password.$dirty}'>
 								<label for='password'>Password</label>
-								<input type='password' class='form-control' ng-change='resetAuthError(loginForm.password)' ng-model='password' id='password' name='password' required>
+								<input type='password' class='form-control' ng-change='resetAuthError(loginForm.password)' ng-model='credentials.password' id='password' name='password' required>
 
 								<!--required error message-->
 								<error-message ng-show='loginForm.password.$error.required && loginForm.password.$dirty'>
@@ -47,7 +47,6 @@
 								<!--Pass in loginForm.$valid to see if input fields are empty-->
 								<button class='btn btn-default' ng-click='login(loginForm.$valid)'>Log In</button>
 							</div>
-
 						</form>
 					</div>
 				</div>
