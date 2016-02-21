@@ -12,13 +12,13 @@ class CreateTableUser extends Migration
      */
     public function up()
     {
-        Schema::create('user', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('FirstName');
-          $table->string('LastName');
-          $table->string('DateOfBirthc');
-          $table->string('Email')->unique();
-          $table->string('Password');
+          $table->string('firstName');
+          $table->string('lastName');
+          $table->string('dateOfBirth');
+          $table->string('email')->unique();
+          $table->string('password');
         });
     }
 
@@ -30,7 +30,7 @@ class CreateTableUser extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('user');
+        Schema::drop('users');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

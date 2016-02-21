@@ -12,16 +12,16 @@ class CreateTableManage extends Migration
      */
     public function up()
     {
-      Schema::create('manage', function (Blueprint $table) {
+      Schema::create('manages', function (Blueprint $table) {
         $table->increments('id');
         $table->integer('flightID')->unsigned();
         $table->integer('userID')->unsigned();
         $table->foreign('userID')
-              ->references('id')->on('user')
+              ->references('id')->on('users')
               ->onDelete('cascade')
               ->onUpdate('cascade');
         $table->foreign('flightID')
-              ->references('id')->on('flight')
+              ->references('id')->on('flights')
               ->onDelete('cascade')
               ->onUpdate('cascade');
       });
@@ -35,7 +35,7 @@ class CreateTableManage extends Migration
     public function down()
     {
       DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-      Schema::drop('manage');
+      Schema::drop('manages');
       DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

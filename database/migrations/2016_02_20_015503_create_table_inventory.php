@@ -12,11 +12,11 @@ class CreateTableInventory extends Migration
      */
     public function up()
     {
-        Schema::create('inventory', function (Blueprint $table) {
+        Schema::create('inventorys', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('Disposable');
-          $table->string('Quantity');
-          $table->string('ItemName');
+          $table->string('disposable');
+          $table->string('quantity');
+          $table->string('itemName');
         });
     }
 
@@ -28,7 +28,7 @@ class CreateTableInventory extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('inventory');
+        Schema::drop('inventorys');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

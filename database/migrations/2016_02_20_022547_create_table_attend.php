@@ -18,15 +18,15 @@ class CreateTableAttend extends Migration
           $table->integer('conferenceID')->unsigned();
           $table->integer('taxiID')->unsigned();
           $table->foreign('userID')
-                ->references('id')->on('user')
+                ->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
           $table->foreign('conferenceID')
-                ->references('id')->on('conference')
+                ->references('id')->on('conferences')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
           $table->foreign('taxiID')
-                ->references('id')->on('taxiBus')
+                ->references('id')->on('taxiBuses')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });

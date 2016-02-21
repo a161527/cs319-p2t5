@@ -12,9 +12,9 @@ class CreateTableAnnouncement extends Migration
      */
     public function up()
     {
-        Schema::create('announcement', function (Blueprint $table) {
+        Schema::create('announcements', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('Message');
+          $table->string('message');
         });
     }
 
@@ -26,7 +26,7 @@ class CreateTableAnnouncement extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('announcement');
+        Schema::drop('announcements');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
 
     }

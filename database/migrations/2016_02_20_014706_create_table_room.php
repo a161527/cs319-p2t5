@@ -12,13 +12,13 @@ class CreateTableRoom extends Migration
      */
     public function up()
     {
-        Schema::create('room', function (Blueprint $table) {
+        Schema::create('rooms', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('ResidenceName');
-          $table->string('Location');
-          $table->string('Date');
-          $table->string('RoomNumber');
-          $table->integer('Capacity');
+          $table->string('residenceName');
+          $table->string('location');
+          $table->string('date');
+          $table->string('roomNumber');
+          $table->integer('capacity');
         });
     }
 
@@ -30,7 +30,7 @@ class CreateTableRoom extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('room');
+        Schema::drop('rooms');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
 
     }

@@ -12,16 +12,16 @@ class CreateTableRequest extends Migration
      */
     public function up()
     {
-        Schema::create('request', function (Blueprint $table) {
+        Schema::create('requests', function (Blueprint $table) {
           $table->increments('id');
           $table->integer('roomID')->unsigned();
           $table->integer('itemID')->unsigned();
           $table->foreign('itemID')
-                ->references('id')->on('inventory')
+                ->references('id')->on('inventorys')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
           $table->foreign('roomID')
-                ->references('id')->on('room')
+                ->references('id')->on('rooms')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -35,7 +35,7 @@ class CreateTableRequest extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('request');
+        Schema::drop('requests');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }
