@@ -3,7 +3,6 @@
 
 	angular.module('login')
 		.controller('loginCtrl', function($scope, $http, $auth) {
-
 			$scope.credentials = {}
 
 			$scope.login = function(fieldsFilled) {

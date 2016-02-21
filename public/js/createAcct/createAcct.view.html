@@ -8,25 +8,8 @@
 				<div class="panel-body">
 					<form name='createAcctForm' novalidate>
 						<div class='row'>
-							<div class='col-md-6'>
-								<div class='form-group' ng-class='{"has-error": !createAcctForm.username.$valid && createAcctForm.username.$dirty}'>
-									<label for='username'>Username</label>
 
-									<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
-									<input type='text' ng-model-options='{updateOn: "blur"}' ng-model='username' ng-pattern='/^[a-zA-Z0-9_-]*$/' class='form-control' id='username' name='username' required>
-
-									<error-message ng-show='createAcctForm.username.$error.pattern && !createAcctForm.username.$error.required'>
-										Username can only contain alphanumeric characters, dashes, and underscores
-									</error-message>
-
-									<!--Required error message, only show when dirty-->
-									<error-message ng-show='createAcctForm.username.$error.required && createAcctForm.username.$dirty'>
-										Username is required
-									</error-message>
-								</div>
-							</div>
-
-							<div class='col-md-6'>
+							<div class='col-md-12'>
 								<div class='form-group' ng-class='{"has-error": createAcctForm.email.$error.email}'>
 									<label for='email'>Email</label>
 
@@ -38,6 +21,7 @@
 									</error-message>
 								</div>
 							</div>
+
 						</div>
 
 						<div class='row'>
@@ -81,21 +65,19 @@
 							</div>
 						</div>
 
-						<div class='row'>
+<!-- 						<div class='row'>
 							<div class='col-md-6'>
 								<div class='form-group' ng-class='{"has-error": !createAcctForm.phone.$valid && createAcctForm.phone.$dirty}'>
 									<label for='phone'>Phone</label>
 
-									<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
 									<input type='text' ng-model-options='{updateOn: "blur"}' ng-pattern='/^(\d+(-\d+)?)*$/' ng-model='phone' class='form-control' id='phone' name='phone'>
 
-									<!--Required error message, only show when dirty-->
 									<error-message ng-show='createAcctForm.phone.$error.pattern'>
 										Phone number is not valid
 									</error-message>
 								</div>
 							</div>
-						</div>
+						</div> -->
 					</form>
 
 					<div class='form-group'>
@@ -123,11 +105,11 @@
 
 										<div class='row'>
 											<div class='col-md-6'>
-												<required-input model='dependents[idx].firstname' validation='dependentsForm' identifier='firstname{{idx}}'>First Name</required-input>
+												<required-input model='dependents[idx].firstname' validation='dependentsForm' identifier='firstname{{idx}}' inp-type='text'>First Name</required-input>
 											</div>
 
 											<div class='col-md-6'>
-												<required-input model='dependents[idx].lastname' validation='dependentsForm' identifier='lastname{{idx}}'>Last Name</required-input>
+												<required-input model='dependents[idx].lastname' validation='dependentsForm' identifier='lastname{{idx}}' inp-type='password'>Last Name</required-input>
 											</div>
 										</div>
 										
@@ -160,10 +142,11 @@
 
 									</div>
 								</div>
+
 							</div>
 						</form>
+
 					</div>
-				
 				</div>
 			</div>
 		

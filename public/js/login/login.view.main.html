@@ -8,35 +8,12 @@
 
 						<!--Need to block HTML5 validation so it does not conflict with angular-->
 						<form name='loginForm' novalidate>
+							<div ng-model='credentials'>
 
-							<!--Highlight input only when value is invalid and input is dirty-->
-							<div class='form-group' ng-class='{"has-error": !loginForm.username.$valid && loginForm.username.$dirty}'>
-								<label for='username'>Username</label>
+								<email-input validation='loginForm' model='credentials.email' identifier='email'></email-input>
 
-								<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
-								<input type='text' ng-model='credentials.username' ng-change='resetAuthError(loginForm.username)' class='form-control' id='username' name='username' required>
+								<required-input validation='loginForm' model='credentials.password' identifier='password' inp-type='password'>Password</required-input>
 
-								<!--Show error messages for username-->
-								<!--Invalid username message, if required error exists, show that instead-->
-								<error-message ng-show='loginForm.username.$error.pattern && !loginForm.username.$error.required'>
-									Username can only contain alphanumeric characters, dashes, and underscores
-								</error-message>
-
-								<!--Required error message, only show when dirty-->
-								<error-message ng-show='loginForm.username.$error.required && loginForm.username.$dirty'>
-									Username is required
-								</error-message>
-							</div>
-
-							<!--Input error for password-->
-							<div class='form-group' ng-class='{"has-error": !loginForm.password.$valid && loginForm.password.$dirty}'>
-								<label for='password'>Password</label>
-								<input type='password' class='form-control' ng-change='resetAuthError(loginForm.password)' ng-model='credentials.password' id='password' name='password' required>
-
-								<!--required error message-->
-								<error-message ng-show='loginForm.password.$error.required && loginForm.password.$dirty'>
-									Password is required
-								</error-message>
 							</div>
 
 							<div class='form-group pull-right'>

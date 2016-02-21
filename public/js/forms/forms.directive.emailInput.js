@@ -2,18 +2,16 @@
 	'use strict'
 
 	angular.module('forms')
-		.directive('requiredInput', function() {
+		.directive('emailInput', function() {
 			return {
 				restrict: 'E',
 				replace: true,
-				transclude: true,
 				scope: {
 					validation: '=',
 					model: '=',
-					identifier: '@',
-					inpType: '@'
+					identifier: '@'
 				},
-				templateUrl: 'js/forms/forms.view.requiredInput.html'
+				templateUrl: 'js/forms/forms.view.emailInput.html'
 			}
 		})
 
