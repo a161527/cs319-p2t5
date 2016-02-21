@@ -7,7 +7,8 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
-        "tymon/jwt-auth": "0.5.*"
+        "tymon/jwt-auth": "0.5.*",
+        "zizaco/entrust": "dev-laravel-5-2@dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -49,5 +50,12 @@
     },
     "config": {
         "preferred-install": "dist"
-    }
+    },
+
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/hiendv/entrust"
+        }
+    ]
 }
