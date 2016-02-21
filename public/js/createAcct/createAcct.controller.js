@@ -7,6 +7,7 @@
 			var dependentIndex = 1
 			$scope.dependentIndices = [dependentIndex]
 			$scope.dependents = {}
+			$scope.createAcct = {}
 
 			$scope.createAccount = function(createAcctForm, dependentsForm) {
 				var dependentsHandled = dependentsForm.$valid || $scope.transfer
@@ -23,11 +24,11 @@
 				}
 			}
 
-			$scope.checkPasswordMatch = function(pwValidation) {
-				if ($scope.confirmPassword != $scope.password) {
-					pwValidation.$setValidity('pwMatch', false)
+			$scope.checkMatch = function(validation, field, confirmationField) {
+				if (field != confirmationField) {
+					validation.$setValidity('match', false)
 				} else {
-					pwValidation.$setValidity('pwMatch', true)
+					validation.$setValidity('match', true)
 				}
 			}
 
