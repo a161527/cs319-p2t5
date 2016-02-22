@@ -19,9 +19,13 @@ Route::get('/', function()
 
 Route::group(['prefix' => 'conferences'], function () {
     Route::post('', 'ConferenceController@createNew');
-    Route::get('{confId}', 'ConferenceController@getInfo');
-    Route::put('{confId}', 'ConferenceController@replace');
-    Route::delete('{confId}', 'ConferenceController@delete');
+    Route::get('', 'ConferenceController@getInfoList');
+
+    Route::group(['prefix' => '{confId}'], function () {
+        Route::get('', 'ConferenceController@getInfo');
+        Route::put('', 'ConferenceController@replace');
+        Route::delete('', 'ConferenceController@delete');
+    });
 });
 
 // Route::get('/', function () {

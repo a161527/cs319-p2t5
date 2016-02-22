@@ -26,6 +26,15 @@ class ConferenceController extends Controller
              'DateEnd' => $req->input('end'),
              'Location' => $req->input('location')];
     }
+
+    private function conferenceResponseJSONArray($conference) {
+        return [
+                'id' => (int)$conference->id,
+                'name' => $conference->ConferenceName,
+                'start' => $conference->DateStart,
+                'end' => $conference->DateEnd,
+                'location' => $conference->Location];
+    }
     public function createNew(Request $req) {
         $this->validateConferenceJson($req);
         $id = DB::table('conference')->insertGetId($this->jsonReqAsDBArray($req));
@@ -43,13 +52,16 @@ class ConferenceController extends Controller
         }
 
         $conference = $rows[0];
-        return
-            response()->json([
-                'id' => (int)$conference->id,
-                'name' => $conference->ConferenceName,
-                'start' => $conference->DateStart,
-                'end' => $conference->DateEnd,
-                'location' => $conference->Location]);
+        return response()->json($this->conferenceResponseJSONArray($conference));
+    }
+
+    public function getInfoList() {
+        $rows = DB::table('conference')->get();
+        $jsonArrays =
+            array_map(
+                function($x) { return $this->conferenceResponseJSONArray($x); },
+                $rows);
+        return response()->json($jsonArrays);
     }
 
     public function replace(Request $req, $id) {
