@@ -17,7 +17,7 @@ Route::get('/', function()
     return File::get(public_path() . '/login.html');
 });
 
-Route::group(['prefix' => 'conferences'], function () {
+Route::group(['prefix' => 'api/conferences'], function () {
     Route::post('', 'ConferenceController@createNew');
     Route::get('', 'ConferenceController@getInfoList');
 
