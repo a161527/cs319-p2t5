@@ -70,22 +70,14 @@ class ConferenceController extends Controller
 
     public function replace(Request $req, $id) {
         $this->validateConferenceJson($req);
-        try {
-            DB::table('conferences')
-                ->where('id', $id)
-                ->update($this->jsonReqAsDBArray($req));
-        } catch (QueryException $qe) {
-            return response('', 500);
-        }
+        DB::table('conferences')
+            ->where('id', $id)
+            ->update($this->jsonReqAsDBArray($req));
         return '';
     }
 
     public function delete($id) {
-        try {
-            DB::table('conferences')->where('id', $id)->delete();
-        } catch (QueryException $qe) {
-            return response('', 500);
-        }
+        DB::table('conferences')->where('id', $id)->delete();
         return '';
     }
 }

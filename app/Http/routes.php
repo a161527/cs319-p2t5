@@ -13,7 +13,7 @@
 
 Route::group(['prefix' => 'api/conferences'], function () {
     Route::get('', 'ConferenceController@getInfoList');
-    Route::post('', ['as' => 'conference.create', 'uses' => 'ConferenceController@createNew']);
+    Route::post('', 'ConferenceController@createNew');
 
     Route::group(['prefix' => '{confId}'], function () {
         Route::get('', 'ConferenceController@getInfo');
