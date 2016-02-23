@@ -8,9 +8,13 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use DB;
 use Illuminate\Database\QueryException;
+use JWTAuth;
 
 class ConferenceController extends Controller
 {
+
+    public function __construct() {
+    }
 
     private function validateConferenceJson($req) {
         $this->validate($req, [
@@ -21,28 +25,28 @@ class ConferenceController extends Controller
     }
     private function jsonReqAsDBArray($req) {
         return
-            ['ConferenceName' => $req->input('name'),
-             'DateStart' => $req->input('start'),
-             'DateEnd' => $req->input('end'),
-             'Location' => $req->input('location')];
+            ['conferenceName' => $req->input('name'),
+             'dateStart' => $req->input('start'),
+             'dateEnd' => $req->input('end'),
+             'location' => $req->input('location')];
     }
 
     private function conferenceResponseJSONArray($conference) {
         return [
                 'id' => (int)$conference->id,
-                'name' => $conference->ConferenceName,
-                'start' => $conference->DateStart,
-                'end' => $conference->DateEnd,
-                'location' => $conference->Location];
+                'name' => $conference->conferenceName,
+                'start' => $conference->dateStart,
+                'end' => $conference->dateEnd,
+                'location' => $conference->location];
     }
     public function createNew(Request $req) {
         $this->validateConferenceJson($req);
-        $id = DB::table('conference')->insertGetId($this->jsonReqAsDBArray($req));
+        $id = DB::table('conferences')->insertGetId($this->jsonReqAsDBArray($req));
         return response()->json(['id' => (int)$id]);
     }
 
     public function getInfo($id) {
-        $rows = DB::table('conference')->where('id', $id)->get();
+        $rows = DB::table('conferences')->where('id', $id)->get();
         if (sizeof($rows) > 1) {
             return response("Multiple conferences match the ID?", 500);
         }
@@ -56,7 +60,7 @@ class ConferenceController extends Controller
     }
 
     public function getInfoList() {
-        $rows = DB::table('conference')->get();
+        $rows = DB::table('conferences')->get();
         $jsonArrays =
             array_map(
                 function($x) { return $this->conferenceResponseJSONArray($x); },
@@ -67,7 +71,7 @@ class ConferenceController extends Controller
     public function replace(Request $req, $id) {
         $this->validateConferenceJson($req);
         try {
-            DB::table('conference')
+            DB::table('conferences')
                 ->where('id', $id)
                 ->update($this->jsonReqAsDBArray($req));
         } catch (QueryException $qe) {
@@ -78,7 +82,7 @@ class ConferenceController extends Controller
 
     public function delete($id) {
         try {
-            DB::table('conference')->where('id', $id)->delete();
+            DB::table('conferences')->where('id', $id)->delete();
         } catch (QueryException $qe) {
             return response('', 500);
         }
