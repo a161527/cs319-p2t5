@@ -19,11 +19,13 @@
 							<div class='form-group pull-right'>
 								<a href="#/create">Create Account</a>
 							</div>
-							
+
 							<div class='form-group'>
 								<!--Pass in loginForm.$valid to see if input fields are empty-->
 								<button class='btn btn-default' ng-click='login(loginForm.$valid)'>Log In</button>
 							</div>
+
+							<error-message ng-show='showError'>{{errorMessage}}<span class="glyphicon glyphicon-remove pull-right" ng-click='removeMessage()'></span></error-message>
 						</form>
 					</div>
 				</div>
