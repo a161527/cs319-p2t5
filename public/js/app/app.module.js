@@ -10,6 +10,7 @@
 		'forms',
 		'createAcct',
 		'satellizer',
-		'ui.router'
+		'ui.router',
+		'blockUI'
 	])
 })()

@@ -104,7 +104,7 @@
 								<h4>Dependents</h4>
 							</div>
 							<div class='col-md-4'>
-								<button class='btn btn-success pull-right' ng-click='addPerson()'><span class="glyphicon glyphicon-plus"></span> Add Dependents</button>
+								<button class='btn btn-info pull-right' ng-click='addPerson()'><span class="glyphicon glyphicon-plus"></span> Add Dependents</button>
 							</div>
 						</div>
 						
@@ -147,6 +147,16 @@
 
 													<error-message ng-show='dependentsForm["gender" + idx].$error.required && dependentsForm["gender" + idx].$dirty'>Gender is required</error-message>
 												</div>
+											</div>
+										</div>
+
+										<div class='row'>
+											<div class='col-md-6'>
+												<input-with-validation model='dependents[idx].city' validation='dependentsForm' identifier='city' inp-type='text'>City</input>
+											</div>
+
+											<div class='col-md-6'>
+												<input-with-validation model='dependents[idx].country' validation='dependentsForm' identifier='country' inp-type='text'>Country</input>
 											</div>
 										</div>
 

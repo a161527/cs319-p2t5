@@ -2,17 +2,19 @@
 	'use strict'
 
 	angular.module('login')
-		.controller('loginCtrl', function($scope, $http, $auth) {
+		.controller('loginCtrl', function($scope, ajax) {
 			$scope.credentials = {}
 
 			$scope.login = function(fieldsFilled) {
 
 				if (fieldsFilled) {
-					$auth.login($scope.credentials).then(function(resData) {
-						console.log(resData)
+
+					ajax.login($scope.credentials).then(function(resData) {
+						alert('You did it!')
 					}, function(resData) {
-						console.log(resData)
+						console.log(resData.data.error)
 					})
+
 				} else {
 					angular.forEach($scope.loginForm.$error.required, function(field) {
 						field.$setDirty()
