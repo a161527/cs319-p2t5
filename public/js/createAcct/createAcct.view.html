@@ -11,7 +11,9 @@
 
 							<div class='row'>
 								<div class='col-md-6'>
-									<email-input validation='createAcctForm' model='createAcct.email' identifier='email'></email-input>
+
+									<input-with-validation model='createAcct.email' validation='createAcctForm' identifier='email' inp-type='email'>Email</input-with-validation>
+
 								</div>
 
 								<div class='col-md-6'>
@@ -104,33 +106,34 @@
 							<div class='col-md-4'>
 								<button class='btn btn-success pull-right' ng-click='addPerson()'><span class="glyphicon glyphicon-plus"></span> Add Dependents</button>
 							</div>
-							<!-- <div class='col-md-1'>
-								<button class='btn btn-default btn-block' ng-click='deleteLastPerson()'>Del</button> 
-							</div> -->
 						</div>
 						
 						<form name='dependentsForm' novalidate>
-							<div ng-repeat='idx in dependentIndices'>
+							<div ng-repeat='(idx, value) in dependents'>
 
 								<div class="panel panel-default">
 									<div class="panel-body" ng-model='dependents[idx]'>
+										<div class='row' ng-show='showRemoveButton(idx)'>
+											<div class='col-md-offset-11 col-md-1'>
+												<div class="glyphicon glyphicon-remove" ng-click='deleteDependent(idx)'></div>
+											</div>
+										</div>
 
 										<div class='row'>
 											<div class='col-md-6'>
-												<required-input model='dependents[idx].firstname' validation='dependentsForm' identifier='firstname{{idx}}' inp-type='text'>First Name</required-input>
+												<input-with-validation model='dependents[idx].firstname' validation='dependentsForm' identifier='firstname{{idx}}' inp-type='text'>First Name</input-with-validation>
 											</div>
 
 											<div class='col-md-6'>
-												<required-input model='dependents[idx].lastname' validation='dependentsForm' identifier='lastname{{idx}}' inp-type='password'>Last Name</required-input>
+												<input-with-validation model='dependents[idx].lastname' validation='dependentsForm' identifier='lastname{{idx}}' inp-type='password'>Last Name</input-with-validation>
 											</div>
 										</div>
 										
 										<div class='row'>
 											<div class='col-md-6'>
-												<div class='form-group'>
-													<label for='birthdate{{idx}}'>Date of Birth</label>
-													<input type='date' ng-model='dependents[idx].birthdate' class='form-control' id='birthdate{{idx}}' name='birthdate{{idx}}'>
-												</div>
+
+												<input-with-validation model='dependents[idx].birthdate' validation='dependentsForm' identifier='birthdate{{idx}}' inp-type='date'>Birth Date</input-with-validation>
+
 											</div>
 
 											<div class='col-md-6'>
