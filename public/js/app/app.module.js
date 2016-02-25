@@ -9,6 +9,8 @@
 		'login',
 		'forms',
 		'createAcct',
-		'ui.router'
+		'satellizer',
+		'ui.router',
+		'blockUI'
 	])
 })()
