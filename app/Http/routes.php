@@ -19,12 +19,15 @@ Route::group(['prefix' => 'api/conferences'], function () {
         Route::get('', 'ConferenceController@getInfo');
         Route::put('', 'ConferenceController@replace');
         Route::delete('', 'ConferenceController@delete');
+
+        //New registration request
+        Route::post('register', 'ConfRegistrationController@userRegistration');
     });
 });
 
 Route::get('/', function()
 {
-	// change login.html to whatever the index page for angular will be
+    // change login.html to whatever the index page for angular will be
     return File::get(public_path() . '/login.html');
 });
 
