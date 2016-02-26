@@ -11,13 +11,19 @@
 |
 */
 
-Route::get('/test/hi', function() {
-  return "Hello world";
+Route::get('/', function()
+{
+	// change login.html to whatever the index page for angular will be
+    return File::get(public_path() . '/login.html');
 });
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/test/hi', function() {
+	return "Hello world";
 });
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 
 /*
@@ -34,3 +40,17 @@ Route::get('/', function () {
 Route::group(['middleware' => ['web']], function () {
     //
 });
+
+Route::group(['prefix' => 'api'], function()
+{
+    Route::resource('login', 'AuthenticationController', ['only' => ['index']]);
+    Route::post('login', 'AuthenticationController@authenticate');
+});
+
+
+
+//Routes for Event
+Route::get('/api/v1/event/{id?}', 'Events@index');
+Route::post('/api/v1/event', 'Events@store');
+Route::post('/api/v1/event/{id}', 'Events@update');
+Route::delete('/api/v1/event/{id}', 'Events@destroy');
