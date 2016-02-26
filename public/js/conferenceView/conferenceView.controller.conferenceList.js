@@ -2,15 +2,10 @@
 	'use strict'
 
 	angular.module('conferenceView')
-		.controller('conferenceListCtrl', function($scope, ajax) {
+		.controller('conferenceListCtrl', function($scope, conferenceList) {
 			
-			$scope.conferences = []
-
-			ajax.serviceCall('Loading conferences...', 'get', 'api/conferences').then(function(resData) {
-				$scope.conferences = resData.data
-			}, function(resData) {
-
-			})
+			$scope.conferences = conferenceList.data || []
+			$scope.noConferences = ($scope.conferences.length === 0)
 
 		})
 
