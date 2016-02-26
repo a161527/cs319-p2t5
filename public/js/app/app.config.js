@@ -7,16 +7,22 @@
 			$authProvider.loginUrl = '/api/login';
 
 			$stateProvider
-				.state('preLogin', {
+				.state('login', {
 					url: '',
 					templateUrl: 'js/login/login.view.main.html',
 					controller: 'loginCtrl'
 				})
 
-				.state('loggedIn', {
+				.state('creatingAccount', {
 					url: '/create',
 					templateUrl: 'js/createAcct/createAcct.view.html',
 					controller: 'createAcctCtrl'
+				})
+
+				.state('conferenceList', {
+					url: '/conferences',
+					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
+					controller: 'conferenceViewCtrl'
 				})
 
 		})
