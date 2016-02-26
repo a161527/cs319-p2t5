@@ -22,7 +22,18 @@
 				.state('conferenceList', {
 					url: '/conferences',
 					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
-					controller: 'conferenceViewCtrl'
+					controller: 'conferenceListCtrl'
+				})
+
+				.state('viewConference', {
+					url: '/conference/:cid',
+					templateUrl: 'js/conferenceView/conferenceView.view.conferenceDetails.html',
+					controller: 'conferenceDetailsCtrl',
+					resolve: {
+						conferenceInfo: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid)
+						}
+					}
 				})
 
 		})
