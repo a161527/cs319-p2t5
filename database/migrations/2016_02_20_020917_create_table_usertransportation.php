@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableAttend extends Migration
+class CreateTableUserTransportation extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,12 @@ class CreateTableAttend extends Migration
      */
     public function up()
     {
-        Schema::create('attend', function (Blueprint $table) {
+        Schema::create('usertransportation', function (Blueprint $table) {
           $table->increments('id');
           $table->integer('userID')->unsigned();
           $table->integer('conferenceID')->unsigned();
-          $table->integer('taxiID')->unsigned();
+          $table->integer('flightID')->unsigned()->nullable();
+          $table->integer('transportationID')->unsigned()->nullable();
           $table->foreign('userID')
                 ->references('id')->on('users')
                 ->onDelete('cascade')
@@ -25,8 +26,12 @@ class CreateTableAttend extends Migration
                 ->references('id')->on('conferences')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-          $table->foreign('taxiID')
-                ->references('id')->on('taxiBuses')
+          $table->foreign('flightID')
+                ->references('id')->on('flights')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+          $table->foreign('transportationID')
+                ->references('id')->on('transportation')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -39,8 +44,8 @@ class CreateTableAttend extends Migration
      */
     public function down()
     {
-      DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-      Schema::drop('attend');
-      DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        Schema::drop('usertransportation');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

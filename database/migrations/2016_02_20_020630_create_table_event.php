@@ -15,10 +15,12 @@ class CreateTableEvent extends Migration
         Schema::create('events', function (Blueprint $table) {
           $table->increments('id');
           $table->string('eventName');
-          $table->string('date');
+          $table->date('date');
           $table->string('location');
-          $table->string('time');
-          $table->integer('seatsCount');
+          $table->time('startTime');
+          $table->time('endTime')->nullable();
+          $table->integer('capacity');
+          $table->string('description')->nullable();
           $table->integer('conferenceID')->unsigned();
           $table->foreign('conferenceID')
                 ->references('id')->on('conferences')

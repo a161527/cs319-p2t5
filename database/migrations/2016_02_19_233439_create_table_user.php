@@ -16,9 +16,15 @@ class CreateTableUser extends Migration
           $table->increments('id');
           $table->string('firstName');
           $table->string('lastName');
-          $table->string('dateOfBirth');
-          $table->string('email')->unique();
-          $table->string('password');
+          $table->date('dateOfBirth');
+          $table->enum('gender', ['Male', 'Female', 'Other']);
+          $table->string('location');
+          $table->string('notes')->nullable();
+          $table->integer('accountID')->unsigned();
+          $table->foreign('accountID')
+              ->references('id')->on('account')
+              ->onDelete('cascade')
+              ->onUpdate('cascade');
         });
     }
 
