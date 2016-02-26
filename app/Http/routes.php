@@ -11,15 +11,23 @@
 |
 */
 
+Route::group(['prefix' => 'api/conferences'], function () {
+    Route::get('', 'ConferenceController@getInfoList');
+    Route::post('', 'ConferenceController@createNew');
+
+    Route::group(['prefix' => '{confId}'], function () {
+        Route::get('', 'ConferenceController@getInfo');
+        Route::put('', 'ConferenceController@replace');
+        Route::delete('', 'ConferenceController@delete');
+    });
+});
+
 Route::get('/', function()
 {
 	// change login.html to whatever the index page for angular will be
     return File::get(public_path() . '/login.html');
 });
 
-Route::get('/test/hi', function() {
-	return "Hello world";
-});
 
 // Route::get('/', function () {
 //     return view('welcome');
