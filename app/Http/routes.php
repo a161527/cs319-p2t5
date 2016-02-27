@@ -51,14 +51,21 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['prefix' => 'api'], function()
 {
+	// test for a page that requires a token to be submitted
     Route::resource('login', 'AuthenticationController', ['only' => ['index']]);
+
     Route::post('login', 'AuthenticationController@authenticate');
+    Route::post('register', array('as'=>'register', 'uses'=>'RegistrationController@register'));
 });
 
 
+<<<<<<< HEAD
+// Routes for event
+=======
 
 
 //Routes for Event
+>>>>>>> 798d67aacea7a7b948a9ef29bdf1d8aca65a1cd3
 Route::get('/api/v1/event/{id?}', 'Events@index');
 Route::post('/api/v1/event', 'Events@store');
 Route::post('/api/v1/event/{id}', 'Events@update');
