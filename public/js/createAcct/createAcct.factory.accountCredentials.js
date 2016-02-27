@@ -1,0 +1,48 @@
+(function() {
+	'use strict'
+
+	angular.module('createAcct')
+		.factory('accountCredentials', function() {
+
+			var _dependents = null
+			var _accountInfo = null
+			var _contact = null
+			var _currentState = 1
+			var _transfer = false
+
+			return {
+				setDependents: function(t) {
+					_dependents = t
+				},
+				getDependents: function() {
+					return _dependents
+				},
+				setAccountInfo: function(t) {
+					_accountInfo = t
+				},
+				getAccountInfo: function() {
+					return _accountInfo
+				},
+				setContact: function(t) {
+					_contact = t
+				},
+				getContact: function() {
+					return _contact
+				},
+				setTransfer: function(t) {
+					_transfer = t
+				},
+				getTransfer:function() {
+					return _transfer
+				},
+				resetAll: function() {
+					_dependents = null
+					_accountInfo = null
+					_contact = null
+					_transfer = false
+				}
+			}
+
+		})
+
+})()

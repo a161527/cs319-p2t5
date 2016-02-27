@@ -13,9 +13,28 @@
 					controller: 'loginCtrl'
 				})
 
-				.state('creatingAccount', {
+				.state('createAccount', {
 					url: '/create',
+					abstract: true,
 					templateUrl: 'js/createAcct/createAcct.view.html',
+					controller: 'createAcctCtrl'
+				})
+
+				.state('createAccount.1', {
+					url: '',
+					templateUrl: 'js/createAcct/createAcct.view.accountInfo.html',
+					controller: 'createAcctCtrl'
+				})
+
+				.state('createAccount.2', {
+					url: '',
+					templateUrl: 'js/createAcct/createAcct.view.dependents.html',
+					controller: 'createAcctCtrl'
+				})
+
+				.state('createAccount.3', {
+					url: '',
+					templateUrl: 'js/createAcct/createAcct.view.emergencyContact.html',
 					controller: 'createAcctCtrl'
 				})
 

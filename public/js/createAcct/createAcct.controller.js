@@ -2,22 +2,20 @@
 	'use strict'
 
 	angular.module('createAcct')
-		.controller('createAcctCtrl', function($scope) {
+		.controller('createAcctCtrl', function($scope, $state, accountCredentials) {
 
-			//initialize form to have one dependent
-			$scope.dependents = {'1':{}}
-			$scope.createAcct = {}
+			$scope.dependents = accountCredentials.getDependents() || {'1':{}} 
+			$scope.createAcct = accountCredentials.getAccountInfo() || {}
+			$scope.contact = accountCredentials.getContact() || {}
+			$scope.transfer = accountCredentials.getTransfer() || false
 
-			$scope.createAccount = function(createAcctForm, dependentsForm) {
-				var dependentsHandled = dependentsForm.$valid || $scope.transfer
-				if (createAcctForm.$valid && dependentsHandled) {
+			$scope.createAccount = function(form) {
+				if (form.$valid) {
 					alert('You did it!')
+					accountCredentials.resetAll()
+					$state.go('login')
 				} else {
-					angular.forEach(createAcctForm.$error.required, function(field) {
-						field.$setDirty()
-					})
-
-					angular.forEach(dependentsForm.$error.required, function(field) {
+					angular.forEach(form.$error.required, function(field) {
 						field.$setDirty()
 					})
 				}
@@ -49,6 +47,33 @@
 
 			$scope.showRemoveButton = function(index) {
 				return index > 1
+			}
+
+			$scope.cancel = function() {
+				accountCredentials.resetAll()
+				$state.go('login')
+			}
+
+			$scope.back = function(state, set, model) {
+				accountCredentials[set]($scope[model])
+				accountCredentials.setTransfer($scope.transfer)
+				var state = 'createAccount.' + state
+				$state.go(state)
+			}
+
+			$scope.nextStep = function(form, state, set, model) {
+				if (form.$valid || $scope.transfer === true) {
+
+					accountCredentials.setTransfer($scope.transfer)
+
+					accountCredentials[set]($scope[model])
+					var state = 'createAccount.' + state
+					$state.go(state)
+				} else {
+					angular.forEach(form.$error.required, function(field) {
+						field.$setDirty()
+					})
+				}
 			}
 
 		})

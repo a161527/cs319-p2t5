@@ -1,0 +1,91 @@
+<div class="progress">
+	<div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="33"
+	aria-valuemin="0" aria-valuemax="100" style="width:33%">
+		Step 1
+	</div>
+</div>
+
+<h4>Account Information</h4>
+<div class="panel panel-default">
+	<div class="panel-body">
+		<form name='createAcctForm' novalidate>
+			<div ng-model='createAcct'>
+
+				<div class='row'>
+					<div class='col-md-6'>
+
+						<input-with-validation model='createAcct.email' validation='createAcctForm' identifier='email' inp-type='email'>Email</input-with-validation>
+
+					</div>
+
+					<div class='col-md-6'>
+						<div class='form-group' ng-class='{"has-error": !createAcctForm.confirmEmail.$valid && createAcctForm.confirmEmail.$dirty}'>
+							<label for='confirmEmail'>Confirm Email</label>
+
+							<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
+							<input type='text' ng-model-options='{updateOn: "blur"}' ng-model='confirmEmail' ng-change='checkMatch(createAcctForm.confirmEmail, createAcct.email, confirmEmail)' class='form-control' id='confirmEmail' name='confirmEmail' required>
+
+							<!--Show error messages for confirmPassword-->
+							<!--Invalid confirmPassword message, if required error exists, show that instead-->
+							<error-message ng-show='createAcctForm.confirmEmail.$error.match && !createAcctForm.confirmEmail.$error.required'>
+								Email does not match
+							</error-message>
+
+							<error-message ng-show='createAcctForm.confirmEmail.$error.required && createAcctForm.confirmEmail.$dirty'>
+								Email confirmation is required
+							</error-message>
+						</div>
+					</div>
+
+				</div>
+
+				<div class='row'>
+					<div class='col-md-6'>
+						<div class='form-group' ng-class='{"has-error": !createAcctForm.password.$valid && createAcctForm.password.$dirty}'>
+							<label for='password'>Password</label>
+
+							<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
+							<input type='password' ng-model-options='{updateOn: "blur"}' ng-model='createAcct.password' ng-change='checkPasswordMatch(createAcctForm.confirmPassword)' ng-minlength='8' class='form-control' id='password' name='password' required>
+
+							<!--Show error messages for password-->
+							<!--Invalid password message, if required error exists, show that instead-->
+							<error-message ng-show='createAcctForm.password.$error.minlength && !createAcctForm.password.$error.required'>
+								Password must be atleast 8 characters long
+							</error-message>
+
+							<!--Required error message, only show when dirty-->
+							<error-message ng-show='createAcctForm.password.$error.required && createAcctForm.password.$dirty'>
+								Password is required
+							</error-message>
+						</div>
+					</div>
+
+					<div class='col-md-6'>
+						<div class='form-group' ng-class='{"has-error": !createAcctForm.confirmPassword.$valid && createAcctForm.confirmPassword.$dirty}'>
+							<label for='confirmPassword'>Confirm Password</label>
+
+							<input type='password' ng-model-options='{updateOn: "blur"}' ng-model='confirmPassword' ng-change='checkMatch(createAcctForm.confirmPassword, createAcct.password, confirmPassword)' class='form-control' id='confirmPassword' name='confirmPassword' required>
+
+							<error-message ng-show='createAcctForm.confirmPassword.$error.match && !createAcctForm.confirmPassword.$error.required'>
+								Password does not match
+							</error-message>
+
+							<error-message ng-show='createAcctForm.confirmPassword.$error.required && createAcctForm.confirmPassword.$dirty'>
+								Password confirmation is required
+							</error-message>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class='row'>
+	<div class='col-md-6'>
+		<button class='btn btn-default btn-block' ng-click='cancel()'>Cancel</button>
+	</div>
+	<div class='col-md-6'>
+		<button class='btn btn-primary btn-block' ng-click='nextStep(createAcctForm, "2", "setAccountInfo", "createAcct")'>Next</button>
+	</div>
+</div>
