@@ -75,4 +75,12 @@ class RegistrationController extends Controller
 	        return response()->json(['message' => 'validation_failed', 'errors' => $validator->errors()], 400);
 	    }
     }
+
+    public function checkEmail(Request $request) {
+    	$user = User::where('email', '=', $request->only('email'))->first();
+		if ($user === null)
+			return response()->json(['taken' => false]);
+		else
+			return response()->json(['taken' => true]);
+    }
 }
