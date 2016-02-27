@@ -21,7 +21,7 @@ class AuthenticationController extends Controller
         // the user from retrieving their token if they don't already have it
 
         // TODO: add jwt.refresh to middlewares to provide a new token to the response header
-        $this->middleware('jwt.auth', ['except' => ['authenticate']);
+        $this->middleware('jwt.auth', ['except' => ['authenticate']]);
     }
 
     public function index()
