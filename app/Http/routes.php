@@ -43,6 +43,9 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['prefix' => 'api'], function()
 {
+	// test for a page that requires a token to be submitted
     Route::resource('login', 'AuthenticationController', ['only' => ['index']]);
+
     Route::post('login', 'AuthenticationController@authenticate');
+    Route::post('register', array('as'=>'register', 'uses'=>'RegistrationController@register'));
 });
