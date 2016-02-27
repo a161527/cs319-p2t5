@@ -51,28 +51,24 @@ class RegistrationController extends Controller
 
     /**
      * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return User
      */
     protected function create(Request $request)
     {
 
-    	
-        // $user = new User();
-        // $user->firstName = $request->firstName;
-        // $user->lastName = $request->lastName;
-        // $user->email = $request->email;
-        // $user->password = bcrypt($request->password);
+        $user = new User();
+        $user->firstName = $request->firstName;
+        $user->lastName = $request->lastName;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+		$user->save();
 
-		// return $user->save();
     }
 
     public function register(Request $request) {
     	$validator = $this->validator($request->all());
 	    if ( $validator->passes() ) {
 	        // validation has passed, save user in DB
-	        $user = $this->create($request);
+	        $result = $this->create($request);
 	        return response()->json(['message' => 'account_created']);
 	    } else {
 	        // validation has failed, display error messages
