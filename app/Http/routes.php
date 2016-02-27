@@ -51,6 +51,7 @@ Route::group(['prefix' => 'api'], function()
 });
 
 
+// Routes for event
 Route::get('/api/v1/event/{id?}', 'Events@index');
 Route::post('/api/v1/event', 'Events@store');
 Route::post('/api/v1/event/{id}', 'Events@update');
