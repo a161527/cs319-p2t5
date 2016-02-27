@@ -2,28 +2,39 @@
 	'use strict'
 
 	angular.module('login')
-		.controller('loginCtrl', function($scope, $http, loginService) {
+		.controller('loginCtrl', function($scope, ajax, errorCodes) {
+
+			$scope.credentials = {}
+			$scope.errorMessage = ''
+			$scope.showError = false
 
 			$scope.login = function(fieldsFilled) {
+				$scope.showError = false
 
 				if (fieldsFilled) {
-					loginService.login('username', 'password').then(function(resData) {
-						console.log(resData)
+
+					ajax.login($scope.credentials).then(function(resData) {
+
+						alert('You did it!')
+
+					}, function(resData) {
+
+						$scope.showError = true
+						$scope.errorMessage = errorCodes[resData.data.error]
+
 					})
+
 				} else {
 					angular.forEach($scope.loginForm.$error.required, function(field) {
 						field.$setDirty()
 					})
 				}
-				// $scope.loginForm.username.$setValidity('auth', false)
 			}
 
-			$scope.resetAuthError = function(element) {
-				if (element.$error.auth) {
-					element.$setValidity('auth', true)
-				}
+			$scope.removeMessage = function() {
+				$scope.showError = false
 			}
-			
+
 		})
 
 })()

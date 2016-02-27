@@ -49,3 +49,10 @@ Route::group(['prefix' => 'api'], function()
     Route::post('login', 'AuthenticationController@authenticate');
     Route::post('register', array('as'=>'register', 'uses'=>'RegistrationController@register'));
 });
+
+
+Route::get('/api/v1/event/{id?}', 'Events@index');
+Route::post('/api/v1/event', 'Events@store');
+Route::post('/api/v1/event/{id}', 'Events@update');
+Route::delete('/api/v1/event/{id}', 'Events@destroy');
+
