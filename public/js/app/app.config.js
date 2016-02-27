@@ -7,16 +7,38 @@
 			$authProvider.loginUrl = '/api/login';
 
 			$stateProvider
-				.state('preLogin', {
+				.state('login', {
 					url: '',
 					templateUrl: 'js/login/login.view.main.html',
 					controller: 'loginCtrl'
 				})
 
-				.state('loggedIn', {
+				.state('creatingAccount', {
 					url: '/create',
 					templateUrl: 'js/createAcct/createAcct.view.html',
 					controller: 'createAcctCtrl'
+				})
+
+				.state('conferenceList', {
+					url: '/conferences',
+					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
+					controller: 'conferenceListCtrl',
+					resolve: {
+						conferenceList: function($http) {
+							return $http.get('api/conferences')
+						}
+					}
+				})
+
+				.state('viewConference', {
+					url: '/conference/:cid',
+					templateUrl: 'js/conferenceView/conferenceView.view.conferenceDetails.html',
+					controller: 'conferenceDetailsCtrl',
+					resolve: {
+						conferenceInfo: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid)
+						}
+					}
 				})
 
 		})

@@ -46,7 +46,7 @@
 					}, function(resData) {
 
 						blockUI.stop()
-						resolve(resData)
+						reject(resData)
 
 					})
 				})
