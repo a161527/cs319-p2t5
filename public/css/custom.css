@@ -1,0 +1,12 @@
+.glyphicon-large {
+	font-size: 5em;
+}
+
+.hand-cursor {
+	cursor: pointer;
+	cursor: hand;
+}
+
+.remove-button {
+	color: red;
+}

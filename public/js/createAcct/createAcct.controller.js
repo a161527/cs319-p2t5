@@ -4,8 +4,6 @@
 	angular.module('createAcct')
 		.controller('createAcctCtrl', function($scope) {
 
-			var dependentIndex = 1
-
 			//initialize form to have one dependent
 			$scope.dependents = {'1':{}}
 			$scope.createAcct = {}
@@ -34,14 +32,18 @@
 			}
 
 			$scope.addPerson = function() {
-				dependentIndex += 1
+				var dependentIndex = 1
+				while($scope.dependents.hasOwnProperty(dependentIndex)) {
+					dependentIndex += 1
+				}
 				$scope.dependents[dependentIndex] = {}
 			}
 
 			$scope.deleteDependent = function(index) {
 				if (index != 1) {
-					delete $scope.dependents[index]
-					dependentIndex -= 1
+					if ($scope.dependents.hasOwnProperty(index)) {
+						delete $scope.dependents[index]
+					}
 				}
 			}
 

@@ -4,6 +4,7 @@
 	model: ng-model, should be defined in the controller
 	identifer: unique identifier for the inputs
 	inpType: input type eg. password, text
+	changeFn: function, optional, if exists, bind to input and execute whenever change occurs
 */
 (function() {
 	'use strict'
@@ -18,9 +19,20 @@
 					validation: '=',
 					model: '=',
 					identifier: '@',
-					inpType: '@'
+					inpType: '@',
+					changeFn: '&'
 				},
-				templateUrl: 'js/forms/forms.view.inputWithValidation.html'
+				templateUrl: 'js/forms/forms.view.inputWithValidation.html',
+				link: function(scope, elements, attrs) {
+
+					//Bind the change function
+					if (scope.changeFn) {
+						elements.find('input').bind('change', function() {
+							scope.changeFn()
+						});
+					}
+
+				}
 			}
 		})
 
