@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableRequest extends Migration
+class CreateTableUserInventory extends Migration
 {
     /**
      * Run the migrations.
@@ -12,16 +12,18 @@ class CreateTableRequest extends Migration
      */
     public function up()
     {
-        Schema::create('requests', function (Blueprint $table) {
+        Schema::create('userinventory', function (Blueprint $table) {
           $table->increments('id');
-          $table->integer('roomID')->unsigned();
-          $table->integer('itemID')->unsigned();
-          $table->foreign('itemID')
-                ->references('id')->on('inventorys')
+          $table->integer('userID')->unsigned();
+          $table->integer('inventoryID')->unsigned();
+          // Many-to-One
+          $table->foreign('userID')
+                ->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-          $table->foreign('roomID')
-                ->references('id')->on('rooms')
+          // Many-to-One
+          $table->foreign('inventoryID')
+                ->references('id')->on('inventory')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -35,7 +37,7 @@ class CreateTableRequest extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('requests');
+        Schema::drop('userinventory');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

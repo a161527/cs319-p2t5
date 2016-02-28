@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableFlight extends Migration
+class CreateTableAccounts extends Migration
 {
     /**
      * Run the migrations.
@@ -12,16 +12,17 @@ class CreateTableFlight extends Migration
      */
     public function up()
     {
-        Schema::create('flights', function (Blueprint $table) {
+        Schema::create('accounts', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('flightNumber');
-          $table->string('airline');
-          $table->date('arrivalDate');
-          $table->time('arrivalTime');
-          $table->string('airport');
+          $table->string('email')->unique();
+          $table->string('password');
+          $table->integer('roleID')->unsigned();
+          // Many-to-One
+          $table->foreign('roleID')
+                ->references('id')->on('roles')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
-
-
     }
 
     /**
@@ -32,7 +33,7 @@ class CreateTableFlight extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('flights');
+        Schema::drop('accounts');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

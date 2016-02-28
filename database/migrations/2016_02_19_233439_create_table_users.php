@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableUser extends Migration
+class CreateTableUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -21,8 +21,9 @@ class CreateTableUser extends Migration
           $table->string('location');
           $table->string('notes')->nullable();
           $table->integer('accountID')->unsigned();
+          // Many-to-One
           $table->foreign('accountID')
-              ->references('id')->on('account')
+              ->references('id')->on('accounts')
               ->onDelete('cascade')
               ->onUpdate('cascade');
         });

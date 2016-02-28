@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableOrganize extends Migration
+class CreateTableUserRooms extends Migration
 {
     /**
      * Run the migrations.
@@ -12,16 +12,18 @@ class CreateTableOrganize extends Migration
      */
     public function up()
     {
-        Schema::create('organizes', function (Blueprint $table) {
+        Schema::create('userrooms', function (Blueprint $table) {
           $table->increments('id');
+          $table->integer('roomID')->unsigned();
           $table->integer('userID')->unsigned();
-          $table->integer('conferenceID')->unsigned();
+          // Many-to-One
           $table->foreign('userID')
                 ->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-          $table->foreign('conferenceID')
-                ->references('id')->on('conferences')
+          // Many-to-One
+          $table->foreign('roomID')
+                ->references('id')->on('rooms')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -35,7 +37,7 @@ class CreateTableOrganize extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('organizes');
+        Schema::drop('userrooms');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

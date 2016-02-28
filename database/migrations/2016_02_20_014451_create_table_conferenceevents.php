@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableSupervise extends Migration
+class CreateTableConferenceEvents extends Migration
 {
     /**
      * Run the migrations.
@@ -12,19 +12,16 @@ class CreateTableSupervise extends Migration
      */
     public function up()
     {
-        Schema::create('supervises', function (Blueprint $table) {
+        Schema::create('conferenceEvents', function (Blueprint $table) {
           $table->increments('id');
-          $table->integer('userID')->unsigned();
           $table->integer('conferenceID')->unsigned();
-          $table->integer('eventID')->unsigned();
-          $table->foreign('userID')
-                ->references('id')->on('users')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+          $table->integer('eventID')->unsigned()->unique();
+          // Many-to-One
           $table->foreign('conferenceID')
-                ->references('conferenceID')->on('events')
+                ->references('id')->on('conferences')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+          // One-to-One
           $table->foreign('eventID')
                 ->references('id')->on('events')
                 ->onDelete('cascade')
@@ -40,7 +37,7 @@ class CreateTableSupervise extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('supervises');
+        Schema::drop('conferenceevents');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

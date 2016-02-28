@@ -17,10 +17,12 @@ class CreateTableUserConferences extends Migration
           $table->integer('userID')->unsigned();
           $table->integer('conferenceID')->unsigned();
           $table->boolean('needsTransportation');
+          // Many-to-One
           $table->foreign('userID')
                 ->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+          // Many-to-One
           $table->foreign('conferenceID')
                 ->references('id')->on('conferences')
                 ->onDelete('cascade')

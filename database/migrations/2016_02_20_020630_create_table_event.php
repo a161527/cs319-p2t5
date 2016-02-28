@@ -22,6 +22,7 @@ class CreateTableEvent extends Migration
           $table->integer('capacity');
           $table->string('description')->nullable();
           $table->integer('conferenceID')->unsigned();
+          // Many-to-One
           $table->foreign('conferenceID')
                 ->references('id')->on('conferences')
                 ->onDelete('cascade')
