@@ -7,7 +7,6 @@
 			var _dependents = null
 			var _accountInfo = null
 			var _contact = null
-			var _currentState = 1
 			var _transfer = false
 
 			return {

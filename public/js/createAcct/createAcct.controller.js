@@ -15,9 +15,7 @@
 					accountCredentials.resetAll()
 					$state.go('login')
 				} else {
-					angular.forEach(form.$error.required, function(field) {
-						field.$setDirty()
-					})
+					setFormDirty(form)
 				}
 			}
 
@@ -54,26 +52,36 @@
 				$state.go('login')
 			}
 
-			$scope.back = function(state, set, model) {
-				accountCredentials[set]($scope[model])
-				accountCredentials.setTransfer($scope.transfer)
-				var state = 'createAccount.' + state
-				$state.go(state)
+			$scope.back = function(toState, set, model) {
+				if (model === 'dependents') {
+					accountCredentials.setTransfer($scope.transfer)
+				}
+
+				onNavigate(toState, set, model)
 			}
 
-			$scope.nextStep = function(form, state, set, model) {
-				if (form.$valid || $scope.transfer === true) {
-
+			$scope.nextStep = function(form, toState, set, model) {
+				if ($scope.transfer === true && model === 'dependents') {
 					accountCredentials.setTransfer($scope.transfer)
-
-					accountCredentials[set]($scope[model])
-					var state = 'createAccount.' + state
-					$state.go(state)
-				} else {
-					angular.forEach(form.$error.required, function(field) {
-						field.$setDirty()
-					})
+					onNavigate(toState, set, model)
 				}
+				else if (form.$valid) {
+					onNavigate(toState, set, model)
+				} else {
+					setFormDirty(form)
+				}
+			}
+
+			var setFormDirty = function(form) {
+				angular.forEach(form.$error.required, function(field) {
+					field.$setDirty()
+				})
+			}
+
+			var onNavigate = function(toState, set, model) {
+				accountCredentials[set]($scope[model])
+				var state = 'createAccount.' + toState
+				$state.go(state)
 			}
 
 		})
