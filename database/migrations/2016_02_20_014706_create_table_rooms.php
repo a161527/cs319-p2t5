@@ -17,6 +17,7 @@ class CreateTableRooms extends Migration
           $table->string('residenceName');
           $table->string('roomNumber');
           $table->string('location');
+          $table->integer('capacity')->unsigned();
           $table->integer('conferenceID')->unsigned();
           // Many-to-One
           $table->foreign('conferenceID')

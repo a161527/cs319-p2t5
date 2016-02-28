@@ -18,7 +18,7 @@ class CreateTableEvent extends Migration
           $table->date('date');
           $table->string('location');
           $table->time('startTime');
-          $table->time('endTime')->nullable();
+          $table->time('endTime');
           $table->integer('capacity');
           $table->string('description')->nullable();
           $table->integer('conferenceID')->unsigned();

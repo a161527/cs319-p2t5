@@ -14,6 +14,7 @@ class CreateTableUserInventory extends Migration
     {
         Schema::create('userinventory', function (Blueprint $table) {
           $table->increments('id');
+          $table->integer('unitCount')->unsigned();
           $table->integer('userID')->unsigned();
           $table->integer('inventoryID')->unsigned();
           // Many-to-One
