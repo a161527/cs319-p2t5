@@ -8,7 +8,7 @@
 
 			$stateProvider
 				.state('login', {
-					url: '',
+					url: '/',
 					templateUrl: 'js/login/login.view.main.html',
 					controller: 'loginCtrl'
 				})
@@ -35,6 +35,12 @@
 				.state('createAccount.3', {
 					url: '',
 					templateUrl: 'js/createAcct/createAcct.view.emergencyContact.html',
+					controller: 'createAcctCtrl'
+				})
+
+				.state('createAccount.4', {
+					url: '',
+					templateUrl: 'js/createAcct/createAcct.view.reviewInfo.html',
 					controller: 'createAcctCtrl'
 				})
 

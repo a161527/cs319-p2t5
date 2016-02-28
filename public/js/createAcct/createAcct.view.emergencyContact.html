@@ -39,10 +39,10 @@
 	</div>
 	<div class='row'>
 		<div class='col-md-6'>
-			<a class='btn btn-default btn-block' ui-sref='createAccount.2'>Back</a>
+			<button class='btn btn-default btn-block' ng-click='back("2", "setContact", "contact")'>Back</button>
 		</div>
 		<div class='col-md-6'>
-			<button class='btn btn-primary btn-block' ng-click='createAccount(contactForm)'>Finish</button>
+			<button class='btn btn-primary btn-block' ng-click='nextStep(contactForm, "4", "setContact", "contact")'>Next</button>
 		</div>
 	</div>
 </form>

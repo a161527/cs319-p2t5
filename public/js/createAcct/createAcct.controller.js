@@ -9,14 +9,10 @@
 			$scope.contact = accountCredentials.getContact() || {}
 			$scope.transfer = accountCredentials.getTransfer() || false
 
-			$scope.createAccount = function(form) {
-				if (form.$valid) {
-					alert('You did it!')
-					accountCredentials.resetAll()
-					$state.go('login')
-				} else {
-					setFormDirty(form)
-				}
+			$scope.createAccount = function() {
+				alert('You did it!')
+				accountCredentials.resetAll()
+				$state.go('login')
 			}
 
 			$scope.checkMatch = function(validation, field, confirmationField) {
@@ -48,7 +44,7 @@
 			}
 
 			$scope.cancel = function() {
-				accountCredentials.resetAll()
+				accountCredentials['setAccountInfo']($scope.createAcct)
 				$state.go('login')
 			}
 
@@ -61,8 +57,8 @@
 			}
 
 			$scope.nextStep = function(form, toState, set, model) {
+				accountCredentials.setTransfer($scope.transfer)
 				if ($scope.transfer === true && model === 'dependents') {
-					accountCredentials.setTransfer($scope.transfer)
 					onNavigate(toState, set, model)
 				}
 				else if (form.$valid) {
