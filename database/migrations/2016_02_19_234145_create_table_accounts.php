@@ -16,12 +16,6 @@ class CreateTableAccounts extends Migration
           $table->increments('id');
           $table->string('email')->unique();
           $table->string('password');
-          $table->integer('roleID')->unsigned();
-          // Many-to-One
-          $table->foreign('roleID')
-                ->references('id')->on('roles')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
         });
     }
 
