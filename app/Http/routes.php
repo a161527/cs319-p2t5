@@ -11,15 +11,23 @@
 |
 */
 
+Route::group(['prefix' => 'api/conferences'], function () {
+    Route::get('', 'ConferenceController@getInfoList');
+    Route::post('', 'ConferenceController@createNew');
+
+    Route::group(['prefix' => '{confId}'], function () {
+        Route::get('', 'ConferenceController@getInfo');
+        Route::put('', 'ConferenceController@replace');
+        Route::delete('', 'ConferenceController@delete');
+    });
+});
+
 Route::get('/', function()
 {
 	// change login.html to whatever the index page for angular will be
     return File::get(public_path() . '/login.html');
 });
 
-Route::get('/test/hi', function() {
-	return "Hello world";
-});
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -43,14 +51,16 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['prefix' => 'api'], function()
 {
+	// test for a page that requires a token to be submitted
     Route::resource('login', 'AuthenticationController', ['only' => ['index']]);
-    Route::post('login', 'AuthenticationController@authenticate');
+
+    Route::post('login', array('as' => 'login', 'uses' => 'AuthenticationController@authenticate'));
+    Route::post('register', array('as' => 'register', 'uses'=>'RegistrationController@register'));
 });
 
-
-
-//Routes for Event
+// Routes for Event
 Route::get('/api/v1/event/{id?}', 'Events@index');
 Route::post('/api/v1/event', 'Events@store');
 Route::post('/api/v1/event/{id}', 'Events@update');
 Route::delete('/api/v1/event/{id}', 'Events@destroy');
+

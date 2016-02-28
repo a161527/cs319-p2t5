@@ -62,11 +62,8 @@
 									<div class='form-group' ng-class='{"has-error": !createAcctForm.confirmPassword.$valid && createAcctForm.confirmPassword.$dirty}'>
 										<label for='confirmPassword'>Confirm Password</label>
 
-										<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
 										<input type='password' ng-model-options='{updateOn: "blur"}' ng-model='confirmPassword' ng-change='checkMatch(createAcctForm.confirmPassword, createAcct.password, confirmPassword)' class='form-control' id='confirmPassword' name='confirmPassword' required>
 
-										<!--Show error messages for confirmPassword-->
-										<!--Invalid confirmPassword message, if required error exists, show that instead-->
 										<error-message ng-show='createAcctForm.confirmPassword.$error.match && !createAcctForm.confirmPassword.$error.required'>
 											Password does not match
 										</error-message>
@@ -78,19 +75,36 @@
 								</div>
 							</div>
 
-	<!-- 						<div class='row'>
-								<div class='col-md-6'>
-									<div class='form-group' ng-class='{"has-error": !createAcctForm.phone.$valid && createAcctForm.phone.$dirty}'>
-										<label for='phone'>Phone</label>
+							<h4>Emergency Contact</h4>
+							<div class="panel panel-default">
+								
+								<div class="panel-body">
+									<div class='row'>
+										<div class='col-md-6'>
+											<input-with-validation model='createAcct.emergencyContactName' validation='createAcctForm' identifier='emergencyContactName' inp-type='text'>Email</input-with-validation>
+										</div>
 
-										<input type='text' ng-model-options='{updateOn: "blur"}' ng-pattern='/^(\d+(-\d+)?)*$/' ng-model='phone' class='form-control' id='phone' name='phone'>
+										<div class='col-md-6'>
+											<div class='form-group' ng-class='{"has-error": !createAcctForm.phone.$valid && createAcctForm.phone.$dirty}'>
+												<label for='phone'>Phone</label>
 
-										<error-message ng-show='createAcctForm.phone.$error.pattern'>
-											Phone number is not valid
-										</error-message>
+												<input type='text' ng-model-options='{updateOn: "blur"}' ng-pattern='/^(\d+(-\d+)?)*$/' ng-model='createAcct.phone' class='form-control' id='phone' name='phone' required>
+
+												<error-message ng-show='createAcctForm.phone.$error.pattern'>
+													Phone number is not valid
+												</error-message>
+
+												<error-message ng-show='createAcctForm.phone.$error.required && createAcctForm.phone.$dirty'>
+													Password confirmation is required
+												</error-message>
+
+											</div>
+										</div>
+
 									</div>
 								</div>
-							</div> -->
+							</div>
+	
 						</div>
 					</form>
 
@@ -101,10 +115,7 @@
 					<div ng-hide='transfer'>
 						<div class='row'>
 							<div class='col-md-8'>
-								<h4>Dependents</h4>
-							</div>
-							<div class='col-md-4'>
-								<button class='btn btn-info pull-right' ng-click='addPerson()'><span class="glyphicon glyphicon-plus"></span> Add Dependents</button>
+								<h4>Dependent Users</h4>
 							</div>
 						</div>
 						
@@ -115,7 +126,7 @@
 									<div class="panel-body" ng-model='dependents[idx]'>
 										<div class='row' ng-show='showRemoveButton(idx)'>
 											<div class='col-md-offset-11 col-md-1'>
-												<div class="glyphicon glyphicon-remove" ng-click='deleteDependent(idx)'></div>
+												<div class='glyphicon glyphicon-remove hand-cursor remove-button' ng-click='deleteDependent(idx)'></div>
 											</div>
 										</div>
 
@@ -152,11 +163,11 @@
 
 										<div class='row'>
 											<div class='col-md-6'>
-												<input-with-validation model='dependents[idx].city' validation='dependentsForm' identifier='city' inp-type='text'>City</input>
+												<input-with-validation model='dependents[idx].city' validation='dependentsForm' identifier='city{{idx}}' inp-type='text'>City</input>
 											</div>
 
 											<div class='col-md-6'>
-												<input-with-validation model='dependents[idx].country' validation='dependentsForm' identifier='country' inp-type='text'>Country</input>
+												<input-with-validation model='dependents[idx].country' validation='dependentsForm' identifier='country{{idx}}' inp-type='text'>Country</input>
 											</div>
 										</div>
 
@@ -167,10 +178,9 @@
 
 									</div>
 								</div>
-
 							</div>
 						</form>
-
+						<button class='btn btn-success pull-right' ng-click='addPerson()'><span class="glyphicon glyphicon-plus"></span> Add Dependents</button>
 					</div>
 				</div>
 			</div>

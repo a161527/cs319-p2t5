@@ -46,6 +46,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        if ($e instanceof ValidationException) {
+            return response("Bad input", 400);
+        }
+
         return parent::render($request, $e);
     }
 }

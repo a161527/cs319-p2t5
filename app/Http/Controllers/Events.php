@@ -32,7 +32,6 @@ class Events extends Controller
      */
     public function store(Request $request) {
         $event = new Event;
-
         $event->eventName = $request->input('eventName');
         $event->date = $request->input('date');
         $event->location = $request->input('location');
@@ -40,8 +39,7 @@ class Events extends Controller
         $event->seatsCount = $request->input('seatsCount');
         $event->conferenceID = $request->input('conferenceID');
         $event->save();
-
-        return 'Employee record successfully created with id ' . $event->id;
+        return response()->json(['Employee ID' => $event->id]);
     }
 
     /**
@@ -71,8 +69,7 @@ class Events extends Controller
         $event->seatsCount = $request->input('seatsCount');
         $event->conferenceID = $request->input('conferenceID');
         $event->save();
-
-        return "User with Id number " . $event->id ." has been updated.";
+        return response()->json(['Employee ID' => $event->id]);
     }
 
     /**
@@ -84,7 +81,6 @@ class Events extends Controller
     public function destroy($id) {
         $event = Event::find($id);
         $event->delete();
-
-        return "Event with ID number " . $id." has been deleted.";
+        return response()->json(['Employee ID' => $event->id]);
     }
 }
