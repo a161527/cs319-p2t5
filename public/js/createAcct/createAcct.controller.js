@@ -2,25 +2,18 @@
 	'use strict'
 
 	angular.module('createAcct')
-		.controller('createAcctCtrl', function($scope) {
+		.controller('createAcctCtrl', function($scope, $state, accountCredentials) {
 
-			//initialize form to have one dependent
-			$scope.dependents = {'1':{}}
-			$scope.createAcct = {}
+			$scope.dependents = accountCredentials.getDependents() || {'1':{}} 
+			$scope.createAcct = accountCredentials.getAccountInfo() || {}
+			$scope.contact = accountCredentials.getContact() || {}
+			$scope.transfer = accountCredentials.getTransfer() || false
+			$scope.triggerModal = false
 
-			$scope.createAccount = function(createAcctForm, dependentsForm) {
-				var dependentsHandled = dependentsForm.$valid || $scope.transfer
-				if (createAcctForm.$valid && dependentsHandled) {
-					alert('You did it!')
-				} else {
-					angular.forEach(createAcctForm.$error.required, function(field) {
-						field.$setDirty()
-					})
-
-					angular.forEach(dependentsForm.$error.required, function(field) {
-						field.$setDirty()
-					})
-				}
+			$scope.createAccount = function() {
+				alert('You did it!')
+				accountCredentials.resetAll()
+				$state.go('login')
 			}
 
 			$scope.checkMatch = function(validation, field, confirmationField) {
@@ -28,6 +21,16 @@
 					validation.$setValidity('match', false)
 				} else {
 					validation.$setValidity('match', true)
+				}
+			}
+
+			$scope.checkEmailAvail = function(validation, email) {
+				if (email === 'test@foo') {
+					//email available
+					validation.$setValidity('emailAvailable', true)
+				} else {
+					//email not available, show error
+					validation.$setValidity('emailAvailable', false)
 				}
 			}
 
@@ -49,6 +52,45 @@
 
 			$scope.showRemoveButton = function(index) {
 				return index > 1
+			}
+
+			$scope.cancel = function() {
+				// accountCredentials['setAccountInfo']($scope.createAcct)
+				// $scope.triggerModal = true
+				accountCredentials.resetAll()
+				$state.go('login')
+			}
+
+			$scope.back = function(toState, set, model) {
+				if (model === 'dependents') {
+					accountCredentials.setTransfer($scope.transfer)
+				}
+
+				onNavigate(toState, set, model)
+			}
+
+			$scope.nextStep = function(form, toState, set, model) {
+				accountCredentials.setTransfer($scope.transfer)
+				if ($scope.transfer === true && model === 'dependents') {
+					onNavigate(toState, set, model)
+				}
+				else if (form.$valid) {
+					onNavigate(toState, set, model)
+				} else {
+					setFormDirty(form)
+				}
+			}
+
+			var setFormDirty = function(form) {
+				angular.forEach(form.$error.required, function(field) {
+					field.$setDirty()
+				})
+			}
+
+			var onNavigate = function(toState, set, model) {
+				accountCredentials[set]($scope[model])
+				var state = 'createAccount.' + toState
+				$state.go(state)
 			}
 
 		})

@@ -20,7 +20,7 @@
 					}, function(resData) {
 
 						$scope.showError = true
-						$scope.errorMessage = errorCodes[resData.data.error]
+						$scope.errorMessage = errorCodes[resData.data.message]
 
 					})
 
