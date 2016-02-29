@@ -13,8 +13,25 @@
 
 				<div class='row'>
 					<div class='col-md-6'>
+						<div class='form-group' ng-class='{"has-error": !createAcctForm.email.$valid && createAcctForm.email.$dirty, "has-success": createAcctForm.email.$valid}'>
+							<label for='email'>Email</label>
 
-						<input-with-validation model='createAcct.email' validation='createAcctForm' identifier='email' inp-type='email'>Email</input-with-validation>
+							<input type='email' ng-model-options='{updateOn: "blur"}' ng-model='createAcct.email' ng-change='checkEmailAvail(createAcctForm.email, createAcct.email)' class='form-control' id='email' name='email' required>
+
+							<div class="alert alert-success" ng-show='createAcctForm.email.$valid'><span class="glyphicon glyphicon-ok"></span> Email is available</div>
+
+							<error-message ng-show='createAcctForm.email.$error.emailAvailable && !createAcctForm.email.$error.email && !createAcctForm.email.$error.required'>
+								Email is already in use
+							</error-message>
+
+							<error-message ng-show='createAcctForm.email.$error.email && !createAcctForm.email.$error.required'>
+								Not a valid email
+							</error-message>
+
+							<error-message ng-show='createAcctForm.email.$error.required && createAcctForm.email.$dirty'>
+								Email is required
+							</error-message>
+						</div>
 
 					</div>
 
@@ -22,11 +39,8 @@
 						<div class='form-group' ng-class='{"has-error": !createAcctForm.confirmEmail.$valid && createAcctForm.confirmEmail.$dirty}'>
 							<label for='confirmEmail'>Confirm Email</label>
 
-							<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
 							<input type='text' ng-model-options='{updateOn: "blur"}' ng-model='confirmEmail' ng-change='checkMatch(createAcctForm.confirmEmail, createAcct.email, confirmEmail)' class='form-control' id='confirmEmail' name='confirmEmail' required>
 
-							<!--Show error messages for confirmPassword-->
-							<!--Invalid confirmPassword message, if required error exists, show that instead-->
 							<error-message ng-show='createAcctForm.confirmEmail.$error.match && !createAcctForm.confirmEmail.$error.required'>
 								Email does not match
 							</error-message>
@@ -44,16 +58,12 @@
 						<div class='form-group' ng-class='{"has-error": !createAcctForm.password.$valid && createAcctForm.password.$dirty}'>
 							<label for='password'>Password</label>
 
-							<!--Restrict inputs to alpha numeric characters and dashes/underscores-->
 							<input type='password' ng-model-options='{updateOn: "blur"}' ng-model='createAcct.password' ng-change='checkPasswordMatch(createAcctForm.confirmPassword)' ng-minlength='8' class='form-control' id='password' name='password' required>
 
-							<!--Show error messages for password-->
-							<!--Invalid password message, if required error exists, show that instead-->
 							<error-message ng-show='createAcctForm.password.$error.minlength && !createAcctForm.password.$error.required'>
 								Password must be atleast 8 characters long
 							</error-message>
 
-							<!--Required error message, only show when dirty-->
 							<error-message ng-show='createAcctForm.password.$error.required && createAcctForm.password.$dirty'>
 								Password is required
 							</error-message>
@@ -89,3 +99,4 @@
 		<button class='btn btn-primary btn-block' ng-click='nextStep(createAcctForm, "2", "setAccountInfo", "createAcct")'>Next</button>
 	</div>
 </div>
+<modal show='triggerModal' button-name='OK'>OK</modal>

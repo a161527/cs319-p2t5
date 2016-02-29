@@ -8,6 +8,7 @@
 			$scope.createAcct = accountCredentials.getAccountInfo() || {}
 			$scope.contact = accountCredentials.getContact() || {}
 			$scope.transfer = accountCredentials.getTransfer() || false
+			$scope.triggerModal = false
 
 			$scope.createAccount = function() {
 				alert('You did it!')
@@ -20,6 +21,16 @@
 					validation.$setValidity('match', false)
 				} else {
 					validation.$setValidity('match', true)
+				}
+			}
+
+			$scope.checkEmailAvail = function(validation, email) {
+				if (email === 'test@foo') {
+					//email available
+					validation.$setValidity('emailAvailable', true)
+				} else {
+					//email not available, show error
+					validation.$setValidity('emailAvailable', false)
 				}
 			}
 
@@ -44,7 +55,9 @@
 			}
 
 			$scope.cancel = function() {
-				accountCredentials['setAccountInfo']($scope.createAcct)
+				// accountCredentials['setAccountInfo']($scope.createAcct)
+				// $scope.triggerModal = true
+				accountCredentials.resetAll()
 				$state.go('login')
 			}
 

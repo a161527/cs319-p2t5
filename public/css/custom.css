@@ -15,6 +15,6 @@
 	color: red;
 }
 
- .panel-body  {
-    word-break: break-all;
+.break-all {
+	word-break: break-all;
 }
