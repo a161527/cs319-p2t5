@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableAccounts extends Migration
+class CreateTableTransportation extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,9 @@ class CreateTableAccounts extends Migration
      */
     public function up()
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('transportation', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('email')->unique();
-          $table->string('password');
+          $table->integer('capacity');
         });
     }
 
@@ -26,8 +25,8 @@ class CreateTableAccounts extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('accounts');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
-    }
+      DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+      Schema::drop('transportation');
+      DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+       }
 }

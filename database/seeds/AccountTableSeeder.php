@@ -2,9 +2,9 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
+use App\Models\Account;
 
-class UserTableSeeder extends Seeder
+class AccountTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,12 +12,12 @@ class UserTableSeeder extends Seeder
      * @return void
      */
     public function run()
-    {
+    {     
         Model::unguard();
 
-        DB::table('users')->delete();
+        DB::table('accounts')->delete();
 
-        $users = array(
+        $accounts = array(
                 ['email' => 'ryanchenkie@gmail.com', 'password' => Hash::make('secret')],
                 ['email' => 'chris@scotch.io', 'password' => Hash::make('secret')],
                 ['email' => 'holly@scotch.io', 'password' => Hash::make('secret')],
@@ -25,10 +25,10 @@ class UserTableSeeder extends Seeder
         );
             
         // Loop through each user above and create the record for them in the database
-        // foreach ($users as $u)
-        // {
-        //     User::create($u);
-        // }
+        foreach ($accounts as $a)
+        {
+            Account::create($a);
+        }
 
         Model::reguard();
     }

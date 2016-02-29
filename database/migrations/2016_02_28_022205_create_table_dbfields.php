@@ -15,8 +15,11 @@ class CreateTableDBFields extends Migration
         Schema::create('dbfields', function (Blueprint $table) {
             $table->increments('id');
             $table->string('fieldName');
-            $table->string('tableID');
+            $table->integer('tableID')->unsigned();
             $table->boolean('tracked');
+        });
+
+        Schema::table('dbfields', function(Blueprint $table) {
             $table->foreign('tableID')
                   ->references('id')->on('dbtables')
                   ->onDelete('cascade')

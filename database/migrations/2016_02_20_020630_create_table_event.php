@@ -29,7 +29,6 @@ class CreateTableEvent extends Migration
                 ->onUpdate('cascade');
         });
     }
-
     /**
      * Reverse the migrations.
      *

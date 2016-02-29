@@ -26,6 +26,7 @@ class CreateTableUsers extends Migration
               ->references('id')->on('accounts')
               ->onDelete('cascade')
               ->onUpdate('cascade');
+          $table->timestamps();
         });
     }
 
