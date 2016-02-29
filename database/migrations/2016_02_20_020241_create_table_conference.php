@@ -15,9 +15,12 @@ class CreateTableConference extends Migration
         Schema::create('conferences', function (Blueprint $table) {
           $table->increments('id');
           $table->string('conferenceName');
-          $table->string('dateStart');
-          $table->string('dateEnd');
+          $table->date('dateStart');
+          $table->date('dateEnd');
           $table->string('location');
+          $table->string('description')->nullable();
+          $table->boolean('hasTransportation');
+          $table->boolean('hasAccommodations');
         });
     }
 

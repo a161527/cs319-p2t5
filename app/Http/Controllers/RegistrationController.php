@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Models\Account;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -55,12 +55,12 @@ class RegistrationController extends Controller
     protected function create(Request $request)
     {
 
-        $user = new User();
-        $user->firstName = $request->firstName;
-        $user->lastName = $request->lastName;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-		$user->save();
+        $account = new Account();
+        $account->firstName = $request->firstName;
+        $account->lastName = $request->lastName;
+        $account->email = $request->email;
+        $account->password = Hash::make($request->password);
+		$account->save();
 
     }
 
@@ -77,8 +77,8 @@ class RegistrationController extends Controller
     }
 
     public function checkEmail(Request $request) {
-    	$user = User::where('email', '=', $request->only('email'))->first();
-		if ($user === null)
+    	$account = Account::where('email', '=', $request->only('email'))->first();
+		if ($account === null)
 			return response()->json(['taken' => false]);
 		else
 			return response()->json(['taken' => true]);

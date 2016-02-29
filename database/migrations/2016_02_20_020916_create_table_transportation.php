@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableTaxiBus extends Migration
+class CreateTableTransportation extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,8 @@ class CreateTableTaxiBus extends Migration
      */
     public function up()
     {
-        Schema::create('taxiBuses', function (Blueprint $table) {
+        Schema::create('transportation', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('taxiBusNumber');
           $table->integer('capacity');
         });
     }
@@ -27,7 +26,7 @@ class CreateTableTaxiBus extends Migration
     public function down()
     {
       DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-      Schema::drop('taxiBuses');
+      Schema::drop('transportation');
       DB::statement('SET FOREIGN_KEY_CHECKS = 1');
        }
 }

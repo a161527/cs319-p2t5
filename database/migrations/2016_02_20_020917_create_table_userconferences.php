@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableRequire extends Migration
+class CreateTableUserConferences extends Migration
 {
     /**
      * Run the migrations.
@@ -12,21 +12,17 @@ class CreateTableRequire extends Migration
      */
     public function up()
     {
-        Schema::create('requires', function (Blueprint $table) {
+        Schema::create('userconferences', function (Blueprint $table) {
           $table->increments('id');
           $table->integer('userID')->unsigned();
           $table->integer('conferenceID')->unsigned();
-          $table->integer('eventID')->unsigned();
+          $table->boolean('needsTransportation');
           $table->foreign('userID')
                 ->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
           $table->foreign('conferenceID')
                 ->references('id')->on('conferences')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-          $table->foreign('eventID')
-                ->references('id')->on('events')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -40,7 +36,7 @@ class CreateTableRequire extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('requires');
+        Schema::drop('userconferences');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableVisit extends Migration
+class CreateTableUserEvents extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateTableVisit extends Migration
      */
     public function up()
     {
-        Schema::create('visits', function (Blueprint $table) {
+        Schema::create('userevents', function (Blueprint $table) {
           $table->increments('id');
           $table->integer('userID')->unsigned();
           $table->integer('eventID')->unsigned();
@@ -35,7 +35,7 @@ class CreateTableVisit extends Migration
     public function down()
     {
       DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-      Schema::drop('visits');
+      Schema::drop('userevents');
       DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }
