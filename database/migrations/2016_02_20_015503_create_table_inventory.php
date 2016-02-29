@@ -12,11 +12,19 @@ class CreateTableInventory extends Migration
      */
     public function up()
     {
-        Schema::create('inventorys', function (Blueprint $table) {
+        Schema::create('inventory', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('disposable');
-          $table->string('quantity');
+          $table->integer('currentQuantity');
+          $table->integer('totalQuantity');
+          $table->string('units')->nullable();
           $table->string('itemName');
+          $table->boolean('disposable');
+          $table->integer('conferenceID')->unsigned();
+          // Many-to-One
+          $table->foreign('conferenceID')
+                ->references('id')->on('conferences')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 
@@ -28,7 +36,7 @@ class CreateTableInventory extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('inventorys');
+        Schema::drop('inventory');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

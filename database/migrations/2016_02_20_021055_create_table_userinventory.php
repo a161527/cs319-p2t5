@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableGroupdependent extends Migration
+class CreateTableUserInventory extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,19 @@ class CreateTableGroupdependent extends Migration
      */
     public function up()
     {
-        Schema::create('groupdependents', function (Blueprint $table) {
+        Schema::create('userinventory', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('dateOfBirth');
-          $table->string('firstName');
-          $table->string('lastName');
+          $table->integer('unitCount')->unsigned();
           $table->integer('userID')->unsigned();
+          $table->integer('inventoryID')->unsigned();
+          // Many-to-One
           $table->foreign('userID')
                 ->references('id')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+          // Many-to-One
+          $table->foreign('inventoryID')
+                ->references('id')->on('inventory')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -33,7 +38,7 @@ class CreateTableGroupdependent extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('groupdependents');
+        Schema::drop('userinventory');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

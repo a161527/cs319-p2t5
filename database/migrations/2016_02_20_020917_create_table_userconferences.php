@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableBook extends Migration
+class CreateTableUserConferences extends Migration
 {
     /**
      * Run the migrations.
@@ -12,16 +12,19 @@ class CreateTableBook extends Migration
      */
     public function up()
     {
-        Schema::create('books', function (Blueprint $table) {
+        Schema::create('userconferences', function (Blueprint $table) {
           $table->increments('id');
-          $table->integer('roomID')->unsigned();
           $table->integer('userID')->unsigned();
+          $table->integer('conferenceID')->unsigned();
+          $table->boolean('needsTransportation');
+          // Many-to-One
           $table->foreign('userID')
                 ->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-          $table->foreign('roomID')
-                ->references('id')->on('rooms')
+          // Many-to-One
+          $table->foreign('conferenceID')
+                ->references('id')->on('conferences')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -35,7 +38,7 @@ class CreateTableBook extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('books');
+        Schema::drop('userconferences');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

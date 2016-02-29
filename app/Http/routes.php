@@ -55,7 +55,10 @@ Route::group(['prefix' => 'api'], function()
     Route::resource('login', 'AuthenticationController', ['only' => ['index']]);
 
     Route::post('login', array('as' => 'login', 'uses' => 'AuthenticationController@authenticate'));
-    Route::post('register', array('as' => 'register', 'uses'=>'RegistrationController@register'));
+    Route::post('register', array('as' => 'register', 'uses' => 'RegistrationController@register'));
+
+    // check if email is taken
+    Route::post('checkemail', array('as' => 'checkemail', 'uses' => 'RegistrationController@checkEmail'));
 });
 
 // Routes for Event

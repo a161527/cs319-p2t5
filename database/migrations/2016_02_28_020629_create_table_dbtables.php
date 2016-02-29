@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTimestampsToUsersTable extends Migration
+class CreateTableDBTables extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,9 @@ class AddTimestampsToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->timestamps();
-
+        Schema::create('dbtables', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('tableName')->unique();
         });
     }
 
@@ -25,8 +25,6 @@ class AddTimestampsToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        Schema::drop('dbtables');
     }
 }
