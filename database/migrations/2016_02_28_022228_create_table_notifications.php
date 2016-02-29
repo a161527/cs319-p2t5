@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableRequire extends Migration
+class CreateTableNotifications extends Migration
 {
     /**
      * Run the migrations.
@@ -12,21 +12,25 @@ class CreateTableRequire extends Migration
      */
     public function up()
     {
-        Schema::create('requires', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
           $table->increments('id');
+          $table->string('message');
           $table->integer('userID')->unsigned();
-          $table->integer('conferenceID')->unsigned();
-          $table->integer('eventID')->unsigned();
+          $table->integer('dbtriggerID')->unsigned();
+          $table->integer('changehistoryID')->unsigned();
+          // Many-to-One
           $table->foreign('userID')
                 ->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-          $table->foreign('conferenceID')
-                ->references('id')->on('conferences')
+          // Many-to-One
+          $table->foreign('dbtriggerID')
+                ->references('id')->on('dbtriggers')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-          $table->foreign('eventID')
-                ->references('id')->on('events')
+          // Many-to-One
+          $table->foreign('changehistoryID')
+                ->references('id')->on('changehistory')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -40,7 +44,8 @@ class CreateTableRequire extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('requires');
+        Schema::drop('notifications');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+
     }
 }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableAnnouncement extends Migration
+class CreateTableTransportation extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,9 @@ class CreateTableAnnouncement extends Migration
      */
     public function up()
     {
-        Schema::create('announcements', function (Blueprint $table) {
+        Schema::create('transportation', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('message');
+          $table->integer('capacity');
         });
     }
 
@@ -25,9 +25,8 @@ class CreateTableAnnouncement extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('announcements');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
-
-    }
+      DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+      Schema::drop('transportation');
+      DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+       }
 }

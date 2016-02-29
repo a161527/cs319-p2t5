@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableMake extends Migration
+class CreateTableRooms extends Migration
 {
     /**
      * Run the migrations.
@@ -12,16 +12,16 @@ class CreateTableMake extends Migration
      */
     public function up()
     {
-        Schema::create('makes', function (Blueprint $table) {
+        Schema::create('rooms', function (Blueprint $table) {
           $table->increments('id');
-          $table->integer('announcementID')->unsigned();
-          $table->integer('userID')->unsigned();
-          $table->foreign('userID')
-                ->references('id')->on('users')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-          $table->foreign('announcementID')
-                ->references('id')->on('announcements')
+          $table->string('residenceName');
+          $table->string('roomNumber');
+          $table->string('location');
+          $table->integer('capacity')->unsigned();
+          $table->integer('conferenceID')->unsigned();
+          // Many-to-One
+          $table->foreign('conferenceID')
+                ->references('id')->on('conferences')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -35,7 +35,8 @@ class CreateTableMake extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('makes');
+        Schema::drop('rooms');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
-class User extends Authenticatable
+class Account extends Authenticatable
 {
     /**
      * This will enable the relation with Role and add the following methods roles(), hasRole($name), 
@@ -13,7 +13,6 @@ class User extends Authenticatable
      * 
      */
     use EntrustUserTrait;
-
 
     /**
      * The attributes that are mass assignable.

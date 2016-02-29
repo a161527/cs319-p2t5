@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableConference extends Migration
+class CreateTableAccount extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,11 @@ class CreateTableConference extends Migration
      */
     public function up()
     {
-        Schema::create('conferences', function (Blueprint $table) {
+        Schema::create('accounts', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('conferenceName');
-          $table->string('dateStart');
-          $table->string('dateEnd');
-          $table->string('location');
+          $table->string('email')->unique();
+          $table->string('password');
+          $table->timestamps();
         });
     }
 
@@ -29,7 +28,7 @@ class CreateTableConference extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('conferences');
+        Schema::drop('accounts');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }
