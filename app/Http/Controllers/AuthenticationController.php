@@ -8,7 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use App\User;
+use App\Models\Account;
 
 
 class AuthenticationController extends Controller
@@ -31,10 +31,10 @@ class AuthenticationController extends Controller
         // returns the logged-in user
         // must call JWTAuth::authenticate() and then you can use Laravel's Auth::user()->id
         // source: https://github.com/tymondesigns/jwt-auth/issues/125
-        $user = JWTAuth::parseToken()->authenticate();
-        $userId = $user->id;
+        $account = JWTAuth::parseToken()->authenticate();
+        $accountId = $account->id;
 
-        return $user;
+        return $account;
     }    
   
     public function authenticate(Request $request)
