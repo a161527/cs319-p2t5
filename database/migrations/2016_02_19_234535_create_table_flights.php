@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableRoom extends Migration
+class CreateTableFlights extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,16 @@ class CreateTableRoom extends Migration
      */
     public function up()
     {
-        Schema::create('rooms', function (Blueprint $table) {
+        Schema::create('flights', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('residenceName');
-          $table->string('location');
-          $table->string('date');
-          $table->string('roomNumber');
-          $table->integer('capacity');
+          $table->string('flightNumber');
+          $table->string('airline');
+          $table->date('arrivalDate');
+          $table->time('arrivalTime');
+          $table->string('airport');
         });
+
+
     }
 
     /**
@@ -30,8 +32,7 @@ class CreateTableRoom extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('rooms');
+        Schema::drop('flights');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
-
     }
 }

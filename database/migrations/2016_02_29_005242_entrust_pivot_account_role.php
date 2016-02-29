@@ -2,7 +2,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class EntrustPivotRoleUser extends Migration
+class EntrustPivotAccountRole extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,14 @@ class EntrustPivotRoleUser extends Migration
     public function up()
     {
         // Create table for associating roles to users (Many-to-Many)
-        Schema::create('role_user', function (Blueprint $table) {
-                        $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')
+        Schema::create('account_role', function (Blueprint $table) {
+                        $table->integer('account_id')->unsigned();
+            $table->foreign('account_id')->references('id')->on('accounts')
             ->onUpdate('cascade')->onDelete('cascade');
                         $table->integer('role_id')->unsigned();
             $table->foreign('role_id')->references('id')->on('roles')
             ->onUpdate('cascade')->onDelete('cascade');
-                        $table->primary(['user_id', 'role_id']);
+                        $table->primary(['account_id', 'role_id']);
         });
     }
 
@@ -30,6 +30,6 @@ class EntrustPivotRoleUser extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('role_user');
+        Schema::dropIfExists('account_role');
     }
 }

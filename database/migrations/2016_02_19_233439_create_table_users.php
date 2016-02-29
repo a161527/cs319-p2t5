@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableUser extends Migration
+class CreateTableUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -16,9 +16,17 @@ class CreateTableUser extends Migration
           $table->increments('id');
           $table->string('firstName');
           $table->string('lastName');
-          $table->string('dateOfBirth');
-          $table->string('email')->unique();
-          $table->string('password');
+          $table->date('dateOfBirth');
+          $table->enum('gender', ['Male', 'Female', 'Other']);
+          $table->string('location');
+          $table->string('notes')->nullable();
+          $table->integer('accountID')->unsigned();
+          // Many-to-One
+          $table->foreign('accountID')
+              ->references('id')->on('accounts')
+              ->onDelete('cascade')
+              ->onUpdate('cascade');
+          $table->timestamps();
         });
     }
 
