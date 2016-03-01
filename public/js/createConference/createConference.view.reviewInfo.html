@@ -1,0 +1,53 @@
+<div class="progress">
+    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="75"
+    aria-valuemin="0" aria-valuemax="100" style="width:75%">
+    </div>
+    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="25"
+    aria-valuemin="0" aria-valuemax="100" style="width:25%">
+        Review
+    </div>
+</div>
+
+<h4>Review Conference Details</h4>
+<div class='panel panel-default'>
+	<div class='panel panel-body break-all'>
+		<h3>Conference Information</h3>
+		<div><h4>Conference Name: {{conferenceInfo.name}}</h4></div>
+		<div ng-show='conferenceInfo.description'>Conference Description: "{{conferenceInfo.description}}"</div>
+		<div>Start Date: {{conferenceInfo.start}}</div>
+		<div>End Date: {{conferenceInfo.end}}</div>
+		<div>Location: {{conferenceInfo.location}}</div>
+		<div>Provides Transportation: {{conferenceInfo.hasTransportation}}</div>
+		<div>Provides Boarding Accommodations: {{hasRooms}}</div>
+		<br>
+		<h3>Conference Inventory</h3>
+		<div ng-repeat='(idx, value) in inventory'>
+			<div><h4>{{inventory[idx].name}}</h4></div>
+			<div>Quantity: {{inventory[idx].quantity}} {{inventory[idx].units}}</div>
+			<div>Disposable: {{inventory[idx].disposable}}</div>
+		</div>
+		<br>
+		<div ng-show='hasRooms'>
+			<h3>Conference Accommodations</h3>
+			<div ng-repeat='(idx, value) in rooms'>
+				<div><h4>{{rooms[idx].name}}</h4></div>
+				<div>Address: {{rooms[idx].location}}</div>
+				<div ng-show='rooms[idx].number'>Rooms: {{rooms[idx].number}}</div>
+			</div>
+			<br>
+		</div>
+	</div>
+</div>
+<div class='row'>
+	<div class='col-md-6'>
+		<div ng-show='hasRooms'>
+			<a class='btn btn-default btn-block' ui-sref='dashboard.conferences.create.3'>Back</a>
+		</div>
+		<div ng-hide='hasRooms'>
+			<a class='btn btn-default btn-block' ui-sref='dashboard.conferences.create.2'>Back</a>
+		</div>
+	</div>
+	<div class='col-md-6'>
+		<button class='btn btn-primary btn-block' ng-click='createConference()'>Submit</button>
+	</div>
+</div>

@@ -66,6 +66,48 @@
 					}
 				})
 
+				.state('dashboard', {
+					url: '/dashboard',
+					templateUrl: 'js/dashboard/dashboard.view.html',
+					controller: 'dashboardCtrl'
+				})
+
+				.state('dashboard.conferences', {
+					url: '/conferences',
+					templateUrl: 'js/conferenceWidget/conferenceWidget.view.html',
+					controller: 'conferenceWidgetCtrl'
+				})
+
+				.state('dashboard.conferences.create', {
+					url: '/create',
+					abstract: true,
+					templateUrl: 'js/createConference/createConference.view.html',
+					controller: 'createConferenceCtrl'
+				})
+
+				.state('dashboard.conferences.create.1', {
+					url: '',
+					templateUrl: 'js/createConference/createConference.view.conferenceInfo.html',
+					controller: 'createConferenceCtrl'
+				})
+
+				.state('dashboard.conferences.create.2', {
+					url: '',
+					templateUrl: 'js/createConference/createConference.view.conferenceInventory.html',
+					controller: 'createConferenceCtrl'
+				})
+
+				.state('dashboard.conferences.create.3', {
+					url: '',
+					templateUrl: 'js/createConference/createConference.view.conferenceRooms.html',
+					controller: 'createConferenceCtrl'
+				})
+
+				.state('dashboard.conferences.create.4', {
+					url: '',
+					templateUrl: 'js/createConference/createConference.view.reviewInfo.html',
+					controller: 'createConferenceCtrl'
+				})
 		})
 
 })()
