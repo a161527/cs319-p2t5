@@ -20,9 +20,9 @@ class AuthenticationController extends Controller
         // except for the authenticate method. We don't want to prevent
         // the user from retrieving their token if they don't already have it
 
-        $this->middleware('jwt.auth', ['except' => ['authenticate']]);
+        $this->middleware('jwt.auth', ['except' => ['authenticate', 'token']]);
         // provides an authorization header with each response
-        $this->middleware('jwt.refresh', ['except' => ['authenticate']]);
+        $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token']]);
 
     }
 
@@ -60,20 +60,20 @@ class AuthenticationController extends Controller
 
     public function token()
     {
-        // $token = JWTAuth::getToken();
-        // if (!$token)
-        // {
-        //     return response()->json(['message' => 'token_not_provided'], 401);
-        // }
-        // try
-        // {
-        //     $token = JWTAuth::refresh($token);
-        // }
-        // catch (TokenInvalidException $e)
-        // {
-        //     return response()->json(['message' => 'invalid_token'], 401)
-        // }
-        // return response()->json(['token'=>$token]);
+        $token = JWTAuth::getToken();
+        if (!$token)
+        {
+            return response()->json(['message' => 'token_not_provided'], 401);
+        }
+        try
+        {
+            $token = JWTAuth::refresh($token);
+        }
+        catch (TokenInvalidException $e)
+        {
+            return response()->json(['message' => 'token_invalid'], 401);
+        }
+        return response()->json(['token'=>$token]);
     }
 
     // Add the token to the blacklist
