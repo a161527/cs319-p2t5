@@ -20,17 +20,20 @@ class AuthenticationController extends Controller
         // except for the authenticate method. We don't want to prevent
         // the user from retrieving their token if they don't already have it
 
-        // TODO: add jwt.refresh to middlewares to provide a new token to the response header
         $this->middleware('jwt.auth', ['except' => ['authenticate']]);
+        // provides an authorization header with each response
+        $this->middleware('jwt.refresh', ['except' => ['authenticate']]);
+
     }
 
-    public function index()
+    public function index(Request $request)
     {
         // token must be submitted with request in order for this to no throw error "token_not_provided"
         
         // returns the logged-in user
         // must call JWTAuth::authenticate() and then you can use Laravel's Auth::user()->id
         // source: https://github.com/tymondesigns/jwt-auth/issues/125
+        
         $account = JWTAuth::parseToken()->authenticate();
         $accountId = $account->id;
 
@@ -55,8 +58,27 @@ class AuthenticationController extends Controller
         return response()->json(['message' => 'successful_login', 'token' => $token]);
     }
 
+    public function token()
+    {
+        // $token = JWTAuth::getToken();
+        // if (!$token)
+        // {
+        //     return response()->json(['message' => 'token_not_provided'], 401);
+        // }
+        // try
+        // {
+        //     $token = JWTAuth::refresh($token);
+        // }
+        // catch (TokenInvalidException $e)
+        // {
+        //     return response()->json(['message' => 'invalid_token'], 401)
+        // }
+        // return response()->json(['token'=>$token]);
+    }
+
     // Add the token to the blacklist
-    public function logout() {
+    public function logout()
+    {
         //
         $token = JWTAuth::getToken();
         if ($token) {
