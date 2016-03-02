@@ -2,13 +2,17 @@
 	'use strict'
 
 	angular.module('createAcct')
-		.controller('createAcctCtrl', function($scope, $state, accountCredentials) {
+		.controller('createAcctCtrl', function($scope, $state, accountCredentials, ajax) {
 
 			$scope.dependents = accountCredentials.getDependents() || {'1':{}} 
 			$scope.createAcct = accountCredentials.getAccountInfo() || {}
 			$scope.contact = accountCredentials.getContact() || {}
 			$scope.transfer = accountCredentials.getTransfer() || false
 			$scope.triggerModal = false
+
+			//Need this to show message in sync with ajax call for check email
+			$scope.showAvailMsg = false
+			$scope.emailAvailable = accountCredentials.getEmailAvailable() || false
 
 			$scope.createAccount = function() {
 				alert('You did it!')
@@ -17,7 +21,7 @@
 			}
 
 			$scope.checkMatch = function(validation, field, confirmationField) {
-				if (field != confirmationField) {
+				if (confirmationField && field !== confirmationField) {
 					validation.$setValidity('match', false)
 				} else {
 					validation.$setValidity('match', true)
@@ -25,12 +29,21 @@
 			}
 
 			$scope.checkEmailAvail = function(validation, email) {
-				if (email === 'test@foo') {
-					//email available
-					validation.$setValidity('emailAvailable', true)
-				} else {
-					//email not available, show error
-					validation.$setValidity('emailAvailable', false)
+				$scope.showAvailMsg = false
+				if (validation.$valid) {
+
+					ajax.serviceCall('Checking email...', 'post', 'api/checkemail', {'email': email}).then(function(resData) {
+						$scope.showAvailMsg = true
+						console.log({'email': email})
+						if (!resData.data.taken) {
+							$scope.emailAvailable = true
+						} else {
+							$scope.emailAvailable = false
+						}
+						
+					}, function(resData) {
+						//something went wrong
+					})
 				}
 			}
 
@@ -71,12 +84,17 @@
 
 			$scope.nextStep = function(form, toState, set, model) {
 				accountCredentials.setTransfer($scope.transfer)
+				accountCredentials.setEmailAvailable($scope.emailAvailable)
+
 				if ($scope.transfer === true && model === 'dependents') {
 					onNavigate(toState, set, model)
 				}
-				else if (form.$valid) {
+
+				else if (form.$valid && $scope.emailAvailable) {
 					onNavigate(toState, set, model)
-				} else {
+				} 
+
+				else {
 					setFormDirty(form)
 				}
 			}
