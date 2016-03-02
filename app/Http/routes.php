@@ -54,14 +54,20 @@ Route::group(['prefix' => 'api'], function()
 	// test for a page that requires a token to be submitted
     Route::resource('login', 'AuthenticationController', ['only' => ['index']]);
 
-    Route::post('login', array('as' => 'login', 'uses' => 'AuthenticationController@authenticate'));
-    Route::post('register', array('as' => 'register', 'uses' => 'RegistrationController@register'));
+    Route::post('login', 'AuthenticationController@authenticate');
+    Route::post('register', 'RegistrationController@register');
 
     // check if email is taken
-    Route::post('checkemail', array('as' => 'checkemail', 'uses' => 'RegistrationController@checkEmail'));
+    Route::post('checkemail', 'RegistrationController@checkEmail');
 
     // refresh token
-    Route::get('token', array('as' => 'token', 'uses' => 'AuthenticationController@token'));
+    Route::get('token', 'AuthenticationController@token');
+
+    // dependents management endpoints
+    Route::group(['prefix' => 'accounts/{id}/dependents'], function() {
+        Route::get('/', 'UserController@index');
+        
+    });
 });
 
 // Routes for Event

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
-class Account extends Authenticatable
+class User extends Authenticatable
 {
     /**
      * This will enable the relation with Role and add the following methods roles(), hasRole($name), 
