@@ -59,6 +59,9 @@ Route::group(['prefix' => 'api'], function()
 
     // check if email is taken
     Route::post('checkemail', array('as' => 'checkemail', 'uses' => 'RegistrationController@checkEmail'));
+
+    // refresh token
+    Route::get('token', array('as' => 'token', 'uses' => 'AuthenticationController@token'));
 });
 
 // Routes for Event

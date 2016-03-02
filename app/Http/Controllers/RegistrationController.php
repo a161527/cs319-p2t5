@@ -40,9 +40,7 @@ class RegistrationController extends Controller
     protected function validator(array $data)
     {
     	$validator = Validator::make($data, [
-    		'firstName' => 'required|max:255',
-            'lastName' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:accounts',
             'password' => 'required|confirmed|min:6|alpha_num',
         ]);
 
@@ -54,14 +52,10 @@ class RegistrationController extends Controller
      */
     protected function create(Request $request)
     {
-
         $account = new Account();
-        $account->firstName = $request->firstName;
-        $account->lastName = $request->lastName;
         $account->email = $request->email;
         $account->password = Hash::make($request->password);
 		$account->save();
-
     }
 
     public function register(Request $request) {
@@ -72,7 +66,7 @@ class RegistrationController extends Controller
 	        return response()->json(['message' => 'account_created']);
 	    } else {
 	        // validation has failed, display error messages
-	        return response()->json(['message' => 'validation_failed', 'errors' => $validator->errors()], 400);
+	        return response()->json(['message' => 'validation_failed', 'errors' => $validator->errors()], 422);
 	    }
     }
 
