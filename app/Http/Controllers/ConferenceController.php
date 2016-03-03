@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use DB;
 use Illuminate\Database\QueryException;
 use JWTAuth;
+use App\Conference;
 
 class ConferenceController extends Controller
 {
@@ -18,17 +19,13 @@ class ConferenceController extends Controller
 
     private function validateConferenceJson($req) {
         $this->validate($req, [
-            'name' => 'required',
-            'start' => 'required',
-            'end' => 'required',
-            'location' => 'required' ]);
-    }
-    private function jsonReqAsDBArray($req) {
-        return
-            ['conferenceName' => $req->input('name'),
-             'dateStart' => $req->input('start'),
-             'dateEnd' => $req->input('end'),
-             'location' => $req->input('location')];
+            "name" => "required",
+            "start" => "required|date_format:Y-m-d",
+            "end" => "required|date_format:Y-m-d",
+            "location" => "required",
+            "description" => "string",
+            "hasTransportation" => "boolean|required",
+            "hasAccommodations" => "boolean|required"]);
     }
 
     private function conferenceResponseJSONArray($conference) {
@@ -37,47 +34,66 @@ class ConferenceController extends Controller
                 'name' => $conference->conferenceName,
                 'start' => $conference->dateStart,
                 'end' => $conference->dateEnd,
-                'location' => $conference->location];
+                'location' => $conference->location,
+                'description' => $conference->description,
+                'hasTransportation' => $conference->hasTransportation,
+                'hasAccommodations' => $conference->hasAccommodations];
     }
+
+    private function assignInputToConference($req, $conf) {
+        $conf->conferenceName = $req->input('name');
+        $conf->dateStart = $req->input('start');
+        $conf->dateEnd = $req->input('end');
+        $conf->location = $req->input('location');
+        $conf->description = $req->input('description');
+        $conf->hasTransportation = $req->input('hasTransportation');
+        $conf->hasAccommodations = $req->input('hasAccommodations');
+    }
+
     public function createNew(Request $req) {
         $this->validateConferenceJson($req);
-        $id = DB::table('conferences')->insertGetId($this->jsonReqAsDBArray($req));
-        return response()->json(['id' => (int)$id]);
+
+        $conf = new Conference;
+        $this->assignInputToConference($req, $conf);
+        $conf->save();
+
+        return response()->json(['id' => (int)$conf->id]);
     }
 
     public function getInfo($id) {
-        $rows = DB::table('conferences')->where('id', $id)->get();
-        if (sizeof($rows) > 1) {
-            return response("Multiple conferences match the ID?", 500);
-        }
+        $conference = Conference::find($id);
 
-        if (sizeof($rows) == 0) {
+        if (is_null($conference)) {
             return response("No conference for id {$id}.", 404);
         }
 
-        $conference = $rows[0];
         return response()->json($this->conferenceResponseJSONArray($conference));
     }
 
     public function getInfoList() {
-        $rows = DB::table('conferences')->get();
-        $jsonArrays =
-            array_map(
-                function($x) { return $this->conferenceResponseJSONArray($x); },
-                $rows);
+        $conferences = Conference::all();
+
+        $jsonArrays = [];
+        foreach ($conferences as $conf) {
+            array_push($jsonArrays, $this->conferenceResponseJSONArray($conf));
+        }
         return response()->json($jsonArrays);
     }
 
     public function replace(Request $req, $id) {
         $this->validateConferenceJson($req);
-        DB::table('conferences')
-            ->where('id', $id)
-            ->update($this->jsonReqAsDBArray($req));
+        $conf = Conference::find($id);
+
+        if (is_null($conf)) {
+            return response("Conference {$id} does not exist.", 400);
+        }
+        $this->assignInputToConference($req, $conf);
+        $conf->save();
         return '';
     }
 
     public function delete($id) {
-        DB::table('conferences')->where('id', $id)->delete();
+        Conference::destroy($id);
         return '';
     }
 }
