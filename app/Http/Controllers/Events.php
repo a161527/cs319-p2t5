@@ -11,7 +11,7 @@ class Events extends Controller
 {
     //
     /**
-     * Display a listing of the resource.
+     * Display a listing of all events in the database.
      *
      * @return Response
      */
@@ -57,7 +57,7 @@ class Events extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the event given the eventID.
      *
      * @param  int  $id
      * @return Response
@@ -67,7 +67,7 @@ class Events extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified event give the eventID.
      *
      * @param  Request  $request
      * @param  int  $id
@@ -88,7 +88,7 @@ class Events extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the event given the eventID.
      *
      * @param  int  $id
      * @return Response
