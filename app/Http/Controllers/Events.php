@@ -9,10 +9,8 @@ use App\Http\Controllers\Controller;
 
 class Events extends Controller
 {
-    //
     /**
      * Display a listing of all events in the database.
-     *
      * @return Response
      */
     public function index($id = null) {
@@ -23,24 +21,18 @@ class Events extends Controller
         }
     }
 
-    //
     /**
      * Display a listing of events given the conferenceID.
-     *
      * @return Response
      */
     public function getEventByConferenceID($conferenceID) {
-
     return Event::where('conferenceID',$conferenceID)->get();
-
     }
 
     /**
      * Store a newly created resource in storage.
-     *
      * @param  Request  $request
      * @return Response
-     *('id', 'eventName', 'date','location','time','seatsCount','conferenceID');
      */
     public function store(Request $request) {
         $event = new Event;
@@ -58,7 +50,6 @@ class Events extends Controller
 
     /**
      * Display the event given the eventID.
-     *
      * @param  int  $id
      * @return Response
      */
@@ -68,7 +59,6 @@ class Events extends Controller
 
     /**
      * Update the specified event give the eventID.
-     *
      * @param  Request  $request
      * @param  int  $id
      * @return Response
@@ -89,7 +79,6 @@ class Events extends Controller
 
     /**
      * Remove the event given the eventID.
-     *
      * @param  int  $id
      * @return Response
      */
