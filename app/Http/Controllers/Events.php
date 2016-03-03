@@ -53,7 +53,7 @@ class Events extends Controller
         $event->description = $request->input('description');
         $event->conferenceID = $request->input('conferenceID');
         $event->save();
-        return response()->json(['Stored a new Event with ID' => $event->id]);
+        return response()->json(['id' => $event->id]);
     }
 
     /**
@@ -84,7 +84,7 @@ class Events extends Controller
         $event->description = $request->input('description');
         $event->conferenceID = $request->input('conferenceID');
         $event->save();
-        return response()->json(['Updated Event with ID' => $event->id]);
+        return response()->json(['id' => $event->id]);
     }
 
     /**
@@ -96,6 +96,6 @@ class Events extends Controller
     public function destroy($id) {
         $event = Event::find($id);
         $event->delete();
-        return response()->json(['Deleted Event with ID' => $event->id]);
+        return response()->json(['id' => $event->id]);
     }
 }
