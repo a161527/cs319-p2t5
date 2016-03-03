@@ -64,9 +64,10 @@ Route::group(['prefix' => 'api'], function()
     Route::get('token', array('as' => 'token', 'uses' => 'AuthenticationController@token'));
 });
 
-// Routes for Event
+// Routes for Event Start
 Route::get('/api/v1/event/{id?}', 'Events@index');
+Route::get('/api/v1/event/conference/{id?}', 'Events@getEventByConferenceID');
 Route::post('/api/v1/event', 'Events@store');
 Route::post('/api/v1/event/{id}', 'Events@update');
 Route::delete('/api/v1/event/{id}', 'Events@destroy');
-
+// Routes for Event End
