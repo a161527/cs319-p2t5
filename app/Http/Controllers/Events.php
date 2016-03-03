@@ -11,7 +11,7 @@ class Events extends Controller
 {
     //
     /**
-     * Display a listing of the resource.
+     * Display a listing of all events in the database.
      *
      * @return Response
      */
@@ -21,6 +21,18 @@ class Events extends Controller
         } else {
             return $this->show($id);
         }
+    }
+
+    //
+    /**
+     * Display a listing of events given the conferenceID.
+     *
+     * @return Response
+     */
+    public function getEventByConferenceID($conferenceID) {
+
+    return Event::where('conferenceID',$conferenceID)->get();
+
     }
 
     /**
@@ -35,15 +47,17 @@ class Events extends Controller
         $event->eventName = $request->input('eventName');
         $event->date = $request->input('date');
         $event->location = $request->input('location');
-        $event->time = $request->input('time');
-        $event->seatsCount = $request->input('seatsCount');
+        $event->startTime = $request->input('startTime');
+        $event->endTime = $request->input('endTime');
+        $event->capacity = $request->input('capacity');
+        $event->description = $request->input('description');
         $event->conferenceID = $request->input('conferenceID');
         $event->save();
-        return response()->json(['Employee ID' => $event->id]);
+        return response()->json(['Stored a new Event with ID' => $event->id]);
     }
 
     /**
-     * Display the specified resource.
+     * Display the event given the eventID.
      *
      * @param  int  $id
      * @return Response
@@ -53,7 +67,7 @@ class Events extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified event give the eventID.
      *
      * @param  Request  $request
      * @param  int  $id
@@ -61,19 +75,20 @@ class Events extends Controller
      */
     public function update(Request $request, $id) {
         $event = Event::find($id);
-
         $event->eventName = $request->input('eventName');
         $event->date = $request->input('date');
         $event->location = $request->input('location');
-        $event->time = $request->input('time');
-        $event->seatsCount = $request->input('seatsCount');
+        $event->startTime = $request->input('startTime');
+        $event->endTime = $request->input('endTime');
+        $event->capacity = $request->input('capacity');
+        $event->description = $request->input('description');
         $event->conferenceID = $request->input('conferenceID');
         $event->save();
-        return response()->json(['Employee ID' => $event->id]);
+        return response()->json(['Updated Event with ID' => $event->id]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the event given the eventID.
      *
      * @param  int  $id
      * @return Response
@@ -81,6 +96,6 @@ class Events extends Controller
     public function destroy($id) {
         $event = Event::find($id);
         $event->delete();
-        return response()->json(['Employee ID' => $event->id]);
+        return response()->json(['Deleted Event with ID' => $event->id]);
     }
 }
