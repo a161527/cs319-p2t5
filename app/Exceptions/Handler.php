@@ -47,7 +47,11 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         if ($e instanceof ValidationException) {
-            return response("Bad input", 400);
+            $message = "Validation failed:\n";
+            foreach ($e->validator->messages()->all() as $err) {
+                $message = $message . $err . "\n";
+            }
+            return response($message, 400);
         }
 
         return parent::render($request, $e);
