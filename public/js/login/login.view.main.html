@@ -22,7 +22,7 @@
 
 							<div class='form-group'>
 								<!--Pass in loginForm.$valid to see if input fields are empty-->
-								<button class='btn btn-default' ng-click='login(loginForm.$valid)'>Log In</button>
+								<button class='btn btn-default' id='loginButton' ng-click='login(loginForm.$valid)'>Log In</button>
 							</div>
 
 							<error-message ng-show='showError'>{{errorMessage}}<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeMessage()'></span></error-message>
