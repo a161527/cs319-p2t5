@@ -17,6 +17,9 @@ class ConferenceController extends Controller
     public function __construct() {
     }
 
+    /**
+     * Validates json for basic conference details.
+     */
     private function validateConferenceJson($req) {
         $this->validate($req, [
             "name" => "required",
@@ -28,6 +31,10 @@ class ConferenceController extends Controller
             "hasAccommodations" => "boolean|required"]);
     }
 
+    /**
+     * Converts a conference object from the Eloquent object
+     * into a json array.
+     */
     private function conferenceResponseJSONArray($conference) {
         return [
                 'id' => (int)$conference->id,
@@ -40,6 +47,10 @@ class ConferenceController extends Controller
                 'hasAccommodations' => $conference->hasAccommodations];
     }
 
+    /**
+     * Builds a Conference object from a request.  This assumes the
+     * request is valid, so use 'validateConferenceJson' first
+     */
     private function assignInputToConference($req, $conf) {
         $conf->conferenceName = $req->input('name');
         $conf->dateStart = $req->input('start');
@@ -50,6 +61,9 @@ class ConferenceController extends Controller
         $conf->hasAccommodations = $req->input('hasAccommodations');
     }
 
+    /**
+     * Creates a new conference, given valid json.
+     */
     public function createNew(Request $req) {
         $this->validateConferenceJson($req);
 
@@ -60,6 +74,9 @@ class ConferenceController extends Controller
         return response()->json(['id' => (int)$conf->id]);
     }
 
+    /**
+     * Gets info about a specific conference.
+     */
     public function getInfo($id) {
         $conference = Conference::find($id);
 
@@ -70,6 +87,9 @@ class ConferenceController extends Controller
         return response()->json($this->conferenceResponseJSONArray($conference));
     }
 
+    /**
+     * Gets a json array with all conferences.
+     */
     public function getInfoList() {
         $conferences = Conference::all();
 
@@ -80,6 +100,9 @@ class ConferenceController extends Controller
         return response()->json($jsonArrays);
     }
 
+    /**
+     * Replaces a given conference with the new values, given valid json.
+     */
     public function replace(Request $req, $id) {
         $this->validateConferenceJson($req);
         $conf = Conference::find($id);
@@ -92,6 +115,9 @@ class ConferenceController extends Controller
         return '';
     }
 
+    /**
+     * Deletes a conference.
+     */
     public function delete($id) {
         Conference::destroy($id);
         return '';
