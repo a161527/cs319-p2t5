@@ -59,11 +59,14 @@ Route::group(['prefix' => 'api'], function()
 
     // check if email is taken
     Route::post('checkemail', array('as' => 'checkemail', 'uses' => 'RegistrationController@checkEmail'));
+
+    // refresh token
+    Route::get('token', array('as' => 'token', 'uses' => 'AuthenticationController@token'));
 });
 
 // Routes for Event
-Route::get('/api/v1/event/{id?}', 'Events@index');
-Route::post('/api/v1/event', 'Events@store');
-Route::post('/api/v1/event/{id}', 'Events@update');
-Route::delete('/api/v1/event/{id}', 'Events@destroy');
-
+Route::get('/api/event/{id?}', 'Events@index');
+Route::get('/api/event/conference/{id?}', 'Events@getEventByConferenceID');
+Route::post('/api/event', 'Events@store');
+Route::post('/api/event/{id}', 'Events@update');
+Route::delete('/api/event/{id}', 'Events@destroy');
