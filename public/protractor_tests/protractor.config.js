@@ -5,6 +5,7 @@ exports.config = {
   // Capabilities to be passed to the webdriver instance.
   capabilities: {
     'browserName': 'chrome'
+    // 'browserName': 'firefox'
   },
 
   // Framework to use. Jasmine is recommended.
