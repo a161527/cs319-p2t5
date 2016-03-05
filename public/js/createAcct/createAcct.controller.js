@@ -8,7 +8,7 @@
 			$scope.createAcct = accountCredentials.getAccountInfo() || {}
 			$scope.contact = accountCredentials.getContact() || {}
 			$scope.transfer = accountCredentials.getTransfer() || false
-			$scope.triggerModal = false
+			$scope.invalidAge = false
 
 			//Need this to show message in sync with ajax call for check email
 			$scope.showAvailMsg = false
@@ -34,7 +34,7 @@
 
 					ajax.serviceCall('Checking email...', 'post', 'api/checkemail', {'email': email}).then(function(resData) {
 						$scope.showAvailMsg = true
-						console.log({'email': email})
+
 						if (!resData.data.taken) {
 							$scope.emailAvailable = true
 						} else {
@@ -86,8 +86,10 @@
 				accountCredentials.setTransfer($scope.transfer)
 				accountCredentials.setEmailAvailable($scope.emailAvailable)
 
-				if ($scope.transfer === true && model === 'dependents') {
-					onNavigate(toState, set, model)
+				if (model === 'dependents') {
+					
+					checkDependentsForm(form, toState, set, model)
+
 				}
 
 				else if (form.$valid && $scope.emailAvailable) {
@@ -97,6 +99,10 @@
 				else {
 					setFormDirty(form)
 				}
+			}
+
+			$scope.removeAgeMessage = function() {
+				$scope.invalidAge = false
 			}
 
 			var setFormDirty = function(form) {
@@ -109,6 +115,46 @@
 				accountCredentials[set]($scope[model])
 				var state = 'createAccount.' + toState
 				$state.go(state)
+			}
+
+			var checkDependentsForm = function(form, toState, set, model) {
+				if ($scope.transfer === true) {
+
+					onNavigate(toState, set, model)
+
+				} else if (form.$valid) {
+
+					var validDependentsAge = verifyDependentsAge($scope.dependents, moment())
+
+					if (validDependentsAge) {
+						onNavigate(toState, set, model)
+					} else {
+						$scope.invalidAge = true
+					}
+
+				} else {
+					setFormDirty(form)
+				}
+			}
+
+			var verifyDependentsAge = function(dependents, today) {
+				var minAge = 16
+				var todayM = moment(today)
+
+				for (var key in dependents) {
+
+					if (dependents.hasOwnProperty(key)) {
+
+						var dateM = moment(dependents[key].birthdate)
+						var age = parseInt(moment.duration(todayM.diff(dateM)).asYears())
+
+						if (age >= minAge) {
+							return true
+						}
+
+					}
+				}
+				return false
 			}
 
 		})
