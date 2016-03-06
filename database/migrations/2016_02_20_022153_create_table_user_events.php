@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableUserConferences extends Migration
+class CreateTableUserEvents extends Migration
 {
     /**
      * Run the migrations.
@@ -12,19 +12,18 @@ class CreateTableUserConferences extends Migration
      */
     public function up()
     {
-        Schema::create('userconferences', function (Blueprint $table) {
+        Schema::create('user_events', function (Blueprint $table) {
           $table->increments('id');
           $table->integer('userID')->unsigned();
-          $table->integer('conferenceID')->unsigned();
-          $table->boolean('needsTransportation');
+          $table->integer('eventID')->unsigned();
           // Many-to-One
           $table->foreign('userID')
                 ->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
           // Many-to-One
-          $table->foreign('conferenceID')
-                ->references('id')->on('conferences')
+          $table->foreign('eventID')
+                ->references('id')->on('events')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -37,8 +36,8 @@ class CreateTableUserConferences extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('userconferences');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+      DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+      Schema::drop('user_events');
+      DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

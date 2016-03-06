@@ -12,7 +12,7 @@ class CreateTableUserRooms extends Migration
      */
     public function up()
     {
-        Schema::create('userrooms', function (Blueprint $table) {
+        Schema::create('user_rooms', function (Blueprint $table) {
           $table->increments('id');
           $table->integer('roomID')->unsigned();
           $table->integer('userID')->unsigned();
@@ -37,7 +37,7 @@ class CreateTableUserRooms extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('userrooms');
+        Schema::drop('user_rooms');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }
