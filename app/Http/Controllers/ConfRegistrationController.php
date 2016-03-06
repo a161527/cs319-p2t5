@@ -43,34 +43,42 @@ class ConfRegistrationController extends Controller
     private function processRegistration($req, $conferenceID, $userID) {
         DB::transaction(function () use ($req, $conferenceID, $userID){
             $number = $req->input('flight.number');
-            $departure = $req->input('flight.departure');
-            $arrival = $req->input('flight.arrival');
+            $arrivalDay = $req->input('flight.arrivalDate');
+            $arrivalTime = $req->input('flight.arrivalTime');
             $airline = $req->input('flight.airline');
+
             if(!$this->dependentsAreOkay($userID, $req->input('dependents'))) {
                 throw new BadDependentList(response("Dependent(s) not owned by user", 403));
             }
-            $flights = Flight::where('flightNumber', $number)->where('airline', $airline)->get();
 
-            $result =
-                DB::table('flights')
-                    ->where('flightNumber', $number)
-                    ->where('airline', $airline)
-                    ->get();
+            $flights =
+                Flight::where('flightNumber', $number)
+                ->where('airline', $airline)
+                ->where('arrivalDate', $arrivalDay)
+                ->where('isChecked', true)
+                ->get();
+
             if(sizeof($flights) >= 1) {
-                $row = $result[0];
-                if ($row->departureTime != $departure || $row->arrivalTime != $arrival) {
-                    return $this->addRegistration($conferenceID, $userID, $row->id);
-                } else {
-                    return response("Flight data does not match known data for flight", 400);
+                foreach($flights as $row) {
+                    if ($row->arrivalTime == $arrivalTime) {
+                        return $this->addRegistration($conferenceID, $userID, $row->id);
+                    } else {
+                        return response("Flight data does not match known data for flight", 400);
+                    }
                 }
             } else {
-                $newID = DB::table('flights')->insertGetId([
-                    'flightNumber' => $number,
-                    'departureTime' => $departure,
-                    'arrivalTime' => $arrival,
-                    'airline' => $airline
-                ]);
-                return $this->addRegistration($conferenceID, $userID, $newID);
+                $airport = $req->input('flight.airport');
+
+                $flight = new Flight;
+                $flight->flightNumber = $number;
+                $flight->airline = $airline;
+                $flight->arrivalDate = $arrivalDay;
+                $flight->arrivalTime = $arrivalTime;
+                $flight->airport = $airport;
+                $flight->isChecked = false;
+
+                $flight->save();
+                return $this->addRegistration($conferenceID, $userID, $flight->id);
             }
         });
     }
@@ -79,9 +87,10 @@ class ConfRegistrationController extends Controller
         $this->validate($request, [
             'dependents' => 'required',
             'flight.number' => 'numeric|required',
-            'flight.departure' => 'date_format:Y-m-d H:i:s|required',
+            'flight.arrivalDate' => 'date_format:Y-m-d|required',
             'flight.arrivalTime' => 'date_format:H:i|required',
-            'flight.airline' => 'required'
+            'flight.airline' => 'required|string'
+            'flight.airport' => 'required|string'
         ]);
     }
 

@@ -13,5 +13,6 @@ class Flight extends Model
         'airline',
         'arrivalDate',
         'arrivalTime',
-        'airport'];
+        'airport',
+        'isChecked'];
 }
