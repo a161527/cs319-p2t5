@@ -20,9 +20,9 @@ class CreateTableUsers extends Migration
           $table->enum('gender', ['Male', 'Female', 'Other']);
           $table->string('location');
           $table->string('notes')->nullable();
-          $table->integer('accountID')->unsigned();
+          $table->integer('accountId')->unsigned();
           // Many-to-One
-          $table->foreign('accountID')
+          $table->foreign('accountId')
               ->references('id')->on('accounts')
               ->onDelete('cascade')
               ->onUpdate('cascade');

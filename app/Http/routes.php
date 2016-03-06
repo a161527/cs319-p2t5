@@ -51,13 +51,14 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['prefix' => 'api'], function()
 {
-	// test for a page that requires a token to be submitted
+	// test GET for a page that requires a token to be submitted
     Route::resource('login', 'AuthenticationController', ['only' => ['index']]);
 
     Route::post('login', 'AuthenticationController@authenticate');
     Route::post('register', 'RegistrationController@register');
 
     // check if email is taken
+    Route::get('checkemail', 'RegistrationController@checkEmail');
     Route::post('checkemail', 'RegistrationController@checkEmail');
 
     // refresh token
@@ -66,7 +67,10 @@ Route::group(['prefix' => 'api'], function()
     // dependents management endpoints
     Route::group(['prefix' => 'accounts/{id}/dependents'], function() {
         Route::get('/', 'UserController@index');
-        
+        Route::post('/', 'UserController@addDependents');
+        Route::put('/', 'UserController@addDependents');
+        Route::patch('/{depId}', 'UserController@editDependent');
+        Route::delete('/{depId}', 'UserController@deleteDependent');
     });
 });
 
