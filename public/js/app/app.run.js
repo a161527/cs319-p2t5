@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('app')
-		.run(function($rootScope, $state, $window) {
+		.run(function($rootScope, $state, loginStorage) {
 
 			$rootScope.$on('$stateChangeStart', function(e, toState, toStateParams, fromState, fromStateParams) {
 				
@@ -11,14 +11,14 @@
 				//dashboard is the only state that requires login
 				if (parentState === 'dashboard') {
 
-					if (!$window.localStorage['satellizer_token']) {
+					if (!loginStorage.getAuthToken() || !loginStorage.getEmail()) {
 
 						e.preventDefault()
 						$state.go('login')
 
 					}
 					
-				} 
+				}
 
 			})
 
