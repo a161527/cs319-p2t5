@@ -8,6 +8,7 @@
 			var _accountInfo = null
 			var _contact = null
 			var _transfer = false
+			var _emailAvailable = false
 
 			return {
 				setDependents: function(t) {
@@ -33,6 +34,12 @@
 				},
 				getTransfer:function() {
 					return _transfer
+				},
+				setEmailAvailable: function(t) {
+					_emailAvailable = t
+				},
+				getEmailAvailable:function() {
+					return _emailAvailable
 				},
 				resetAll: function() {
 					_dependents = null
