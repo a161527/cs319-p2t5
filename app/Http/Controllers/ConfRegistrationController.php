@@ -9,6 +9,9 @@ use App\Http\Controllers\Controller;
 
 use DB;
 use JWTAuth;
+
+use App\Flight;
+
 class BadDependentList extends \Exception {
     public $response;
 
@@ -46,12 +49,14 @@ class ConfRegistrationController extends Controller
             if(!$this->dependentsAreOkay($userID, $req->input('dependents'))) {
                 throw new BadDependentList(response("Dependent(s) not owned by user", 403));
             }
+            $flights = Flight::where('flightNumber', $number)->where('airline', $airline)->get();
+
             $result =
                 DB::table('flights')
                     ->where('flightNumber', $number)
                     ->where('airline', $airline)
                     ->get();
-            if(sizeof($result) >= 1) {
+            if(sizeof($flights) >= 1) {
                 $row = $result[0];
                 if ($row->departureTime != $departure || $row->arrivalTime != $arrival) {
                     return $this->addRegistration($conferenceID, $userID, $row->id);
@@ -75,7 +80,7 @@ class ConfRegistrationController extends Controller
             'dependents' => 'required',
             'flight.number' => 'numeric|required',
             'flight.departure' => 'date_format:Y-m-d H:i:s|required',
-            'flight.arrival' => 'date_format:Y-m-d H:i:s|required',
+            'flight.arrivalTime' => 'date_format:H:i|required',
             'flight.airline' => 'required'
         ]);
     }
