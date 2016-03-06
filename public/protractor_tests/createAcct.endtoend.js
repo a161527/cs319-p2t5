@@ -21,7 +21,7 @@ describe('account creation service', function() {
 		element(by.id('email')).sendKeys(protractor.Key.TAB)
 		browser.driver.sleep(1000)
 		expect(element(by.xpath('//*[contains(text(), "Email is available")]')).isDisplayed()).toBe(false)
-		expect(element(by.xpath('//div[@class="alert alert-danger"]//*[contains(text(), "Email is not available")]')).isDisplayed()).toBe(true)
+		expect(element(by.xpath('//div[@class="alert alert-danger"]//*[contains(text(), "Email is already in use")]')).isDisplayed()).toBe(true)
 	})
 
 })
