@@ -16,7 +16,9 @@ class CreateTableUserConferences extends Migration
           $table->increments('id');
           $table->integer('userID')->unsigned();
           $table->integer('conferenceID')->unsigned();
+          $table->integer('flightID')->unsigned()->nullable();
           $table->boolean('needsTransportation');
+          $table->boolean('approved');
           // Many-to-One
           $table->foreign('userID')
                 ->references('id')->on('users')
@@ -25,6 +27,11 @@ class CreateTableUserConferences extends Migration
           // Many-to-One
           $table->foreign('conferenceID')
                 ->references('id')->on('conferences')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+          $table->foreign('flightID')
+                ->references('id')->on('flights')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
