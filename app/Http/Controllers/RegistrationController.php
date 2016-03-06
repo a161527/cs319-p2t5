@@ -40,8 +40,8 @@ class RegistrationController extends Controller
     protected function validator(array $data)
     {
     	$validator = Validator::make($data, [
-            'email' => 'required|email|max:255|unique:accounts',
-            'password' => 'required|confirmed|min:6|alpha_num',
+            'email'     =>  'required|email|max:255|unique:accounts',
+            'password'  =>  'required|confirmed|min:6|alpha_num',
         ]);
 
     	return $validator;
