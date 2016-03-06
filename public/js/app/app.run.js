@@ -18,6 +18,16 @@
 
 					}
 					
+				//if credentials are valid, go to dashboard
+				} else if (parentState === 'login') {
+
+					if (loginStorage.getAuthToken() && loginStorage.getEmail()) {
+
+						e.preventDefault()
+						$state.go('dashboard')
+
+					}
+
 				}
 
 			})
