@@ -11,6 +11,8 @@ use DB;
 use JWTAuth;
 
 use App\Flight;
+use App\User;
+use App\UserConference;
 
 class BadDependentList extends \Exception {
     public $response;
@@ -28,9 +30,23 @@ class ConfRegistrationController extends Controller
         $this->middleware('jwt.auth');
     }
 
-    private function dependentsAreOkay($userID, $dependentIDList) {
-        //TODO FIXME This needs to actually validate dependents
-        return false;
+    private function dependentsAreOkay($accountID, $dependentIDList) {
+        foreach ($dependentIDList as $attendee) {
+            $matchCount = User::where('id', $attendee)->where('accountId', $accountID)->count();
+            if ($matchCount < 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private function registerAttendees($confID, $users, $needsTransport, $flight) {
+        $registryIDs = [];
+        foreach ($users as $attendee) {
+            $newRegistryID = $this->addConferenceRegistration($confID, $attendee, $needsTransport, $flight);
+            $registryIDs[] = $newRegistryID;
+        }
+        return response()->json(['ids' => $registryIDs]);
     }
 
     private function addConferenceRegistration($conferenceID, $userID, $needsTransportation, $flight) {
@@ -39,28 +55,29 @@ class ConfRegistrationController extends Controller
         $userConf->conferenceID = $conferenceID;
         $userConf->needsTransportation = $needsTransportation;
         $userConf->approved = false;
-        $userConf->flightId = $flight;
+        $userConf->flightID = $flight;
 
         $userConf->save();
-        return response()->json(['id' => $userConf->id]);
+        return $userConf->id;
     }
 
-    private function processRegistration($req, $conferenceID, $userID) {
-        DB::transaction(function () use ($req, $conferenceID, $userID){
+    private function processRegistration($req, $conferenceID, $accountID) {
+        return DB::transaction(function () use ($req, $conferenceID, $accountID){
             $number = $req->input('flight.number');
             $arrivalDay = $req->input('flight.arrivalDate');
             $arrivalTime = $req->input('flight.arrivalTime');
             $airline = $req->input('flight.airline');
 
             $needsTransport = $req->input('needsTransportation');
+            $attendees = $req->input('attendees');
 
-            if(!$this->dependentsAreOkay($userID, $req->input('dependents'))) {
+            if(!$this->dependentsAreOkay($accountID, $attendees)) {
                 throw new BadDependentList(response("Dependent(s) not owned by user", 403));
             }
 
             if ($req->has('hasFlight')) {
                 if (!$req->input('hasFlight')) {
-                   return $this->addConferenceRegistration($conferenceID, $userID, $needsTransport, null);
+                   return $this->registerAttendees($conferenceID, $attendees, $needsTransport, null);
                 }
             }
 
@@ -74,7 +91,7 @@ class ConfRegistrationController extends Controller
             if(sizeof($flights) >= 1) {
                 foreach($flights as $row) {
                     if ($row->arrivalTime == $arrivalTime) {
-                        return $this->addRegistration($conferenceID, $userID, $needsTransport, $row->id);
+                        return $this->registerAttendees($conferenceID, $attendees, $needsTransport, $row->id);
                     } else {
                         return response("Flight data does not match known data for flight", 400);
                     }
@@ -91,14 +108,14 @@ class ConfRegistrationController extends Controller
                 $flight->isChecked = false;
 
                 $flight->save();
-                return $this->addRegistration($conferenceID, $userID, $needsTransport, $flight->id);
+                return $this->registerAttendees($conferenceID, $attendees, $needsTransport, $flight->id);
             }
         });
     }
 
     private function validateRegistrationRequest($request) {
         $this->validate($request, [
-            'dependents' => 'required',
+            'attendees' => 'required|idarray',
             'needsTransportation' => 'required|boolean',
             'hasFlight' => 'boolean',
             'flight.number' => 'numeric|required_unless:hasFlight,false',
@@ -117,5 +134,30 @@ class ConfRegistrationController extends Controller
         } catch (BadDependentList $badDeps) {
             return $badDeps->response;
         }
+    }
+
+    //This should validate whether the currently logged in user is
+    //a registration approver for the given conference.  We don't
+    //have these permissions yet though.
+    private function isUserRegistrationApprover($conferenceID) {
+        return true;
+    }
+    public function approveRegistration($conferenceID, $requestID) {
+        if(!$this->isUserRegistrationApprover($conferenceID)) {
+            return response("", 401);
+        }
+        DB::transaction(function () use ($requestID) {
+            $conference = UserConference::find($requestID);
+            if ($conference != null && $conference->approved = false) {
+                $conference->approved = true;
+                $conference->save();
+            }
+
+            $flight = $conference->flight;
+            if (!$flight->isChecked) {
+                $flight->isChecked = true;
+                $flight->save();
+            }
+        });
     }
 }

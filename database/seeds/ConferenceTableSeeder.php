@@ -13,7 +13,8 @@ class ConferenceTableSeeder extends Seeder
     public function run()
     {
         $conferences = [
-            ['conferenceName' => 'Foo',
+            ['id' => 1,
+             'conferenceName' => 'Foo',
              'dateStart' => '2016-01-01',
              'dateEnd' => '2016-02-01',
              'location' => 'Earth',
@@ -21,7 +22,8 @@ class ConferenceTableSeeder extends Seeder
              'hasTransportation' => true,
              'hasAccommodations' => false],
 
-            ['conferenceName' => 'Bar',
+            ['id' => 2,
+             'conferenceName' => 'Bar',
              'dateStart' => '2016-02-03',
              'dateEnd' => '2016-02-05',
              'location' => 'Earth',

@@ -22,6 +22,7 @@ Route::group(['prefix' => 'api/conferences'], function () {
 
         //New registration request
         Route::post('register', 'ConfRegistrationController@userRegistration');
+        Route::post('register/{registryID}/approve', 'ConfRegistrationController@approveRegistration');
     });
 });
 
@@ -54,7 +55,7 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['prefix' => 'api'], function()
 {
-	// test GET for a page that requires a token to be submitted
+    // test GET for a page that requires a token to be submitted
     Route::resource('login', 'AuthenticationController', ['only' => ['index']]);
 
     Route::post('login', 'AuthenticationController@authenticate');
