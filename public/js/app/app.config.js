@@ -2,13 +2,13 @@
 	'use strict'
 
 	angular.module('app')
-		.config(function($stateProvider, $urlRouterProvider, $authProvider) {
+		.config(function($stateProvider, $urlRouterProvider, $authProvider, $locationProvider) {
 
 			$authProvider.loginUrl = '/api/login';
 
 			$stateProvider
 				.state('login', {
-					url: '',
+					url: '/',
 					templateUrl: 'js/login/login.view.main.html',
 					controller: 'loginCtrl'
 				})
@@ -108,6 +108,8 @@
 					templateUrl: 'js/createConference/createConference.view.reviewInfo.html',
 					controller: 'createConferenceCtrl'
 				})
+
+				// $locationProvider.html5Mode(true)
 		})
 
 })()

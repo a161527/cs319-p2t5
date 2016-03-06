@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('login')
-		.controller('loginCtrl', function($scope, ajax, errorCodes) {
+		.controller('loginCtrl', function($scope, $state, ajax, errorCodes) {
 
 			$scope.credentials = {}
 			$scope.errorMessage = ''
@@ -15,7 +15,7 @@
 
 					ajax.login($scope.credentials).then(function(resData) {
 
-						alert('You did it!')
+						$state.go('dashboard')
 
 					}, function(resData) {
 

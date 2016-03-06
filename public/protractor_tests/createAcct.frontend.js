@@ -8,7 +8,7 @@ describe('account creation', function() {
 		browser.get(common.url)
 		browser.driver.sleep(500)
 		element(by.xpath('//a[contains(text(), "Create Account")]')).click()
-		expect(browser.getCurrentUrl()).toEqual(common.url + '/#/create')
+		expect(browser.getCurrentUrl()).toEqual(common.url + 'create')
 	})
 
 	it('should display error messages when no fields are filled in and next is clicked', function() {
