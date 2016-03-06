@@ -18,11 +18,11 @@
 			<form name='dependentsForm' novalidate>
 				<div ng-repeat='(idx, value) in dependents'>
 
-					<div class="panel panel-default">
+					<div class="panel panel-default" id='dependents{{idx}}'>
 						<div class="panel-body" ng-model='dependents[idx]'>
 							<div class='row' ng-show='showRemoveButton(idx)'>
 								<div class='col-md-offset-11 col-md-1'>
-									<div class='glyphicon glyphicon-remove hand-cursor remove-button' ng-click='deleteDependent(idx)'></div>
+									<div class='glyphicon glyphicon-remove hand-cursor remove-button' name='removeButton{{idx}}' ng-click='deleteDependent(idx)'></div>
 								</div>
 							</div>
 
