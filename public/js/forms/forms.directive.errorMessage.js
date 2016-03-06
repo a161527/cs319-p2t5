@@ -7,10 +7,10 @@
 				restrict: 'E',
 				transclude: true,
 				replace: true,
-				template: 
+				template:
 				'<div class="alert alert-danger">' +
-					'<div ng-transclude></div>' + 
-				'</div>'
+					'<span class="glyphicon glyphicon-flag"></span> <span ng-transclude></span>' + 
+				'</div>' 
 			}
 		})
 

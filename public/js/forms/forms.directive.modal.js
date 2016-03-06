@@ -7,7 +7,7 @@
 				restrict: 'E',
 				transclude: true,
 				replace: true,
-				template: 
+				template:
 					'<div class="modal fade" role="dialog">' +
 						'<div class="modal-dialog">' +
 							'<div class="modal-content">' +
@@ -21,22 +21,25 @@
 						'</div>' +
 					'</div>',
 				scope: {
-					showModal: '=',
+					show: '=',
 					buttonName: '@',
-					modalOnClose: '&'
+					modalOnConfirm: '&'
 				},
 				link: function(scope, element, attrs) {
 
-					scope.$watch(attrs.showModal, function(value) {
+					scope.$watch(function() { 
+						return scope.show 
+					}, function(value) {
+
 						if (value === true) {
 							element.modal('show')
 						}
 
-						scope.showModal = false
+						scope.show = false
 					})
 
 					element.find('button').bind('click', function() {
-						scope.modalOnClose()	
+						scope.modalOnConfirm()	
 					})
 
 				}
