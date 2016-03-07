@@ -5,6 +5,7 @@ const TEST_LOGIN = [
 ];
 trait TokenTestCase {
     protected $token;
+    protected $skipNextReq = false;
 
     public function setUp() {
         parent::setUp();
@@ -14,7 +15,23 @@ trait TokenTestCase {
     }
 
     public function json($method, $uri, array $params = array(), array $headers = array()) {
-        $headers['HTTP_Authorization'] = 'Bearer ' . $this->token;
+        if (!$this->skipNextReq) {
+            $headers['HTTP_Authorization'] = 'Bearer ' . $this->token;
+        } else {
+	    $this->refreshApplication();
+            $skipNextReq = false;
+        }
         parent::json($method, $uri, $params, $headers);
+    }
+
+    public function call($method, $uri, $params = array(), $cookies = array(),
+        $files = array(), $headers = array(), $content = null) {
+        if(!$this->skipNextReq) {
+            $headers['HTTP_Authorization'] = 'Bearer ' . $this->token;
+        } else {
+	    $this->refreshApplication();
+            $skipNextReq = false;
+        }
+        parent::call($method, $uri, $params, $cookies, $files, $headers, $content);
     }
 }

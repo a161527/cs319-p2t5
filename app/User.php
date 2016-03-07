@@ -15,4 +15,8 @@ class User extends Model
         'location',
         'notes',
         'accountID'];
+
+    public function account() {
+        return $this->hasOne('App\Models\Account', 'id', 'accountID');
+    }
 }

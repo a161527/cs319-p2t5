@@ -22,7 +22,8 @@ Route::group(['prefix' => 'api/conferences'], function () {
 
         //New registration request
         Route::post('register', 'ConfRegistrationController@userRegistration');
-        Route::post('register/{registryID}/approve', 'ConfRegistrationController@approveRegistration');
+        Route::post('register/{registryId}/approve', 'ConfRegistrationController@approveRegistration');
+        Route::get('register/{registryId}', 'ConfRegistrationController@getRegistrationData');
     });
 });
 

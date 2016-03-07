@@ -12,4 +12,9 @@ class UserConference extends Model
     public function flight() {
         return $this->hasOne('App\Flight', 'id', 'flightID');
     }
+
+    public function user() {
+        return $this->hasOne('App\User', 'id', 'userID');
+    }
+
 }

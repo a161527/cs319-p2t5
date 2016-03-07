@@ -13,6 +13,7 @@ use JWTAuth;
 use App\Flight;
 use App\User;
 use App\UserConference;
+use Auth;
 
 class BadDependentList extends \Exception {
     public $response;
@@ -25,9 +26,12 @@ class BadDependentList extends \Exception {
 
 class ConfRegistrationController extends Controller
 {
+    const REGISTRATION_FULL_ACCESS_TYPE = "full";
+    const REGISTRATION_EDIT_ACCESS_TYPE = "edit";
 
     public function __construct() {
         $this->middleware('jwt.auth');
+        $this->middleware('auth');
     }
 
     private function dependentsAreOkay($accountID, $dependentIDList) {
@@ -40,6 +44,9 @@ class ConfRegistrationController extends Controller
         return true;
     }
 
+    /*
+     * Registers a group of attendees for a conference.
+     */
     private function registerAttendees($confID, $users, $needsTransport, $flight) {
         $registryIDs = [];
         foreach ($users as $attendee) {
@@ -49,6 +56,9 @@ class ConfRegistrationController extends Controller
         return response()->json(['ids' => $registryIDs]);
     }
 
+    /*
+     * Registers a single attendee for a conference
+     */
     private function addConferenceRegistration($conferenceID, $userID, $needsTransportation, $flight) {
         $userConf = new UserConference;
         $userConf->userID = $userID;
@@ -61,8 +71,13 @@ class ConfRegistrationController extends Controller
         return $userConf->id;
     }
 
+    /* Process registration for a group of users.
+     * This checks that the flight is OK, creates a new (unchecked) flight if
+     * needed, and then adds new unapproved UserConference entries as needed.
+     */
     private function processRegistration($req, $conferenceID, $accountID) {
         return DB::transaction(function () use ($req, $conferenceID, $accountID){
+            //Grab request data for use later
             $number = $req->input('flight.number');
             $arrivalDay = $req->input('flight.arrivalDate');
             $arrivalTime = $req->input('flight.arrivalTime');
@@ -71,16 +86,19 @@ class ConfRegistrationController extends Controller
             $needsTransport = $req->input('needsTransportation');
             $attendees = $req->input('attendees');
 
+            //Check whether dependents are okay/owned by the current user
             if(!$this->dependentsAreOkay($accountID, $attendees)) {
                 throw new BadDependentList(response("Dependent(s) not owned by user", 403));
             }
 
+            //If the request explicitly doesn't have a flight, just register attendees without one
             if ($req->has('hasFlight')) {
                 if (!$req->input('hasFlight')) {
                    return $this->registerAttendees($conferenceID, $attendees, $needsTransport, null);
                 }
             }
 
+            //Grab (checked) matching flights for airline/flight number/date
             $flights =
                 Flight::where('flightNumber', $number)
                 ->where('airline', $airline)
@@ -92,11 +110,11 @@ class ConfRegistrationController extends Controller
                 foreach($flights as $row) {
                     if ($row->arrivalTime == $arrivalTime) {
                         return $this->registerAttendees($conferenceID, $attendees, $needsTransport, $row->id);
-                    } else {
-                        return response("Flight data does not match known data for flight", 400);
                     }
                 }
+                return response("Flight data does not match known data for flight", 400);
             } else {
+                //Create a new flight with the given data
                 $airport = $req->input('flight.airport');
 
                 $flight = new Flight;
@@ -120,7 +138,7 @@ class ConfRegistrationController extends Controller
             'hasFlight' => 'boolean',
             'flight.number' => 'numeric|required_unless:hasFlight,false',
             'flight.arrivalDate' => 'date_format:Y-m-d|required_unless:hasFlight,false',
-            'flight.arrivalTime' => 'date_format:H:i|required_unless:hasFlight,false',
+            'flight.arrivalTime' => 'date_format:H:i:s|required_unless:hasFlight,false',
             'flight.airline' => 'required_unless:hasFlight,false|string',
             'flight.airport' => 'required_unless:hasFlight,false|string'
         ]);
@@ -143,21 +161,63 @@ class ConfRegistrationController extends Controller
         return true;
     }
     public function approveRegistration($conferenceID, $requestID) {
+        //Check whether the current user is allowed to do this
         if(!$this->isUserRegistrationApprover($conferenceID)) {
             return response("", 401);
         }
-        DB::transaction(function () use ($requestID) {
+        DB::transaction(function () use ($conferenceID, $requestID) {
             $conference = UserConference::find($requestID);
+            if ($conferenceID != $conference->conferenceID) {
+                return response("Registration request not found for conference.",  404);
+            }
+            //Set conference attendance to approved
             if ($conference != null && $conference->approved = false) {
                 $conference->approved = true;
                 $conference->save();
             }
 
+            //Also update the flight if there is one
             $flight = $conference->flight;
-            if (!$flight->isChecked) {
+            if ($flight != null && !$flight->isChecked) {
                 $flight->isChecked = true;
                 $flight->save();
             }
         });
+    }
+
+
+    private function determineAccessType($conferenceID, $registration) {
+        if ($this->isUserRegistrationApprover($conferenceID)) {
+            return self::REGISTRATION_FULL_ACCESS_TYPE;
+        } else if (Auth::user()->id == $registration->user->account->id) {
+            return self::REGISTRATION_EDIT_ACCESS_TYPE;
+        }
+        return null;
+    }
+
+    /*
+     * Get data for a registration.
+     */
+    public function getRegistrationData(Request $req, $conferenceID, $requestID) {
+        $registration = UserConference::find($requestID);
+        if ($conferenceID != $registration->conferenceID) {
+            return response("Registration request not found for conference.",  404);
+        }
+
+        $accessType = $this->determineAccessType($conferenceID, $registration);
+        if ($accessType == null) {
+            return response("", 401);
+        }
+
+        $flightData = $registration->flight->toArray();
+        $flightData["number"] = (int) $flightData["flightNumber"];
+        unset($flightData["flightNumber"]);
+
+        return response()->json(
+            ['needsTransportation' => $registration->needsTransportation,
+             'approved' => $registration->approved,
+             'attendee' => $registration->user->firstName . " " . $registration->user->lastName,
+             'flight' => $flightData,
+             'access' => $accessType]);
     }
 }
