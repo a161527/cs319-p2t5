@@ -35,11 +35,11 @@
 									<input-with-validation model='dependents[idx].lastname' validation='dependentsForm' identifier='lastname{{idx}}' inp-type='text'>Last Name</input-with-validation>
 								</div>
 							</div>
-							
+
 							<div class='row'>
 								<div class='col-md-6'>
 
-									<date-picker-input ng-model='dependents[idx].birthdate'>Birth Date</date-picker-input>
+									<date-picker-input model='dependents[idx].birthdate' validation='dependentsForm' identifier='birthdate{{idx}}' label='Birth Date'><date-picker-input>
 
 								</div>
 

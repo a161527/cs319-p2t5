@@ -17,7 +17,7 @@
 
 							<input type='email' ng-model-options='{updateOn: "blur"}' ng-model='createAcct.email' ng-change='checkEmailAvail(createAcctForm.email, createAcct.email); checkMatch(createAcctForm.confirmEmail, createAcct.email, confirmEmail)' class='form-control' id='email' name='email' required>
 
-							<div class="alert alert-success" ng-show='emailAvailable && createAcctForm.email.$dirty && showAvailMsg'><span class="glyphicon glyphicon-ok"></span> Email is available</div>
+							<div class='alert alert-success' ng-show='emailAvailable && createAcctForm.email.$dirty && showAvailMsg'><span class="glyphicon glyphicon-ok"></span> Email is available</div>
 
 							<error-message ng-show='!emailAvailable && !createAcctForm.email.$error.email && !createAcctForm.email.$error.required && showAvailMsg'>
 								Email is already in use
@@ -98,4 +98,3 @@
 		<button class='btn btn-primary btn-block' ng-click='nextStep(createAcctForm, "2", "setAccountInfo", "createAcct")'>Next</button>
 	</div>
 </div>
-<modal show='triggerModal' button-name='OK'>OK</modal>

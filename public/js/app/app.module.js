@@ -19,6 +19,7 @@
 		'createConference',
 		'satellizer',
 		'ui.router',
-		'blockUI'
+		'blockUI',
+		'ui.bootstrap'
 	])
 })()
