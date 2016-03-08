@@ -3,6 +3,17 @@
 const TEST_LOGIN = [
     'email' => 'ryanchenkie@gmail.com', 'password' => 'secret'
 ];
+
+/**
+ * Handles test cases that need to pass tokens through to JWTAuth.
+ *
+ * This essentually results in grabbing a token before each test and
+ * adding the appropriate header to every request after.
+ *
+ * Note on usage - set the protected field $skipNextReq to true if you
+ * want to make a request without a token (to check that authentication
+ * blocks things, for example.
+ */
 trait TokenTestCase {
     protected $token;
     protected $skipNextReq = false;
@@ -14,24 +25,19 @@ trait TokenTestCase {
         $this->token = json_decode($this->response->getContent())->token;
     }
 
-    public function json($method, $uri, array $params = array(), array $headers = array()) {
-        if (!$this->skipNextReq) {
-            $headers['HTTP_Authorization'] = 'Bearer ' . $this->token;
-        } else {
-	    $this->refreshApplication();
-            $skipNextReq = false;
-        }
-        parent::json($method, $uri, $params, $headers);
-    }
-
+    /*
+     * Overrides the default call method for Laravel's TestCase (from CrawlerTrait)
+     * and sets the auth header before continuing
+     */
     public function call($method, $uri, $params = array(), $cookies = array(),
-        $files = array(), $headers = array(), $content = null) {
+            $files = array(), $headers = array(), $content = null) {
         if(!$this->skipNextReq) {
             $headers['HTTP_Authorization'] = 'Bearer ' . $this->token;
         } else {
-	    $this->refreshApplication();
+            $this->refreshApplication();
             $skipNextReq = false;
         }
+
         parent::call($method, $uri, $params, $cookies, $files, $headers, $content);
     }
 }
