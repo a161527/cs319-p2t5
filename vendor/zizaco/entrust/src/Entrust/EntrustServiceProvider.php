@@ -1,8 +1,6 @@
-<?php
+<?php namespace Zizaco\Entrust;
 
-namespace Zizaco\Entrust;
-
-/*
+/**
  * This file is part of Entrust,
  * a role & permission management solution for Laravel.
  *
@@ -23,6 +21,8 @@ class EntrustServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap the application events.
+     *
+     * @return void
      */
     public function boot()
     {
@@ -33,13 +33,15 @@ class EntrustServiceProvider extends ServiceProvider
 
         // Register commands
         $this->commands('command.entrust.migration');
-        $this->commands('command.entrust.classes');
-
-        $this->loadViewsFrom(__DIR__.'/../views', 'entrust');
+        
+        // Register blade directives
+        $this->bladeDirectives();
     }
 
     /**
      * Register the service provider.
+     *
+     * @return void
      */
     public function register()
     {
@@ -51,34 +53,76 @@ class EntrustServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register the blade directives
+     *
+     * @return void
+     */
+    private function bladeDirectives()
+    {
+        // Call to Entrust::hasRole
+        \Blade::directive('role', function($expression) {
+            return "<?php if (\\Entrust::hasRole{$expression}) : ?>";
+        });
+
+        \Blade::directive('endrole', function($expression) {
+            return "<?php endif; // Entrust::hasRole ?>";
+        });
+
+        // Call to Entrust::can
+        \Blade::directive('permission', function($expression) {
+            return "<?php if (\\Entrust::can{$expression}) : ?>";
+        });
+
+        \Blade::directive('endpermission', function($expression) {
+            return "<?php endif; // Entrust::can ?>";
+        });
+
+        // Call to Entrust::ability
+        \Blade::directive('ability', function($expression) {
+            return "<?php if (\\Entrust::ability{$expression}) : ?>";
+        });
+
+        \Blade::directive('endability', function($expression) {
+            return "<?php endif; // Entrust::ability ?>";
+        });
+    }
+
+    /**
      * Register the application bindings.
+     *
+     * @return void
      */
     private function registerEntrust()
     {
         $this->app->bind('entrust', function ($app) {
             return new Entrust($app);
         });
+        
+        $this->app->alias('entrust', 'Zizaco\Entrust\Entrust');
     }
 
     /**
      * Register the artisan commands.
+     *
+     * @return void
      */
     private function registerCommands()
     {
         $this->app->singleton('command.entrust.migration', function ($app) {
-            return new MigrationCommand($app['config'], $app['view'], $app['composer'], $app['files']);
-        });
-        $this->app->singleton('command.entrust.classes', function ($app) {
-            return new ClassCreatorCommand($app['config']);
+            return new MigrationCommand();
         });
     }
 
     /**
      * Merges user's and entrust's configs.
+     *
+     * @return void
      */
     private function mergeConfig()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'entrust');
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/config.php', 'entrust'
+        );
     }
 
     /**
@@ -89,8 +133,7 @@ class EntrustServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
-            'command.entrust.migration',
-            'command.entrust.classes',
+            'command.entrust.migration'
         ];
     }
 }
