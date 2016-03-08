@@ -7,6 +7,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class ConferenceTest extends TestCase
 {
 
+    use \TokenTestCase;
+
     const SIMPLE_CONF_CREATEDATA = [
         'name' => 'Foo',
         'start' => '2016-02-05',
@@ -43,11 +45,19 @@ class ConferenceTest extends TestCase
         $id = $this->createGetId();
         $this->get("/api/conferences/{$id}")
             ->seeJson(self::SIMPLE_CONF_CREATEDATA);
+
+        $this->noTokenNextReq = true;
+        $this->get("/api/conferences/{$id}")
+            ->seeJson(self::SIMPLE_CONF_CREATEDATA);
     }
 
     public function testConferencesIncludedInFullList()
     {
         $this->json('POST', '/api/conferences', self::SIMPLE_CONF_CREATEDATA);
+        $this->get("/api/conferences")
+            ->seeJson(self::SIMPLE_CONF_CREATEDATA);
+
+        $this->noTokenNextReq = true;
         $this->get("/api/conferences")
             ->seeJson(self::SIMPLE_CONF_CREATEDATA);
     }
