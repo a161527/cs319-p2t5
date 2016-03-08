@@ -15,25 +15,26 @@ use App\User;
 use App\UserConference;
 use Auth;
 
-class BadDependentList extends \Exception {
-    public $response;
-
-    public function __construct($response) {
-        $this->response = $response;
-    }
-}
-
-
+/**
+ * Controller for handling conference registration.
+ *
+ * Handles both registration applications by users and approval of these
+ * applications by admins.  This results in handling of flight data as well,
+ * as flights are created in the DB as registrations are created.
+ */
 class ConfRegistrationController extends Controller
 {
+    //Types of access to a registration application
     const REGISTRATION_FULL_ACCESS_TYPE = "full";
     const REGISTRATION_EDIT_ACCESS_TYPE = "edit";
 
     public function __construct() {
         $this->middleware('jwt.auth');
-        $this->middleware('auth');
     }
 
+    //Checks whether the list of dependents is valid for the user specified by
+    //accountID.  (This essentially means checking whether the dependents are associated
+    //with that account)
     private function dependentsAreOkay($accountID, $dependentIDList) {
         foreach ($dependentIDList as $attendee) {
             $matchCount = User::where('id', $attendee)->where('accountId', $accountID)->count();
@@ -88,7 +89,7 @@ class ConfRegistrationController extends Controller
 
             //Check whether dependents are okay/owned by the current user
             if(!$this->dependentsAreOkay($accountID, $attendees)) {
-                throw new BadDependentList(response("Dependent(s) not owned by user", 403));
+                return response("Dependent(s) not owned by user", 403);
             }
 
             //If the request explicitly doesn't have a flight, just register attendees without one
@@ -147,11 +148,8 @@ class ConfRegistrationController extends Controller
     public function userRegistration(Request $req, $conferenceID) {
         $this->validateRegistrationRequest($req);
         $user = JWTAuth::parseToken()->authenticate();
-        try {
-            return $this->processRegistration($req, $conferenceID, $user->id);
-        } catch (BadDependentList $badDeps) {
-            return $badDeps->response;
-        }
+
+        return $this->processRegistration($req, $conferenceID, $user->id);
     }
 
     //This should validate whether the currently logged in user is
@@ -160,11 +158,17 @@ class ConfRegistrationController extends Controller
     private function isUserRegistrationApprover($conferenceID) {
         return true;
     }
+
+    /**
+     * Handles approval request. If successful, this changes the specified
+     * request to approved, as well as setting the flight as checked if necessary.
+     */
     public function approveRegistration($conferenceID, $requestID) {
         //Check whether the current user is allowed to do this
         if(!$this->isUserRegistrationApprover($conferenceID)) {
             return response("", 401);
         }
+
         DB::transaction(function () use ($conferenceID, $requestID) {
             $conference = UserConference::find($requestID);
             if ($conferenceID != $conference->conferenceID) {
@@ -182,10 +186,16 @@ class ConfRegistrationController extends Controller
                 $flight->isChecked = true;
                 $flight->save();
             }
+            return response("", 200);
         });
     }
 
-
+    /*
+     * Determines how much access (if any) the current user has for the
+     * given conference and registration request.  Approvers for the conference
+     * have full access, while owners of the user/dependent for the registration
+     * attempt have edit access
+     */
     private function determineAccessType($conferenceID, $registration) {
         if ($this->isUserRegistrationApprover($conferenceID)) {
             return self::REGISTRATION_FULL_ACCESS_TYPE;
