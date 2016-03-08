@@ -1,7 +1,5 @@
 <?php
 
-require ('TokenTestCase.php');
-
 class ConferenceRegistrationTest extends TestCase
 {
     use \TokenTestCase;
@@ -69,7 +67,7 @@ class ConferenceRegistrationTest extends TestCase
         $this->get("/api/conferences/1/register/${id}");
         $this->seeJson(self::FLIGHT_DATA);
 
-        $this->skipNextReq = true;
+        $this->noTokenNextReq = true;
         $this->get("/api/conferences/1/register/${id}");
         $this->assertResponseStatus(400);
     }

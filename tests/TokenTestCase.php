@@ -10,13 +10,13 @@ const TEST_LOGIN = [
  * This essentually results in grabbing a token before each test and
  * adding the appropriate header to every request after.
  *
- * Note on usage - set the protected field $skipNextReq to true if you
+ * Note on usage - set the protected field $noTokenNextReq to true if you
  * want to make a request without a token (to check that authentication
  * blocks things, for example.
  */
 trait TokenTestCase {
     protected $token;
-    protected $skipNextReq = false;
+    protected $noTokenNextReq = false;
 
     public function setUp() {
         parent::setUp();
@@ -31,11 +31,11 @@ trait TokenTestCase {
      */
     public function call($method, $uri, $params = array(), $cookies = array(),
             $files = array(), $headers = array(), $content = null) {
-        if(!$this->skipNextReq) {
+        if(!$this->noTokenNextReq) {
             $headers['HTTP_Authorization'] = 'Bearer ' . $this->token;
         } else {
             $this->refreshApplication();
-            $skipNextReq = false;
+            $this->noTokenNextReq = false;
         }
 
         parent::call($method, $uri, $params, $cookies, $files, $headers, $content);
