@@ -60,8 +60,8 @@
 					templateUrl: 'js/conferenceView/conferenceView.view.conferenceDetails.html',
 					controller: 'conferenceDetailsCtrl',
 					resolve: {
-						conferenceInfo: function($stateParams, $http) {
-							return $http.get('api/conferences/' + $stateParams.cid)
+						conferenceInfo: function($stateParams, $http, $q) {
+							return $q.all([$http.get('api/conferences/' + $stateParams.cid), $http.get('/api/event/conference/' + $stateParams.cid)])
 						}
 					}
 				})
