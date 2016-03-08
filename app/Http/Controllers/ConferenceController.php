@@ -7,9 +7,13 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use DB;
-use Illuminate\Database\QueryException;
+use Auth;
+use Entrust;
 use JWTAuth;
 use App\Conference;
+use App\Utility\RoleCreate;
+use App\Utility\PermissionNames;
+use Config;
 
 class ConferenceController extends Controller
 {
@@ -71,11 +75,17 @@ class ConferenceController extends Controller
     public function createNew(Request $req) {
         $this->validateConferenceJson($req);
 
-        $conf = new Conference;
-        $this->assignInputToConference($req, $conf);
-        $conf->save();
+        return DB::transaction(function () use ($req) {
+            $conf = new Conference;
+            $this->assignInputToConference($req, $conf);
+            $conf->save();
 
-        return response()->json(['id' => (int)$conf->id]);
+            $role = RoleCreate::ConferenceManager($conf->id);
+            $user = Auth::user();
+            $user->attachRole($role);
+
+            return response()->json(['id' => (int)$conf->id]);
+        });
     }
 
     /**
@@ -108,6 +118,9 @@ class ConferenceController extends Controller
      * Replaces a given conference with the new values, given valid json.
      */
     public function replace(Request $req, $id) {
+        if (!Entrust::can(PermissionNames::ConferenceInfoEdit($id))) {
+            return response("", 403);
+        }
         $this->validateConferenceJson($req);
         $conf = Conference::find($id);
 
