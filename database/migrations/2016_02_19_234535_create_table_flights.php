@@ -19,7 +19,7 @@ class CreateTableFlights extends Migration
           $table->date('arrivalDate');
           $table->time('arrivalTime');
           $table->string('airport');
-          $table->boolean('isChecked');
+          $table->boolean('isChecked')->default(false);
         });
 
 
