@@ -19,12 +19,17 @@ Route::group(['prefix' => 'api/conferences'], function () {
         Route::get('', 'ConferenceController@getInfo');
         Route::put('', 'ConferenceController@replace');
         Route::delete('', 'ConferenceController@delete');
+
+        //New registration request
+        Route::post('register', 'ConfRegistrationController@userRegistration');
+        Route::post('register/{registryId}/approve', 'ConfRegistrationController@approveRegistration');
+        Route::get('register/{registryId}', 'ConfRegistrationController@getRegistrationData');
     });
 });
 
 Route::get('/', function()
 {
-	// change login.html to whatever the index page for angular will be
+    // change login.html to whatever the index page for angular will be
     return File::get(public_path() . '/login.html');
 });
 
@@ -51,7 +56,7 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['prefix' => 'api'], function()
 {
-	// test GET for a page that requires a token to be submitted
+    // test GET for a page that requires a token to be submitted
     Route::resource('login', 'AuthenticationController', ['only' => ['index']]);
 
     Route::post('login', 'AuthenticationController@authenticate');

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableDBTables extends Migration
+class CreateTableDbTables extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateTableDBTables extends Migration
      */
     public function up()
     {
-        Schema::create('dbtables', function (Blueprint $table) {
+        Schema::create('db_tables', function (Blueprint $table) {
             $table->increments('id');
             $table->string('tableName')->unique();
         });
@@ -25,6 +25,6 @@ class CreateTableDBTables extends Migration
      */
     public function down()
     {
-        Schema::drop('dbtables');
+        Schema::drop('db_tables');
     }
 }

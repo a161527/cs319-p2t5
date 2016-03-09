@@ -24,8 +24,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        //Force conference IDs to be numeric
+        //Force conference and registration IDs to be numeric
         $router->pattern('confId', '\d+');
+        $router->pattern('registryId', '\d+');
 
         parent::boot($router);
     }
