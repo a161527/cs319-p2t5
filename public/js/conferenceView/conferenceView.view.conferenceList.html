@@ -1,34 +1,82 @@
 <br>
-<div class='row'>
-	<div class='col-md-offset-2 col-md-8'>
-		<h4>Conferences</h4>
+<div class='container'>
+	<h4>Conferences</h4>
 <!-- 		<div class='panel panel-default'>
-			<div class='panel-body'> -->
-				<div ng-show='noConferences'>No conferences at this time</div>
-				<ul class="list-group">
-					<div ng-repeat='conference in conferences'>
-						<li class="list-group-item">
+		<div class='panel-body'> -->
+			<div ng-show='noConferences'>No conferences at this time</div>
+			<ul class="list-group">
+				<div ng-repeat='conference in conferences'>
+					<li class="list-group-item">
 
-							<div class='row'>
-
-								<div class='col-md-8'>
-									<h3>{{conference.name}}</h3>
-								</div>
-
-								<div class='col-md-4'>
-									<div><b>Location:</b> {{conference.location}}</div>
-									<div><b>Start:</b> {{conference.start}}</div>
-									<div><b>End:</b> {{conference.end}}</div>
-
-									<a href='#/conference/{{conference.id}}' class='btn btn-default pull-left'><span class='glyphicon glyphicon-info-sign'></span> View Details</a>
-									<button class='btn btn-primary pull-right'><span class='glyphicon glyphicon-pencil'></span> Register</button>
-								</div>
-
+						<div class='row'>
+							<div class='col-md-4'>
+								<img src="https://pixabay.com/static/uploads/photo/2015/05/15/14/22/conference-room-768441_960_720.jpg" class="img-thumbnail img-responsive"/>
 							</div>
-						</li>
-					</div>
-				<ul>
+
+							<div class='col-md-5'>
+								<h1>{{conference.name}}</h1>
+								<div>{{conference.description}}</div>
+							</div>
+
+							<div class='col-md-3'>
+								<div class='row'>
+									<div class='col-md-6'>
+										<b>Location:</b>
+									</div>
+									<div class='col-md-6'>
+										{{conference.location}}
+									</div>
+								</div>
+
+								<div class='row'>
+									<div class='col-md-6'>
+										<b>Start:</b>
+									</div>
+									<div class='col-md-6'>
+										{{conference.start}}
+									</div>
+								</div>
+
+								<div class='row'>
+									<div class='col-md-6'>
+										<b>End:</b>
+									</div>
+									<div class='col-md-6'>
+										{{conference.end}}
+									</div>
+								</div>
+
+								<div class='row'>
+									<div class='col-md-6'>
+										<b>Transportation:</b>
+									</div>
+									<div class='col-md-6'>
+										{{conference.hasTransportation}}
+									</div>
+								</div>
+
+								<div class='row'>
+									<div class='col-md-6'>
+										<b>Accommodations:</b>
+									</div>
+									<div class='col-md-6'>
+										{{conference.hasAccommodations}}
+									</div>
+								</div>
+
+								<br>
+								<div class='row'>
+									<div class='col-md-12'>
+										<a href='#/conference/{{conference.id}}' class='btn btn-default pull-left'><span class='glyphicon glyphicon-info-sign'></span> View Events</a>
+										<button class='btn btn-primary pull-right'><span class='glyphicon glyphicon-pencil'></span> Register</button>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</li>
+				</div>
+			<ul>
 <!-- 			</div>
-		</div> -->
-	</div>
+	</div> -->
 </div>
