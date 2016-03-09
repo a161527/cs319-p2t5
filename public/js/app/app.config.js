@@ -109,7 +109,16 @@
 					controller: 'createConferenceCtrl'
 				})
 
-				// $locationProvider.html5Mode(true)
+				.state('dashboard.conferences.view', {
+					url: '/viewConferences',
+					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
+					controller: 'conferenceListCtrl',
+					resolve: {
+						conferenceList: function($http) {
+							return $http.get('api/conferences')
+						}
+					}
+				})
 		})
 
 })()
