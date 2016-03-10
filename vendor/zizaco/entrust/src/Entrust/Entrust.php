@@ -1,17 +1,17 @@
-<?php
-
-namespace Zizaco\Entrust;
+<?php namespace Zizaco\Entrust;
 
 /**
  * This class is the main entry point of entrust. Usually this the interaction
- * with this class will be done through the Entrust Facade.
+ * with this class will be done through the Entrust Facade
  *
  * @license MIT
+ * @package Zizaco\Entrust
  */
+
 class Entrust
 {
     /**
-     * Laravel application.
+     * Laravel application
      *
      * @var \Illuminate\Foundation\Application
      */
@@ -21,6 +21,8 @@ class Entrust
      * Create a new confide instance.
      *
      * @param \Illuminate\Foundation\Application $app
+     *
+     * @return void
      */
     public function __construct($app)
     {
@@ -28,7 +30,7 @@ class Entrust
     }
 
     /**
-     * Checks if the current user has a role by its name.
+     * Checks if the current user has a role by its name
      *
      * @param string $name Role name.
      *
@@ -44,7 +46,7 @@ class Entrust
     }
 
     /**
-     * Check if the current user has a permission by its name.
+     * Check if the current user has a permission by its name
      *
      * @param string $permission Permission string.
      *
@@ -54,6 +56,24 @@ class Entrust
     {
         if ($user = $this->user()) {
             return $user->can($permission, $requireAll);
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the current user has a role or permission by its name
+     *
+     * @param array|string $roles            The role(s) needed.
+     * @param array|string $permissions      The permission(s) needed.
+     * @param array $options                 The Options.
+     *
+     * @return bool
+     */
+    public function ability($roles, $permissions, $options = [])
+    {
+        if ($user = $this->user()) {
+            return $user->ability($roles, $permissions, $options);
         }
 
         return false;
@@ -84,7 +104,7 @@ class Entrust
      */
     public function routeNeedsRole($route, $roles, $result = null, $requireAll = true)
     {
-        $filterName = is_array($roles) ? implode('_', $roles) : $roles;
+        $filterName  = is_array($roles) ? implode('_', $roles) : $roles;
         $filterName .= '_'.substr(md5($route), 0, 6);
 
         $closure = function () use ($roles, $result, $requireAll) {
@@ -118,7 +138,7 @@ class Entrust
      */
     public function routeNeedsPermission($route, $permissions, $result = null, $requireAll = true)
     {
-        $filterName = is_array($permissions) ? implode('_', $permissions) : $permissions;
+        $filterName  = is_array($permissions) ? implode('_', $permissions) : $permissions;
         $filterName .= '_'.substr(md5($route), 0, 6);
 
         $closure = function () use ($permissions, $result, $requireAll) {
@@ -148,15 +168,17 @@ class Entrust
      * @param array|string $permissions The permission(s) needed
      * @param mixed        $result      i.e: Redirect::to('/')
      * @param bool         $requireAll  User must have all roles and permissions
+     *
+     * @return void
      */
     public function routeNeedsRoleOrPermission($route, $roles, $permissions, $result = null, $requireAll = false)
     {
-        $filterName = is_array($roles)       ? implode('_', $roles)       : $roles;
+        $filterName  =      is_array($roles)       ? implode('_', $roles)       : $roles;
         $filterName .= '_'.(is_array($permissions) ? implode('_', $permissions) : $permissions);
         $filterName .= '_'.substr(md5($route), 0, 6);
 
         $closure = function () use ($roles, $permissions, $result, $requireAll) {
-            $hasRole = $this->hasRole($roles, $requireAll);
+            $hasRole  = $this->hasRole($roles, $requireAll);
             $hasPerms = $this->can($permissions, $requireAll);
 
             if ($requireAll) {
