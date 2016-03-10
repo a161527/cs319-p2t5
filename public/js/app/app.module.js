@@ -8,12 +8,16 @@
 	angular.module('dashboard', [])
 	angular.module('conferenceWidget', [])
 	angular.module('createConference', [])
+	angular.module('format', [])
+	angular.module('conferenceRegistration', [])
 
 	angular.module('app', [
+		'format',
 		'login',
 		'forms',
 		'createAcct',
 		'conferenceView',
+		'conferenceRegistration',
 		'dashboard',
 		'conferenceWidget',
 		'createConference',

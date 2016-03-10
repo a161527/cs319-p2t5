@@ -119,6 +119,22 @@
 						}
 					}
 				})
+
+				/*
+				CONFERENCE REGISTRATION
+				*/
+				.state('dashboard.conferences.registration', {
+					url: '/conferenceRegistration',
+					abstract: true,
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.html',
+					controller: 'conferenceRegistrationCtrl'
+				})
+
+				.state('dashboard.conferences.registration.1', {
+					url: '',
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.selectDependents.html',
+					controller: 'conferenceRegistrationCtrl'
+				})
 		})
 
 })()
