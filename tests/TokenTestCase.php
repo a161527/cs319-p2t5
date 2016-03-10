@@ -1,7 +1,7 @@
 <?php
 
 const TEST_LOGIN = [
-    'email' => 'ryanchenkie@gmail.com', 'password' => 'secret'
+    'email' => 'root@localhost', 'password' => 'admin'
 ];
 
 /**
@@ -17,11 +17,12 @@ const TEST_LOGIN = [
 trait TokenTestCase {
     protected $token;
     protected $noTokenNextReq = false;
+    protected $loginInfo = TEST_LOGIN;
 
     public function setUp() {
         parent::setUp();
 
-        parent::json('POST', '/api/login', TEST_LOGIN);
+        parent::json('POST', '/api/login', $this->loginInfo);
         $this->token = json_decode($this->response->getContent())->token;
     }
 

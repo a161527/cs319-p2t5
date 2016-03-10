@@ -3,6 +3,10 @@
 namespace App\Utility;
 
 class PermissionNames {
+    public static function ConferenceCreate() {
+        return "create-conference";
+    }
+
     public static function ConferenceEventCreate($confId) {
         return "conference-event-create." . $confId;
     }

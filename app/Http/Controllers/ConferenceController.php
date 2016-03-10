@@ -13,6 +13,7 @@ use JWTAuth;
 use App\Conference;
 use App\Utility\RoleCreate;
 use App\Utility\PermissionNames;
+use App\Utility\RoleNames;
 use Config;
 
 class ConferenceController extends Controller
@@ -23,6 +24,7 @@ class ConferenceController extends Controller
         //auth stuff if they want detailed info, but right now we don't
         //make that distinction
         $this->middleware('jwt.auth', ['except' => ['getInfo', 'getInfoList']]);
+        $this->middleware('permission:' . PermissionNames::ConferenceCreate(), ['only' => ['createNew']]);
     }
 
     /**
@@ -73,6 +75,8 @@ class ConferenceController extends Controller
      * Creates a new conference, given valid json.
      */
     public function createNew(Request $req) {
+        if (!Entrust::can(PermissionNames::ConferenceCreate()))
+
         $this->validateConferenceJson($req);
 
         return DB::transaction(function () use ($req) {
@@ -136,6 +140,9 @@ class ConferenceController extends Controller
      * Deletes a conference.
      */
     public function delete($id) {
+        if (!Entrust::hasRole(RoleNames::ConferenceManager($id))) {
+            return response("", 403);
+        }
         Conference::destroy($id);
         return '';
     }
