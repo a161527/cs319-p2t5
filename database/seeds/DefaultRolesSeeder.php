@@ -64,6 +64,7 @@ class DefaultRolesSeeder extends Seeder
                 foreach ($permissions as $p) {
                     $entry->attachPermission(Permission::where('name', $p)->get()->first());
                 }
+                unset($permissions);
             }
         }
     }

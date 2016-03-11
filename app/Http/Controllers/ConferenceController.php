@@ -75,8 +75,6 @@ class ConferenceController extends Controller
      * Creates a new conference, given valid json.
      */
     public function createNew(Request $req) {
-        if (!Entrust::can(PermissionNames::ConferenceCreate()))
-
         $this->validateConferenceJson($req);
 
         return DB::transaction(function () use ($req) {

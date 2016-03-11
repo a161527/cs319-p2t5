@@ -20,6 +20,7 @@ class AccountTableSeeder extends Seeder
 
         $accounts = array(
                 ['email' => 'root@localhost', 'password' => Hash::make('admin'), 'roles' => ['owner']],
+                ['email' => 'unprivileged@localhost', 'password' => Hash::make('secret')],
                 ['email' => 'ryanchenkie@gmail.com', 'password' => Hash::make('secret')],
                 ['email' => 'chris@scotch.io', 'password' => Hash::make('secret')],
                 ['email' => 'holly@scotch.io', 'password' => Hash::make('secret')],
@@ -38,6 +39,7 @@ class AccountTableSeeder extends Seeder
                 foreach ($roles as $r) {
                     $user->attachRole(Role::where('name', $r)->get()->first());
                 }
+                unset($roles);
             }
         }
 

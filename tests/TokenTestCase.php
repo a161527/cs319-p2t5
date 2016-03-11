@@ -4,6 +4,10 @@ const TEST_LOGIN = [
     'email' => 'root@localhost', 'password' => 'admin'
 ];
 
+const NO_PERMISSION_LOGIN = [
+    'email' => 'unprivileged@localhost', 'password' => 'secret'
+];
+
 /**
  * Handles test cases that need to pass tokens through to JWTAuth.
  *
@@ -17,14 +21,27 @@ const TEST_LOGIN = [
 trait TokenTestCase {
     protected $token;
     protected $noTokenNextReq = false;
-    protected $loginInfo = TEST_LOGIN;
+
+    protected function disablePrivileges() {
+        $this->authWithLoginCredentials(NO_PERMISSION_LOGIN);
+    }
+
+    protected function enablePrivileges() {
+        $this->authWithLoginCredentials(TEST_LOGIN);
+    }
+
+    protected function authWithLoginCredentials($credentials, $refresh = true) {
+        parent::json('POST', '/api/login', $credentials);
+        $this->token = json_decode($this->response->getContent())->token;
+        if ($refresh) {
+            $this->refreshApplication();
+        }
+    }
 
     public function setUp() {
         parent::setUp();
-
-        parent::json('POST', '/api/login', $this->loginInfo);
-        $this->token = json_decode($this->response->getContent())->token;
-    }
+        $this->authWithLoginCredentials(TEST_LOGIN, false);
+   }
 
     /*
      * Overrides the default call method for Laravel's TestCase (from CrawlerTrait)

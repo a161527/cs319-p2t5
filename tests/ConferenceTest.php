@@ -27,11 +27,12 @@ class ConferenceTest extends TestCase
         $this->assertResponseOK();
     }
 
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
+    public function testRejectsUnprivilegedCreate() {
+        $this->disablePrivileges();
+        $this->json('POST', '/api/conferences', self::SIMPLE_CONF_CREATEDATA);
+        $this->assertResponseStatus(403);
+    }
+
     public function testCreateReturnsDifferingIDs()
     {
         $startId = $this->createGetId();
