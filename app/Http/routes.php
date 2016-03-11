@@ -19,12 +19,17 @@ Route::group(['prefix' => 'api/conferences'], function () {
         Route::get('', 'ConferenceController@getInfo');
         Route::put('', 'ConferenceController@replace');
         Route::delete('', 'ConferenceController@delete');
+
+        //New registration request
+        Route::post('register', 'ConfRegistrationController@userRegistration');
+        Route::post('register/{registryId}/approve', 'ConfRegistrationController@approveRegistration');
+        Route::get('register/{registryId}', 'ConfRegistrationController@getRegistrationData');
     });
 });
 
 Route::get('/', function()
 {
-	// change login.html to whatever the index page for angular will be
+    // change login.html to whatever the index page for angular will be
     return File::get(public_path() . '/login.html');
 });
 
@@ -51,17 +56,27 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['prefix' => 'api'], function()
 {
-	// test for a page that requires a token to be submitted
+    // test GET for a page that requires a token to be submitted
     Route::resource('login', 'AuthenticationController', ['only' => ['index']]);
 
-    Route::post('login', array('as' => 'login', 'uses' => 'AuthenticationController@authenticate'));
-    Route::post('register', array('as' => 'register', 'uses' => 'RegistrationController@register'));
+    Route::post('login', 'AuthenticationController@authenticate');
+    Route::post('register', 'RegistrationController@register');
 
     // check if email is taken
-    Route::post('checkemail', array('as' => 'checkemail', 'uses' => 'RegistrationController@checkEmail'));
+    Route::get('checkemail', 'RegistrationController@checkEmail');
+    Route::post('checkemail', 'RegistrationController@checkEmail');
 
     // refresh token
-    Route::get('token', array('as' => 'token', 'uses' => 'AuthenticationController@token'));
+    Route::get('token', 'AuthenticationController@token');
+
+    // dependents management endpoints
+    Route::group(['prefix' => 'accounts/{id}/dependents'], function() {
+        Route::get('/', 'UserController@index');
+        Route::post('/', 'UserController@addDependents');
+        Route::put('/', 'UserController@addDependents');
+        Route::patch('/{depId}', 'UserController@editDependent');
+        Route::delete('/{depId}', 'UserController@deleteDependent');
+    });
 });
 
 // Routes for Event

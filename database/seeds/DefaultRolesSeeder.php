@@ -29,7 +29,10 @@ class DefaultRolesSeeder extends Seeder
     	$roles = array(
     		array(	'name'			=> 'user',
              		'display_name'	=> 'Basic User',
-             		'description'	=> 'An approved user who can view and register for conferences and events.')
+             		'description'	=> 'An approved user who can view and register for conferences and events.'),
+             array(  'name'          => 'owner',
+                     'display_name'  => 'Owner',
+                     'description'   => 'Owner of the management system. Has access to all aspects of the system.')
              // array(	'name'			=> '',
              // 		'display_name'	=> '',
              // 		'description'	=> ''),

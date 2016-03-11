@@ -20,6 +20,17 @@ class AppServiceProvider extends ServiceProvider
         {
             return new RestValidator($translator, $data, $rules, $messages);
         });
+
+        \Validator::extend('idarray', function($attr, $value, $params) {
+            if (!is_array($value)) {
+                return false;
+            }
+
+            foreach ($value as $v) {
+                if (!is_int($v) || (int) $v < 1) return false;
+            }
+            return true;
+        });
     }
 
     /**

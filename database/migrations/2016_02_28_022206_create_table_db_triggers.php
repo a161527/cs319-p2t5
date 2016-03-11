@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableDBTriggers extends Migration
+class CreateTableDbTriggers extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateTableDBTriggers extends Migration
      */
     public function up()
     {
-        Schema::create('dbtriggers', function (Blueprint $table) {
+        Schema::create('db_triggers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
             $table->string('description');
@@ -21,7 +21,7 @@ class CreateTableDBTriggers extends Migration
             $table->enum('triggerEvent', ['insert', 'update', 'delete']);
             $table->string('command')->unique();
             $table->foreign('dbfieldID')
-                ->references('id')->on('dbfields')
+                ->references('id')->on('db_fields')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -34,6 +34,6 @@ class CreateTableDBTriggers extends Migration
      */
     public function down()
     {
-        Schema::drop('dbtriggers');
+        Schema::drop('db_triggers');
     }
 }
