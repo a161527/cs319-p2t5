@@ -2,6 +2,11 @@
 
 namespace App\Utility;
 
+/**
+ * Provides functions to get the names for permissions.  This
+ * is essentially used to centralize names, and also to avoid issues
+ * constructing permission names for specific conferences/events.
+ */
 class PermissionNames {
     public static function ConferenceCreate() {
         return "create-conference";
