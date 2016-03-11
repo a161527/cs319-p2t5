@@ -91,6 +91,10 @@ class AuthenticationController extends Controller
         }
     }
 
+    public function permissionList(){
+        return response()->json($this->buildPermissionsJson());
+    }
+
     private function buildPermissionsJson() {
         $permissions = [];
         $this->checkPermission(PermissionNames::ConferenceCreate(), $permissions);
