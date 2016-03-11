@@ -2,7 +2,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class EntrustBase extends Migration
+class EntrustSetupTables extends Migration
 {
     /**
      * Run the migrations.
@@ -18,6 +18,19 @@ class EntrustBase extends Migration
             $table->string('display_name')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
+        });
+
+        // Create table for associating roles to users (Many-to-Many)
+        Schema::create('account_role', function (Blueprint $table) {
+            $table->integer('account_id')->unsigned();
+            $table->integer('role_id')->unsigned();
+
+            $table->foreign('account_id')->references('id')->on('accounts')
+                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')
+                ->onUpdate('cascade')->onDelete('cascade');
+
+            $table->primary(['account_id', 'role_id']);
         });
 
         // Create table for storing permissions
@@ -50,8 +63,9 @@ class EntrustBase extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('permission_role');
-        Schema::dropIfExists('permissions');
-        Schema::dropIfExists('roles');
+        Schema::drop('permission_role');
+        Schema::drop('permissions');
+        Schema::drop('account_role');
+        Schema::drop('roles');
     }
 }

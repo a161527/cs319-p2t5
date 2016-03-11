@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableUserEvents extends Migration
+class CreateTableUserInventory extends Migration
 {
     /**
      * Run the migrations.
@@ -12,18 +12,19 @@ class CreateTableUserEvents extends Migration
      */
     public function up()
     {
-        Schema::create('userevents', function (Blueprint $table) {
+        Schema::create('user_inventory', function (Blueprint $table) {
           $table->increments('id');
+          $table->integer('unitCount')->unsigned();
           $table->integer('userID')->unsigned();
-          $table->integer('eventID')->unsigned();
+          $table->integer('inventoryID')->unsigned();
           // Many-to-One
           $table->foreign('userID')
                 ->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
           // Many-to-One
-          $table->foreign('eventID')
-                ->references('id')->on('events')
+          $table->foreign('inventoryID')
+                ->references('id')->on('inventory')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -36,8 +37,8 @@ class CreateTableUserEvents extends Migration
      */
     public function down()
     {
-      DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-      Schema::drop('userevents');
-      DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        Schema::drop('user_inventory');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

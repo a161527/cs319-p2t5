@@ -12,14 +12,14 @@ class CreateTableChangeHistory extends Migration
      */
     public function up()
     {
-        Schema::create('changehistory', function (Blueprint $table) {
+        Schema::create('change_history', function (Blueprint $table) {
             $table->increments('id');
             $table->date('modificationDate');
             $table->string('oldValue')->nullable();
             $table->string('newValue')->nullable();
             $table->integer('dbfieldID')->unsigned();
             $table->foreign('dbfieldID')
-                ->references('id')->on('dbfields')
+                ->references('id')->on('db_fields')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -32,6 +32,6 @@ class CreateTableChangeHistory extends Migration
      */
     public function down()
     {
-        Schema::drop('changehistory');
+        Schema::drop('change_history');
     }
 }
