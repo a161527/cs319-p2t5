@@ -1,3 +1,12 @@
 <div ui-view>
-    <button ng-click='showWidget("conferences.create.1");'>create</button>
+    <button class='btn btn-primary btn-lg' ng-click='showWidget("conferences.create.1");'>
+    	<span class='glyphicon glyphicon-pencil glyphicon-large'></span>
+    	<br>
+    	Create Conference
+    </button>
+    <button class='btn btn-danger btn-lg' ng-click='showWidget("conferences.view")'>
+    	<span class='glyphicon glyphicon-folder-open glyphicon-large'></span>
+    	<br>
+    	View Conferences
+    </button>
 </div>

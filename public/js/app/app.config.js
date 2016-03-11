@@ -2,13 +2,13 @@
 	'use strict'
 
 	angular.module('app')
-		.config(function($stateProvider, $urlRouterProvider, $authProvider) {
+		.config(function($stateProvider, $urlRouterProvider, $authProvider, $locationProvider) {
 
 			$authProvider.loginUrl = '/api/login';
 
 			$stateProvider
 				.state('login', {
-					url: '',
+					url: '/',
 					templateUrl: 'js/login/login.view.main.html',
 					controller: 'loginCtrl'
 				})
@@ -60,8 +60,8 @@
 					templateUrl: 'js/conferenceView/conferenceView.view.conferenceDetails.html',
 					controller: 'conferenceDetailsCtrl',
 					resolve: {
-						conferenceInfo: function($stateParams, $http) {
-							return $http.get('api/conferences/' + $stateParams.cid)
+						conferenceInfo: function($stateParams, $http, $q) {
+							return $q.all([$http.get('api/conferences/' + $stateParams.cid), $http.get('/api/event/conference/' + $stateParams.cid)])
 						}
 					}
 				})
@@ -107,6 +107,33 @@
 					url: '',
 					templateUrl: 'js/createConference/createConference.view.reviewInfo.html',
 					controller: 'createConferenceCtrl'
+				})
+
+				.state('dashboard.conferences.view', {
+					url: '/viewConferences',
+					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
+					controller: 'conferenceListCtrl',
+					resolve: {
+						conferenceList: function($http) {
+							return $http.get('api/conferences')
+						}
+					}
+				})
+
+				/*
+				CONFERENCE REGISTRATION
+				*/
+				.state('dashboard.conferences.registration', {
+					url: '/conferenceRegistration',
+					abstract: true,
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.html',
+					controller: 'conferenceRegistrationCtrl'
+				})
+
+				.state('dashboard.conferences.registration.1', {
+					url: '',
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.selectDependents.html',
+					controller: 'conferenceRegistrationCtrl'
 				})
 		})
 
