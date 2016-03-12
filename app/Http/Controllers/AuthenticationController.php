@@ -102,6 +102,8 @@ class AuthenticationController extends Controller
     }
 
     private function checkPermission($permName, &$permissionsArray) {
-        $permissionsArray[$permName] = Entrust::can($permName);
+        if(Entrust::can($permName)) {
+            $permissionsArray[] = $permName;
+        }
     }
 }
