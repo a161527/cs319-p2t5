@@ -83,6 +83,7 @@ class ConfRegistrationController extends Controller
             $arrivalDay = $req->input('flight.arrivalDate');
             $arrivalTime = $req->input('flight.arrivalTime');
             $airline = $req->input('flight.airline');
+            $airport = $req->input('flight.airport');
 
             $needsTransport = $req->input('needsTransportation');
             $attendees = $req->input('attendees');
@@ -109,14 +110,13 @@ class ConfRegistrationController extends Controller
 
             if(sizeof($flights) >= 1) {
                 foreach($flights as $row) {
-                    if ($row->arrivalTime == $arrivalTime) {
+                    if ($row->arrivalTime == $arrivalTime && $row->airport == $airport) {
                         return $this->registerAttendees($conferenceID, $attendees, $needsTransport, $row->id);
                     }
                 }
                 return response("Flight data does not match known data for flight", 400);
             } else {
                 //Create a new flight with the given data
-                $airport = $req->input('flight.airport');
 
                 $flight = new Flight;
                 $flight->flightNumber = $number;
@@ -156,7 +156,7 @@ class ConfRegistrationController extends Controller
     //a registration approver for the given conference.  We don't
     //have these permissions yet though.
     private function isUserRegistrationApprover($conferenceID) {
-        return true;
+        return Entrust::can(PermissionNames::ConferenceRegistrationApproval($conferenceID));
     }
 
     /**
