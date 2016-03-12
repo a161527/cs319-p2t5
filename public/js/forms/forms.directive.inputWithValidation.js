@@ -22,7 +22,24 @@
 					inpType: '@',
 					changeFn: '&'
 				},
-				templateUrl: 'js/forms/forms.view.inputWithValidation.html',
+				template: 
+					"<div class='form-group' ng-class='{" + '"has-error"' + ": !validation.{{identifier}}.$valid &&" + 
+						"validation.{{identifier}}.$dirty}'>" +
+						"<label for='{{identifier}}'><div ng-transclude></div></label>" +
+
+						"<input type='{{inpType}}' ng-model-options='{updateOn:" + '"blur"' + "}'" + 
+							"ng-model='model'" + 
+							"class='form-control'" + 
+							"id='{{identifier}}'" + 
+							"name='{{identifier}}' required>" +
+	
+						"<error-message ng-show='validation[identifier].$error[inpType] && validation.{{identifier}}.$dirty'>" +
+							"<span ng-transclude></span> is invalid" +
+						"</error-message>" +
+						"<error-message ng-show='validation[identifier].$error.required && validation[identifier].$dirty'>" +
+							"<span ng-transclude></span> is required" +
+						"</error-message>" +
+					"</div>",
 				link: function(scope, elements, attrs) {
 
 					//Bind the change function
