@@ -21,6 +21,7 @@
 		'dashboard',
 		'conferenceWidget',
 		'createConference',
+		'ui.select',
 		'satellizer',
 		'ui.router',
 		'blockUI',
