@@ -30,7 +30,7 @@ Route::group(['prefix' => 'api/conferences'], function () {
 Route::get('/', function()
 {
     // change login.html to whatever the index page for angular will be
-    return File::get(public_path() . '/login.html');
+    return File::get(public_path() . '/index.html');
 });
 
 
