@@ -14,6 +14,10 @@ use App\Flight;
 use App\User;
 use App\UserConference;
 use Auth;
+use Entrust;
+use App\Utility\PermissionNames;
+
+use App\Jobs\RegistrationFlightAggregator;
 
 /**
  * Controller for handling conference registration.
@@ -166,13 +170,13 @@ class ConfRegistrationController extends Controller
     public function approveRegistration($conferenceID, $requestID) {
         //Check whether the current user is allowed to do this
         if(!$this->isUserRegistrationApprover($conferenceID)) {
-            return response("", 401);
+            return response("", 403);
         }
 
-        DB::transaction(function () use ($conferenceID, $requestID) {
+        $success = DB::transaction(function () use ($conferenceID, $requestID) {
             $conference = UserConference::find($requestID);
             if ($conferenceID != $conference->conferenceID) {
-                return response("Registration request not found for conference.",  404);
+                return false;
             }
             //Set conference attendance to approved
             if ($conference != null && $conference->approved = false) {
@@ -186,8 +190,14 @@ class ConfRegistrationController extends Controller
                 $flight->isChecked = true;
                 $flight->save();
             }
-            return response("", 200);
+            return true;
         });
+        if ($success) {
+            $this->dispatch(new RegistrationFlightAggregator($conferenceID));
+            return response("", 200);
+        } else {
+            return response("Registration request not found for conference.",  404);
+        }
     }
 
     /*
@@ -216,7 +226,7 @@ class ConfRegistrationController extends Controller
 
         $accessType = $this->determineAccessType($conferenceID, $registration);
         if ($accessType == null) {
-            return response("", 401);
+            return response("", 403);
         }
 
         $flightData = $registration->flight->toArray();

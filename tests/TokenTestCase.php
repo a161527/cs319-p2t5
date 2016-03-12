@@ -1,12 +1,16 @@
 <?php
 
-const TEST_LOGIN = [
+define('TEST_LOGIN', [
     'email' => 'root@localhost', 'password' => 'admin'
-];
+]);
 
-const NO_PERMISSION_LOGIN = [
+define('NO_PERMISSION_LOGIN', [
     'email' => 'unprivileged@localhost', 'password' => 'secret'
-];
+]);
+
+define ('WITH_DEPENDENT_LOGIN', [
+    'email' => 'ryanchenkie@gmail.com', 'password' => 'secret'
+]);
 
 /**
  * Handles test cases that need to pass tokens through to JWTAuth.
