@@ -130,10 +130,14 @@
 					controller: 'conferenceRegistrationCtrl'
 				})
 
-				.state('dashboard.conferences.registration.1', {
+				// .state('dashboard.conferences.registration.1', {
+				// 	url: '',
+				// 	templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.selectDependents.html',
+				// })
+
+				.state('dashboard.conferences.registration.4', {
 					url: '',
-					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.selectDependents.html',
-					controller: 'conferenceRegistrationCtrl'
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.inventory.html',
 				})
 		})
 
