@@ -11,21 +11,21 @@
 |
 */
 
-Route::group(['prefix' => 'api/conferences'], function () {
-    Route::get('', 'ConferenceController@getInfoList');
-    Route::post('', 'ConferenceController@createNew');
+Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], function () {
+    Route::get('', 'MainController@getInfoList');
+    Route::post('', 'MainController@createNew');
 
     Route::group(['prefix' => '{confId}'], function () {
-        Route::get('', 'ConferenceController@getInfo');
-        Route::put('', 'ConferenceController@replace');
-        Route::delete('', 'ConferenceController@delete');
+        Route::get('', 'MainController@getInfo');
+        Route::put('', 'MainController@replace');
+        Route::delete('', 'MainController@delete');
 
         Route::get('permissions', 'ConferenceController@getPermissions');
 
         //New registration request
-        Route::post('register', 'ConfRegistrationController@userRegistration');
-        Route::post('register/{registryId}/approve', 'ConfRegistrationController@approveRegistration');
-        Route::get('register/{registryId}', 'ConfRegistrationController@getRegistrationData');
+        Route::post('register', 'RegistrationController@userRegistration');
+        Route::post('register/{registryId}/approve', 'RegistrationController@approveRegistration');
+        Route::get('register/{registryId}', 'RegistrationController@getRegistrationData');
     });
 });
 
