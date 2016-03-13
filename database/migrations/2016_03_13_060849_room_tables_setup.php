@@ -31,7 +31,10 @@ class RoomTablesSetup extends Migration
 
         Schema::create('room_sets', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('roomName');
+            $table->string('roomName')->nullable();
+            $table->integer('roomRangeStart')->unsigned()->nullable();
+            $table->integer('roomRangeEnd')->unsigned()->nullable();
+
             $table->integer('residenceID')->unsigned();
             $table->integer('roomTypeID')->unsigned();
 
@@ -54,7 +57,9 @@ class RoomTablesSetup extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('rooms');
+        Schema::drop('residences');
+        Schema::drop('room_sets');
+        Schema::drop('room_types');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
 
     }
