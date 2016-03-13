@@ -21,6 +21,7 @@ module.exports = function(config) {
         'lib/angular-ui-router.min.js',
         'lib/angular-block-ui.min.js',
         'lib/satellizer.min.js',
+        'lib/**.js',
         'js/app/app.module.js',
         'js/**/*.js',
         'unit_tests/*.js'
