@@ -19,18 +19,48 @@
 	word-break: break-all;
 }
 
+@media (min-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 45px;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        display: block;
+        padding-top: 5px;
+        padding-left: 0px;
+        padding-right: 0px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background-color: #f5f5f5;
+        border-right: 1px solid #eee;
+    }
+}
+
 .sidebar {
     position: fixed;
     top: 45px;
-    bottom: 0;
     left: 0;
     z-index: 1000;
     display: block;
-    padding: 5px;
+    padding-top: 5px;
+    padding-left: 0px;
+    padding-right: 0px;
     overflow-x: hidden;
     overflow-y: auto;
     background-color: #f5f5f5;
     border-right: 1px solid #eee;
+}
+
+.sidebar-pill {
+    border-collapse: true;
+    border-bottom: 1px solid #eee;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.navbar-collapse {
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .main {
@@ -57,6 +87,7 @@
     margin-right: auto;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
+    padding-right: 5px;
 }
 
 .navy {
@@ -69,4 +100,28 @@
 
 .med-blue {
     color: 409dd6;
+}
+
+td.uib-day > button {
+    border-radius: 0px !important;
+}
+
+.pad-right {
+    padding-right: 5px;
+}
+
+@media (min-width: 768px) {
+    .show-mobile {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .hide-mobile {
+        display: none;
+    }
+}
+
+.navbar-dropdown {
+    left: 0 !important;
 }
