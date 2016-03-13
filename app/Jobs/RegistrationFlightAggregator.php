@@ -43,12 +43,10 @@ class RegistrationFlightAggregator extends Job implements ShouldQueue
                 ->where('airport', $currentFlight->airport)
                 ->where('id', '<>', $currentFlight->id)
                 ->get();
-            if(sizeof($others) >= 1) {
-                foreach ($others as $otherFlight) {
-                    UserConference::where('flightID', $otherFlight->id)
-                        ->update('flightID', $currentFlight->id);
-                    $otherFlight->delete();
-                }
+            foreach ($others as $otherFlight) {
+                UserConference::where('flightID', $otherFlight->id)
+                    ->update(['flightID' => $currentFlight->id]);
+                $otherFlight->delete();
             }
         });
     }

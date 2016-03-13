@@ -8,6 +8,7 @@ class ConferenceTest extends TestCase
 {
 
     use \TokenTestCase;
+    use DatabaseTransactions;
 
     const SIMPLE_CONF_CREATEDATA = [
         'name' => 'Foo',
@@ -48,8 +49,8 @@ class ConferenceTest extends TestCase
             ->seeJson(self::SIMPLE_CONF_CREATEDATA);
 
         $this->noTokenNextReq = true;
-        $this->get("/api/conferences/{$id}")
-            ->seeJson(self::SIMPLE_CONF_CREATEDATA);
+        $this->get("/api/conferences/{$id}");
+        $this->seeJson(self::SIMPLE_CONF_CREATEDATA);
     }
 
     public function testConferencesIncludedInFullList()

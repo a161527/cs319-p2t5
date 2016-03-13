@@ -3,14 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
-class Account extends Authenticatable
+class Account extends Authenticatable implements JWTSubject
 {
     /**
-     * This will enable the relation with Role and add the following methods roles(), hasRole($name), 
+     * This will enable the relation with Role and add the following methods roles(), hasRole($name),
      * can($permission), and ability($roles, $permissions, $options) within your User model.
-     * 
+     *
      */
     use EntrustUserTrait;
 
@@ -31,4 +32,12 @@ class Account extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function getJWTIdentifier() {
+        return $this->email;
+    }
+
+    public function getJWTCustomClaims() {
+        return [];
+    }
 }

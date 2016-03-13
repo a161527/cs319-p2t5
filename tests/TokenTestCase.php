@@ -23,6 +23,7 @@ define ('WITH_DEPENDENT_LOGIN', [
  * blocks things, for example.
  */
 trait TokenTestCase {
+
     protected $token;
     protected $noTokenNextReq = false;
 
@@ -37,15 +38,13 @@ trait TokenTestCase {
     protected function authWithLoginCredentials($credentials, $refresh = true) {
         parent::json('POST', '/api/login', $credentials);
         $this->token = json_decode($this->response->getContent())->token;
-        if ($refresh) {
-            $this->refreshApplication();
-        }
+        JWTAuth::unsetToken();
     }
 
-    public function setUp() {
+    protected function setUp() {
         parent::setUp();
         $this->authWithLoginCredentials(TEST_LOGIN, false);
-   }
+    }
 
     /*
      * Overrides the default call method for Laravel's TestCase (from CrawlerTrait)
@@ -56,8 +55,8 @@ trait TokenTestCase {
         if(!$this->noTokenNextReq) {
             $headers['HTTP_Authorization'] = 'Bearer ' . $this->token;
         } else {
-            $this->refreshApplication();
             $this->noTokenNextReq = false;
+            JWTAuth::unsetToken();
         }
 
         parent::call($method, $uri, $params, $cookies, $files, $headers, $content);

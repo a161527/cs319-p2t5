@@ -1,8 +1,11 @@
 <?php
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
 class ConferenceRegistrationTest extends TestCase
 {
     use \TokenTestCase;
+
     const TEST_CONF_ID = 1;
     const TEST_ATTENDEE_ID = 1;
 
@@ -85,6 +88,7 @@ class ConferenceRegistrationTest extends TestCase
     public function testApprovalDeniedWithoutPermission() {
         $this->authWithLoginCredentials(NO_PERMISSION_LOGIN);
         $data = self::SIMPLE_REGISTRY_DATA;
+
         //First user/dependent not owned by the first account
         $data['attendees'] = [5];
         $this->json('POST', '/api/conferences/1/register', $data);

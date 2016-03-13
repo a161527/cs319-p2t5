@@ -151,7 +151,7 @@ class ConfRegistrationController extends Controller
 
     public function userRegistration(Request $req, $conferenceID) {
         $this->validateRegistrationRequest($req);
-        $user = JWTAuth::parseToken()->authenticate();
+        $user = Auth::user();
 
         return $this->processRegistration($req, $conferenceID, $user->id);
     }
