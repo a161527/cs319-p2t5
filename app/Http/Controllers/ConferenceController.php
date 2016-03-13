@@ -27,8 +27,8 @@ class ConferenceController extends Controller
             "end" => "required|date_format:Y-m-d",
             "location" => "required",
             "description" => "string",
-            "hasTransportation" => "boolean|required",
-            "hasAccommodations" => "boolean|required"]);
+            "hasTransportation" => "boolean",
+            "hasAccommodations" => "boolean"]);
     }
 
     /**

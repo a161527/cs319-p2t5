@@ -1,8 +1,8 @@
 (function() {
 	'use strict'
 
-	angular.module('conferenceWidget')
-		.factory('conferenceCredentials', function() {
+	angular.module('createConference')
+		.factory('conferenceFields', function() {
 
 			var _conferenceInfo = null
 			var _inventory = null
@@ -31,13 +31,14 @@
 				setHasRooms: function(t) {
 					_hasRooms = t
 				},
-				getHasRooms: function() {
+				getHasRooms:function() {
 					return _hasRooms
 				},
 				resetAll: function() {
 					_conferenceInfo = null
 					_inventory = null
 					_rooms = null
+					_hasRooms = false
 				}
 			}
 

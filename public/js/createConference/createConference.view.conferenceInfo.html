@@ -17,22 +17,22 @@
                 </div>
                 <div class='row'>
                     <div class='col-md-12'>
-                        <label for='description'>Description (optional)</label>
+                        <label for='description'>Description (optional) </label>
                         <textarea class='form-control' ng-model='conferenceInfo.description' rows='3' id='description' name='description'></textarea>
                     </div>
                 </div>
                 <br>
                 <div class='row'>
                     <div class='col-md-6'>
-                        <input-with-validation model='conferenceInfo.start' validation='createConferenceForm' identifier='start' inp-type='date'>Start Date</input-with-validation>
+                        <date-picker-input model='conferenceInfo.start' validation='createConferenceForm' identifier='start' label='Start Date'><date-picker-input>
                     </div>
                     <div class='col-md-6'>
-                        <input-with-validation model='conferenceInfo.end' validation='createConferenceForm' identifier='end' inp-type='date'>End Date</input-with-validation>
+                        <date-picker-input model='conferenceInfo.end' validation='createConferenceForm' identifier='end' label='End Date'><date-picker-input>
                     </div>
                 </div>
                 <div class='row'>
-                    <div class='col-md-12'>
-                        <input-with-validation model='conferenceInfo.location' validation='createConferenceForm' identifier='location' inp-type='text'>Location</input-with-validation>
+                    <div class='col-md-12' id='location-typeahead'>
+                        <input-with-validation model='conferenceInfo.location' validation='createConferenceForm' identifier='location' inp-type='text' class='typeahead'>Location</input-with-validation>
                     </div>
                 </div>
                 <div class='row'>
@@ -42,7 +42,7 @@
                 </div>
                 <div class='row'>
                     <div class='form-group col-md-12'>
-                        <label class='checkbox-inline'><input type='checkbox' ng-model='hasRooms'>Provide boarding accommodations for attendees</label>
+                        <label class='checkbox-inline'><input type='checkbox' ng-model='conferenceInfo.hasAccommodations'>Provide boarding accommodations for attendees</label>
                     </div>
                 </div>
             </div>

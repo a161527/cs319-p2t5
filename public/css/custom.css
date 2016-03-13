@@ -21,7 +21,7 @@
 
 .sidebar {
     position: fixed;
-    top: 51px;
+    top: 45px;
     bottom: 0;
     left: 0;
     z-index: 1000;
@@ -49,4 +49,24 @@
     -o-user-select: none;
     user-select: none;
     cursor: default;    
+}
+
+.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.navy {
+    color: #00599d;
+}
+
+.light-blue {
+    color: #7acddf;
+}
+
+.med-blue {
+    color: 409dd6;
 }
