@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Conference;
 
 use Illuminate\Http\Request;
 
@@ -28,7 +28,7 @@ use Illuminate\Foundation\Validation\ValidationException;
  * applications by admins.  This results in handling of flight data as well,
  * as flights are created in the DB as registrations are created.
  */
-class ConfRegistrationController extends Controller
+class RegistrationController extends Controller
 {
     //Types of access to a registration application
     const REGISTRATION_FULL_ACCESS_TYPE = "full";

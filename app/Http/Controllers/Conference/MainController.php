@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Conference;
 
 use Illuminate\Http\Request;
 
@@ -17,7 +17,7 @@ use App\Utility\RoleNames;
 use App\Utility\ConferenceRegistrationUtils;
 use Config;
 
-class ConferenceController extends Controller
+class MainController extends Controller
 {
 
     public function __construct() {
