@@ -81,10 +81,14 @@
     cursor: default;    
 }
 
-.logo {
+.logo-img {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    padding-top: 15%;
+}
+
+.logo-text {
     text-align: center;
     font-family: 'Montserrat', sans-serif;
     padding-right: 5px;

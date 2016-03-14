@@ -11,6 +11,10 @@
 
 			return {
 				setConferenceInfo: function(t) {
+					//format dates
+					t.start = moment(t.start).format('YYYY-MM-DD')
+					t.end = moment(t.end).format('YYYY-MM-DD')
+					
 					_conferenceInfo = t
 				},
 				getConferenceInfo: function() {

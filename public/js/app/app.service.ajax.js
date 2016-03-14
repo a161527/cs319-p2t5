@@ -24,30 +24,6 @@
 
 			}
 
-			this.createConference = function(conferenceInfo) {
-
-				return $q(function(resolve, reject) {
-					blockUI.start('Creating conference...')
-
-					conferenceInfo.start = parseDate(conferenceInfo.start);
-					conferenceInfo.end = parseDate(conferenceInfo.end);
-
-					console.log(conferenceInfo);
-
-					$http.post('api/conferences', conferenceInfo).then(function(resData) {
-
-						blockUI.stop()
-						resolve(resData)
-
-					}, function(resData) {
-
-						blockUI.stop()
-						reject(resData)
-
-					})
-				})
-			}
-
 			/*
 			@Params:
 				loadMessage: string - message to display when loading
@@ -75,22 +51,6 @@
 					})
 				})
 
-			}
-
-			var parseDate = function(date) {
-					var year = date.getFullYear(),
-						month = date.getMonth() + 1,
-						day = date.getDate();
-					if (month < 10) {
-						month = '0' + month;
-					}
-					if (day < 10) {
-						day = '0' + day;
-					}
-
-					var formatted = year + '-' + month + '-' + day;
-
-					return formatted;
 			}
 
 		})

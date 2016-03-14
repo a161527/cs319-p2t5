@@ -12,10 +12,13 @@
 
 			$scope.createConference = function() {
 				$scope.showError = false
-				$scope.conferenceInfo['hasAccommodations'] = $scope.hasRooms;
-				$scope.conferenceInfo['hasTransportation'] = $scope.conferenceInfo.hasTransportation || false;
 
-				ajax.createConference($scope.conferenceInfo).then(function(resData) {
+				// formatting request
+				var conferenceInfo = $scope.conferenceInfo;
+				conferenceInfo.hasAccommodations = $scope.hasRooms;
+				conferenceInfo.hasTransportation = $scope.conferenceInfo.hasTransportation || false;
+
+				ajax.serviceCall('Creating conference...', 'post', 'api/conferences', conferenceInfo).then(function(resData) {
 					$state.go('viewConference', {cid: resData['data']['id']});
 
 
