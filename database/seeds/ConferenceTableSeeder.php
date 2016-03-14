@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use App\Conference;
+use App\Utility\RoleCreate;
+use App\Models\Account;
 
 class ConferenceTableSeeder extends Seeder
 {
@@ -32,7 +34,9 @@ class ConferenceTableSeeder extends Seeder
              'hasAccommodations' => true]
         ];
         foreach ($conferences as $conf){
-            Conference::create($conf);
+            $c = Conference::create($conf);
+            $role = RoleCreate::ConferenceManager($c->id);
+            Account::where('email', 'root@localhost')->get()->first()->attachRole($role);
         }
     }
 }

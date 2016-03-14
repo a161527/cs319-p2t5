@@ -14,6 +14,10 @@ use App\Flight;
 use App\User;
 use App\UserConference;
 use Auth;
+use Entrust;
+use App\Utility\PermissionNames;
+
+use App\Jobs\RegistrationFlightAggregator;
 
 /**
  * Controller for handling conference registration.
@@ -83,6 +87,7 @@ class ConfRegistrationController extends Controller
             $arrivalDay = $req->input('flight.arrivalDate');
             $arrivalTime = $req->input('flight.arrivalTime');
             $airline = $req->input('flight.airline');
+            $airport = $req->input('flight.airport');
 
             $needsTransport = $req->input('needsTransportation');
             $attendees = $req->input('attendees');
@@ -109,14 +114,13 @@ class ConfRegistrationController extends Controller
 
             if(sizeof($flights) >= 1) {
                 foreach($flights as $row) {
-                    if ($row->arrivalTime == $arrivalTime) {
+                    if ($row->arrivalTime == $arrivalTime && $row->airport == $airport) {
                         return $this->registerAttendees($conferenceID, $attendees, $needsTransport, $row->id);
                     }
                 }
                 return response("Flight data does not match known data for flight", 400);
             } else {
                 //Create a new flight with the given data
-                $airport = $req->input('flight.airport');
 
                 $flight = new Flight;
                 $flight->flightNumber = $number;
@@ -147,7 +151,7 @@ class ConfRegistrationController extends Controller
 
     public function userRegistration(Request $req, $conferenceID) {
         $this->validateRegistrationRequest($req);
-        $user = JWTAuth::parseToken()->authenticate();
+        $user = Auth::user();
 
         return $this->processRegistration($req, $conferenceID, $user->id);
     }
@@ -156,7 +160,7 @@ class ConfRegistrationController extends Controller
     //a registration approver for the given conference.  We don't
     //have these permissions yet though.
     private function isUserRegistrationApprover($conferenceID) {
-        return true;
+        return Entrust::can(PermissionNames::ConferenceRegistrationApproval($conferenceID));
     }
 
     /**
@@ -166,13 +170,13 @@ class ConfRegistrationController extends Controller
     public function approveRegistration($conferenceID, $requestID) {
         //Check whether the current user is allowed to do this
         if(!$this->isUserRegistrationApprover($conferenceID)) {
-            return response("", 401);
+            return response("", 403);
         }
 
-        DB::transaction(function () use ($conferenceID, $requestID) {
+        $success = DB::transaction(function () use ($conferenceID, $requestID) {
             $conference = UserConference::find($requestID);
             if ($conferenceID != $conference->conferenceID) {
-                return response("Registration request not found for conference.",  404);
+                return false;
             }
             //Set conference attendance to approved
             if ($conference != null && $conference->approved = false) {
@@ -186,8 +190,14 @@ class ConfRegistrationController extends Controller
                 $flight->isChecked = true;
                 $flight->save();
             }
-            return response("", 200);
+            return true;
         });
+        if ($success) {
+            $this->dispatch(new RegistrationFlightAggregator($conferenceID));
+            return response("", 200);
+        } else {
+            return response("Registration request not found for conference.",  404);
+        }
     }
 
     /*
@@ -216,7 +226,7 @@ class ConfRegistrationController extends Controller
 
         $accessType = $this->determineAccessType($conferenceID, $registration);
         if ($accessType == null) {
-            return response("", 401);
+            return response("", 403);
         }
 
         $flightData = $registration->flight->toArray();
