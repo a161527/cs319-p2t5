@@ -34,7 +34,7 @@ class Account extends Authenticatable implements JWTSubject
     ];
 
     public function getJWTIdentifier() {
-        return $this->email;
+        return $this->id;
     }
 
     public function getJWTCustomClaims() {

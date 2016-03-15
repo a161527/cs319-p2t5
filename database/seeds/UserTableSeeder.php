@@ -24,7 +24,8 @@ class UserTableSeeder extends Seeder
                  'gender' => '',
                  'location' => '',
                  'notes' => '',
-                 'accountID' => 1],
+                 'accountID' => 1,
+                 'approved' => true],
 
                 ['firstName' => 'Ryan\'s',
                  'lastName' => 'Dependent1',
@@ -32,7 +33,8 @@ class UserTableSeeder extends Seeder
                  'gender' => '',
                  'location' => '',
                  'notes' => '',
-                 'accountID' => 1],
+                 'accountID' => 1,
+                 'approved' => true],
 
                 ['firstName' => 'Ryan\'s',
                  'lastName' => 'Dependent2',
@@ -40,7 +42,8 @@ class UserTableSeeder extends Seeder
                  'gender' => '',
                  'location' => '',
                  'notes' => '',
-                 'accountID' => 1],
+                 'accountID' => 1,
+                 'approved' => true],
 
                 ['firstName' => 'Ryan\'s',
                  'lastName' => 'Dependent3',
@@ -48,7 +51,8 @@ class UserTableSeeder extends Seeder
                  'gender' => '',
                  'location' => '',
                  'notes' => '',
-                 'accountID' => 1],
+                 'accountID' => 1,
+                 'approved' => true],
 
                 ['firstName' => 'Chris',
                  'lastName' => 'Somelastname',
@@ -56,7 +60,8 @@ class UserTableSeeder extends Seeder
                  'gender' => '',
                  'location' => '',
                  'notes' => '',
-                 'accountID' => 2],
+                 'accountID' => 2,
+                 'approved' => true],
 
                 ['firstName' => 'Chris\'s',
                  'lastName' => 'Dependent1',
@@ -64,7 +69,8 @@ class UserTableSeeder extends Seeder
                  'gender' => '',
                  'location' => '',
                  'notes' => '',
-                 'accountID' => 2]
+                 'accountID' => 2,
+                 'approved' => true]
         );
 
         // Loop through each user above and create the record for them in the database

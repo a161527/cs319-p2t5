@@ -40,13 +40,13 @@ class ConfRegistrationController extends Controller
     //accountID.  (This essentially means checking whether the dependents are associated
     //with that account)
     private function dependentsAreOkay($accountID, $dependentIDList) {
-        foreach ($dependentIDList as $attendee) {
-            $matchCount = User::where('id', $attendee)->where('accountId', $accountID)->count();
-            if ($matchCount < 1) {
-                return false;
-            }
-        }
-        return true;
+        $matchCount =
+            User::whereIn('id', $dependentIDList)
+                ->where(function ($query) use ($accountID) {
+                    $query->where('accountId', '<>', $accountID)
+                          ->orWhere('approved', 'false');
+                })->count();
+        return $matchCount == 0;
     }
 
     /*
@@ -94,7 +94,7 @@ class ConfRegistrationController extends Controller
 
             //Check whether dependents are okay/owned by the current user
             if(!$this->dependentsAreOkay($accountID, $attendees)) {
-                return response("Dependent(s) not owned by user", 403);
+                return response("Dependent(s) not owned by user or currently unapproved", 400);
             }
 
             //If the request explicitly doesn't have a flight, just register attendees without one
