@@ -14,7 +14,7 @@ class RoomTablesSetup extends Migration
     {
         Schema::create('residences', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('residenceName');
+            $table->string('name');
             $table->string('location');
             $table->integer('conferenceID')->unsigned();
             $table->foreign('conferenceID')
@@ -31,18 +31,18 @@ class RoomTablesSetup extends Migration
 
         Schema::create('room_sets', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('roomName')->nullable();
-            $table->integer('roomRangeStart')->unsigned()->nullable();
-            $table->integer('roomRangeEnd')->unsigned()->nullable();
+            $table->string('name')->nullable();
+            $table->integer('rangeStart')->unsigned()->nullable();
+            $table->integer('rangeEnd')->unsigned()->nullable();
 
             $table->integer('residenceID')->unsigned();
-            $table->integer('roomTypeID')->unsigned();
+            $table->integer('typeID')->unsigned();
 
             $table->foreign('residenceID')
                   ->references('id')->on('residences')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->foreign('roomTypeID')
+            $table->foreign('typeID')
                   ->references('id')->on('room_types')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
