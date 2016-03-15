@@ -11,6 +11,7 @@
 |
 */
 
+//All conference endpoints
 Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], function () {
     Route::get('', 'MainController@getInfoList');
     Route::post('', 'MainController@createNew');
