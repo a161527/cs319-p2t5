@@ -32,8 +32,21 @@
                             </div>  
                             <div class='row'>
                                 <div class='col-md-6'>
-                                    <label for='number{{idx}}'>Room #</label>
+                                    <label for='number{{idx}}'>
+                                        Room Numbers
+                                        <a tabindex="0" class="btn-xs" data-toggle="popover" data-trigger="focus" data-content="You may enter either single numbers or ranges of numbers delimited by commas
+                                        <br />
+                                        (e.g. 1-4,6,7,10-15)
+                                        <br /><br />
+                                        [click to close]"><i class="glyphicon glyphicon-question-sign"></i></a>
+                                    </label>
                                     <input ng-model='rooms[idx].number' id='number{{idx}}' name='number{{idx}}' type='text' class='form-control'></input>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col-md-6'>
+                                    <label for='capacity{{idx}}'>Room Capacity</label>
+                                    <input ng-model='rooms[idx].capacity' id='capacity{{idx}}' name='capacity{{idx}}' type='text' class='form-control'></input>
                                 </div>
                             </div>
                         </div>
@@ -45,10 +58,10 @@
 </div>
 
 <div class='row'>
-    <div class='col-md-6'>
+    <div class='col-xs-6'>
         <button class='btn btn-default btn-block' ng-click='back("2", "setRooms", "rooms")'>Back</button>
     </div>
-    <div class='col-md-6'>
+    <div class='col-xs-6'>
         <button class='btn btn-primary btn-block' ng-click='nextStep(roomsForm, "4", "setRooms", "rooms")'>Next</button>
     </div>
 </div>

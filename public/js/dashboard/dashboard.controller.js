@@ -14,6 +14,7 @@
 
 			$scope.showWidget = function(toState) {
 				var state = 'dashboard.' + toState
+				$('#sidebarNav').collapse('hide');
 				$state.go(state);
 			}
 

@@ -2,19 +2,36 @@
 	'use strict'
 
 	angular.module('createConference')
-		.controller('createConferenceCtrl', function($scope, $state, conferenceCredentials) {
+		.controller('createConferenceCtrl', function($scope, $state, conferenceFields, ajax, errorCodes) {
 
-			$scope.conferenceInfo = conferenceCredentials.getConferenceInfo() || {} 
-			$scope.inventory = conferenceCredentials.getInventory() || {'1':{}} 
-			$scope.rooms = conferenceCredentials.getRooms() || {'1':{}}
-			$scope.hasRooms = conferenceCredentials.getHasRooms() || false
-			$scope.triggerModal = false
+			$scope.conferenceInfo = conferenceFields.getConferenceInfo() || {} 
+			$scope.inventory = conferenceFields.getInventory() || {'1':{}} 
+			$scope.rooms = conferenceFields.getRooms() || {'1':{}}
+			$scope.hasRooms = conferenceFields.getHasRooms() || false
+			$scope.showError = false
 
 			$scope.createConference = function() {
-				alert('You did it!')
-				conferenceCredentials.resetAll()
-				var confID = 1; //conferenceCredentials['id'];
-				$state.go('viewConference', {cid: confID})
+				$scope.showError = false
+
+				// formatting request
+				var conferenceInfo = $scope.conferenceInfo;
+				conferenceInfo.hasAccommodations = $scope.hasRooms;
+				conferenceInfo.hasTransportation = $scope.conferenceInfo.hasTransportation || false;
+
+				ajax.serviceCall('Creating conference...', 'post', 'api/conferences', conferenceInfo).then(function(resData) {
+					$state.go('viewConference', {cid: resData['data']['id']});
+
+
+				}, function(resData) {
+
+					$scope.showError = true
+					$scope.errorMessage = errorCodes[resData.data.message]
+
+				})
+			}
+
+			$scope.removeMessage = function() {
+				$scope.showError = false
 			}
 
 			$scope.addInventory = function() {
@@ -54,7 +71,7 @@
 			}
 
 			$scope.cancel = function() {
-				conferenceCredentials.resetAll()
+				conferenceFields.resetAll()
 				$state.go('dashboard.conferences')
 			}
 
@@ -63,7 +80,7 @@
 			}
 
 			$scope.nextStep = function(form, toState, set, model) {
-				conferenceCredentials.setHasRooms($scope.hasRooms)
+				conferenceFields.setHasRooms($scope.hasRooms)
 				if ($scope.hasRooms != true && model === 'inventory') {
 					var skipStep = (parseInt(toState)+1).toString();
 					onNavigate(skipStep, set, model)
@@ -82,10 +99,16 @@
 			}
 
 			var onNavigate = function(toState, set, model) {
-				conferenceCredentials[set]($scope[model])
+				conferenceFields[set]($scope[model])
 				var state = 'dashboard.conferences.create.' + toState
 				$state.go(state)
 			}
+
+			var initPopover = function() {
+				$('[data-toggle="popover"]').popover({html:true});
+			}
+
+			initPopover();
 
 		})
 

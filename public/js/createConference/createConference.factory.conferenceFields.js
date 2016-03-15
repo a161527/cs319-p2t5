@@ -1,8 +1,8 @@
 (function() {
 	'use strict'
 
-	angular.module('conferenceWidget')
-		.factory('conferenceCredentials', function() {
+	angular.module('createConference')
+		.factory('conferenceFields', function() {
 
 			var _conferenceInfo = null
 			var _inventory = null
@@ -11,6 +11,10 @@
 
 			return {
 				setConferenceInfo: function(t) {
+					//format dates
+					t.start = moment(t.start).format('YYYY-MM-DD')
+					t.end = moment(t.end).format('YYYY-MM-DD')
+					
 					_conferenceInfo = t
 				},
 				getConferenceInfo: function() {
@@ -31,13 +35,14 @@
 				setHasRooms: function(t) {
 					_hasRooms = t
 				},
-				getHasRooms: function() {
+				getHasRooms:function() {
 					return _hasRooms
 				},
 				resetAll: function() {
 					_conferenceInfo = null
 					_inventory = null
 					_rooms = null
+					_hasRooms = false
 				}
 			}
 
