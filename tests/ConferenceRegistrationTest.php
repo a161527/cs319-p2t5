@@ -98,4 +98,23 @@ class ConferenceRegistrationTest extends TestCase
         $this->post("/api/conferences/1/register/${id}/approve");
         $this->assertResponseStatus(403);
     }
+
+    public function testFailureIfDependentUnapproved() {
+        $this->authWithLoginCredentials(NO_PERMISSION_LOGIN);
+        $data = self::SIMPLE_REGISTRY_DATA;
+
+        //Unapproved dependent
+        $data['attendees'] = [6];
+        $this->json('POST', '/api/conferences/1/register', $data);
+        $this->assertResponseStatus(400);
+    }
+
+    public function testCannotRegisterUnownedDependent() {
+        $this->authWithLoginCredentials(NO_PERMISSION_LOGIN);
+        $data = self::SIMPLE_REGISTRY_DATA;
+
+        $data['attendees'] = [1];
+        $this->json('POST', '/api/conferences/1/register', $data);
+        $this->assertResponseStatus(400);
+    }
 }

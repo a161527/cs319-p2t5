@@ -70,7 +70,7 @@ class UserTableSeeder extends Seeder
                  'location' => '',
                  'notes' => '',
                  'accountID' => 2,
-                 'approved' => true]
+                 'approved' => false]
         );
 
         // Loop through each user above and create the record for them in the database
