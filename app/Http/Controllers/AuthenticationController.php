@@ -9,6 +9,9 @@ use App\Http\Controllers\Controller;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Models\Account;
+use Auth;
+use Entrust;
+use App\Utility\PermissionNames;
 
 
 class AuthenticationController extends Controller
@@ -29,17 +32,17 @@ class AuthenticationController extends Controller
     public function index(Request $request)
     {
         // token must be submitted with request in order for this to no throw error "token_not_provided"
-        
+
         // returns the logged-in user
         // must call JWTAuth::authenticate() and then you can use Laravel's Auth::user()->id
         // source: https://github.com/tymondesigns/jwt-auth/issues/125
-        
+
         $account = JWTAuth::parseToken()->authenticate();
         $accountId = $account->id;
 
         return $account;
-    }    
-  
+    }
+
     public function authenticate(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -54,8 +57,10 @@ class AuthenticationController extends Controller
             return response()->json(['message' => 'could_not_create_token'], 500);
         }
 
+        $permissions = $this->buildPermissionsJson();
+
         // if no errors are encountered we can return a JWT
-        return response()->json(['message' => 'successful_login', 'token' => $token]);
+        return response()->json(['message' => 'successful_login', 'token' => $token, 'permissions' => $permissions]);
     }
 
     public function token()
@@ -83,6 +88,22 @@ class AuthenticationController extends Controller
         $token = JWTAuth::getToken();
         if ($token) {
             JWTAuth::setToken($token)->invalidate();
+        }
+    }
+
+    public function permissionList(){
+        return response()->json($this->buildPermissionsJson());
+    }
+
+    private function buildPermissionsJson() {
+        $permissions = [];
+        $this->checkPermission(PermissionNames::ConferenceCreate(), $permissions);
+        return $permissions;
+    }
+
+    private function checkPermission($permName, &$permissionsArray) {
+        if(Entrust::can($permName)) {
+            $permissionsArray[] = $permName;
         }
     }
 }
