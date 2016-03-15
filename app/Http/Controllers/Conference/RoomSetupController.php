@@ -13,7 +13,27 @@ class RoomSetupController extends Controller
         $this->middleware('jwt.auth');
     }
 
-    public function getRoomList($confId) {
+    public function getAccommodationList($confId) {
+
+    }
+
+    public function uploadRoomData($confId) {
+
+    }
+
+    public function createResidence($confId) {
+
+    }
+
+    public function getResidenceRooms($confId, $residenceId) {
+
+    }
+
+    public function getResidenceRoomTypes($confId, $residenceId) {
+
+    }
+
+    public function createRoomSet($confId, $residenceId) {
 
     }
 }
