@@ -7,6 +7,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class ConferenceTest extends TestCase
 {
 
+    use \TokenTestCase;
+    use DatabaseTransactions;
+
     const SIMPLE_CONF_CREATEDATA = [
         'name' => 'Foo',
         'start' => '2016-02-05',
@@ -25,11 +28,12 @@ class ConferenceTest extends TestCase
         $this->assertResponseOK();
     }
 
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
+    public function testRejectsUnprivilegedCreate() {
+        $this->disablePrivileges();
+        $this->json('POST', '/api/conferences', self::SIMPLE_CONF_CREATEDATA);
+        $this->assertResponseStatus(403);
+    }
+
     public function testCreateReturnsDifferingIDs()
     {
         $startId = $this->createGetId();
@@ -43,11 +47,19 @@ class ConferenceTest extends TestCase
         $id = $this->createGetId();
         $this->get("/api/conferences/{$id}")
             ->seeJson(self::SIMPLE_CONF_CREATEDATA);
+
+        $this->noTokenNextReq = true;
+        $this->get("/api/conferences/{$id}");
+        $this->seeJson(self::SIMPLE_CONF_CREATEDATA);
     }
 
     public function testConferencesIncludedInFullList()
     {
         $this->json('POST', '/api/conferences', self::SIMPLE_CONF_CREATEDATA);
+        $this->get("/api/conferences")
+            ->seeJson(self::SIMPLE_CONF_CREATEDATA);
+
+        $this->noTokenNextReq = true;
         $this->get("/api/conferences")
             ->seeJson(self::SIMPLE_CONF_CREATEDATA);
     }

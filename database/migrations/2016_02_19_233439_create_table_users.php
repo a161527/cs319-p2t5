@@ -21,6 +21,7 @@ class CreateTableUsers extends Migration
           $table->string('location');
           $table->string('notes')->nullable();
           $table->integer('accountID')->unsigned();
+          $table->boolean('approved');
           // Many-to-One
           $table->foreign('accountID')
               ->references('id')->on('accounts')

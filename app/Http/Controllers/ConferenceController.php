@@ -7,14 +7,24 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use DB;
-use Illuminate\Database\QueryException;
+use Auth;
+use Entrust;
 use JWTAuth;
 use App\Conference;
+use App\Utility\RoleCreate;
+use App\Utility\PermissionNames;
+use App\Utility\RoleNames;
+use Config;
 
 class ConferenceController extends Controller
 {
 
     public function __construct() {
+        //Allow info requests without a token.  May need to do extra
+        //auth stuff if they want detailed info, but right now we don't
+        //make that distinction
+        $this->middleware('jwt.auth', ['except' => ['getInfo', 'getInfoList']]);
+        $this->middleware('permission:' . PermissionNames::ConferenceCreate(), ['only' => ['createNew']]);
     }
 
     /**
@@ -67,11 +77,17 @@ class ConferenceController extends Controller
     public function createNew(Request $req) {
         $this->validateConferenceJson($req);
 
-        $conf = new Conference;
-        $this->assignInputToConference($req, $conf);
-        $conf->save();
+        return DB::transaction(function () use ($req) {
+            $conf = new Conference;
+            $this->assignInputToConference($req, $conf);
+            $conf->save();
 
-        return response()->json(['id' => (int)$conf->id]);
+            $role = RoleCreate::ConferenceManager($conf->id);
+            $user = Auth::user();
+            $user->attachRole($role);
+
+            return response()->json(['id' => (int)$conf->id]);
+        });
     }
 
     /**
@@ -104,6 +120,9 @@ class ConferenceController extends Controller
      * Replaces a given conference with the new values, given valid json.
      */
     public function replace(Request $req, $id) {
+        if (!Entrust::can(PermissionNames::ConferenceInfoEdit($id))) {
+            return response("", 403);
+        }
         $this->validateConferenceJson($req);
         $conf = Conference::find($id);
 
@@ -119,6 +138,9 @@ class ConferenceController extends Controller
      * Deletes a conference.
      */
     public function delete($id) {
+        if (!Entrust::hasRole(RoleNames::ConferenceManager($id))) {
+            return response("", 403);
+        }
         Conference::destroy($id);
         return '';
     }
