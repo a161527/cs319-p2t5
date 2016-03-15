@@ -27,6 +27,18 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
         Route::post('register', 'RegistrationController@userRegistration');
         Route::post('register/{registryId}/approve', 'RegistrationController@approveRegistration');
         Route::get('register/{registryId}', 'RegistrationController@getRegistrationData');
+
+        Route::group(['prefix' => 'residences'], function () {
+            Route::get('', 'RegistrationController@getAccommodationList');
+            Route::post('upload', 'RegistrationController@uploadRoomData');
+            Route::post('', 'RegistrationController@createResidence');
+
+            Route::group(['prefix' => '{residenceId}'], function () {
+                Route::get('rooms', 'RegistrationController@getResidenceRooms');
+                Route::get('roomTypes', 'RegistrationController@getResidenceRoomTypes');
+                Route::post('rooms', 'RegistrationController@createRoomSet');
+            });
+        });
     });
 });
 
