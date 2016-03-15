@@ -61,6 +61,5 @@ class RoomTablesSetup extends Migration
         Schema::drop('room_sets');
         Schema::drop('room_types');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
-
     }
 }
