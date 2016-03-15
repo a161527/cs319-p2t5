@@ -20,6 +20,8 @@ Route::group(['prefix' => 'api/conferences'], function () {
         Route::put('', 'ConferenceController@replace');
         Route::delete('', 'ConferenceController@delete');
 
+        Route::get('permissions', 'ConferenceController@getPermissions');
+
         //New registration request
         Route::post('register', 'ConfRegistrationController@userRegistration');
         Route::post('register/{registryId}/approve', 'ConfRegistrationController@approveRegistration');

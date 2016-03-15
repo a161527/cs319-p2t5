@@ -144,4 +144,26 @@ class ConferenceController extends Controller
         Conference::destroy($id);
         return '';
     }
+
+    public function getPermissions(Request $req, $confId) {
+        $permissions = [];
+
+        $this->checkAddPermission(
+            PermissionNames::ConferenceEventCreate($confId),
+            $permissions);
+        $this->checkAddPermission(
+            PermissionNames::ConferenceRegistrationApproval($confId),
+            $permissions);
+        $this->checkAddPermission(
+            PermissionNames::ConferenceInfoEdit($confId),
+            $permissions);
+
+        return response()->json($permissions);
+    }
+
+    private function checkAddPermission($pname, &$permList) {
+        if (Entrust::can($pname)) {
+            $permList[] = PermissionNames::normalizeConferencePermission($pname);
+        }
+    }
 }
