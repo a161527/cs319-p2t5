@@ -1,0 +1,20 @@
+
+<div class='form-group'>
+	<label class='checkbox-inline'><input type='checkbox' ng-model='sameFlightInfo'>All dependents have the same flight information?</label>
+</div>
+<div ng-hide='transfer'>
+	<form name='flightsForm' novalidate>
+		<div ng-repeat='(idx, value) in dependents'>
+			{{dependents[idx].firstname}} {{dependents[idx].lastname}}
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<timepicker-with-validation model='dependents[idx].arrivaltime'
+												label='Arrival Time'
+												identifier='arrivaltime{{idx}}'
+												validation='flightsForm'
+					></time-picker-with-validation>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

@@ -134,19 +134,24 @@
 					controller: 'conferenceRegistrationCtrl'
 				})
 
-				.state('dashboard.conferences.registration.1', {
-					url: '',
-					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.selectDependents.html',
-				})
+				// .state('dashboard.conferences.registration.1', {
+				// 	url: '',
+				// 	templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.selectDependents.html',
+				// })
 
-				.state('dashboard.conferences.registration.2', {
-					url: '',
-					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.accomodations.html'
-				})
+				// .state('dashboard.conferences.registration.2', {
+				// 	url: '',
+				// 	templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.accomodations.html'
+				// })
 
-				.state('dashboard.conferences.registration.3', {
+				// .state('dashboard.conferences.registration.3', {
+				// 	url: '',
+				// 	templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.transportation.html'
+				// })
+
+				.state('dashboard.conferences.registration.4', {
 					url: '',
-					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.transportation.html'
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.flights.html'
 				})
 
 
