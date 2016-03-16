@@ -22,13 +22,13 @@
 
 							</div>
 
+							<error-message ng-show='showError'>{{errorMessage}}<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeMessage()'></span></error-message>
+
 							<div class='form-group'>
 								<a ui-sref='createAccount.1' class='btn btn-default pull-left'>Create Account</a>
 								<!--Pass in loginForm.$valid to see if input fields are empty-->
 								<button class='btn btn-primary pull-right' id='loginButton' ng-click='login(loginForm.$valid)'>Log In</button>
 							</div>
-
-							<error-message ng-show='showError'>{{errorMessage}}<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeMessage()'></span></error-message>
 						</form>
 					</div>
 				</div>

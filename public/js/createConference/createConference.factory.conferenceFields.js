@@ -7,13 +7,16 @@
 			var _conferenceInfo = null
 			var _inventory = null
 			var _rooms = null
-			var _hasRooms = false
 
 			return {
 				setConferenceInfo: function(t) {
 					//format dates
-					t.start = moment(t.start).format('YYYY-MM-DD')
-					t.end = moment(t.end).format('YYYY-MM-DD')
+					t.startFormatted = moment(t.start).format('YYYY-MM-DD')
+					t.endFormatted = moment(t.end).format('YYYY-MM-DD')
+
+					//format booleans
+					t.hasTransportation = t.hasTransportation || false;
+					t.hasAccommodations = t.hasAccommodations || false;
 					
 					_conferenceInfo = t
 				},
@@ -21,6 +24,11 @@
 					return _conferenceInfo
 				},
 				setInventory: function(t) {
+					//format boolean
+					for (var key in t) {
+						t[key].disposable = t[key].disposable || false;
+					}
+
 					_inventory = t
 				},
 				getInventory: function() {
@@ -32,17 +40,10 @@
 				getRooms: function() {
 					return _rooms
 				},
-				setHasRooms: function(t) {
-					_hasRooms = t
-				},
-				getHasRooms:function() {
-					return _hasRooms
-				},
 				resetAll: function() {
 					_conferenceInfo = null
 					_inventory = null
 					_rooms = null
-					_hasRooms = false
 				}
 			}
 
