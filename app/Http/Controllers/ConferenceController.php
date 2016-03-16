@@ -14,6 +14,7 @@ use App\Conference;
 use App\Utility\RoleCreate;
 use App\Utility\PermissionNames;
 use App\Utility\RoleNames;
+use App\Utility\ConferenceRegistrationUtils;
 use Config;
 
 class ConferenceController extends Controller
@@ -24,6 +25,7 @@ class ConferenceController extends Controller
         //auth stuff if they want detailed info, but right now we don't
         //make that distinction
         $this->middleware('jwt.auth', ['except' => ['getInfo', 'getInfoList']]);
+        $this->middleware('jwt.check', ['only' => ['getInfo', 'getInfoList']]);
         $this->middleware('permission:' . PermissionNames::CreateConference(), ['only' => ['createNew']]);
     }
 
@@ -41,20 +43,30 @@ class ConferenceController extends Controller
             "hasAccommodations" => "boolean|required"]);
     }
 
+    private function validateDataRequest($req) {
+        $this->validate(
+            $req,
+            [
+                "includePermissions" => "boolean",
+                "includeRegistration" => "boolean"
+            ]);
+    }
+
     /**
      * Converts a conference object from the Eloquent object
      * into a json array.
      */
-    private function conferenceResponseJSONArray($conference) {
-        return [
-                'id' => (int)$conference->id,
-                'name' => $conference->conferenceName,
-                'start' => $conference->dateStart,
-                'end' => $conference->dateEnd,
-                'location' => $conference->location,
-                'description' => $conference->description,
-                'hasTransportation' => $conference->hasTransportation,
-                'hasAccommodations' => $conference->hasAccommodations];
+    private function conferenceResponseJSONArray($conference, $req) {
+        $data = $conference->toArray();
+        if ($req->input("includePermissions")) {
+            $data["permissions"] = $this->buildPermissionList($conference->id);
+        }
+
+        if ($req->input("includeRegistration")) {
+            $data["registered"] = ConferenceRegistrationUtils::getAccountRegistrationData($conference->id);
+        }
+
+        return $data;
     }
 
     /**
@@ -93,25 +105,27 @@ class ConferenceController extends Controller
     /**
      * Gets info about a specific conference.
      */
-    public function getInfo($id) {
+    public function getInfo(Request $req, $id) {
+        $this->validateDataRequest($req);
         $conference = Conference::find($id);
 
         if (is_null($conference)) {
             return response("No conference for id {$id}.", 404);
         }
 
-        return response()->json($this->conferenceResponseJSONArray($conference));
+        return response()->json($this->conferenceResponseJSONArray($conference, $req));
     }
 
     /**
      * Gets a json array with all conferences.
      */
-    public function getInfoList() {
+    public function getInfoList(Request $req) {
+        $this->validateDataRequest($req);
         $conferences = Conference::all();
 
         $jsonArrays = [];
         foreach ($conferences as $conf) {
-            array_push($jsonArrays, $this->conferenceResponseJSONArray($conf));
+            array_push($jsonArrays, $this->conferenceResponseJSONArray($conf, $req));
         }
         return response()->json($jsonArrays);
     }
@@ -145,20 +159,24 @@ class ConferenceController extends Controller
         return '';
     }
 
-    public function getPermissions(Request $req, $confId) {
-        $permissions = [];
-
-        $this->checkAddPermission(
-            PermissionNames::ConferenceEventCreate($confId),
-            $permissions);
-        $this->checkAddPermission(
-            PermissionNames::ConferenceRegistrationApproval($confId),
-            $permissions);
-        $this->checkAddPermission(
-            PermissionNames::ConferenceInfoEdit($confId),
-            $permissions);
-
+    public function getPermissions($confId) {
+        $permissions = $this->buildPermissionList($confId);
         return response()->json($permissions);
+    }
+
+    private function buildPermissionList($confId) {
+         $permissions = [];
+
+         $this->checkAddPermission(
+             PermissionNames::ConferenceEventCreate($confId),
+             $permissions);
+         $this->checkAddPermission(
+             PermissionNames::ConferenceRegistrationApproval($confId),
+             $permissions);
+         $this->checkAddPermission(
+             PermissionNames::ConferenceInfoEdit($confId),
+             $permissions);
+         return $permissions;
     }
 
     private function checkAddPermission($pname, &$permList) {
