@@ -79,4 +79,8 @@ class PermissionNames {
     public static function EventAnnounce($evtId) {
         return "event-announce." . $evtId;
     }
+
+    public static function normalizeConferencePermission($permName) {
+        return explode(".", $permName)[0];
+    }
 }
