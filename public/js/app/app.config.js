@@ -134,14 +134,15 @@
 					controller: 'conferenceRegistrationCtrl'
 				})
 
-				// .state('dashboard.conferences.registration.1', {
-				// 	url: '',
-				// 	templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.selectDependents.html',
-				// })
-
-				.state('dashboard.conferences.registration.4', {
+				.state('dashboard.conferences.registration.1', {
 					url: '',
-					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.inventory.html',
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.selectDependents.html',
+				})
+
+				.state('dashboard.conferences.inventoryRequest', {
+					url: '/requestInventory',
+					templateUrl: 'js/inventory/inventory.view.request.html',
+					controller: 'requestInventoryCtrl'
 				})
 		})
 
