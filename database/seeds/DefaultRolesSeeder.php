@@ -37,7 +37,10 @@ class DefaultRolesSeeder extends Seeder
             array('name'          => 'owner',
                   'display_name'  => 'Owner',
                   'description'   => 'Owner of the management system. Has access to all aspects of the system.',
-                  'permissions'   => [PermissionNames::ConferenceCreate()])
+                  'permissions'   => [PermissionNames::CreateConference(),
+                                      PermissionNames::ManageGlobalPermissions(),
+                                      PermissionNames::ApproveUserRegistration(),
+                                      PermissionNames::ViewSiteStatistics()])
              // array(    'name'            => '',
              //         'display_name'    => '',
              //         'description'    => ''),

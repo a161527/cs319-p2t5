@@ -97,7 +97,10 @@ class AuthenticationController extends Controller
 
     private function buildPermissionsJson() {
         $permissions = [];
-        $this->checkPermission(PermissionNames::ConferenceCreate(), $permissions);
+        $this->checkPermission(PermissionNames::CreateConference(), $permissions);
+        $this->checkPermission(PermissionNames::ManageGlobalPermissions(), $permissions);
+        $this->checkPermission(PermissionNames::ApproveUserRegistration(), $permissions);
+        $this->checkPermission(PermissionNames::ViewSiteStatistics(), $permissions);
         return $permissions;
     }
 

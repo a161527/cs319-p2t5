@@ -6,6 +6,10 @@ use App\Utility\PermissionNames;
 
 class DefaultPermissionsSeeder extends Seeder
 {
+
+    private static function pArray($name, $display) {
+        return ["name" => $name, "display_name" => $display];
+    }
     /**
      * Run the database seeds.
      *
@@ -28,7 +32,10 @@ class DefaultPermissionsSeeder extends Seeder
          */
 
         $permissions = array(
-            array("name" => PermissionNames::ConferenceCreate(), "display_name" => "Create Conference")
+            self::pArray(PermissionNames::CreateConference(), "Create Conference"),
+            self::pArray(PermissionNames::ManageGlobalPermissions(), "Manage Global Permissions"),
+            self::pArray(PermissionNames::ApproveUserRegistration(), "Approve User Registration"),
+            self::pArray(PermissionNames::ViewSiteStatistics(), "View Site Statistics")
         );
 
         foreach ($permissions as $p) {
