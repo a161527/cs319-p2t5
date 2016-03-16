@@ -22,11 +22,11 @@
 					'<div>' +
 						'<label>{{label}}</label>' +
 						'<uib-timepicker ng-model="model" hour-step="1" minute-step="1" show-meridian="true" name="{{identifier}}"></uib-timepicker>' +
-						'<error-message ng-show="validation.{{identifier}}.$invalid">Input is not valid</error-message>' +
+						'<error-message ng-show="validation[identifier].$invalid">Input is not valid</error-message>' +
 					'</div>',	
 				link: function(scope, elem, attrs) {
 
-					scope.model = new Date(0).setHours(0,0,0,0);
+					scope.model = new Date()
 
 				}
 			}

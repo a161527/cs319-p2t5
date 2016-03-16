@@ -9,8 +9,10 @@
 			'3':{firstname: 'Kevin', lastname: ''}
 			}
 
-			$scope.registration = {}
+			//Dependents all share same flight info, replace object
+			$scope.flightInfo = {}
 
+			$scope.registration = {}
 			$scope.noSelection = false
 
 			$scope.checkOneSelected = function(dependents) {
@@ -32,6 +34,14 @@
 
 			$scope.cancel = function() {
 				$state.go('dashboard.conferences.view')
+			}
+
+			$scope.getFlightsSet = function(sameFlightInfo) {
+				return sameFlightInfo? $scope.emptyFlightInfo : $scope.dependents
+			}
+
+			$scope.getFlightIdentifier = function(sameFlightInfo) {
+				return sameFlightInfo? 'airport{{idx}}' : 'airport'
 			}
 
 			$scope.back = function(currentState) {
