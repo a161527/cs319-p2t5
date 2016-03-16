@@ -12,6 +12,11 @@ class ConferenceRegistrationUtils {
             $account = Auth::user();
         }
 
+        //If no user is logged in, return an empty list
+        if (is_null($account)) {
+            return [];
+        }
+
         $accountId = $account->id;
 
         $attendances =
