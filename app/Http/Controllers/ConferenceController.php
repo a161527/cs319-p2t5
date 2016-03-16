@@ -24,7 +24,7 @@ class ConferenceController extends Controller
         //auth stuff if they want detailed info, but right now we don't
         //make that distinction
         $this->middleware('jwt.auth', ['except' => ['getInfo', 'getInfoList']]);
-        $this->middleware('permission:' . PermissionNames::ConferenceCreate(), ['only' => ['createNew']]);
+        $this->middleware('permission:' . PermissionNames::CreateConference(), ['only' => ['createNew']]);
     }
 
     /**
@@ -37,8 +37,8 @@ class ConferenceController extends Controller
             "end" => "required|date_format:Y-m-d",
             "location" => "required",
             "description" => "string",
-            "hasTransportation" => "boolean",
-            "hasAccommodations" => "boolean"]);
+            "hasTransportation" => "boolean|required",
+            "hasAccommodations" => "boolean|required"]);
     }
 
     /**

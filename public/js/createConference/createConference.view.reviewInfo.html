@@ -11,39 +11,81 @@
 <h4>Review Conference Details</h4>
 <div class='panel panel-default'>
 	<div class='panel panel-body break-all'>
-		<h3>Conference Information</h3>
-		<div><h4>Conference Name: {{conferenceInfo.name}}</h4></div>
-		<div ng-show='conferenceInfo.description'>Conference Description: "{{conferenceInfo.description}}"</div>
-		<div>Start Date: {{conferenceInfo.start}}</div>
-		<div>End Date: {{conferenceInfo.end}}</div>
-		<div>Location: {{conferenceInfo.location}}</div>
-		<div>Provides Transportation: {{conferenceInfo.hasTransportation}}</div>
-		<div>Provides Boarding Accommodations: {{hasRooms}}</div>
-		<br>
-		<h3>Conference Inventory</h3>
-		<div ng-repeat='(idx, value) in inventory'>
-			<div><h4>{{inventory[idx].name}}</h4></div>
-			<div>Quantity: {{inventory[idx].quantity}} {{inventory[idx].units}}</div>
-			<div>Disposable: {{inventory[idx].disposable}}</div>
+		<h4><b><u>Conference Information</u></b></h4>
+		<div>
+			<b>Name:</b>
+			<br>
+			{{conferenceInfo.name}}
+		</div>
+		<div ng-show='conferenceInfo.description'>
+			<b>Description:</b>
+			<br>
+			{{conferenceInfo.description}}
+		</div>
+		<div>
+			<b>Start Date:</b>
+			<br>
+			{{conferenceInfo.startFormatted}}
+		</div>
+		<div>
+			<b>End Date:</b>
+			<br>
+			{{conferenceInfo.endFormatted}}
+		</div>
+		<div>
+			<b>Location:</b>
+			<br>
+			{{conferenceInfo.location}}
+		</div>
+		<div>
+			<b>Provides Transportation:</b>
+			<br>
+			{{conferenceInfo.hasTransportation}}
+		</div>
+		<div>
+			<b>Provides Boarding Accommodations:</b>
+			<br>
+			{{conferenceInfo.hasAccommodations}}
 		</div>
 		<br>
-		<div ng-show='hasRooms'>
-			<h3>Conference Accommodations</h3>
+		<h4><b><u>Inventory</u></b></h4>
+		<div ng-repeat='(idx, value) in inventory'>
+			<div class='row'>
+				<div class='col-xs-12 col-sm-6'>
+					<h5><b>{{inventory[idx].name}}</b></h5>
+				</div>
+				<div class='col-xs-12 col-sm-6'>
+					<b>Quantity:</b> {{inventory[idx].quantity}} {{inventory[idx].units}}
+					<br>
+					<b>Disposable:</b> {{inventory[idx].disposable}}
+				</div>
+			</div>
+			<br>
+		</div>
+		<br>
+		<div ng-show='conferenceInfo.hasAccommodations'>
+			<h4><b><u>Conference Accommodations</u></b></h4>
 			<div ng-repeat='(idx, value) in rooms'>
-				<div><h4>{{rooms[idx].name}}</h4></div>
-				<div>Address: {{rooms[idx].location}}</div>
-				<div ng-show='rooms[idx].number'>Rooms: {{rooms[idx].number}}</div>
+				<div class='row'>
+					<div class='col-xs-12 col-sm-6'>
+						<div><h5><b>{{rooms[idx].name}}</b></h5></div>
+					</div>
+					<div class='col-xs-12 col-sm-6'>
+						<div><b>Address:</b> {{rooms[idx].location}}</div>
+						<div ng-show='rooms[idx].number'><b>Rooms:</b> {{rooms[idx].number}}</div>
+						<div ng-show='rooms[idx].capacity'><b>Capacity:</b> {{rooms[idx].capacity}}</div>
+					</div>
 			</div>
 			<br>
 		</div>
 	</div>
 </div>
 <div class='row'>
-	<div class='col-md-6'>
-		<div ng-show='hasRooms'>
+	<div class='col-xs-6'>
+		<div ng-show='conferenceInfo.hasAccommodations'>
 			<a class='btn btn-default btn-block' ui-sref='dashboard.conferences.create.3'>Back</a>
 		</div>
-		<div ng-hide='hasRooms'>
+		<div ng-hide='conferenceInfo.hasAccommodations'>
 			<a class='btn btn-default btn-block' ui-sref='dashboard.conferences.create.2'>Back</a>
 		</div>
 	</div>

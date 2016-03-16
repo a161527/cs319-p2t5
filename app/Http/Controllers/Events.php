@@ -26,7 +26,9 @@ class Events extends Controller
      * @return Response
      */
     public function getEventByConferenceID($conferenceID) {
-    return Event::where('conferenceID',$conferenceID)->get();
+    $event = Event::where('conferenceID',$conferenceID)->get();
+      if (count($event) == 0) {return response("No events for conferenceID {$conferenceID}.", 404);}
+      return $event;
     }
 
     /**
@@ -54,7 +56,9 @@ class Events extends Controller
      * @return Response
      */
     public function show($id) {
-        return Event::find($id);
+      $event = Event::find($id);
+        if (count($event) == 0) {return response("No event for id {$id}.", 404);}
+        return $event;
     }
 
     /**
@@ -65,6 +69,7 @@ class Events extends Controller
      */
     public function update(Request $request, $id) {
         $event = Event::find($id);
+        if (is_null($event)) {return response("No event for id {$id}.", 404);}
         $event->eventName = $request->input('eventName');
         $event->date = $request->input('date');
         $event->location = $request->input('location');
@@ -84,6 +89,7 @@ class Events extends Controller
      */
     public function destroy($id) {
         $event = Event::find($id);
+        if (is_null($event)) {return response("No event for id {$id}.", 404);}
         $event->delete();
         return response()->json(['id' => $event->id]);
     }

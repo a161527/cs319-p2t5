@@ -7,7 +7,6 @@
 			$scope.conferenceInfo = conferenceFields.getConferenceInfo() || {} 
 			$scope.inventory = conferenceFields.getInventory() || {'1':{}} 
 			$scope.rooms = conferenceFields.getRooms() || {'1':{}}
-			$scope.hasRooms = conferenceFields.getHasRooms() || false
 			$scope.showError = false
 
 			$scope.createConference = function() {
@@ -15,10 +14,12 @@
 
 				// formatting request
 				var conferenceInfo = $scope.conferenceInfo;
-				conferenceInfo.hasAccommodations = $scope.hasRooms;
-				conferenceInfo.hasTransportation = $scope.conferenceInfo.hasTransportation || false;
+				conferenceInfo.start = conferenceInfo.startFormatted;
+				delete conferenceInfo.startFormatted;
+				conferenceInfo.end = conferenceInfo.endFormatted;
+				delete conferenceInfo.endFormatted;
 
-				ajax.serviceCall('Creating conference...', 'post', 'api/conferences', conferenceInfo).then(function(resData) {
+				ajax.serviceCall('Creating conference...', 'post', 'api/conferences', $scope.conferenceInfo).then(function(resData) {
 					$state.go('viewConference', {cid: resData['data']['id']});
 
 
@@ -80,8 +81,7 @@
 			}
 
 			$scope.nextStep = function(form, toState, set, model) {
-				conferenceFields.setHasRooms($scope.hasRooms)
-				if ($scope.hasRooms != true && model === 'inventory') {
+				if ($scope.conferenceInfo.hasAccommodations != true && model === 'inventory') {
 					var skipStep = (parseInt(toState)+1).toString();
 					onNavigate(skipStep, set, model)
 				}
