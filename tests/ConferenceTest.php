@@ -96,4 +96,10 @@ class ConferenceTest extends TestCase
         $this->get("/api/conferences/{$id}")->seeJson($newData);
 
     }
+
+    public function testGetPermissions() {
+        $this->get("/api/conferences/1/permissions");
+        $result = json_decode($this->response->getContent());
+        $this->assertArraySubset(["conference-event-create", "conference-registration-approval", "conference-info-edit"], $result);
+    }
 }
