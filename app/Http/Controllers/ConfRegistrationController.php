@@ -179,7 +179,7 @@ class ConfRegistrationController extends Controller
                 return false;
             }
             //Set conference attendance to approved
-            if ($conference != null && $conference->approved = false) {
+            if (!is_null($conference) && $conference->approved == false) {
                 $conference->approved = true;
                 $conference->save();
             }
@@ -193,7 +193,7 @@ class ConfRegistrationController extends Controller
             return true;
         });
         if ($success) {
-            $this->dispatch(new RegistrationFlightAggregator($conferenceID));
+            $this->dispatch(new RegistrationFlightAggregator($requestID));
             return response("", 200);
         } else {
             return response("Registration request not found for conference.",  404);

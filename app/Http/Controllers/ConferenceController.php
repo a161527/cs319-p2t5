@@ -66,6 +66,14 @@ class ConferenceController extends Controller
             $data["registered"] = ConferenceRegistrationUtils::getAccountRegistrationData($conference->id);
         }
 
+        $data["end"] = $data["dateEnd"];
+        unset($data["dateEnd"]);
+        $data["start"] = $data["dateStart"];
+        unset($data["dateStart"]);
+
+        $data["name"] = $data["conferenceName"];
+        unset($data["conferenceName"]);
+
         return $data;
     }
 
