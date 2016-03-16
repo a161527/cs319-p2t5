@@ -36,7 +36,7 @@
 
 				return $q(function(resolve, reject) {
 					blockUI.start(loadMessage)
-					var promise = parameters ? $http[requestMethod](route) : $http[requestMethod](route, parameters)
+					var promise = parameters ? $http[requestMethod](route, parameters) : $http[requestMethod](route)
 
 					promise.then(function(resData) {
 

@@ -1,0 +1,27 @@
+<ul class="list-group">
+	<div ng-repeat='(idx, value) in dependents'>
+		<li class='list-group-item unselectable-text' ng-click='dependents[idx].register = !dependents[idx].register'>
+			<div class='row'>
+				<div class='col-md-2'>
+					<input type="checkbox" ng-model='dependents[idx].register'>
+				</div>
+				<div class='col-md-2'>
+					<span class='glyphicon glyphicon-user glyphicon-large'></span>
+				</div>
+				<div class='col-md-8'>
+					<div>{{dependents[idx].firstname}} {{dependents[idx].lastname}}</div>
+				</div>
+			</div>
+		</li>
+	</div>
+	<error-message ng-show='noSelection'>There must be one user selected<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeMessage()'></span></error-message>
+	<br>
+	<div class='row'>
+		<div class='col-md-6'>
+			<button class='btn btn-default btn-block'>Cancel</button>
+		</div>
+		<div class='col-md-6'>
+			<button class='btn btn-primary btn-block' ng-click='checkOneSelected(dependents)'>Next</button>
+		</div>
+	</div>
+</ul>

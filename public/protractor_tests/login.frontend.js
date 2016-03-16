@@ -47,4 +47,35 @@ describe('login page', function() {
 		});	
 	})
 
+	it('should redirect to dashboard when already logged in', function() {
+		element(by.id('email')).clear()
+		element(by.id('password')).clear()
+		element(by.id('email')).sendKeys('ryanchenkie@gmail.com');
+		element(by.id('password')).sendKeys('secret');
+		element(by.id('email')).sendKeys(protractor.Key.TAB)
+
+		browser.driver.sleep(500)
+		element(by.id('loginButton')).click()
+
+		browser.driver.sleep(1000)
+		expect(browser.getCurrentUrl()).toEqual(common.url + 'dashboard')
+
+		browser.get(common.url)
+		browser.driver.sleep(500)
+		expect(browser.getCurrentUrl()).toEqual(common.url + 'dashboard')
+	})
+
+	it('should redirect to login if logout is clicked', function() {
+		element(by.xpath('//*[@id="cmsNavbar"]/ul/li/a')).click()
+		element(by.xpath('//*[@ng-click="logout()"]')).click()
+		browser.driver.sleep(500)
+		expect(browser.getCurrentUrl()).toEqual(common.url)
+	})
+
+	it('should not redirect to dashboard after logout', function() {
+		browser.get(common.url)
+		browser.driver.sleep(500)
+		expect(browser.getCurrentUrl()).toEqual(common.url)
+	})
+
 })
