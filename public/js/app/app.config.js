@@ -114,8 +114,12 @@
 					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
 					controller: 'conferenceListCtrl',
 					resolve: {
-						conferenceList: function($http) {
-							return $http.get('api/conferences')
+						conferenceData: function($http, $q, loginStorage) {
+							return $q.all([
+								//TODO move into service
+								$http.get('api/conferences'), 
+								loginStorage.getPermissions()
+							])
 						}
 					}
 				})
