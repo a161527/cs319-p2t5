@@ -18,7 +18,7 @@ class RoleCreate {
         $permission->save();
         return $permission;
     }
-    
+
     //Creates a permission for each permission name in the list
     private static function createAllPermissions($permissionNames) {
         return array_map(function ($p) {return self::createPermission($p);}, $permissionNames);
