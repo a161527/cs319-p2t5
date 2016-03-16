@@ -14,14 +14,14 @@
 			</div>
 		</li>
 	</div>
-	<error-message ng-show='noSelection'>There must be one user selected<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeMessage()'></span></error-message>
-	<br>
-	<div class='row'>
-		<div class='col-md-6'>
-			<button class='btn btn-default btn-block'>Cancel</button>
-		</div>
-		<div class='col-md-6'>
-			<button class='btn btn-primary btn-block' ng-click='checkOneSelected(dependents)'>Next</button>
-		</div>
-	</div>
 </ul>
+<error-message ng-show='noSelection'>There must be one user selected<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeMessage()'></span></error-message>
+<br>
+<div class='row'>
+	<div class='col-md-6'>
+		<button class='btn btn-default btn-block' ng-click='cancel()'>Cancel</button>
+	</div>
+	<div class='col-md-6'>
+		<button class='btn btn-primary btn-block' ng-click='nextStep(1)'>Next</button>
+	</div>
+</div>

@@ -139,6 +139,20 @@
 					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.selectDependents.html',
 				})
 
+				.state('dashboard.conferences.registration.2', {
+					url: '',
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.accomodations.html'
+				})
+
+				.state('dashboard.conferences.registration.3', {
+					url: '',
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.transportation.html'
+				})
+
+
+				/*
+				INVENTORY
+				*/
 				.state('dashboard.conferences.inventoryRequest', {
 					url: '/requestInventory',
 					templateUrl: 'js/inventory/inventory.view.request.html',
