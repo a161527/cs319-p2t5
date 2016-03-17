@@ -43,4 +43,22 @@ class RoleCreate {
             return $role;
         });
     }
+
+    public static function EventManager($eventId) {
+    return DB::transaction(function() use ($eventId) {
+    $permissionList = [PermissionNames::EventInfoEdit($eventId),
+                       PermissionNames::EventDetailView($eventId)];
+
+    $permissions = self::createAllPermissions($permissionList);
+
+    $rolename = RoleNames::EventManager($eventId);
+
+    $role = new Role;
+    $role->name = $rolename;
+    $role->save();
+    $role->attachPermissions($permissions);
+
+    return $role;
+    });
+}
 }
