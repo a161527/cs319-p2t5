@@ -72,6 +72,19 @@ Route::group(['prefix' => 'api'], function()
         Route::patch('/{depId}', 'UserController@editDependent');
         Route::delete('/{depId}', 'UserController@deleteDependent');
     });
+
+    // inventory management
+    Route::group(['prefix' => 'conference/{conferenceId}/inventory'], function() {
+        Route::get('/', 'InventoryController@index');
+        Route::post('/', 'InventoryController@addItem');
+        Route::put('/', 'InventoryController@addItem');
+        Route::get('/reserve', 'InventoryController@reserveItem');
+        Route::post('/reserve', 'InventoryController@reserveItem');
+
+        Route::patch('/{itemId}', 'InventoryController@editItem');
+        Route::delete('/{itemId}', 'InventoryController@deleteItem');
+    });
+
 });
 
 // Routes for Event
