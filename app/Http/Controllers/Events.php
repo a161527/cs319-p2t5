@@ -22,7 +22,6 @@ class Events extends Controller
        //auth stuff if they want detailed info, but right now we don't
       //make that distinction
        $this->middleware('jwt.auth');
-       $this->middleware('jwt.check');
    }
 
     /**
@@ -49,8 +48,8 @@ class Events extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function store(Request $request, $confId) {
-       if (!Entrust::can(PermissionNames::ConferenceEventCreate($confId))) {return response("not found", 403);}
+    public function store(Request $request, $id) {
+       if (!Entrust::can(PermissionNames::ConferenceEventCreate($id))) {return response("not found", 403);}
 
        return DB::transaction(function () use ($request) {
          $event = new Event;
