@@ -1,8 +1,6 @@
-<?php
+<?php namespace Zizaco\Entrust\Traits;
 
-namespace Zizaco\Entrust\Traits;
-
-/*
+/**
  * This file is part of Entrust,
  * a role & permission management solution for Laravel.
  *
@@ -10,11 +8,37 @@ namespace Zizaco\Entrust\Traits;
  * @package Zizaco\Entrust
  */
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use InvalidArgumentException;
 
 trait EntrustUserTrait
 {
+    //Big block of caching functionality.
+    public function cachedRoles()
+    {
+        $userPrimaryKey = $this->primaryKey;
+        $cacheKey = 'entrust_roles_for_user_'.$this->$userPrimaryKey;
+        return Cache::tags(Config::get('entrust.role_user_table'))->remember($cacheKey, Config::get('cache.ttl'), function () {
+            return $this->roles()->get();
+        });
+    }
+    public function save(array $options = [])
+    {   //both inserts and updates
+        parent::save($options);
+        Cache::tags(Config::get('entrust.role_user_table'))->flush();
+    }
+    public function delete(array $options = [])
+    {   //soft or hard
+        parent::delete($options);
+        Cache::tags(Config::get('entrust.role_user_table'))->flush();
+    }
+    public function restore()
+    {   //soft delete undo's
+        parent::restore();
+        Cache::tags(Config::get('entrust.role_user_table'))->flush();
+    }
+    
     /**
      * Many-to-Many relations with Role.
      *
@@ -22,7 +46,7 @@ trait EntrustUserTrait
      */
     public function roles()
     {
-        return $this->belongsToMany(Config::get('entrust.role'));
+        return $this->belongsToMany(Config::get('entrust.role'), Config::get('entrust.role_user_table'), Config::get('entrust.user_foreign_key'), Config::get('entrust.role_foreign_key'));
     }
 
     /**
@@ -36,8 +60,8 @@ trait EntrustUserTrait
     {
         parent::boot();
 
-        static::deleting(function ($user) {
-            if (!method_exists(Config::get('auth.model'), 'bootSoftDeletingTrait')) {
+        static::deleting(function($user) {
+            if (!method_exists(Config::get('auth.model'), 'bootSoftDeletes')) {
                 $user->roles()->sync([]);
             }
 
@@ -71,7 +95,7 @@ trait EntrustUserTrait
             // Return the value of $requireAll;
             return $requireAll;
         } else {
-            foreach ($this->roles as $role) {
+            foreach ($this->cachedRoles() as $role) {
                 if ($role->name == $name) {
                     return true;
                 }
@@ -107,10 +131,10 @@ trait EntrustUserTrait
             // Return the value of $requireAll;
             return $requireAll;
         } else {
-            foreach ($this->roles as $role) {
+            foreach ($this->cachedRoles() as $role) {
                 // Validate against the Permission table
-                foreach ($role->perms as $perm) {
-                    if ($perm->name == $permission) {
+                foreach ($role->cachedPermissions() as $perm) {
+                    if (str_is( $permission, $perm->name) ) {
                         return true;
                     }
                 }
@@ -172,8 +196,8 @@ trait EntrustUserTrait
         // If validate all and there is a false in either
         // Check that if validate all, then there should not be any false.
         // Check that if not validate all, there must be at least one true.
-        if (($options['validate_all'] && !(in_array(false, $checkedRoles) || in_array(false, $checkedPermissions))) ||
-            (!$options['validate_all'] && (in_array(true, $checkedRoles) || in_array(true, $checkedPermissions)))) {
+        if(($options['validate_all'] && !(in_array(false,$checkedRoles) || in_array(false,$checkedPermissions))) ||
+            (!$options['validate_all'] && (in_array(true,$checkedRoles) || in_array(true,$checkedPermissions)))) {
             $validateAll = true;
         } else {
             $validateAll = false;
@@ -187,6 +211,7 @@ trait EntrustUserTrait
         } else {
             return [$validateAll, ['roles' => $checkedRoles, 'permissions' => $checkedPermissions]];
         }
+
     }
 
     /**
@@ -196,11 +221,11 @@ trait EntrustUserTrait
      */
     public function attachRole($role)
     {
-        if (is_object($role)) {
+        if(is_object($role)) {
             $role = $role->getKey();
         }
 
-        if (is_array($role)) {
+        if(is_array($role)) {
             $role = $role['id'];
         }
 
@@ -226,7 +251,7 @@ trait EntrustUserTrait
     }
 
     /**
-     * Attach multiple roles to a user.
+     * Attach multiple roles to a user
      *
      * @param mixed $roles
      */
@@ -238,14 +263,17 @@ trait EntrustUserTrait
     }
 
     /**
-     * Detach multiple roles from a user.
+     * Detach multiple roles from a user
      *
      * @param mixed $roles
      */
-    public function detachRoles($roles)
+    public function detachRoles($roles=null)
     {
+        if (!$roles) $roles = $this->roles()->get();
+        
         foreach ($roles as $role) {
             $this->detachRole($role);
         }
     }
+
 }

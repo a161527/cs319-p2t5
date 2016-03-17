@@ -5,6 +5,7 @@
  * a role & permission management solution for Laravel.
  *
  * @license MIT
+ * @package Zizaco\Entrust
  */
 
 return [
@@ -18,7 +19,7 @@ return [
     | the role if it is in a different namespace.
     |
     */
-    'role' => 'App\Models\Role',
+    'role' => 'App\Role',
 
     /*
     |--------------------------------------------------------------------------
@@ -39,7 +40,7 @@ return [
     | Update the permission if it is in a different namespace.
     |
     */
-    'permission' => 'App\Models\Permission',
+    'permission' => 'App\Permission',
 
     /*
     |--------------------------------------------------------------------------
@@ -62,5 +63,30 @@ return [
     |
     */
     'permission_role_table' => 'permission_role',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Entrust role_user Table
+    |--------------------------------------------------------------------------
+    |
+    | This is the role_user table used by Entrust to save assigned roles to the
+    | database.
+    |
+    */
+    'role_user_table' => 'role_user',
+
+    /*
+    |--------------------------------------------------------------------------
+    | User Foreign key on Entrust's role_user Table (Pivot)
+    |--------------------------------------------------------------------------
+    */
+    'user_foreign_key' => 'user_id',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Role Foreign key on Entrust's role_user Table (Pivot)
+    |--------------------------------------------------------------------------
+    */
+    'role_foreign_key' => 'role_id',
 
 ];

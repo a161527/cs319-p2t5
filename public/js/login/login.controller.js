@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('login')
-		.controller('loginCtrl', function($scope, ajax, errorCodes) {
+		.controller('loginCtrl', function($scope, $state, ajax, errorCodes, loginStorage) {
 
 			$scope.credentials = {}
 			$scope.errorMessage = ''
@@ -15,12 +15,13 @@
 
 					ajax.login($scope.credentials).then(function(resData) {
 
-						alert('You did it!')
+						loginStorage.storeEmail($scope.credentials.email)
+						$state.go('dashboard')
 
 					}, function(resData) {
 
 						$scope.showError = true
-						$scope.errorMessage = errorCodes[resData.data.error]
+						$scope.errorMessage = errorCodes[resData.data.message]
 
 					})
 
@@ -30,7 +31,7 @@
 					})
 				}
 			}
-
+			console.log(loginStorage.getAuthToken())
 			$scope.removeMessage = function() {
 				$scope.showError = false
 			}

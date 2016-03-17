@@ -19,13 +19,20 @@ Route::group(['prefix' => 'api/conferences'], function () {
         Route::get('', 'ConferenceController@getInfo');
         Route::put('', 'ConferenceController@replace');
         Route::delete('', 'ConferenceController@delete');
+
+        Route::get('permissions', 'ConferenceController@getPermissions');
+
+        //New registration request
+        Route::post('register', 'ConfRegistrationController@userRegistration');
+        Route::post('register/{registryId}/approve', 'ConfRegistrationController@approveRegistration');
+        Route::get('register/{registryId}', 'ConfRegistrationController@getRegistrationData');
     });
 });
 
 Route::get('/', function()
 {
-	// change login.html to whatever the index page for angular will be
-    return File::get(public_path() . '/login.html');
+    // change login.html to whatever the index page for angular will be
+    return File::get(public_path() . '/index.html');
 });
 
 
@@ -51,8 +58,10 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['prefix' => 'api'], function()
 {
-	// test GET for a page that requires a token to be submitted
+    // test GET for a page that requires a token to be submitted
     Route::resource('login', 'AuthenticationController', ['only' => ['index']]);
+
+    Route::get('permissions', 'AuthenticationController@permissionList');
 
     Route::post('login', 'AuthenticationController@authenticate');
     Route::post('register', 'RegistrationController@register');
@@ -88,8 +97,8 @@ Route::group(['prefix' => 'api'], function()
 });
 
 // Routes for Event
-Route::get('/api/v1/event/{id?}', 'Events@index');
-Route::post('/api/v1/event', 'Events@store');
-Route::post('/api/v1/event/{id}', 'Events@update');
-Route::delete('/api/v1/event/{id}', 'Events@destroy');
-
+Route::get('/api/event/{id?}', 'Events@index');
+Route::get('/api/event/conference/{id?}', 'Events@getEventByConferenceID');
+Route::post('/api/event', 'Events@store');
+Route::post('/api/event/{id}', 'Events@update');
+Route::delete('/api/event/{id}', 'Events@destroy');

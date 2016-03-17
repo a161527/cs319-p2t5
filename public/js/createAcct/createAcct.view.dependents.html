@@ -1,0 +1,96 @@
+<div class="progress">
+	<div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="33"
+	aria-valuemin="0" aria-valuemax="100" style="width:33%">
+	</div>
+	<div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="33"
+	aria-valuemin="0" aria-valuemax="100" style="width:33%">
+		Step 2
+	</div>
+</div>
+
+<h4>Dependent Users</h4>
+<div class="panel panel-default">
+	<div class="panel-body">
+		<div class='form-group'>
+			<label class='checkbox-inline'><input type='checkbox' ng-model='transfer'>Transfer dependents from existing account</label>
+		</div>
+		<div ng-hide='transfer'>
+			<form name='dependentsForm' novalidate>
+				<div ng-repeat='(idx, value) in dependents'>
+
+					<div class="panel panel-default" id='dependents{{idx}}'>
+						<div class="panel-body" ng-model='dependents[idx]'>
+							<div class='row' ng-show='showRemoveButton(idx)'>
+								<div class='col-md-offset-11 col-md-1'>
+									<div class='glyphicon glyphicon-remove hand-cursor remove-button' name='removeButton{{idx}}' ng-click='deleteDependent(idx)'></div>
+								</div>
+							</div>
+
+							<div class='row'>
+								<div class='col-md-6'>
+									<input-with-validation model='dependents[idx].firstname' validation='dependentsForm' identifier='firstname{{idx}}' inp-type='text'>First Name</input-with-validation>
+								</div>
+
+								<div class='col-md-6'>
+									<input-with-validation model='dependents[idx].lastname' validation='dependentsForm' identifier='lastname{{idx}}' inp-type='text'>Last Name</input-with-validation>
+								</div>
+							</div>
+
+							<div class='row'>
+								<div class='col-md-6'>
+
+									<date-picker-input model='dependents[idx].birthdate' validation='dependentsForm' identifier='birthdate{{idx}}' label='Birth Date'><date-picker-input>
+
+								</div>
+
+								<div class='col-md-6'>
+									<div class='form-group' ng-class='{"has-error": !dependentsForm["gender" + idx].$valid && dependentsForm["gender" + idx].$dirty}'>
+										<label for='gender{{idx}}'>Gender</label>
+										<select class='form-control' ng-model='dependents[idx].gender' id='gender{{idx}}' name='gender{{idx}}' required>
+											<option>Male</option>
+											<option>Female</option>
+											<option>Other</option>
+										</select>
+
+										<error-message ng-show='dependentsForm["gender" + idx].$error.required && dependentsForm["gender" + idx].$dirty'>Gender is required</error-message>
+									</div>
+								</div>
+							</div>
+
+							<div class='row'>
+								<div class='col-md-6'>
+									<input-with-validation model='dependents[idx].city' validation='dependentsForm' identifier='city{{idx}}' inp-type='text'>City</input>
+								</div>
+
+								<div class='col-md-6'>
+									<input-with-validation model='dependents[idx].country' validation='dependentsForm' identifier='country{{idx}}' inp-type='text'>Country</input>
+								</div>
+							</div>
+
+							<div class='form-group'>
+								<label for='accomodations{{idx}}'>Accomodations</label>
+								<textarea class='form-control' ng-model='dependents[idx].accomodations' rows='3' id='accomodations{{idx}}' name='accomodations{{idx}}'></textarea>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</form>
+			<button class='btn btn-success btn-block' ng-click='addPerson()'><span class="glyphicon glyphicon-plus"></span> Add Dependents</button>
+
+		</div>
+	</div>
+</div>
+
+<error-message ng-show='invalidAge'>There must be a user who is at least 16 years of age<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeAgeMessage()'></span></error-message>
+
+<div class='row'>
+	<div class='col-md-6'>
+		<button class='btn btn-default btn-block' ng-click='back("1", "setDependents", "dependents")'>Back</button>
+	</div>
+	<div class='col-md-6'>
+		<button class='btn btn-primary btn-block' ng-click='nextStep(dependentsForm, "3", "setDependents", "dependents")'>Next</button>
+	</div>
+</div>
+
+

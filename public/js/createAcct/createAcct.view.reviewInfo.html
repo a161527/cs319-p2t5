@@ -1,0 +1,35 @@
+<h4>Review Account Details</h4>
+<div class='panel panel-default'>
+	<div class='panel panel-body break-all'>
+		<h3>Account Information</h3>
+		Email: {{createAcct.email}}
+
+		<br>
+
+		<div ng-hide='transfer'>
+			<h3>Dependent Users</h3>
+			<div ng-repeat='(idx, value) in dependents'>
+				<div><h4>{{dependents[idx].firstname}} {{dependents[idx].lastname}}</h4></div>
+				<div>Birth Date: {{dependents[idx].birthdate}}</div>
+				<div>Gender: {{dependents[idx].gender}}</div>
+				<div>City: {{dependents[idx].city}}</div>
+				<div>Country: {{dependents[idx].country}}</div>
+				<div ng-show='dependents[idx].accomodations'>Special Accomodations: {{dependents[idx].accomodations}}</div>
+			</div>
+			<br>
+		</div>
+
+		<h3>Emergency Contact</h3>
+		<div>Full Name: {{contact.emergencyContactName}}</div>
+		<div>Phone Number: {{contact.phone}}</div>
+
+	</div>
+</div>
+<div class='row'>
+	<div class='col-md-6'>
+		<a class='btn btn-default btn-block' ui-sref='createAccount.3'>Back</a>
+	</div>
+	<div class='col-md-6'>
+		<button class='btn btn-primary btn-block' ng-click='createAccount()'>Submit</button>
+	</div>
+</div>

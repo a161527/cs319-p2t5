@@ -25,12 +25,12 @@ class CreateTableNotifications extends Migration
                 ->onUpdate('cascade');
           // Many-to-One
           $table->foreign('dbtriggerID')
-                ->references('id')->on('dbtriggers')
+                ->references('id')->on('db_triggers')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
           // Many-to-One
           $table->foreign('changehistoryID')
-                ->references('id')->on('changehistory')
+              ->references('id')->on('change_history')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });

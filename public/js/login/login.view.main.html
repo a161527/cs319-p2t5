@@ -1,11 +1,17 @@
-<div ng-clear>
+<div ng-cloak>
 	<div class='container'>
 		<div class='row'>
-			<div class='col-md-offset-4 col-md-4'>
+			<div class='col-md-offset-2 col-md-8'>
+				<img class="logo-img" src="img/GS_logo.png"/>
 				<br>
+				<h2 class="logo-text"><span class='navy'>Gobind Sarvar</span> Conferences</h2>
+				<br>
+			</div>
+		</div>
+		<div class='row'>
+			<div class='col-md-offset-4 col-md-4'>
 				<div class="panel panel-default">
 					<div class="panel-body">
-
 						<!--Need to block HTML5 validation so it does not conflict with angular-->
 						<form name='loginForm' novalidate>
 							<div ng-model='credentials'>
@@ -16,19 +22,17 @@
 
 							</div>
 
-							<div class='form-group pull-right'>
-								<a href="#/create">Create Account</a>
-							</div>
+							<error-message ng-show='showError'>{{errorMessage}}<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeMessage()'></span></error-message>
 
 							<div class='form-group'>
+								<a ui-sref='createAccount.1' class='btn btn-default pull-left'>Create Account</a>
 								<!--Pass in loginForm.$valid to see if input fields are empty-->
-								<button class='btn btn-default' ng-click='login(loginForm.$valid)'>Log In</button>
+								<button class='btn btn-primary pull-right' id='loginButton' ng-click='login(loginForm.$valid)'>Log In</button>
 							</div>
-
-							<error-message ng-show='showError'>{{errorMessage}}<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeMessage()'></span></error-message>
 						</form>
 					</div>
 				</div>
+				<div class='center-text'><a ui-sref='conferenceList'>View Conferences<a></div>
 			</div>
 		</div>
 	</div>

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Zizaco\Entrust\Traits\EntrustUserTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -13,7 +12,6 @@ class User extends Model
      * can($permission), and ability($roles, $permissions, $options) within your User model.
      * 
      */
-    use EntrustUserTrait;
     use SoftDeletes;
 
     /**
@@ -22,8 +20,14 @@ class User extends Model
      * @var array
      */
     protected $fillable = [
-        'firstName', 'lastName', 'accountId'
-    ];
+        'id',
+        'firstName',
+        'lastName',
+        'dateOfBirth',
+        'gender',
+        'location',
+        'notes',
+        'accountID'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -40,4 +44,8 @@ class User extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    public function account() {
+        return $this->hasOne('App\Models\Account', 'id', 'accountID');
+    }
 }
