@@ -21,9 +21,8 @@ class Events extends Controller
       //Allow info requests without a token.  May need to do extra
       //auth stuff if they want detailed info, but right now we don't
       //make that distinction
-      $this->middleware('jwt.auth', ['except' => ['getInfo', 'getInfoList']]);
-      $this->middleware('jwt.check', ['only' => ['getInfo', 'getInfoList']]);
-      $this->middleware('permission:' . PermissionNames::ConferenceEventCreate($confId), ['only' => ['createNew']]);
+      $this->middleware('jwt.auth');
+      $this->middleware('jwt.check');
   }
 
     /**
@@ -50,8 +49,8 @@ class Events extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function store(Request $request) {
-      if (!Entrust::can(PermissionNames::ConferenceEventCreate($id))) {return response("", 403);}
+    public function store(Request $request, $confId) {
+      if (!Entrust::can(PermissionNames::ConferenceEventCreate($confId))) {return response("not found", 403);}
 
       return DB::transaction(function () use ($request) {
       $event = new Event;

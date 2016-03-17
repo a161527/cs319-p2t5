@@ -47,7 +47,8 @@ class RoleCreate {
     public static function EventManager($eventId) {
     return DB::transaction(function() use ($eventId) {
     $permissionList = [PermissionNames::EventInfoEdit($eventId),
-                       PermissionNames::EventDetailView($eventId)];
+                       PermissionNames::EventDetailView($eventId),
+                       PermissionNames::EventAnnounce($eventId)];
 
     $permissions = self::createAllPermissions($permissionList);
 

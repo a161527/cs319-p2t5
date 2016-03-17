@@ -1,4 +1,4 @@
-<?php
+c<?php
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +86,6 @@ Route::group(['prefix' => 'api'], function()
 // Routes for Event
 Route::get('/api/event/{id?}', 'Events@index');
 Route::get('/api/event/conference/{id?}', 'Events@getEventByConferenceID');
-Route::post('/api/event', 'Events@store');
-Route::post('/api/event/{id}', 'Events@update');
+Route::post('/api/event/{confId}', 'Events@store');
+Route::post('/api/event/update/{id}', 'Events@update');
 Route::delete('/api/event/{id}', 'Events@destroy');
