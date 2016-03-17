@@ -47,6 +47,10 @@
 				return refresh()
 			} 
 
+			this.clearPermissions = function() {
+				_confList = null
+			}
+
 			var refresh = function() {
 				return $q(function(resolve, reject) {
 

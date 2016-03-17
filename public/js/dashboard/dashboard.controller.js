@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('dashboard')
-		.controller('dashboardCtrl', function($scope, $state, loginStorage) {
+		.controller('dashboardCtrl', function($scope, $state, loginStorage, conferenceList) {
 			$scope.userName = loginStorage.getEmail();
 
 			$scope.widgets = {
@@ -19,6 +19,7 @@
 			}
 
 			$scope.logout = function() {
+				conferenceList.clearPermissions()
 				loginStorage.clearAll()
 				$state.go('login')
 			}

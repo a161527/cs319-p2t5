@@ -4,7 +4,16 @@
 	angular.module('conferenceWidget')
 		.controller('conferenceWidgetCtrl', function($scope, $state, $stateParams, permissions) {
 
-			console.log(permissions)
+			//Hide all buttons.
+			// $('div[class="col-md-3"]').hide()
+
+			var showWidgets = function(list) {
+				list.forEach(function(permission) {
+					$('#' + permission).show()
+				}) 
+			}
+
+			showWidgets(permissions)
 
 			$scope.showWidget = function(toState) {
 				var state = 'dashboard.' + toState;
