@@ -10,11 +10,11 @@
 
 			if (permissions.indexOf('create-conference') === -1) {
 				//Jquery hide is better than adding a watcher with ng-show/hide
-				$(createConferenceBtn).hide()
+				$('#createConferenceBtn').hide()
 			}
-			console.log($scope.conferences)
-			$scope.showManageButton = function() {
-				// if ($scope.conferences.)
+
+			$scope.registered = function(registeredList) {
+				return registeredList > 0
 			}
 
 			$scope.goToCreateConference = function() {

@@ -129,26 +129,26 @@
 				CONFERENCE REGISTRATION
 				*/
 				.state('dashboard.conferences.registration', {
-					url: '/conferenceRegistration',
+					url: '/conferenceRegistration/?:cid',
 					abstract: true,
 					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.html',
 					controller: 'conferenceRegistrationCtrl'
 				})
 
-				// .state('dashboard.conferences.registration.1', {
-				// 	url: '',
-				// 	templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.selectDependents.html',
-				// })
+				.state('dashboard.conferences.registration.1', {
+					url: '',
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.selectDependents.html',
+				})
 
-				// .state('dashboard.conferences.registration.2', {
-				// 	url: '',
-				// 	templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.accomodations.html'
-				// })
+				.state('dashboard.conferences.registration.2', {
+					url: '',
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.accomodations.html'
+				})
 
-				// .state('dashboard.conferences.registration.3', {
-				// 	url: '',
-				// 	templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.transportation.html'
-				// })
+				.state('dashboard.conferences.registration.3', {
+					url: '',
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.transportation.html'
+				})
 
 				.state('dashboard.conferences.registration.4', {
 					url: '',

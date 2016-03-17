@@ -33,7 +33,7 @@
 			}
 
 			$scope.cancel = function() {
-				$state.go('dashboard.conferences.view')
+				$state.go('dashboard.conferences')
 			}
 
 			$scope.getFlightsSet = function(sameFlightInfo) {

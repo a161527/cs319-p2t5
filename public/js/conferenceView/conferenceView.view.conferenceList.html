@@ -73,8 +73,20 @@
 							<div class='row'>
 								<div class='col-md-12'>
 									<a class='btn btn-primary btn-block pull-left'><span class='glyphicon glyphicon-info-sign'></span><br> View Events</a>
-									<button class='btn btn-info pull-right btn-block'><span class='glyphicon glyphicon-pencil'></span><br> Register</button>
-									<a ui-sref='dashboard.conferences.manage({cid: conference.id})' class='btn btn-primary btn-block pull-left'><span class='glyphicon glyphicon-info-sign'></span><br> Manage Conference</a>
+
+									<button class='btn btn-info pull-right btn-block'
+										ng-show='!registered(conference.registered)'
+										ui-sref='dashboard.conferences.registration.1({cid: conference.id})'>
+										<span class='glyphicon glyphicon-pencil'></span><br> Register
+									</button>
+
+									<a ui-sref='dashboard.conferences.manage({cid: conference.id})' 
+										ng-show='conference.permissions.length > 0' 
+										id='manageConferenceBtn'
+										class='btn btn-primary btn-block pull-left'>
+										<span class='glyphicon glyphicon-info-sign'></span><br> Manage Conference
+									</a>
+
 								</div>
 							</div>
 						</div>
