@@ -28,12 +28,28 @@ class UserController extends Controller
     	$validator = Validator::make($data, [
             // need to change the name fields to allow accented characters, dashes, apostrophes, etc.
     		'firstName'	=>	'required|max:255|alpha_num',
-    		'lastName'	=>	'required|max:255',
+    		'lastName'	=>	'required|max:255|alpha_num',
     		'dateOfBirth'	=>	'date_format:Y-m-d',
             'gender'	=>	'in:male,female'
         ]);
 
     	return $validator;
+    }
+
+    /*
+     * Get a validator for an incoming registration request.
+     */
+    protected function dependentEditValidator(array $data)
+    {
+        $validator = Validator::make($data, [
+            // need to change the name fields to allow accented characters, dashes, apostrophes, etc.
+            'firstName' =>  'max:255|alpha_num',
+            'lastName'  =>  'max:255|alpha_num',
+            'dateOfBirth'   =>  'date_format:Y-m-d',
+            'gender'    =>  'in:male,female'
+        ]);
+
+        return $validator;
     }
 
     /*
@@ -95,10 +111,10 @@ class UserController extends Controller
             return response()->json(['message' => 'dependents_added']);
         } catch (ValidationException $e) {
             DB::rollback();
-            return reponse()->json(['message' => 'db_error', 'errors' => $e.getErrors()], 500);
+            return reponse()->json(['message' => 'user_could_not_be_added', 'errors' => $e.getErrors()], 500);
         } catch (\Exception $e) {
             DB::rollback();
-            return reponse()->json(['message' => 'db_error', 500]);
+            return reponse()->json(['message' => 'unknown_error', 'errors' => $e.getErrors()], 500);
         }
     }
 
@@ -108,7 +124,44 @@ class UserController extends Controller
      */
     public function editDependent($accountId, $depId, Request $req)
     {
-    	// dd("editDependent: accountId={$accountId}, depId={$depId}. ", $req->all());	
+        $changes = $req->all();
+        // dd($changes);
+        $user = User::where('id', $depId)
+                    ->where('accountId', $accountId)
+                    ->first();
+        if (!$user)
+            return response()->json(['message' => 'user_does_not_exist'], 422);
+        else 
+        {
+            $validator = $this->dependentEditValidator($changes);
+            if ($validator->passes())
+                // do updates
+                foreach ($changes as $field => $newValue)
+                {
+                    switch($field)
+                    {
+                        case "firstName":
+                            $user->firstName = $newValue;
+                            break;
+                        case "lastName":
+                            $user->lastName = $newValue;
+                            break;
+                        case "dateOfBirth":
+                            $user->dateOfBirth = $newValue;
+                            break;
+                        case "gender":
+                            $user->gender = $newValue;
+                            break;
+                    }
+                }
+            else
+                return response()->json(['message' => 'validation_failed', 'errors' => $validator->errors()], 422);
+        }
+
+        if ($user->save())
+            return response()->json(['message' => 'user_updated'], 200);
+        else
+            return response()->json(['message' => 'user_could_not_be_updated'], 500);
     }
 
     /*
@@ -118,7 +171,7 @@ class UserController extends Controller
     public function deleteDependent($accountId, $depId)
     {
         $user = User::where('accountId', '=', $accountId)
-                    ->where('id', '=',$depId);
+                    ->where('id', '=', $depId);
         if ($user->delete())
             return response()->json(['message' => 'user_deleted'], 200);
         else
