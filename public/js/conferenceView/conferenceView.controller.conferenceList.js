@@ -4,7 +4,7 @@
 	angular.module('conferenceView')
 		.controller('conferenceListCtrl', function($scope, $state, conferenceData) {
 			
-			$scope.conferences = conferenceData[0].data || []
+			$scope.conferences = conferenceData[0] || []
 			$scope.noConferences = ($scope.conferences.length === 0)
 			var permissions = conferenceData[1]
 
