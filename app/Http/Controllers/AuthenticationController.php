@@ -55,7 +55,8 @@ class AuthenticationController extends Controller
         }
 
         // if no errors are encountered we can return a JWT
-        return response()->json(['message' => 'successful_login', 'token' => $token]);
+        $accountId = Account::where('email', '=', $credentials['email'])->select('id')->first()['id'];
+        return response()->json(['message' => 'successful_login', 'token' => $token, 'accountId' => $accountId]);
     }
 
     public function token()

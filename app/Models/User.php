@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Authenticatable
+class User extends Model
 {
     /**
      * This will enable the relation with Role and add the following methods roles(), hasRole($name), 
@@ -13,6 +14,7 @@ class User extends Authenticatable
      * 
      */
     use EntrustUserTrait;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -31,4 +33,11 @@ class User extends Authenticatable
     protected $hidden = [
         
     ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 }
