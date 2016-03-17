@@ -74,6 +74,21 @@
 
 				.state('dashboard.conferences', {
 					url: '/conferences',
+					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
+					controller: 'conferenceListCtrl',
+					resolve: {
+						conferenceData: function($http, $q, loginStorage) {
+							return $q.all([
+								//TODO move into service
+								$http.get('api/conferences?includePermissions=1&includeRegistration=1'), 
+								loginStorage.getPermissions()
+							])
+						}
+					}
+				})
+
+				.state('dashboard.conferences.manage', {
+					url: '/manage/?:cid',
 					templateUrl: 'js/conferenceWidget/conferenceWidget.view.html',
 					controller: 'conferenceWidgetCtrl'
 				})
@@ -109,20 +124,6 @@
 					controller: 'createConferenceCtrl'
 				})
 
-				.state('dashboard.conferences.view', {
-					url: '/viewConferences',
-					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
-					controller: 'conferenceListCtrl',
-					resolve: {
-						conferenceData: function($http, $q, loginStorage) {
-							return $q.all([
-								//TODO move into service
-								$http.get('api/conferences'), 
-								loginStorage.getPermissions()
-							])
-						}
-					}
-				})
 
 				/*
 				CONFERENCE REGISTRATION

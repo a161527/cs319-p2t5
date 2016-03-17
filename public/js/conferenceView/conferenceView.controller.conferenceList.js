@@ -12,6 +12,10 @@
 				//Jquery hide is better than adding a watcher with ng-show/hide
 				$(createConferenceBtn).hide()
 			}
+			console.log($scope.conferences)
+			$scope.showManageButton = function() {
+				// if ($scope.conferences.)
+			}
 
 			$scope.goToCreateConference = function() {
 				$state.go('dashboard.conferences.create.1')
