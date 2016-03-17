@@ -11,6 +11,6 @@ class RoleNames {
     }
 
     public static function EventManager($eventId) {
-    return "event-manager." . $eventId;
+        return "event-manager." . $eventId;
     }
 }
