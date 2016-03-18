@@ -21,7 +21,7 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
         Route::put('', 'MainController@replace');
         Route::delete('', 'MainController@delete');
 
-        Route::get('permissions', 'ConferenceController@getPermissions');
+        Route::get('permissions', 'MainController@getPermissions');
 
         //New registration request
         Route::post('register', 'RegistrationController@userRegistration');
@@ -29,14 +29,14 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
         Route::get('register/{registryId}', 'RegistrationController@getRegistrationData');
 
         Route::group(['prefix' => 'residences'], function () {
-            Route::get('', 'RegistrationController@getAccommodationList');
-            Route::post('upload', 'RegistrationController@uploadRoomData');
-            Route::post('', 'RegistrationController@createResidence');
+            Route::get('', 'RoomSetupController@getResidenceList');
+            Route::post('upload', 'RoomSetupController@uploadRoomData');
+            Route::post('', 'RoomSetupController@createResidence');
 
             Route::group(['prefix' => '{residenceId}'], function () {
-                Route::get('rooms', 'RegistrationController@getResidenceRooms');
-                Route::get('roomTypes', 'RegistrationController@getResidenceRoomTypes');
-                Route::post('rooms', 'RegistrationController@createRoomSet');
+                Route::get('rooms', 'RoomSetupController@getResidenceRooms');
+                Route::get('roomTypes', 'RoomSetupController@getResidenceRoomTypes');
+                Route::post('rooms', 'RoomSetupController@createRoomSet');
             });
         });
     });
