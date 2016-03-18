@@ -9,6 +9,8 @@
 			'3':{firstname: 'Kevin', lastname: ''}
 			}
 
+			$scope.selectDependents = {}
+
 			//Dependents all share same flight info, replace object
 			$scope.flightInfo = {}
 
@@ -59,20 +61,32 @@
 				switch(currentState) {
 					case 1:
 						if ($scope.checkOneSelected($scope.dependents)) {
+							$scope.selectedDependents = addSelectedDependents($scope.dependents)
 							$state.go('dashboard.conferences.registration.2')
 						}
 						break
 
 					case 2: 
-						if (!$scope.registration.accomodations) {
-							alert('finished')
-						} else {
-							$state.go('dashboard.conferences.registration.3')
-						}
+						$state.go('dashboard.conferences.registration.3')
+						break
 						
 				}
 
 			}
+
+			var addSelectedDependents = function(dependents) {
+				var selected = {}
+				for (var i in dependents) {
+					if (dependents[i].hasOwnProperty('register')) {
+						if (dependents[i].register) {
+							selected[i] = dependents[i]
+						}
+					}
+				}
+
+				return selected
+			}
+
 		})
 
 })()

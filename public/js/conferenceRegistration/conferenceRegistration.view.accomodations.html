@@ -1,5 +1,28 @@
 <div class='form-group'>
-	<label class='checkbox-inline'><input type='checkbox' ng-model='registration.accomodations'>Do you require accomodations?</label>
+	{{selectedDependents}}
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Needs Accomodations?</th>
+				<th>Needs Transportation?</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat='(idx, key) in selectedDependents'>
+				<td>{{selectedDependents[idx].firstname}} {{selectedDependents[idx].lastname}}</td>
+				<td>
+					<input type="checkbox" 
+					ng-model='selectedDependents[idx].accomodations'>
+				</td>
+				<td>
+					<input type="checkbox" 
+					ng-model='selectedDependents[idx].transportation'
+					ng-disabled='!selectedDependents[idx].accomodations'>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
 <div class='row'>
 	<div class='col-xs-6'>
