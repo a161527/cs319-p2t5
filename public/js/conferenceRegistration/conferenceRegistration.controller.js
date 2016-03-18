@@ -74,6 +74,20 @@
 
 			}
 
+			$scope.selectAll = function(field, value, list) {
+				angular.forEach(list, function(dependent) { 
+					dependent[field] = value
+				})
+			}
+
+			$scope.selectAllTransportation = function(value, list) {
+				angular.forEach(list, function(dependent) {
+					if (dependent.accomodations) {
+						dependent.transportation = value
+					}
+				})				
+			}
+
 			var addSelectedDependents = function(dependents) {
 				var selected = {}
 				for (var i in dependents) {

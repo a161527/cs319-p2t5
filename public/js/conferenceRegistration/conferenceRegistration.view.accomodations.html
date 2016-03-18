@@ -4,8 +4,25 @@
 		<thead>
 			<tr>
 				<th>Name</th>
-				<th>Needs Accomodations?</th>
-				<th>Needs Transportation?</th>
+				<th>
+					<div>Needs Accomodations?</div>
+					<label class='checkbox-inline'>
+						<input type="checkbox" 
+						ng-model='accomodationsSelectAll'
+						ng-click='selectAll("accomodations", accomodationsSelectAll, selectedDependents); 
+							selectAll("transportation", false, selectedDependents);'>
+						Select All
+					</label>
+				</th>
+				<th>
+					<div>Needs Transportation?</div>
+					<label class='checkbox-inline'>
+						<input type="checkbox" 
+						ng-model='transportSelectAll'
+						ng-click='selectAllTransportation(transportSelectAll, selectedDependents)'>
+						Select All
+					</label>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -13,7 +30,8 @@
 				<td>{{selectedDependents[idx].firstname}} {{selectedDependents[idx].lastname}}</td>
 				<td>
 					<input type="checkbox" 
-					ng-model='selectedDependents[idx].accomodations'>
+					ng-model='selectedDependents[idx].accomodations'
+					ng-change='selectedDependents[idx].transportation = false'>
 				</td>
 				<td>
 					<input type="checkbox" 
