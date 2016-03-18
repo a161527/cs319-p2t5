@@ -17,22 +17,24 @@ class ConferenceRegistrationTest extends TestCase
         "airport" => "FOO",
     ];
 
-    const SIMPLE_REGISTRY_DATA = [
+    const SIMPLE_REGISTRY_DATA = [[
         "flight" => self::FLIGHT_DATA,
         "attendees" => [self::TEST_ATTENDEE_ID],
-        "needsTransportation" => false];
+        "needsTransportation" => 0,
+        "needsAccommodation" => 0
+    ]];
 
     public function testRegisterRejectsDifferentFlightTime() {
         $this->json("POST", "/api/conferences/1/register", self::SIMPLE_REGISTRY_DATA);
         $json = json_decode($this->response->getContent());
         $this->assertResponseOK();
 
-        $id = $json->ids[0];
+        $id = $json[0]->ids[0];
         $this->post("/api/conferences/1/register/${id}/approve");
         $this->assertResponseOK();
 
         $changedTime = self::SIMPLE_REGISTRY_DATA;
-        $changedTime["flight"]["arrivalTime"] = "01:00:00";
+        $changedTime[0]["flight"]["arrivalTime"] = "01:00:00";
 
         $this->json("POST", "/api/conferences/1/register", $changedTime);
         $this->assertResponseStatus(400);
@@ -48,9 +50,9 @@ class ConferenceRegistrationTest extends TestCase
 
     public function testRejectsNonexplicitEmptyFlight() {
         $noflight = self::SIMPLE_REGISTRY_DATA;
-        $noflight['flight'] = null;
+        $noflight[0]['flight'] = null;
 
-        $this->json('POST', "/api/conferences/1/register");
+        $this->json('POST', "/api/conferences/1/register", $noflight);
         $this->assertResponseStatus(400);
     }
 
@@ -65,7 +67,7 @@ class ConferenceRegistrationTest extends TestCase
     public function testBasicDataRetrieval() {
         $this->json('POST', "/api/conferences/1/register", self::SIMPLE_REGISTRY_DATA);
         $this->assertResponseOK();
-        $id = json_decode($this->response->getContent())->ids[0];
+        $id = json_decode($this->response->getContent())[0]->ids[0];
 
         $this->get("/api/conferences/1/register/${id}");
         $this->seeJson(self::FLIGHT_DATA);
@@ -80,7 +82,7 @@ class ConferenceRegistrationTest extends TestCase
 
         $this->json('POST', '/api/conferences/1/register', self::SIMPLE_REGISTRY_DATA);
         $this->assertResponseOK();
-        $id = json_decode($this->response->getContent())->ids[0];
+        $id = json_decode($this->response->getContent())[0]->ids[0];
 
         $this->post("/api/conferences/1/register/${id}/approve");
     }
@@ -90,10 +92,10 @@ class ConferenceRegistrationTest extends TestCase
         $data = self::SIMPLE_REGISTRY_DATA;
 
         //First user/dependent not owned by the first account
-        $data['attendees'] = [5];
+        $data[0]['attendees'] = [5];
         $this->json('POST', '/api/conferences/1/register', $data);
         $this->assertResponseOK();
-        $id = json_decode($this->response->getContent())->ids[0];
+        $id = json_decode($this->response->getContent())[0]->ids[0];
 
         $this->post("/api/conferences/1/register/${id}/approve");
         $this->assertResponseStatus(403);
