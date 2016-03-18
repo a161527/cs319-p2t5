@@ -3,7 +3,7 @@
 }
 
 .glyphicon-large {
-	font-size: 3em;
+	font-size: 6em;
 }
 
 .hand-cursor {
@@ -12,7 +12,7 @@
 }
 
 .remove-button {
-	color: red;
+	color: gray;
 }
 
 .break-all {

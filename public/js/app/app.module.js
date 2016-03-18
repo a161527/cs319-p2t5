@@ -10,6 +10,7 @@
 	angular.module('createConference', [])
 	angular.module('format', [])
 	angular.module('conferenceRegistration', [])
+	angular.module('inventory', [])
 
 	angular.module('app', [
 		'format',
@@ -21,6 +22,8 @@
 		'dashboard',
 		'conferenceWidget',
 		'createConference',
+		'inventory',
+		'ui.select',
 		'satellizer',
 		'ui.router',
 		'blockUI',

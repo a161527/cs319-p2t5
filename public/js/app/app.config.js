@@ -74,8 +74,27 @@
 
 				.state('dashboard.conferences', {
 					url: '/conferences',
+					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
+					controller: 'conferenceListCtrl',
+					resolve: {
+						conferenceData: function(conferenceList, $q, loginStorage) {
+							return $q.all([
+								conferenceList.refresh(), 
+								loginStorage.getPermissions()
+							])
+						}
+					}
+				})
+
+				.state('dashboard.conferences.manage', {
+					url: '/manage/?:cid',
 					templateUrl: 'js/conferenceWidget/conferenceWidget.view.html',
-					controller: 'conferenceWidgetCtrl'
+					controller: 'conferenceWidgetCtrl',
+					resolve: {
+						permissions: function(conferenceList, $stateParams) {
+							return conferenceList.getPermissions($stateParams.cid)
+						}
+					}
 				})
 
 				.state('dashboard.conferences.create', {
@@ -109,22 +128,12 @@
 					controller: 'createConferenceCtrl'
 				})
 
-				.state('dashboard.conferences.view', {
-					url: '/viewConferences',
-					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
-					controller: 'conferenceListCtrl',
-					resolve: {
-						conferenceList: function($http) {
-							return $http.get('api/conferences')
-						}
-					}
-				})
 
 				/*
 				CONFERENCE REGISTRATION
 				*/
 				.state('dashboard.conferences.registration', {
-					url: '/conferenceRegistration',
+					url: '/conferenceRegistration/?:cid',
 					abstract: true,
 					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.html',
 					controller: 'conferenceRegistrationCtrl'
@@ -133,7 +142,31 @@
 				.state('dashboard.conferences.registration.1', {
 					url: '',
 					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.selectDependents.html',
-					controller: 'conferenceRegistrationCtrl'
+				})
+
+				.state('dashboard.conferences.registration.2', {
+					url: '',
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.accomodations.html'
+				})
+
+				.state('dashboard.conferences.registration.3', {
+					url: '',
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.transportation.html'
+				})
+
+				.state('dashboard.conferences.registration.4', {
+					url: '',
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.flights.html'
+				})
+
+
+				/*
+				INVENTORY
+				*/
+				.state('dashboard.conferences.inventoryRequest', {
+					url: '/requestInventory',
+					templateUrl: 'js/inventory/inventory.view.request.html',
+					controller: 'requestInventoryCtrl'
 				})
 		})
 
