@@ -11,10 +11,12 @@
 
 			$scope.selectDependents = {}
 
+			//Need extra object to bypass validation for flights
+			$scope.transportDependents = {}
+
 			//Dependents all share same flight info, replace object
 			$scope.flightInfo = {}
 
-			$scope.registration = {}
 			$scope.noSelection = false
 
 			$scope.checkOneSelected = function(dependents) {
@@ -56,20 +58,30 @@
 				}
 			}
 
-			$scope.nextStep = function(currentState) {
+			$scope.nextStep = function(currentState, flightsForm, flightsFormAlt, sameFlightInfo) {
 
 				switch(currentState) {
 					case 1:
 						if ($scope.checkOneSelected($scope.dependents)) {
-							$scope.selectedDependents = addSelectedDependents($scope.dependents)
+							$scope.selectedDependents = addSelectedDependents($scope.dependents, 'register')
 							$state.go('dashboard.conferences.registration.2')
 						}
 						break
 
-					case 2: 
+					case 2:
+						$scope.transportDependents = addSelectedDependents($scope.selectedDependents, 'transportation') 
 						$state.go('dashboard.conferences.registration.3')
 						break
-						
+
+					case 3:
+						var currentForm = sameFlightInfo? flightsFormAlt : flightsForm
+
+						if (currentForm.$valid) {
+							alert(true)
+						} else {
+							setFormDirty(currentForm)
+						}
+
 				}
 
 			}
@@ -88,11 +100,17 @@
 				})				
 			}
 
-			var addSelectedDependents = function(dependents) {
+			var setFormDirty = function(form) {
+				angular.forEach(form.$error.required, function(field) {
+					field.$setDirty()
+				})
+			}
+
+			var addSelectedDependents = function(dependents, field) {
 				var selected = {}
 				for (var i in dependents) {
-					if (dependents[i].hasOwnProperty('register')) {
-						if (dependents[i].register) {
+					if (dependents[i].hasOwnProperty(field)) {
+						if (dependents[i][field]) {
 							selected[i] = dependents[i]
 						}
 					}

@@ -1,103 +1,116 @@
 
 <div class='form-group'>
-	<label class='checkbox-inline'><input type='checkbox' ng-model='sameFlightInfo'>All Dependents have the same flight information?</label>
+	<label class='checkbox-inline'><input type='checkbox' 
+		ng-model='sameFlightInfo'>
+		All Dependents have the same flight information?
+	</label>
 </div>
-
+{{transportDependents}}
 <div>
 	<form name='flightsForm' novalidate>
 		<div>
-			<div ng-hide='sameFlightInfo' ng-repeat='(idx, value) in selectedDependents'>
-				<div>
-					{{selectedDependents[idx].firstname}} {{selectedDependents[idx].lastname}}
-				</div>
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div class='row'>
-							<div class='col-xs-6'>
-								<input-with-validation model='selectedDependents[idx].airport' 
-														validation='flightsForm' 
-														identifier='airport{{idx}}' 
-														inp-type='text'>Airport</input-with-validation>
-							</div>
-							<div class='col-xs-6'>
-								<input-with-validation model='selectedDependents[idx].airline' 
-														validation='flightsForm' 
-														identifier='airline{{idx}}' 
-														inp-type='text'>Airline</input-with-validation>
-							</div>
-						</div>
-						<div class='row'>
-							<div class='col-xs-6'>
-								<date-picker-input model='selectedDependents[idx].arrivaldate' 
-											validation='flightsForm' 
-											identifier='arrivaldate{{idx}}' 
-											label='Arrival Date'>
-								</date-picker-input>
-							</div>
-							<div class='col-xs-6'>
-								<input-with-validation model='selectedDependents[idx].flightnumber' 
-														validation='flightsForm' 
-														identifier='flightnumber{{idx}}' 
-														inp-type='text'>Flight Number</input-with-validation>
-							</div>
-						</div>
-						<div class='row'>
-							<div class='col-xs-6'>
-								<timepicker-with-validation model='selectedDependents[idx].arrivaltime'
-													label='Arrival Time'
-													identifier='arrivaltime{{idx}}'
-													validation='flightsForm'
-								></time-picker-with-validation>
-							</div>
-						</div>
-						</div>
+			<div ng-hide='sameFlightInfo' ng-repeat='(idx, value) in transportDependents'>
+				<div ng-show='transportDependents[idx].transportation'>
+					<div>
+						{{transportDependents[idx].firstname}} {{transportDependents[idx].lastname}}
 					</div>
-				</div>
-			</div>
-			<div class="panel panel-default" ng-show='sameFlightInfo'>
-					<div class="panel-body">
-						<div class='row'>
-							<div class='col-xs-6'>
-								<input-with-validation model='flightInfo.airport' 
-														validation='flightsForm' 
-														identifier='airport' 
-														inp-type='text'>Airport</input-with-validation>
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class='row'>
+								<div class='col-xs-6'>
+									<input-with-validation model='transportDependents[idx]["flights"].airport' 
+															validation='flightsForm' 
+															identifier='airport{{idx}}' 
+															inp-type='text'>Airport</input-with-validation>
+								</div>
+								<div class='col-xs-6'>
+									<input-with-validation model='transportDependents[idx]["flights"].airline' 
+															validation='flightsForm' 
+															identifier='airline{{idx}}' 
+															inp-type='text'>Airline</input-with-validation>
+								</div>
 							</div>
-							<div class='col-xs-6'>
-								<input-with-validation model='flightInfo.airline' 
-														validation='flightsForm' 
-														identifier='airline' 
-														inp-type='text'>Airline</input-with-validation>
+							<div class='row'>
+								<div class='col-xs-6'>
+									<date-picker-input model='transportDependents[idx]["flights"].arrivaldate' 
+												validation='flightsForm' 
+												identifier='arrivaldate{{idx}}' 
+												label='Arrival Date'>
+									</date-picker-input>
+								</div>
+								<div class='col-xs-6'>
+									<input-with-validation model='transportDependents[idx]["flights"].flightnumber' 
+															validation='flightsForm' 
+															identifier='flightnumber{{idx}}' 
+															inp-type='text'>Flight Number</input-with-validation>
+								</div>
 							</div>
-						</div>
-						<div class='row'>
-							<div class='col-xs-6'>
-								<date-picker-input model='flightInfo.arrivaldate' 
-											validation='flightsForm' 
-											identifier='arrivaldate' 
-											label='Arrival Date'>
-								</date-picker-input>
+							<div class='row'>
+								<div class='col-xs-6'>
+									<timepicker-with-validation model='transportDependents[idx]["flights"].arrivaltime'
+														label='Arrival Time'
+														identifier='arrivaltime{{idx}}'
+														validation='flightsForm'
+									></time-picker-with-validation>
+								</div>
 							</div>
-							<div class='col-xs-6'>
-								<input-with-validation model='flightInfo.flightnumber' 
-														validation='flightsForm' 
-														identifier='flightnumber' 
-														inp-type='text'>Flight Number</input-with-validation>
-							</div>
-						</div>
-						<div class='row'>
-							<div class='col-xs-6'>
-								<timepicker-with-validation model='flightInfo.arrivaltime'
-															label='Arrival Time'
-															identifier='arrivaltime'
-															validation='flightsForm'
-								></time-picker-with-validation>
-							</div>
-						</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</form>
+	<form name='flightsFormAlt'>
+		<div class="panel panel-default" ng-show='sameFlightInfo'>
+			<div class="panel-body">
+				<div class='row'>
+					<div class='col-xs-6'>
+						<input-with-validation model='flightInfo.airport' 
+												validation='flightsFormAlt' 
+												identifier='airport' 
+												inp-type='text'>Airport</input-with-validation>
+					</div>
+					<div class='col-xs-6'>
+						<input-with-validation model='flightInfo.airline' 
+												validation='flightsFormAlt' 
+												identifier='airline' 
+												inp-type='text'>Airline</input-with-validation>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-xs-6'>
+						<date-picker-input model='flightInfo.arrivaldate' 
+									validation='flightsFormAlt' 
+									identifier='arrivaldate' 
+									label='Arrival Date'>
+						</date-picker-input>
+					</div>
+					<div class='col-xs-6'>
+						<input-with-validation model='flightInfo.flightnumber' 
+												validation='flightsFormAlt' 
+												identifier='flightnumber' 
+												inp-type='text'>Flight Number</input-with-validation>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-xs-6'>
+						<timepicker-with-validation model='flightInfo.arrivaltime'
+													label='Arrival Time'
+													identifier='arrivaltime'
+													validation='flightsFormAlt'
+						></time-picker-with-validation>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class='row'>
+	<div class='col-md-6'>
+		<button class='btn btn-default btn-block' ng-click='back(3)'>Back</button>
+	</div>
+	<div class='col-md-6'>
+		<button class='btn btn-primary btn-block' ng-click='nextStep(3, flightsForm, flightsFormAlt, sameFlightInfo)'>Next</button>
+	</div>
 </div>
