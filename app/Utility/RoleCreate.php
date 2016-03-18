@@ -29,7 +29,13 @@ class RoleCreate {
             $permissionList = [
                 PermissionNames::ConferenceEventCreate($confId),
                 PermissionNames::ConferenceRegistrationApproval($confId),
-                PermissionNames::ConferenceInfoEdit($confId)];
+                PermissionNames::ConferencePermissionManagement($confId),
+                PermissionNames::ConferenceInfoEdit($confId),
+                PermissionNames::ConferenceInventoryEdit($confId),
+                PermissionNames::ConferenceRoomEdit($confId),
+                PermissionNames::ConferenceTransportationEdit($confId),
+                PermissionNames::ConferenceAnnounce($confId),
+                PermissionNames::ConferenceViewStatistics($confId)];
 
             $permissions = self::createAllPermissions($permissionList);
 

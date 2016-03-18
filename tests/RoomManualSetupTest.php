@@ -9,13 +9,16 @@ class RoomManualSetupTest extends TestCase
     use \TokenTestCase;
     use DatabaseTransactions;
 
-    private function assertResponseIDExists() {
+    private function assertGetResponseID() {
         $this->assertResponseOK();
-        $this->assertTrue(isset(json_decode($this->response)->id), "ID field not set");
+        $decoded = json_decode($this->response->getContent());
+        $this->assertTrue(
+            isset($decoded->id),
+            "ID field not set");
+        return $decoded->id;
     }
 
     public function testCanGetSeededResidences(){
-        $this->markTestIncomplete();
         $this->get('/api/conferences/1/residences')
              ->seeJson(
                  ["name" => "Foobar Res",
@@ -26,7 +29,6 @@ class RoomManualSetupTest extends TestCase
     }
 
     public function testCreateResidenceAndGet() {
-        $this->markTestIncomplete();
         $data =
             ["name" => "TestRes",
              "location" => "Test Ave"];
@@ -35,27 +37,26 @@ class RoomManualSetupTest extends TestCase
             '/api/conferences/1/residences',
             $data);
 
-        $this->assertResponseIDExists();
+        $id = $this->assertGetResponseID();
 
-        $id = json_decode($this->response)->id;
         $this->get("/api/conferences/1/residences")
              ->seeJson($data);
     }
 
     public function testCreateRoomSetAndGet() {
-        $this->markTestIncomplete();
         $data = [
             "name" => "102A",
             "type" => [
                 "capacity" => 12,
-                "accessible" => false
+                "accessible" => 0,
+                "name" => "Type-12-no"
             ]
         ];
 
         $this->json('POST', '/api/conferences/1/residences/1/rooms', $data);
-        $this->assertResponseIDExists();
+        $id = $this->assertGetResponseID();
+        $data['type']['id'] = json_decode($this->response->getContent())->typeID;
 
-        $id = json_decode($this->response)->id;
         $this->get("/api/conferences/1/residences/1/rooms")
              ->seeJson($data);
 
@@ -63,27 +64,26 @@ class RoomManualSetupTest extends TestCase
         $data = [
             "rangeStart" => 20,
             "rangeEnd" => 29,
-            "typeID" => 3
+            "typeID" => 3,
         ];
 
         $this->json('POST', '/api/conferences/1/residences/2/rooms', $data);
-        $this->assertResponseIDExists();
+        $id = $this->assertGetResponseID();
+        unset ($data["typeID"]);
+        $data["type"] = ["id" => 3, "name" => "TypeA-R2", "accessible"=>1,"capacity"=>4];
 
-        $id = json_decode($this->response)->id;
         $this->get("/api/conferences/1/residences/2/rooms")
              ->seeJson($data);
     }
 
     public function testGetSeededRoomTypes() {
-        $this->markTestIncomplete();
-        $this->get("/api/conferences/1/residences/2/roomTypes")
-             ->seeJson(
+        $this->get("/api/conferences/1/residences/2/roomTypes");
+        $this->seeJson(
                  ["capacity" => 4,
-                  "accessible" => true]);
+                  "accessible" => 1]);
     }
 
     public function testCantListResidencesWithoutPermission() {
-        $this->markTestIncomplete();
         $this->authWithLoginCredentials(NO_PERMISSION_LOGIN);
         $this->get("/api/conferences/1/residences")
              ->assertResponseStatus(403);
