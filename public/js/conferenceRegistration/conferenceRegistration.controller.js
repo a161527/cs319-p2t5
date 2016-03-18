@@ -69,8 +69,12 @@
 						break
 
 					case 2:
-						$scope.transportDependents = addSelectedDependents($scope.selectedDependents, 'transportation') 
-						$state.go('dashboard.conferences.registration.3')
+						if ($scope.checkNeedsTransportation($scope.selectedDependents) < 1) {
+							alert('finished')
+						} else {
+							$scope.transportDependents = addSelectedDependents($scope.selectedDependents, 'transportation') 
+							$state.go('dashboard.conferences.registration.3')
+						}
 						break
 
 					case 3:
@@ -98,6 +102,17 @@
 						dependent.transportation = value
 					}
 				})				
+			}	
+
+			//return number of users needing transportation
+			$scope.checkNeedsTransportation = function(list) {
+				var i = 0
+				angular.forEach(list, function(dependent) {
+					if (dependent.hasOwnProperty('transportation') && dependent['transportation'] === true) {
+						i++
+					}
+				})
+				return i	
 			}
 
 			var setFormDirty = function(form) {
