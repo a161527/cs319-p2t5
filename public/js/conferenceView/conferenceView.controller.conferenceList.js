@@ -6,12 +6,7 @@
 			
 			$scope.conferences = conferenceData[0] || []
 			$scope.noConferences = ($scope.conferences.length === 0)
-			var permissions = conferenceData[1]
-
-			if (permissions.indexOf('create-conference') === -1) {
-				//Jquery hide is better than adding a watcher with ng-show/hide
-				$('#createConferenceBtn').hide()
-			}
+			$scope.canCreateConference = (conferenceData[1].indexOf('create-conference') !== -1)
 
 			$scope.registered = function(registeredList) {
 				return registeredList > 0
