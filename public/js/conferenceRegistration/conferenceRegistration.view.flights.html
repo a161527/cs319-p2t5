@@ -5,26 +5,26 @@
 		All Dependents have the same flight information?
 	</label>
 </div>
-{{transportDependents}}
+
 <div>
 	<form name='flightsForm' novalidate>
 		<div>
-			<div ng-hide='sameFlightInfo' ng-repeat='(idx, value) in transportDependents'>
-				<div ng-show='transportDependents[idx].transportation'>
+			<div ng-hide='sameFlightInfo' ng-repeat='(idx, value) in hasFlightsDependents'>
+				<div ng-show='hasFlightsDependents[idx].hasFlight'>
 					<div>
-						{{transportDependents[idx].firstname}} {{transportDependents[idx].lastname}}
+						{{hasFlightsDependents[idx].firstname}} {{hasFlightsDependents[idx].lastname}}
 					</div>
 					<div class="panel panel-default">
 						<div class="panel-body">
 							<div class='row'>
 								<div class='col-xs-6'>
-									<input-with-validation model='transportDependents[idx]["flights"].airport' 
+									<input-with-validation model='hasFlightsDependents[idx]["flights"].airport' 
 															validation='flightsForm' 
 															identifier='airport{{idx}}' 
 															inp-type='text'>Airport</input-with-validation>
 								</div>
 								<div class='col-xs-6'>
-									<input-with-validation model='transportDependents[idx]["flights"].airline' 
+									<input-with-validation model='hasFlightsDependents[idx]["flights"].airline' 
 															validation='flightsForm' 
 															identifier='airline{{idx}}' 
 															inp-type='text'>Airline</input-with-validation>
@@ -32,14 +32,14 @@
 							</div>
 							<div class='row'>
 								<div class='col-xs-6'>
-									<date-picker-input model='transportDependents[idx]["flights"].arrivalDate' 
+									<date-picker-input model='hasFlightsDependents[idx]["flights"].arrivalDate' 
 												validation='flightsForm' 
 												identifier='arrivaldate{{idx}}' 
 												label='Arrival Date'>
 									</date-picker-input>
 								</div>
 								<div class='col-xs-6'>
-									<input-with-validation model='transportDependents[idx]["flights"].number' 
+									<input-with-validation model='hasFlightsDependents[idx]["flights"].number' 
 															validation='flightsForm' 
 															identifier='flightnumber{{idx}}' 
 															inp-type='text'>Flight Number</input-with-validation>
@@ -47,7 +47,7 @@
 							</div>
 							<div class='row'>
 								<div class='col-xs-6'>
-									<timepicker-with-validation model='transportDependents[idx]["flights"].arrivalTime'
+									<timepicker-with-validation model='hasFlightsDependents[idx]["flights"].arrivalTime'
 														label='Arrival Time'
 														identifier='arrivaltime{{idx}}'
 														validation='flightsForm'

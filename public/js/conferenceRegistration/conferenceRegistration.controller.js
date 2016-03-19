@@ -12,7 +12,7 @@
 			$scope.selectDependents = {}
 
 			//Need extra object to bypass validation for flights
-			$scope.transportDependents = {}
+			$scope.hasFlightDependents = {}
 
 			//Dependents all share same flight info, replace object
 			$scope.flightInfo = {}
@@ -69,10 +69,10 @@
 						break
 
 					case 2:
-						if ($scope.checkNeedsTransportation($scope.selectedDependents) < 1) {
+						if ($scope.checkNeedsFlights($scope.selectedDependents) < 1) {
 							alert('finished')
 						} else {
-							$scope.transportDependents = addSelectedDependents($scope.selectedDependents, 'transportation') 
+							$scope.hasFlightsDependents = addSelectedDependents($scope.selectedDependents, 'hasFlight') 
 							$state.go('dashboard.conferences.registration.3')
 						}
 						break
@@ -96,19 +96,19 @@
 				})
 			}
 
-			$scope.selectAllTransportation = function(value, list) {
+			$scope.selectAllFlights = function(value, list) {
 				angular.forEach(list, function(dependent) {
-					if (dependent.accomodations) {
-						dependent.transportation = value
+					if (dependent.needsTransportation) {
+						dependent.hasFlight = value
 					}
 				})				
 			}	
 
-			//return number of users needing transportation
-			$scope.checkNeedsTransportation = function(list) {
+			//return number of users having flights
+			$scope.checkNeedsFlights = function(list) {
 				var i = 0
 				angular.forEach(list, function(dependent) {
-					if (dependent.hasOwnProperty('transportation') && dependent['transportation'] === true) {
+					if (dependent.hasOwnProperty('hasFlight') && dependent['hasFlight'] === true) {
 						i++
 					}
 				})
@@ -121,11 +121,12 @@
 					var obj = {}
 
 					obj['attendees'] = [dependent.id]
-					obj['hasFlight'] = dependent.hasOwnProperty('transportation')? dependent['transportation'] : false 
-					obj['accomodations'] = dependent.hasOwnProperty('accomodations')? dependent['accomodations'] : false
+					obj['hasFlight'] = dependent.hasOwnProperty('hasFlight')? dependent['hasFlight'] : false 
+					obj['needsTransportation'] = dependent.hasOwnProperty('needsTransportation')? dependent['needsTransportation'] : false 
+					obj['needsAccomodations'] = dependent.hasOwnProperty('needsAccomodations')? dependent['needsAccomodations'] : false
 
-					if ($scope.transportDependents.hasOwnProperty("" + dependent.id)) {
-						obj['flights'] = $scope.sameFlightInfo? $scope.transportDependents["" + dependent.id].flights : $scope.flightInfo
+					if (dependent['hasFlight'] && $scope.hasFlightsDependents.hasOwnProperty("" + dependent.id)) {
+						obj['flights'] = $scope.sameFlightInfo? $scope.hasFlightsDependents["" + dependent.id].flights : $scope.flightInfo
 					}
  					
  					list.push(obj)
