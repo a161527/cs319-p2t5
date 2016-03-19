@@ -154,6 +154,11 @@
 					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.flights.html'
 				})
 
+				.state('dashboard.conferences.registration.4', {
+					url: '',
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.review.html'
+				})
+
 
 				/*
 				INVENTORY

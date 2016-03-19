@@ -21,6 +21,8 @@
 
 			$scope.noSelection = false
 
+			$scope.formattedData = null
+
 			$scope.checkOneSelected = function(dependents) {
 				for (var key in dependents) {
 					if (dependents[key].hasOwnProperty('register')) {
@@ -57,6 +59,13 @@
 						break
 					case 3:
 						$state.go('dashboard.conferences.registration.2')
+					case 4:
+						if ($scope.checkHasFlights($scope.selectedDependents) < 1) {
+							$state.go('dashboard.conferences.registration.2')
+						} else {
+							$state.go('dashboard.conferences.registration.3')
+						}
+						
 				}
 			}
 
@@ -71,8 +80,9 @@
 						break
 
 					case 2:
-						if ($scope.checkNeedsFlights($scope.selectedDependents) < 1) {
-							alert('finished')
+						if ($scope.checkHasFlights($scope.selectedDependents) < 1) {
+							$scope.formattedData = $scope.formatData()
+							$state.go('dashboard.conferences.registration.4')
 						} else {
 							$scope.hasFlightsDependents = addSelectedDependents($scope.selectedDependents, 'hasFlight') 
 							$state.go('dashboard.conferences.registration.3')
@@ -80,10 +90,11 @@
 						break
 
 					case 3:
-						var currentForm = sameFlightInfo.value? flightsFormAlt : flightsForm
+						var currentForm = sameFlightInfo? flightsFormAlt : flightsForm
 
 						if (currentForm.$valid) {
-							$scope.formatData()
+							$scope.formattedData = $scope.formatData()
+							$state.go('dashboard.conferences.registration.4')
 						} else {
 							setFormDirty(currentForm)
 						}
@@ -107,7 +118,7 @@
 			}	
 
 			//return number of users having flights
-			$scope.checkNeedsFlights = function(list) {
+			$scope.checkHasFlights = function(list) {
 				var i = 0
 				angular.forEach(list, function(dependent) {
 					if (dependent.hasOwnProperty('hasFlight') && dependent['hasFlight'] === true) {
@@ -128,13 +139,13 @@
 					obj['needsAccomodations'] = dependent.hasOwnProperty('needsAccomodations')? dependent['needsAccomodations'] : false
 
 					if (dependent['hasFlight'] === true && $scope.hasFlightsDependents.hasOwnProperty("" + dependent.id)) {
-						console.log($scope.sameFlightInfo)
 						obj['flights'] = $scope.sameFlightInfo.value? $scope.flightInfo : $scope.hasFlightsDependents["" + dependent.id].flights
 					}
  					
  					list.push(obj)
 				})
 				console.log(list)
+				return list
 			}
 
 			var setFormDirty = function(form) {

@@ -1,0 +1,61 @@
+<h4>Review Conference Details</h4>
+<div class='panel panel-default'>
+	<div class='panel panel-body break-all'>
+		<div ng-repeat='dependent in formattedData'>
+			<h4><b><u>{{dependents[dependent.attendees[0]].firstname}} {{dependents[dependent.attendees[0]].lastname}}</u></b></h4>
+			<div>
+				<b>Needs Accomodations:</b>
+				<br>
+				{{dependent.needsAccomodations | yesNo}}
+			</div>
+			<div>
+				<b>Needs Transportation:</b>
+				<br>
+				{{dependent.needsTransportation | yesNo}}
+			</div>
+			<div>
+				<b>Has Flight:</b>
+				<br>
+				{{dependent.hasFlight | yesNo}}
+			</div>
+			<div ng-show='dependent.hasFlight'>
+				<div>
+					<b>Airline:</b>
+					<br>
+					{{dependent.flights.airline}}
+				</div>
+				<div>
+					<b>Airport:</b>
+					<br>
+					{{dependent.flights.airport}}
+				</div>
+				<div>
+					<b>Flight Number:</b>
+					<br>
+					{{dependent.flights.number}}
+				</div>
+				<div>
+					<b>Arrival Date:</b>
+					<br>
+					{{dependent.flights.arrivalDate}}
+				</div>
+				<div>
+					<b>Arrival Time:</b>
+					<br>
+					{{dependent.flights.arrivalTime}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class='row'>
+	<div class='col-xs-6'>
+		<div>
+			<a class='btn btn-default btn-block' ng-click='back(4)'>Back</a>
+		</div>
+	</div>
+	<div class='col-xs-6'>
+		<button class='btn btn-primary btn-block'>Submit</button>
+	</div>
+</div>
