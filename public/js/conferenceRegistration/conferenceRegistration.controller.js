@@ -4,9 +4,9 @@
 	angular.module('conferenceRegistration')
 		.controller('conferenceRegistrationCtrl', function($scope, $state) {
 
-			$scope.dependents = {'1': {firstname: 'Uncle', lastname: 'Jimmy Joe'}, 
-			'2':{firstname: 'Billy', lastname: 'from the Jungles of Vancouver'},
-			'3':{firstname: 'Kevin', lastname: ''}
+			$scope.dependents = {'1': {firstname: 'Uncle', lastname: 'Jimmy Joe', id: '1'}, 
+			'2':{firstname: 'Billy', lastname: 'from the Jungles of Vancouver', id: '2'},
+			'3':{firstname: 'Kevin', lastname: '', id: '3'}
 			}
 
 			$scope.selectDependents = {}
@@ -81,7 +81,7 @@
 						var currentForm = sameFlightInfo? flightsFormAlt : flightsForm
 
 						if (currentForm.$valid) {
-							alert(true)
+							formatData()
 						} else {
 							setFormDirty(currentForm)
 						}
@@ -113,6 +113,24 @@
 					}
 				})
 				return i	
+			}
+
+			var formatData = function() {
+				var list = []
+				angular.forEach($scope.selectedDependents, function(dependent) {
+					var obj = {}
+
+					obj['attendees'] = [dependent.id]
+					obj['hasFlight'] = dependent.hasOwnProperty('transportation')? dependent['transportation'] : false 
+					obj['accomodations'] = dependent.hasOwnProperty('accomodations')? dependent['accomodations'] : false
+
+					if ($scope.transportDependents.hasOwnProperty("" + dependent.id)) {
+						obj['flights'] = $scope.sameFlightInfo? $scope.transportDependents["" + dependent.id].flights : $scope.flightInfo
+					}
+ 					
+ 					list.push(obj)
+				})
+				console.log(list)
 			}
 
 			var setFormDirty = function(form) {

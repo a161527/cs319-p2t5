@@ -32,14 +32,14 @@
 							</div>
 							<div class='row'>
 								<div class='col-xs-6'>
-									<date-picker-input model='transportDependents[idx]["flights"].arrivaldate' 
+									<date-picker-input model='transportDependents[idx]["flights"].arrivalDate' 
 												validation='flightsForm' 
 												identifier='arrivaldate{{idx}}' 
 												label='Arrival Date'>
 									</date-picker-input>
 								</div>
 								<div class='col-xs-6'>
-									<input-with-validation model='transportDependents[idx]["flights"].flightnumber' 
+									<input-with-validation model='transportDependents[idx]["flights"].number' 
 															validation='flightsForm' 
 															identifier='flightnumber{{idx}}' 
 															inp-type='text'>Flight Number</input-with-validation>
@@ -47,7 +47,7 @@
 							</div>
 							<div class='row'>
 								<div class='col-xs-6'>
-									<timepicker-with-validation model='transportDependents[idx]["flights"].arrivaltime'
+									<timepicker-with-validation model='transportDependents[idx]["flights"].arrivalTime'
 														label='Arrival Time'
 														identifier='arrivaltime{{idx}}'
 														validation='flightsForm'
@@ -79,14 +79,14 @@
 				</div>
 				<div class='row'>
 					<div class='col-xs-6'>
-						<date-picker-input model='flightInfo.arrivaldate' 
+						<date-picker-input model='flightInfo.arrivalDate' 
 									validation='flightsFormAlt' 
 									identifier='arrivaldate' 
 									label='Arrival Date'>
 						</date-picker-input>
 					</div>
 					<div class='col-xs-6'>
-						<input-with-validation model='flightInfo.flightnumber' 
+						<input-with-validation model='flightInfo.number' 
 												validation='flightsFormAlt' 
 												identifier='flightnumber' 
 												inp-type='text'>Flight Number</input-with-validation>
@@ -94,7 +94,7 @@
 				</div>
 				<div class='row'>
 					<div class='col-xs-6'>
-						<timepicker-with-validation model='flightInfo.arrivaltime'
+						<timepicker-with-validation model='flightInfo.arrivalTime'
 													label='Arrival Time'
 													identifier='arrivaltime'
 													validation='flightsFormAlt'
