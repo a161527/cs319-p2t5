@@ -17,6 +17,8 @@
 			//Dependents all share same flight info, replace object
 			$scope.flightInfo = {}
 
+			$scope.sameFlightInfo = {value: false}
+
 			$scope.noSelection = false
 
 			$scope.checkOneSelected = function(dependents) {
@@ -41,11 +43,11 @@
 			}
 
 			$scope.getFlightsSet = function(sameFlightInfo) {
-				return sameFlightInfo? $scope.emptyFlightInfo : $scope.dependents
+				return sameFlightInfo.value? $scope.emptyFlightInfo : $scope.dependents
 			}
 
 			$scope.getFlightIdentifier = function(sameFlightInfo) {
-				return sameFlightInfo? 'airport{{idx}}' : 'airport'
+				return sameFlightInfo.value? 'airport{{idx}}' : 'airport'
 			}
 
 			$scope.back = function(currentState) {
@@ -78,10 +80,10 @@
 						break
 
 					case 3:
-						var currentForm = sameFlightInfo? flightsFormAlt : flightsForm
+						var currentForm = sameFlightInfo.value? flightsFormAlt : flightsForm
 
 						if (currentForm.$valid) {
-							formatData()
+							$scope.formatData()
 						} else {
 							setFormDirty(currentForm)
 						}
@@ -115,7 +117,7 @@
 				return i	
 			}
 
-			var formatData = function() {
+			$scope.formatData = function() {
 				var list = []
 				angular.forEach($scope.selectedDependents, function(dependent) {
 					var obj = {}
@@ -125,8 +127,9 @@
 					obj['needsTransportation'] = dependent.hasOwnProperty('needsTransportation')? dependent['needsTransportation'] : false 
 					obj['needsAccomodations'] = dependent.hasOwnProperty('needsAccomodations')? dependent['needsAccomodations'] : false
 
-					if (dependent['hasFlight'] && $scope.hasFlightsDependents.hasOwnProperty("" + dependent.id)) {
-						obj['flights'] = $scope.sameFlightInfo? $scope.hasFlightsDependents["" + dependent.id].flights : $scope.flightInfo
+					if (dependent['hasFlight'] === true && $scope.hasFlightsDependents.hasOwnProperty("" + dependent.id)) {
+						console.log($scope.sameFlightInfo)
+						obj['flights'] = $scope.sameFlightInfo.value? $scope.flightInfo : $scope.hasFlightsDependents["" + dependent.id].flights
 					}
  					
  					list.push(obj)

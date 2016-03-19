@@ -1,15 +1,15 @@
 
 <div class='form-group'>
 	<label class='checkbox-inline'><input type='checkbox' 
-		ng-model='sameFlightInfo'>
+		ng-model='sameFlightInfo.value'>
 		All Dependents have the same flight information?
 	</label>
 </div>
-
+{{sameFlightInfo.value}}
 <div>
 	<form name='flightsForm' novalidate>
 		<div>
-			<div ng-hide='sameFlightInfo' ng-repeat='(idx, value) in hasFlightsDependents'>
+			<div ng-hide='sameFlightInfo.value' ng-repeat='(idx, value) in hasFlightsDependents'>
 				<div ng-show='hasFlightsDependents[idx].hasFlight'>
 					<div>
 						{{hasFlightsDependents[idx].firstname}} {{hasFlightsDependents[idx].lastname}}
@@ -61,7 +61,7 @@
 		</div>
 	</form>
 	<form name='flightsFormAlt'>
-		<div class="panel panel-default" ng-show='sameFlightInfo'>
+		<div class="panel panel-default" ng-show='sameFlightInfo.value'>
 			<div class="panel-body">
 				<div class='row'>
 					<div class='col-xs-6'>
@@ -111,6 +111,6 @@
 		<button class='btn btn-default btn-block' ng-click='back(3)'>Back</button>
 	</div>
 	<div class='col-md-6'>
-		<button class='btn btn-primary btn-block' ng-click='nextStep(3, flightsForm, flightsFormAlt, sameFlightInfo)'>Next</button>
+		<button class='btn btn-primary btn-block' ng-click='nextStep(3, flightsForm, flightsFormAlt, sameFlightInfo.value)'>Next</button>
 	</div>
 </div>
