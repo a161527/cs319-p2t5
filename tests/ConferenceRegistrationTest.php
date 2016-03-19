@@ -119,4 +119,18 @@ class ConferenceRegistrationTest extends TestCase
         $this->json('POST', '/api/conferences/1/register', $data);
         $this->assertResponseStatus(400);
     }
+
+    public function testDualRegistration() {
+        $regData = self::SIMPLE_REGISTRY_DATA;
+        $regData[] = $regData[0];
+        $regData[1]['attendees'] = [2];
+
+        $this->json('POST', '/api/conferences/1/register', $regData);
+        $this->assertResponseOK();
+        $jsonResult = json_decode($this->response->getContent());
+        $this->assertEquals(200, $jsonResult[0]->code);
+        $this->assertEquals(200, $jsonResult[1]->code);
+        $this->assertEquals(1, sizeof($jsonResult[0]->ids));
+        $this->assertEquals(1, sizeof($jsonResult[1]->ids));
+    }
 }
