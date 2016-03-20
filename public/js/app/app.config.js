@@ -74,8 +74,14 @@
 
 				.state('dashboard.conferences', {
 					url: '/conferences',
+					abstract: true,
+					template: '<div ui-view></div>'
+				})
+
+				.state('dashboard.conferences.list', {
 					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
 					controller: 'conferenceListCtrl',
+					url: '/list',
 					resolve: {
 						conferenceData: function(conferenceList, $q, loginStorage) {
 							return $q.all([
@@ -84,7 +90,7 @@
 							])
 						}
 					}
-				})
+				}) 
 
 				.state('dashboard.conferences.manage', {
 					url: '/manage/?:cid',

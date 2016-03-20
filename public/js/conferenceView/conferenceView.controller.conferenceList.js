@@ -11,7 +11,7 @@
 			$scope.registered = function(registeredList) {
 				return registeredList > 0
 			}
-
+			console.log($scope.conferences)
 			$scope.goToCreateConference = function() {
 				$state.go('dashboard.conferences.create.1')
 			}
