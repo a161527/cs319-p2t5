@@ -12,6 +12,10 @@
 				return value? 1 : 0
 			}
 
+			this.timeFormat = function(time) {
+				return moment(time).format('hh:mm:ss')
+			}
+
 		})
 
 })()
