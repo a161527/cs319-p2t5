@@ -71,7 +71,11 @@
 						//otherwise go to fill out flights forms
 						} else {
 
-							$scope.hasFlightsDependents = addSelectedDependents($scope.selectedDependents, 'hasFlight') 
+							$scope.hasFlightsDependents = addSelectedDependents($scope.selectedDependents, 'hasFlight')
+
+							$scope.sameFlightInfo.value = false
+							$scope.showSameFlightInfoCheckbox.value = $scope.checkHasFlights($scope.selectedDependents) > 1
+
 							$state.go('dashboard.conferences.registration.3')
 
 						}
@@ -221,6 +225,7 @@
 			$scope.flightInfo = {}
 
 			$scope.sameFlightInfo = {value: false}
+			$scope.showSameFlightInfoCheckbox = {value: false}
 
 			//Return appropriate flights object based on whether or not the dependents share the same flight info
 			$scope.getFlightsSet = function(sameFlightInfo) {
@@ -245,15 +250,23 @@
 			STEP 4 methods
 			*/
 
+			$scope.showSubmitError = false
+
 			$scope.submit = function() {
-				console.log($scope.formattedData)
-				ajax.serviceCall('Submitting...', 'post', 'api/conferences/' + $stateParams.cid + '/register', $scope.formattedData).then(function(data) {
+				$scope.showSubmitError = false
+				ajax.serviceCall('Submitting...', 'post', 'api/conferences/' + $stateParams.cid + '/register', $scope.formattedData).then(function(resData) {
 					
 					openModal()
 
-				}, function(data) {
-					console.log(data)
+				}, function(resData) {
+					
+					$scope.showSubmitError = true
+
 				})
+			}
+
+			$scope.removeSubmitError = function() {
+				$scope.showSubmitError = false
 			}
 
 			//Return a new object with the dependents based on a flag in the object
