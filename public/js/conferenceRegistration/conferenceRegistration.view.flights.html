@@ -5,7 +5,7 @@
 		All Dependents have the same flight information?
 	</label>
 </div>
-{{sameFlightInfo.value}}
+
 <div>
 	<form name='flightsForm' novalidate>
 		<div>
@@ -39,10 +39,23 @@
 									</date-picker-input>
 								</div>
 								<div class='col-xs-6'>
-									<input-with-validation model='hasFlightsDependents[idx]["flights"].number' 
-															validation='flightsForm' 
-															identifier='flightnumber{{idx}}' 
-															inp-type='text'>Flight Number</input-with-validation>
+									<div class='form-group' ng-class='{"has-error": !flightsForm.flightnumber{{idx}}.$valid && flightsForm.flightnumber{{idx}}.$dirty}'>
+										<label>Flight Number</label>
+
+										<input type='text' ng-model-options='{updateOn: "blur"}' 
+											ng-model='hasFlightsDependents[idx]["flights"].number' 
+											class='form-control' 
+											ng-pattern='/^\d+$/'
+											name='flightnumber{{idx}}' required>
+
+										<error-message ng-show='flightsForm.flightnumber{{idx}}.$error.pattern && !flightsForm.flightnumber{{idx}}.$error.required'>
+											Input must be an integer
+										</error-message>
+
+										<error-message ng-show='flightsForm.flightnumber{{idx}}.$error.required && flightsForm.flightnumber{{idx}}.$dirty'>
+											Flight Number is required
+										</error-message>
+									</div>
 								</div>
 							</div>
 							<div class='row'>
@@ -86,10 +99,24 @@
 						</date-picker-input>
 					</div>
 					<div class='col-xs-6'>
-						<input-with-validation model='flightInfo.number' 
-												validation='flightsFormAlt' 
-												identifier='flightnumber' 
-												inp-type='text'>Flight Number</input-with-validation>
+						<div class='form-group' ng-class='{"has-error": !flightsFormAlt.flightnumber.$valid && flightsFormAlt.flightnumber.$dirty}'>
+							<label>Flight Number</label>
+
+							<input type='text' ng-model-options='{updateOn: "blur"}' 
+								ng-model='flightInfo.number' 
+								class='form-control' 
+								ng-pattern='/^\d+$/'
+								name='flightnumber' required>
+
+							<error-message ng-show='flightsFormAlt.flightnumber.$error.pattern && !flightsFormAlt.flightnumber.$error.required'>
+								Input must be an integer
+							</error-message>
+
+							<error-message ng-show='flightsFormAlt.flightnumber.$error.required && flightsFormAlt.flightnumber.$dirty'>
+								Flight Number is required
+							</error-message>
+						</div>
+
 					</div>
 				</div>
 				<div class='row'>

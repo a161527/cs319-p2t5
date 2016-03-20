@@ -18,7 +18,6 @@
 			//Final object to be passed in service call
 			$scope.formattedData = null
 
-
 			$scope.back = function(currentState) {
 				switch(currentState) {
 
@@ -132,7 +131,7 @@
 
 						obj['flight'].arrivalDate = dataFormat.dateFormat(obj['flight'].arrivalDate)
 						obj['flight'].arrivalTime = dataFormat.timeFormat(obj['flight'].arrivalTime)
-
+						obj['flight'].number = parseInt(obj['flight'].number)
 					}
  					
  					list.push(obj)
