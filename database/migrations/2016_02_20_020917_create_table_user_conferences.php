@@ -18,6 +18,7 @@ class CreateTableUserConferences extends Migration
           $table->integer('conferenceID')->unsigned();
           $table->integer('flightID')->unsigned()->nullable();
           $table->boolean('needsTransportation');
+          $table->boolean('needsAccommodation');
           $table->boolean('approved')->default(false);
           // Many-to-One
           $table->foreign('userID')
