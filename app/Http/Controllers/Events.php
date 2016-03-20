@@ -8,6 +8,8 @@ use Auth;
 use Entrust;
 use JWTAuth;
 use App\Event;
+use App\User;
+use App\UserEvent;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Utility\RoleCreate;
@@ -137,6 +139,35 @@ class Events extends Controller {
 
         $event->delete();
         return response()->json(['id' => $event->id]);
+    }
+
+    /**
+     * Register the user given the userID to the event given the eventID.
+     * @param  int  $id, int $eventId
+     * @return Response
+     */
+    public function register($id, $userId) {
+        $event = Event::find($id);
+        if (is_null($event)) {
+            return response("No event for id {$id}.", 404);
+        }
+
+        $user = User::find($userId);
+        if (is_null($user)) {
+            return response("No user for id {$userId}.", 404);
+        }
+
+        $eventUser = UserEvent::where('eventID','=',$id)->where('userID','=',$userId)->get();
+        if (count($eventUser) > 0) {
+            return response("userId {$userId} already registered for event id {$id}.", 404);
+        }
+
+        $userEvent = new UserEvent;
+        $userEvent->userID = $userId;
+        $userEvent->eventID = $id;
+        $userEvent->save();
+
+        return response()->json(['User Resistered' => $userEvent->id]);
     }
 
 }
