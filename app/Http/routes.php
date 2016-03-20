@@ -37,7 +37,13 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
                 Route::get('rooms', 'RoomSetupController@getResidenceRooms');
                 Route::get('roomTypes', 'RoomSetupController@getResidenceRoomTypes');
                 Route::post('rooms', 'RoomSetupController@createRoomSet');
+
+                Route::get('rooms/{roomId}/users', 'RoomAssignmentController@getRoomUsers');
             });
+
+            Route::post('assign', 'RoomAssignmentController@assignRoom');
+            Route::delete('assign/{assignId}', 'RoomAssignmentController@deleteAssignment');
+            Route::get('assign', 'RoomAssignmentController@listAssignments');
         });
     });
 });

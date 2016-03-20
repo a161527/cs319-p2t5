@@ -17,4 +17,8 @@ class RoomSet extends Model
     public function residence() {
         return $this->hasOne('App\Residence', 'id', 'residenceID');
     }
+
+    public function assignments() {
+        return $this->belongsTo('App\UserRoom', 'roomSetID');
+    }
 }

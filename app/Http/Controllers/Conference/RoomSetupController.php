@@ -31,7 +31,7 @@ class RoomSetupController extends Controller
     }
 
     public function uploadRoomData($confId) {
-
+        return "NOTIMPLEMENTED";
     }
 
     public function createResidence(Request $req, $confId) {
@@ -61,7 +61,9 @@ class RoomSetupController extends Controller
 
         $result = [];
         foreach ($res->roomSets()->get() as $roomSet) {
-            $setRepr = ["type" => $roomSet->type->toArray()];
+            $setRepr = ["type" => $roomSet->type->toArray(),
+                        "id" => $roomSet->id];
+            $setRepr["id"] = $roomSet->id;
             if (is_null($roomSet->name)) {
                 $setRepr["rangeStart"] = $roomSet->rangeStart;
                 $setRepr["rangeEnd"] = $roomSet->rangeEnd;
