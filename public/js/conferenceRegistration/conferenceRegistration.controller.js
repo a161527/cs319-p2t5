@@ -2,19 +2,20 @@
 	'use strict'
 
 	angular.module('conferenceRegistration')
-		.controller('conferenceRegistrationCtrl', function($scope, $state) {
+		.controller('conferenceRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat) {
 
-			$scope.dependents = {'1': {firstname: 'Uncle', lastname: 'Jimmy Joe', id: '1'}, 
-			'2':{firstname: 'Billy', lastname: 'from the Jungles of Vancouver', id: '2'},
-			'3':{firstname: 'Kevin', lastname: '', id: '3'}
+			$scope.dependents = {'2': {firstname: 'Uncle', lastname: 'Jimmy Joe', id: '2'}, 
+			'3':{firstname: 'Billy', lastname: 'from the Jungles of Vancouver', id: '3'},
+			'4':{firstname: 'Kevin', lastname: '', id: '4'}
 			}
 
+			//a new dependents object created so modifications can be made without affecting original object
 			$scope.selectDependents = {}
 
-			//Need extra object to bypass validation for flights
+			//Additional dependents object to bypass validation for flights
 			$scope.hasFlightDependents = {}
 
-			//Dependents all share same flight info, replace object
+			//Dependents all share same flight info, replace object with this
 			$scope.flightInfo = {}
 
 			$scope.sameFlightInfo = {value: false}
@@ -22,6 +23,15 @@
 			$scope.noSelection = false
 
 			$scope.formattedData = null
+
+			$scope.submit = function() {
+				console.log($scope.formattedData)
+				ajax.serviceCall('Submitting...', 'post', 'api/conferences/' + $stateParams.cid + '/register', $scope.formattedData).then(function() {
+					console.log(data)
+				}, function(data) {
+					console.log(data)
+				})
+			}
 
 			$scope.checkOneSelected = function(dependents) {
 				for (var key in dependents) {
@@ -133,13 +143,19 @@
 				angular.forEach($scope.selectedDependents, function(dependent) {
 					var obj = {}
 
-					obj['attendees'] = [dependent.id]
-					obj['hasFlight'] = dependent.hasOwnProperty('hasFlight')? dependent['hasFlight'] : false 
-					obj['needsTransportation'] = dependent.hasOwnProperty('needsTransportation')? dependent['needsTransportation'] : false 
-					obj['needsAccomodations'] = dependent.hasOwnProperty('needsAccomodations')? dependent['needsAccomodations'] : false
+					obj['attendees'] = [parseInt(dependent.id)]
+					obj['hasFlight'] = dependent.hasOwnProperty('hasFlight')? dataFormat.trueFalseFormat(dependent['hasFlight']) : false
+					obj['needsTransportation'] = dependent.hasOwnProperty('needsTransportation')? dataFormat.trueFalseFormat(dependent['needsTransportation']) : false 
+					obj['needsAccommodation'] = dependent.hasOwnProperty('needsAccommodation')? dataFormat.trueFalseFormat(dependent['needsAccommodation']) : false
 
 					if (dependent['hasFlight'] === true && $scope.hasFlightsDependents.hasOwnProperty("" + dependent.id)) {
-						obj['flights'] = $scope.sameFlightInfo.value? $scope.flightInfo : $scope.hasFlightsDependents["" + dependent.id].flights
+						obj['flights'] = {}
+						if ($scope.sameFlightInfo.value) {
+							angular.copy($scope.flightInfo, obj['flights'])
+						} else {
+							angular.copy($scope.hasFlightsDependents["" + dependent.id].flights, obj['flights'])
+						}
+						obj['flights'].arrivalDate = dataFormat.dateFormat(obj['flights'].arrivalDate)
 					}
  					
  					list.push(obj)

@@ -9,7 +9,7 @@
 					<label class='checkbox-inline'>
 						<input type="checkbox" 
 						ng-model='accomodationsSelectAll'
-						ng-click='selectAll("needsAccomodations", accomodationsSelectAll, selectedDependents)'>
+						ng-click='selectAll("needsAccommodation", accomodationsSelectAll, selectedDependents)'>
 						Select All
 					</label>
 				</th>
@@ -39,7 +39,7 @@
 				<td>{{selectedDependents[idx].firstname}} {{selectedDependents[idx].lastname}}</td>
 				<td>
 					<input type="checkbox" 
-					ng-model='selectedDependents[idx].needsAccomodations'>
+					ng-model='selectedDependents[idx].needsAccommodation'>
 				</td>
 				<td>
 					<input type="checkbox" 
