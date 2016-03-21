@@ -178,7 +178,7 @@ class Events extends Controller {
         $userEvent->eventID = $id;
         $userEvent->save();
 
-        return response()->json(['User Resistered' => $userEvent->id]);
+        return response()->json(['id' => $userEvent->id]);
     }
 
 }
