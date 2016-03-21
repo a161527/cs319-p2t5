@@ -112,7 +112,7 @@ class Events extends Controller {
      */
     public function update(Request $request, $id) {
         if (!Entrust::can(PermissionNames::EventInfoEdit($id))) {
-            return response("", 403);
+            return response("Permission not found", 403);
         }
 
         $event = Event::find($id);
@@ -140,7 +140,7 @@ class Events extends Controller {
      */
     public function destroy($id) {
         if (!Entrust::hasRole(RoleNames::EventManager($id))) {
-            return response("", 403);
+            return response("Permission not found", 403);
         }
 
         $event = Event::find($id);
