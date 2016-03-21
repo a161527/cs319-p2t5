@@ -166,6 +166,43 @@
 				})
 
 
+				//Expects conference object
+				.state('dashboard.conferences.registrationDetails', {
+					url: '/details/?:cid',
+					templateUrl: 'js/conferenceRegistrationDetails/conferenceRegistrationDetails.view.html',
+					controller: 'conferenceRegistrationDetailsCtrl',
+					params: {
+						conference: null
+					},
+					resolve: {
+						confDetails: function($stateParams, $http, $q) {
+							
+							//If the object is already passed, no need to make api call
+							if ($stateParams.conference) {
+
+								//match object from api call by setting data field
+								return $q.resolve({data: $stateParams.conference})
+
+							} else {
+								return $http.get('api/conferences/' + $stateParams.cid + '?includePermissions=1&includeRegistration=1')
+							}
+
+						},
+						regDetails: function($stateParams, $http, $q, confDetails) {
+
+							var promises = []
+							angular.forEach(confDetails.data.registered, function(reg) {
+								promises.push($http.get('api/conferences/' + $stateParams.cid + '/register/' + reg.id))
+							})
+
+							return $q.all(promises)
+
+						}
+
+					}
+				})
+
+
 				/*
 				INVENTORY
 				*/
