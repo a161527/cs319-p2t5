@@ -83,7 +83,7 @@ Route::group(['prefix' => 'api'], function()
     });
 
     // inventory management
-    Route::group(['prefix' => 'conference/{conferenceId}/inventory'], function() {
+    Route::group(['prefix' => 'conferences/{conferenceId}/inventory'], function() {
         Route::get('/', 'InventoryController@index');
         Route::post('/', 'InventoryController@addItem');
         Route::put('/', 'InventoryController@addItem');
