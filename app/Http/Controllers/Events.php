@@ -165,12 +165,12 @@ class Events extends Controller {
 
         $user = User::find($userId);
         if (is_null($user)) {
-            return response("No user for id {$userId}.", 404);
+            return response("No user for id {$userId}.", 405);
         }
 
         $eventUser = UserEvent::where('eventID','=',$id)->where('userID','=',$userId)->get();
         if (count($eventUser) > 0) {
-            return response("userId {$userId} already registered for event id {$id}.", 404);
+            return response("userId {$userId} already registered for event id {$id}.", 406);
         }
 
         $userEvent = new UserEvent;
