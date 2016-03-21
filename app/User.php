@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'id',
         'firstName',
@@ -19,4 +21,6 @@ class User extends Model
     public function account() {
         return $this->hasOne('App\Models\Account', 'id', 'accountID');
     }
+
+    protected $dates = ['deleted_at'];
 }
