@@ -5,8 +5,8 @@
  */
 
 /*!
- * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=33de2488d0c284fd984e)
- * Config saved to config.json and https://gist.github.com/33de2488d0c284fd984e
+ * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=3ceb7f3577ec1fe21296)
+ * Config saved to config.json and https://gist.github.com/3ceb7f3577ec1fe21296
  */
 /*!
  * Bootstrap v3.3.6 (http://getbootstrap.com)
@@ -1088,7 +1088,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.42857143;
   color: #333333;
@@ -5999,7 +5999,7 @@ button.close {
   position: absolute;
   z-index: 1070;
   display: block;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
@@ -6117,7 +6117,7 @@ button.close {
   display: none;
   max-width: 276px;
   padding: 1px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;

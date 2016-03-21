@@ -5,13 +5,6 @@
 		.controller('dashboardCtrl', function($scope, $state, loginStorage, conferenceList) {
 			$scope.userName = loginStorage.getEmail();
 
-			$scope.widgets = {
-				'conferences': 'Conferences',
-				'events': 'Events',
-				'flights': 'Flights',
-				'transportation': 'Transportation'
-			}
-
 			$scope.showWidget = function(toState) {
 				var state = 'dashboard.' + toState
 				$('#sidebarNav').collapse('hide');

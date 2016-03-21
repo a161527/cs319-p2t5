@@ -55,7 +55,6 @@
 .sidebar-pill {
     border-collapse: true;
     border-bottom: 1px solid #eee;
-    font-family: 'Montserrat', sans-serif;
 }
 
 .navbar-collapse {
@@ -66,6 +65,7 @@
 .main {
     top: 60px;
     padding-right: 40px;
+    height: 100%;
 }
 
 .center-text {
@@ -88,9 +88,17 @@
     padding-top: 15%;
 }
 
+.logo-footer {
+    width: 10%;
+    height: 5%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 10px;
+}
+
 .logo-text {
     text-align: center;
-    font-family: 'Montserrat', sans-serif;
     padding-right: 5px;
 }
 
@@ -103,7 +111,7 @@
 }
 
 .med-blue {
-    color: 409dd6;
+    color: #409dd6;
 }
 
 td.uib-day > button {

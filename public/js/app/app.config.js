@@ -66,14 +66,29 @@
 					}
 				})
 
+				/* 
+				DASHBOARD TEMPLATE
+				*/
 				.state('dashboard', {
-					url: '/dashboard',
 					templateUrl: 'js/dashboard/dashboard.view.html',
 					controller: 'dashboardCtrl'
 				})
 
+				/*
+				DASHBOARD HOME
+				*/
+				.state('dashboard.home', {
+					url: '/dashboard',
+					templateUrl: 'js/dashboard/dashboard.view.home.html',
+					controller: 'dashboardCtrl'
+				})
+
+
+				/*
+				CONFERENCE LIST
+				*/
 				.state('dashboard.conferences', {
-					url: '/conferences',
+					url: '/dashboard/conferences',
 					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
 					controller: 'conferenceListCtrl',
 					resolve: {
@@ -86,6 +101,9 @@
 					}
 				})
 
+				/*
+				CONFERENCE MANAGEMENT
+				*/
 				.state('dashboard.conferences.manage', {
 					url: '/manage/?:cid',
 					templateUrl: 'js/conferenceWidget/conferenceWidget.view.html',
@@ -97,6 +115,9 @@
 					}
 				})
 
+				/*
+				CONFERENCE CREATION
+				*/
 				.state('dashboard.conferences.create', {
 					url: '/create',
 					abstract: true,
