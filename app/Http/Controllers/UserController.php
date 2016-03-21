@@ -7,33 +7,33 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
-use App\Models\User;
+use App\User;
 use Validator;
 use DB;
 
 class UserController extends Controller
 {
- 	public function __construct() 
- 	{
- 		// $this->middleware('jwt.auth', ['except' => ['authenticate', 'token']]);
+     public function __construct() 
+     {
+         // $this->middleware('jwt.auth', ['except' => ['authenticate', 'token']]);
         // provides an authorization header with each response
         // $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token']]);
- 	}
-	
+     }
+    
     /*
      * Get a validator for an incoming registration request.
      */
     protected function dependentValidator(array $data)
     {
-    	$validator = Validator::make($data, [
+        $validator = Validator::make($data, [
             // need to change the name fields to allow accented characters, dashes, apostrophes, etc.
-    		'firstName'	=>	'required|max:255|alpha_num',
-    		'lastName'	=>	'required|max:255|alpha_num',
-    		'dateOfBirth'	=>	'date_format:Y-m-d',
-            'gender'	=>	'in:male,female'
+            'firstName'    =>    'required|max:255|alpha_num',
+            'lastName'    =>    'required|max:255|alpha_num',
+            'dateOfBirth'    =>    'date_format:Y-m-d',
+            'gender'    =>    'in:male,female'
         ]);
 
-    	return $validator;
+        return $validator;
     }
 
     /*
@@ -53,68 +53,67 @@ class UserController extends Controller
     }
 
     /*
-	 * Insert a validated user into the database
-	 */
-    protected function insertDependent($accountId, $data)
+     * Insert a validated user into the database
+     */
+    protected function insertDependent($accountID, $data)
     {
-    	$user = new User();
-    	$user->firstName = $data['firstName'];
-    	$user->lastName = $data['lastName'];
-    	$user->dateOfBirth = $data['dateOfBirth'];
-    	$user->gender = $data['gender'];
-    	$user->accountId = $accountId;
-    	$user->save();
+        $user = new User();
+        $user->firstName = $data['firstName'];
+        $user->lastName = $data['lastName'];
+        $user->dateOfBirth = $data['dateOfBirth'];
+        $user->gender = $data['gender'];
+        $user->accountID = $accountID;
+        $user->save();
     }
 
     //
     // TODO: isOwner() and isAdmin(), to set permission/role filters on managing dependents
     //
 
-	/* 
-	 * GET api/accounts/{id}/dependents
-	 * - list all dependents
-	 */
- 	public function index($accountId)
+    /* 
+     * GET api/accounts/{id}/dependents
+     * - list all dependents
+     */
+     public function index($accountID)
     {
-    	// TODO: add permission/role filter
-        //  - get id from submitted token
-    	$account = Account::where('id', '=', $accountId)->first();
-		if ($account === null)
-			return response()->json(['message' => 'account_not_found']);
-		else
-		{
-			$dependents = User::where('accountID', '=', $account->id)->get();
-			return response()->json(['message' => 'returned_dependents', 'dependents' => $dependents]);
-		}
+        // TODO: add permission/role filter
+        $account = Account::where('id', '=', $accountID)->first();
+        if ($account === null)
+            return response()->json(['message' => 'account_not_found']);
+        else
+        {
+            $dependents = User::where('accountID', '=', $account->id)->get();
+            return response()->json(['message' => 'returned_dependents', 'dependents' => $dependents]);
+        }
     }
 
     /*
-     * POST api/accounts/{accountId}/dependents
-     * PUT api/accounts/{accountId}/dependents
+     * POST api/accounts/{accountID}/dependents
+     * PUT api/accounts/{accountID}/dependents
      * - create new dependent(s)
      */
-    public function addDependents($accountId, Request $req)
+    public function addDependents($accountID, Request $req)
     {
-    	$dependents = $req->all();
+        $dependents = $req->all();
         try
         {   
             DB::beginTransaction();
-        	foreach ($dependents as $d)
-        	{
-    			$validator = $this->dependentValidator($d);
-    	    	if ($validator->passes())
-    	    		$this->insertDependent($accountId, $d);
-    	    	else
-    	    		return response()->json(['message' => 'validation_failed', 'errors' => $validator->errors()], 422);
-        	}
+            foreach ($dependents as $d)
+            {
+                $validator = $this->dependentValidator($d);
+                if ($validator->passes())
+                    $this->insertDependent($accountID, $d);
+                else
+                    return response()->json(['message' => 'validation_failed', 'errors' => $validator->errors()], 422);
+            }
             DB::commit();
             return response()->json(['message' => 'dependents_added']);
         } catch (ValidationException $e) {
             DB::rollback();
-            return reponse()->json(['message' => 'user_could_not_be_added', 'errors' => $e.getErrors()], 500);
+            return response()->json(['message' => 'user_could_not_be_added', 'errors' => $e->getMessage()], 500);
         } catch (\Exception $e) {
             DB::rollback();
-            return reponse()->json(['message' => 'unknown_error', 'errors' => $e.getErrors()], 500);
+            return response()->json(['message' => 'unknown_error', 'errors' => $e->getMessage()], 500);
         }
     }
 
@@ -122,12 +121,12 @@ class UserController extends Controller
      * PATCH api/accounts/{id}/dependents/{depId}
      * - updates the provided values for dependent with id={depId}
      */
-    public function editDependent($accountId, $depId, Request $req)
+    public function editDependent($accountID, $depId, Request $req)
     {
         $changes = $req->all();
         // dd($changes);
         $user = User::where('id', $depId)
-                    ->where('accountId', $accountId)
+                    ->where('accountID', $accountID)
                     ->first();
         if (!$user)
             return response()->json(['message' => 'user_does_not_exist'], 422);
@@ -168,9 +167,9 @@ class UserController extends Controller
      * DELETE api/accounts/{id}/dependents/{dep_id}
      * - deletes the corresponding dependent
      */
-    public function deleteDependent($accountId, $depId)
+    public function deleteDependent($accountID, $depId)
     {
-        $user = User::where('accountId', '=', $accountId)
+        $user = User::where('accountID', '=', $accountID)
                     ->where('id', '=', $depId);
         if ($user->delete())
             return response()->json(['message' => 'user_deleted'], 200);

@@ -42,12 +42,12 @@ class RegistrationController extends Controller
     protected function accountValidator(array $data)
     {
         // TODO: make rules same as front-end validation
-    	$validator = Validator::make($data, [
+        $validator = Validator::make($data, [
             'email'     =>  'required|email|max:255|unique:accounts',
             'password'  =>  'required|confirmed|min:6|alpha_num',
         ]);
 
-    	return $validator;
+        return $validator;
     }
 
     /**
@@ -62,7 +62,7 @@ class RegistrationController extends Controller
             '*.lastName' => 'required',
             '*.dateOfBirth' => 'required',
             '*.gender' => 'required',
-            '*.accountId' => 'required'
+            '*.accountID' => 'required'
         ]);
 
         return $validator;
@@ -76,7 +76,7 @@ class RegistrationController extends Controller
         $account = new Account();
         $account->email = $request->email;
         $account->password = Hash::make($request->password);
-		$account->save();
+        $account->save();
     }
 
     /**
@@ -94,12 +94,12 @@ class RegistrationController extends Controller
 
 
     public function register(Request $request) {
-    	$accountValidator = $this->accountValidator($request->all());
-	    if ( $accountValidator->passes() ) {
-	        // validation has passed, do validation for dependents
+        $accountValidator = $this->accountValidator($request->all());
+        if ( $accountValidator->passes() ) {
+            // validation has passed, do validation for dependents
             // save user and dependents in DB
             $userValidator = $this->userValidator($request->all());
-	        if ( $userValidator->passes() ) {
+            if ( $userValidator->passes() ) {
                 try 
                 {
                     DB::beginTransaction();
@@ -107,24 +107,24 @@ class RegistrationController extends Controller
                     $this->createUsers($request);
                 } catch (\Exception $e) {
                     DB::rollback();
-                    return response()->json(['message' => 'db_error', 'errors' => $e.getErrors()], 500);
+                    return response()->json(['message' => 'db_error', 'errors' => $e.errors()], 500);
                 }
                 DB::commit();
-    	        return response()->json(['message' => 'account_created']);
+                return response()->json(['message' => 'account_created']);
             } else {
                 return response()->json(['message' => 'validation_failed', 'errors' => $userValidator->errors()], 422);
             }
-	    } else {
-	        // validation has failed, display error messages
-	        return response()->json(['message' => 'validation_failed', 'errors' => $accountValidator->errors()], 422);
-	    }
+        } else {
+            // validation has failed, display error messages
+            return response()->json(['message' => 'validation_failed', 'errors' => $accountValidator->errors()], 422);
+        }
     }
 
     public function checkEmail(Request $request) {
-    	$account = Account::where('email', '=', $request->only('email'))->first();
-		if ($account === null)
-			return response()->json(['taken' => false]);
-		else
-			return response()->json(['taken' => true]);
+        $account = Account::where('email', '=', $request->only('email'))->first();
+        if ($account === null)
+            return response()->json(['taken' => false]);
+        else
+            return response()->json(['taken' => true]);
     }
 }
