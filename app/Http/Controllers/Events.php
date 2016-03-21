@@ -10,6 +10,7 @@ use JWTAuth;
 use App\Event;
 use App\User;
 use App\UserEvent;
+use App\Conference;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Utility\RoleCreate;
@@ -43,6 +44,11 @@ class Events extends Controller {
      * @return Response
      */
     public function getEventByConferenceID($conferenceID) {
+        $conf = Conference::find($conferenceID);
+        if (is_null($conf)) {
+            return response("No conference for id {$conferenceID}.", 405);
+        }
+
         $event = Event::where('conferenceID', $conferenceID)->get();
         if (count($event) == 0) {
             return response("No events for conferenceID {$conferenceID}.", 404);
@@ -56,8 +62,13 @@ class Events extends Controller {
      * @return Response
      */
     public function store(Request $request, $id) {
+        $conf = Conference::find($id);
+        if (is_null($conf)) {
+            return response("No conference for id {$id}.", 405);
+        }
+
         if (!Entrust::can(PermissionNames::ConferenceEventCreate($id))) {
-            return response("not found", 403);
+            return response("Permission not found", 403);
         }
 
         return DB::transaction(function () use ($request) {
