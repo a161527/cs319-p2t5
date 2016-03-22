@@ -245,7 +245,7 @@ class RegistrationController extends Controller
      * Get data for a registration.
      */
     public function getRegistrationData(Request $req, $conferenceID, $requestID) {
-        $registration = UserConference::find($requestID);
+        $registration = UserConference::with("flight", "user")->find($requestID);
         if ($conferenceID != $registration->conferenceID) {
             return response("Registration request not found for conference.",  404);
         }
@@ -255,25 +255,36 @@ class RegistrationController extends Controller
             return response("", 403);
         }
 
-        $flightData = $registration->flight;
+        return $registration;
+    }
 
-        $hasFlight = $flightData !== null;
+    private function validateRegistrationListingRequest($req) {
+        $this->validate($req, [
+            "include" => "in:all,pending,approved"
+        ]);
+    }
 
-        if($hasFlight) {
-            $flightData["number"] = (int) $flightData["flightNumber"];
-            unset($flightData["flightNumber"]);
+    public function outstandingRegistrationRequests(Request $req, $conferenceID) {
+        if(!$this->isUserRegistrationApprover($conferenceID)) {
+            return response("", 403);
         }
 
-        $data = ['needsTransportation' => $registration->needsTransportation,
-             'approved' => $registration->approved,
-             'attendee' => $registration->user->firstName . " " . $registration->user->lastName,
-             'hasFlight' => $hasFlight,
-             'access' => $accessType];
+        $this->validateRegistrationListingRequest($req);
 
-        if ($hasFlight) {
-            $data['flight'] = $flightData->toArray();
+        if($req->has("include")) {
+            $include = $req->input("include");
+        } else {
+            $include = "all";
         }
 
-        return response()->json($data);
+        $query = UserConference::with("user", "flight")->where("conferenceID", $conferenceID);
+
+        if($include === "pending") {
+            $query->where("approved", false);
+        }else if ($include == "approved") {
+            $query->where("approved", true);
+        }
+
+        return $query->get();
     }
 }
