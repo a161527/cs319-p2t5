@@ -7,6 +7,8 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AccountTableSeeder' => $baseDir . '/database/seeds/AccountTableSeeder.php',
+    'AddSoftDeletesToUsersTable' => $baseDir . '/database/migrations/2016_03_15_190220_add_soft_deletes_to_users_table.php',
+    'AddTimestampsToInventoryTable' => $baseDir . '/database/migrations/2016_03_21_205420_add_timestamps_to_inventory_table.php',
     'ConferenceTableSeeder' => $baseDir . '/database/seeds/ConferenceTableSeeder.php',
     'CreateTableAccount' => $baseDir . '/database/migrations/2016_02_19_233438_create_table_account.php',
     'CreateTableChangeHistory' => $baseDir . '/database/migrations/2016_02_28_022207_create_table_change_history.php',
