@@ -1,0 +1,49 @@
+<div class='row'>
+	<div class='col-md-10'>
+		<ui-select ng-model="selected.value">
+			<ui-select-match allow-clear="true" placeholder="Select an item to add">
+				<span ng-bind="$select.selected.name"></span>
+			</ui-select-match>
+			<ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id">
+				<span ng-bind="item.name"></span>
+			</ui-select-choices>
+		</ui-select>
+	</div>
+	<div class='col-md-2'>
+		<button class='btn btn-success' ng-click='addItem(selected.value)'><span class='glyphicon glyphicon-plus'></span> Add Item</button>
+	</div>
+</div>
+<br>
+
+<div ng-show='currentItems.length === 0'>
+	No items requested
+</div>
+<ul class='list-group'>
+	<li class='list-group-item' ng-repeat='i in currentItems'>
+		<div class='row'>
+			<div class='col-md-5'>
+				<h1>{{i.name}}</h1>
+				<h6><b>Quantity: </b>{{i.quantity}}</h6>
+			</div>
+			<div class='col-md-6'>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Request For:</th>
+							<th>Quantity:</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat='(key, value) in dependents'>
+							<td>{{dependents[key].firstname}} {{dependents[key].lastname}}</td>
+							<td class="col-md-6"><input-add-subtract model='dependents[key][i.name]' items='i.quantity'></input-add-subtract></td>
+						<tr>
+					</tbody>
+				</table>
+			</div>
+			<div class='col-md-1'>
+				<span class='glyphicon glyphicon-remove hand-cursor remove-button pull-right' ng-click='removeItem(i)'></span>
+			</div>
+		</div>
+	</li>
+</ul>

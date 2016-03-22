@@ -19,7 +19,7 @@
 			}
 
 			$scope.logout = function() {
-				loginStorage.removeTokens()
+				loginStorage.logout()
 				$state.go('login')
 			}
 		})

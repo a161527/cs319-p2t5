@@ -1,12 +1,90 @@
-<div ui-view>
-    <button class='btn btn-primary btn-lg' ng-click='showWidget("conferences.create.1");'>
-    	<span class='glyphicon glyphicon-pencil glyphicon-large'></span>
-    	<br>
-    	Create Conference
-    </button>
-    <button class='btn btn-danger btn-lg' ng-click='showWidget("conferences.view")'>
-    	<span class='glyphicon glyphicon-folder-open glyphicon-large'></span>
-    	<br>
-    	View Conferences
-    </button>
+<!-- <div ui-view> -->
+<h4>Create/Edit<h4>
+<div class='row'>
+	<div class='col-sm-3' id='conference-info-edit'>
+		<button class='btn btn-primary btn-block'>
+			<span class='glyphicon glyphicon-pencil glyphicon-large'></span>
+			<br>
+			Edit Conference
+		</button>
+	</div>
+	<div class='col-sm-3' id='conference-event-create'>
+		<button class='btn btn-primary btn-block'>
+			<span class='glyphicon glyphicon-pencil glyphicon-large'></span>
+			<br>
+			Create Event
+		</button>
+	</div>
+	<div class='col-sm-3' id='conference-inventory-edit'>
+		<button class='btn btn-primary btn-block'>
+			<span class='glyphicon glyphicon-apple glyphicon-large'></span>
+			<br>
+			Edit Inventory
+		</button>
+	</div>
+	<div class='col-sm-3' id='conference-room-edit'>
+		<button class='btn btn-primary btn-block'>
+			<span class='glyphicon glyphicon-bed glyphicon-large'></span>
+			<br>
+			Edit Rooms
+		</button>
+	</div>
 </div>
+
+<div class='row'>
+	<div class='col-sm-3' id='conference-transportation-edit'>
+		<br class='hidden-xs'>
+		<button class='btn btn-primary btn-block'>
+			<span class='glyphicon glyphicon-send glyphicon-large'></span>
+			<br>
+			Edit Transportation
+		</button>
+	</div>
+</div>
+
+<br>
+<h4>Audit</h4>
+<div class='row'>
+	<div class='col-sm-3' id='conference-registration-approval'>
+		<button class='btn btn-danger btn-block'>
+			<span class='glyphicon glyphicon-user glyphicon-large'></span>
+			<br>
+			Attendees
+		</button>
+	</div>
+	<div class='col-sm-3'>
+		<button class='btn btn-danger btn-block'>
+			<span class='glyphicon glyphicon-apple glyphicon-large'></span>
+			<br>
+			Inventory Requests
+		</button>
+	</div>
+	<div class='col-sm-3'>
+		<button class='btn btn-danger btn-block'>
+			<span class='glyphicon glyphicon-bed glyphicon-large'></span>
+			<br>
+			Assign Rooms
+		</button>
+	</div>
+	<div class='col-sm-3'>
+		<button class='btn btn-danger btn-block'>
+			<span class='glyphicon glyphicon-send glyphicon-large'></span>
+			<br>
+			Assign Transportation 
+		</button>
+	</div>
+</div>
+<br>
+<h4>Statistics</h4>
+<div class='row'>
+	<div class='col-sm-3' id='conference-view-statistics'>
+		<button class='btn btn-warning btn-block'>
+			<span class='glyphicon glyphicon-signal glyphicon-large'></span>
+			<br>
+			Statistics
+		</button>
+	</div>
+</div>
+<br>
+
+<!-- </div> -->

@@ -31,7 +31,7 @@
 					})
 				}
 			}
-			console.log(loginStorage.getAuthToken())
+
 			$scope.removeMessage = function() {
 				$scope.showError = false
 			}

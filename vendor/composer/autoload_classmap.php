@@ -32,6 +32,7 @@ return array(
     'DefaultPermissionsSeeder' => $baseDir . '/database/seeds/DefaultPermissionsSeeder.php',
     'DefaultRolesSeeder' => $baseDir . '/database/seeds/DefaultRolesSeeder.php',
     'EntrustSetupTables' => $baseDir . '/database/migrations/2016_03_08_094126_entrust_setup_tables.php',
+    'EventsTableSeeder' => $baseDir . '/database/seeds/EventsTableSeeder.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
     'File_Iterator_Facade' => $vendorDir . '/phpunit/php-file-iterator/src/Facade.php',
     'File_Iterator_Factory' => $vendorDir . '/phpunit/php-file-iterator/src/Factory.php',

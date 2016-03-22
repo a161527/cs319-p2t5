@@ -14,6 +14,7 @@
 					if (!loginStorage.getAuthToken() || !loginStorage.getEmail()) {
 
 						e.preventDefault()
+						loginStorage.logout()
 						$state.go('login')
 
 					}
@@ -26,7 +27,7 @@
 						e.preventDefault()
 						$state.go('dashboard')
 
-					}
+					} 
 
 				}
 

@@ -1,0 +1,143 @@
+<h4>Flight Details</h4>
+<div class='form-group' ng-show='showSameFlightInfoCheckbox.value'>
+	<label class='checkbox-inline'><input type='checkbox' 
+		ng-model='sameFlightInfo.value'>
+		All Dependents have the same flight information?
+	</label>
+</div>
+
+<div>
+	<form name='flightsForm' novalidate>
+		<div>
+			<div ng-hide='sameFlightInfo.value' ng-repeat='(idx, value) in hasFlightsDependents'>
+				<div ng-show='hasFlightsDependents[idx].hasFlight'>
+					<div>
+						{{hasFlightsDependents[idx].firstname}} {{hasFlightsDependents[idx].lastname}}
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class='row'>
+								<div class='col-xs-6'>
+									<input-with-validation model='hasFlightsDependents[idx]["flights"].airport' 
+															validation='flightsForm' 
+															identifier='airport{{idx}}' 
+															inp-type='text'>Airport</input-with-validation>
+								</div>
+								<div class='col-xs-6'>
+									<input-with-validation model='hasFlightsDependents[idx]["flights"].airline' 
+															validation='flightsForm' 
+															identifier='airline{{idx}}' 
+															inp-type='text'>Airline</input-with-validation>
+								</div>
+							</div>
+							<div class='row'>
+								<div class='col-xs-6'>
+									<date-picker-input model='hasFlightsDependents[idx]["flights"].arrivalDate' 
+												validation='flightsForm' 
+												identifier='arrivaldate{{idx}}' 
+												label='Arrival Date'>
+									</date-picker-input>
+								</div>
+								<div class='col-xs-6'>
+									<div class='form-group' ng-class='{"has-error": !flightsForm.flightnumber{{idx}}.$valid && flightsForm.flightnumber{{idx}}.$dirty}'>
+										<label>Flight Number</label>
+
+										<input type='text' ng-model-options='{updateOn: "blur"}' 
+											ng-model='hasFlightsDependents[idx]["flights"].number' 
+											class='form-control' 
+											ng-pattern='/^\d+$/'
+											name='flightnumber{{idx}}' required>
+
+										<error-message ng-show='flightsForm.flightnumber{{idx}}.$error.pattern && !flightsForm.flightnumber{{idx}}.$error.required'>
+											Input must be an integer
+										</error-message>
+
+										<error-message ng-show='flightsForm.flightnumber{{idx}}.$error.required && flightsForm.flightnumber{{idx}}.$dirty'>
+											Flight Number is required
+										</error-message>
+									</div>
+								</div>
+							</div>
+							<div class='row'>
+								<div class='col-xs-6'>
+									<timepicker-with-validation model='hasFlightsDependents[idx]["flights"].arrivalTime'
+														label='Arrival Time'
+														identifier='arrivaltime{{idx}}'
+														validation='flightsForm'
+									></time-picker-with-validation>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<form name='flightsFormAlt'>
+		<div class="panel panel-default" ng-show='sameFlightInfo.value'>
+			<div class="panel-body">
+				<div class='row'>
+					<div class='col-xs-6'>
+						<input-with-validation model='flightInfo.airport' 
+												validation='flightsFormAlt' 
+												identifier='airport' 
+												inp-type='text'>Airport</input-with-validation>
+					</div>
+					<div class='col-xs-6'>
+						<input-with-validation model='flightInfo.airline' 
+												validation='flightsFormAlt' 
+												identifier='airline' 
+												inp-type='text'>Airline</input-with-validation>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-xs-6'>
+						<date-picker-input model='flightInfo.arrivalDate' 
+									validation='flightsFormAlt' 
+									identifier='arrivaldate' 
+									label='Arrival Date'>
+						</date-picker-input>
+					</div>
+					<div class='col-xs-6'>
+						<div class='form-group' ng-class='{"has-error": !flightsFormAlt.flightnumber.$valid && flightsFormAlt.flightnumber.$dirty}'>
+							<label>Flight Number</label>
+
+							<input type='text' ng-model-options='{updateOn: "blur"}' 
+								ng-model='flightInfo.number' 
+								class='form-control' 
+								ng-pattern='/^\d+$/'
+								name='flightnumber' required>
+
+							<error-message ng-show='flightsFormAlt.flightnumber.$error.pattern && !flightsFormAlt.flightnumber.$error.required'>
+								Input must be an integer
+							</error-message>
+
+							<error-message ng-show='flightsFormAlt.flightnumber.$error.required && flightsFormAlt.flightnumber.$dirty'>
+								Flight Number is required
+							</error-message>
+						</div>
+
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-xs-6'>
+						<timepicker-with-validation model='flightInfo.arrivalTime'
+													label='Arrival Time'
+													identifier='arrivaltime'
+													validation='flightsFormAlt'
+						></time-picker-with-validation>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class='row'>
+	<div class='col-xs-6'>
+		<button class='btn btn-default btn-block' ng-click='back(3)'>Back</button>
+	</div>
+	<div class='col-xs-6'>
+		<button class='btn btn-primary btn-block' ng-click='nextStep(3, flightsForm, flightsFormAlt, sameFlightInfo.value)'>Next</button>
+	</div>
+</div>
