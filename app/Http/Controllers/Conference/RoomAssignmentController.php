@@ -115,4 +115,15 @@ class RoomAssignmentController extends Controller
 
         $assignment->delete();
     }
+
+    public function missingAssignments($confId) {
+        if(!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
+            return response("", 403);
+        }
+
+        return UserConference::where("needsAccommodation", true)
+                ->has("room", "<", 1)
+                ->with("user")
+                ->get();
+    }
 }

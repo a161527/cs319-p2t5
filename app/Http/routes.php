@@ -44,6 +44,7 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
             Route::post('assign', 'RoomAssignmentController@assignRoom');
             Route::delete('assign/{assignId}', 'RoomAssignmentController@deleteAssignment');
             Route::get('assign', 'RoomAssignmentController@listAssignments');
+            Route::get('assign/missing', 'RoomAssignmentController@missingAssignments');
         });
     });
 });
