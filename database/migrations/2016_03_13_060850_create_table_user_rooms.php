@@ -14,16 +14,17 @@ class CreateTableUserRooms extends Migration
     {
         Schema::create('user_rooms', function (Blueprint $table) {
           $table->increments('id');
-          $table->integer('roomID')->unsigned();
-          $table->integer('userID')->unsigned();
+          $table->integer('roomSetID')->unsigned();
+          $table->string('roomName');
+          $table->integer('registrationID')->unsigned();
           // Many-to-One
-          $table->foreign('userID')
-                ->references('id')->on('users')
+          $table->foreign('registrationID')
+                ->references('id')->on('user_conferences')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
           // Many-to-One
-          $table->foreign('roomID')
-                ->references('id')->on('rooms')
+          $table->foreign('roomSetID')
+                ->references('id')->on('room_sets')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
