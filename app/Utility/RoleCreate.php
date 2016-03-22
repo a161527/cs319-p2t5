@@ -26,16 +26,7 @@ class RoleCreate {
 
     public static function ConferenceManager($confId) {
         return DB::transaction(function() use ($confId) {
-            $permissionList = [
-                PermissionNames::ConferenceEventCreate($confId),
-                PermissionNames::ConferenceRegistrationApproval($confId),
-                PermissionNames::ConferencePermissionManagement($confId),
-                PermissionNames::ConferenceInfoEdit($confId),
-                PermissionNames::ConferenceInventoryEdit($confId),
-                PermissionNames::ConferenceRoomEdit($confId),
-                PermissionNames::ConferenceTransportationEdit($confId),
-                PermissionNames::ConferenceAnnounce($confId),
-                PermissionNames::ConferenceViewStatistics($confId)];
+            $permissionList = PermissionNames::AllConferencePermissions($confId);
 
             $permissions = self::createAllPermissions($permissionList);
 

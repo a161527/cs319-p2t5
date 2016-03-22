@@ -67,6 +67,19 @@ class PermissionNames {
         return "conference-view-statistics." . $confId;
     }
 
+    public static function AllConferencePermissions($confId) {
+        return [
+                self::ConferenceEventCreate($confId),
+                self::ConferenceRegistrationApproval($confId),
+                self::ConferencePermissionManagement($confId),
+                self::ConferenceInfoEdit($confId),
+                self::ConferenceInventoryEdit($confId),
+                self::ConferenceRoomEdit($confId),
+                self::ConferenceTransportationEdit($confId),
+                self::ConferenceAnnounce($confId),
+                self::ConferenceViewStatistics($confId)];
+    }
+
     //================EVENT PERMISSIONS============
     public static function EventInfoEdit($evtId) {
         return "event-info-edit." . $evtId;
