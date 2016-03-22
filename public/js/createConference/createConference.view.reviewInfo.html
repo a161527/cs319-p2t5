@@ -48,21 +48,23 @@
 			{{conferenceInfo.hasAccommodations}}
 		</div>
 		<br>
-		<h4><b><u>Inventory</u></b></h4>
-		<div ng-repeat='(idx, value) in inventory'>
-			<div class='row'>
-				<div class='col-xs-12 col-sm-6'>
-					<h5><b>{{inventory[idx].name}}</b></h5>
+		<div ng-show='inventory[1].name'>
+			<h4><b><u>Inventory</u></b></h4>
+			<div ng-repeat='(idx, value) in inventory'>
+				<div class='row'>
+					<div class='col-xs-12 col-sm-6'>
+						<h5><b>{{inventory[idx].name}}</b></h5>
+					</div>
+					<div class='col-xs-12 col-sm-6'>
+						<b>Quantity:</b> {{inventory[idx].quantity}} {{inventory[idx].units}}
+						<br>
+						<b>Disposable:</b> {{inventory[idx].disposable}}
+					</div>
 				</div>
-				<div class='col-xs-12 col-sm-6'>
-					<b>Quantity:</b> {{inventory[idx].quantity}} {{inventory[idx].units}}
-					<br>
-					<b>Disposable:</b> {{inventory[idx].disposable}}
-				</div>
+				<br>
 			</div>
 			<br>
 		</div>
-		<br>
 		<div ng-show='conferenceInfo.hasAccommodations'>
 			<h4><b><u>Conference Accommodations</u></b></h4>
 			<div ng-repeat='(idx, value) in rooms'>

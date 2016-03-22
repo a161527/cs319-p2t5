@@ -8,7 +8,7 @@
     </div>
 </div>
 
-<h4>Conference Inventory</h4>
+<h4>Conference Inventory (optional)</h4>
 <div class="panel panel-default">
     <div class="panel-body">
         <form name='inventoryForm' novalidate>
@@ -23,19 +23,22 @@
 
                             <div class='row'>
                                 <div class='col-md-12'>
-                                    <input-with-validation model='inventory[idx].name' validation='inventoryForm' identifier='name{{idx}}' inp-type='text'>Item Name</input-with-validation>
+                                    <label for='name'>Item Name</label>
+                                    <input type='text' class='form-control' ng-model='inventory[idx].name' id='name{{idx}}' name='name'></input>
                                 </div>
                             </div>
-                            
+                            <br>
                             <div class='row'>
                                 <div class='col-md-6'>
-                                    <input-with-validation model='inventory[idx].quantity' validation='inventoryForm' identifier='quantity{{idx}}' inp-type='text'>Quantity Available</input-with-validation>
+                                    <label for='quantity'>Quantity Available</label>
+                                    <input type='text' class='form-control' ng-model='inventory[idx].quantity' id='quantity{{idx}}' name='quantity'></input>
                                 </div>
                                 <div class='col-md-6'>
-                                    <label for='units'>Units (optional)</label>
+                                    <label for='units'>Units</label>
                                     <input type='text' class='form-control' id='units' name='units' ng-model='inventory[idx].units'></input>
                                 </div>
                             </div>
+                            <br>
                             <div class='row'>
                                 <div class='form-group col-md-12'>
                                     <label class='checkbox-inline'><input type='checkbox' ng-model='inventory[idx].disposable'>Item is disposable</label>

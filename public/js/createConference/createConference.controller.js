@@ -20,7 +20,7 @@
 				delete conferenceInfo.endFormatted;
 
 				ajax.serviceCall('Creating conference...', 'post', 'api/conferences', $scope.conferenceInfo).then(function(resData) {
-					$state.go('viewConference', {cid: resData['data']['id']});
+					$state.go('dashboard.conferences.manage', {cid: resData['data']['id']});
 
 
 				}, function(resData) {
