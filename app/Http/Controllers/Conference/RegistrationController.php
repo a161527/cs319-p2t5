@@ -255,15 +255,25 @@ class RegistrationController extends Controller
             return response("", 403);
         }
 
-        $flightData = $registration->flight->toArray();
-        $flightData["number"] = (int) $flightData["flightNumber"];
-        unset($flightData["flightNumber"]);
+        $flightData = $registration->flight;
 
-        return response()->json(
-            ['needsTransportation' => $registration->needsTransportation,
+        $hasFlight = $flightData !== null;
+
+        if($hasFlight) {
+            $flightData["number"] = (int) $flightData["flightNumber"];
+            unset($flightData["flightNumber"]);
+        }
+
+        $data = ['needsTransportation' => $registration->needsTransportation,
              'approved' => $registration->approved,
              'attendee' => $registration->user->firstName . " " . $registration->user->lastName,
-             'flight' => $flightData,
-             'access' => $accessType]);
+             'hasFlight' => $hasFlight,
+             'access' => $accessType];
+
+        if ($hasFlight) {
+            $data['flight'] = $flightData->toArray();
+        }
+
+        return response()->json($data);
     }
 }
