@@ -1,0 +1,47 @@
+<div class='row'>
+	<div class='col-sm-6'>
+		<h4>Residences</h4>
+		<div class="list-group">
+			<button type="button" 
+				class="list-group-item"
+				ng-class='{"active": selected === res.id}' 
+				ng-repeat='res in residences'
+				ng-click='getRooms(res.id); $parent.selected = res.id'>
+				<div class='row'>
+					<div class='col-md-4'>
+						<span class='glyphicon glyphicon-home glyphicon-large'></span>
+					</div>
+					<div class='col-md-8'>
+						<div>{{res.name}}</div>
+						<div>{{res.location}}</div>
+					</div>
+				</div>
+			</button>
+		</div>
+	</div>
+	<div class='col-sm-6'>
+		<h4>Rooms</h4>
+		<ul class="list-group">
+			<div ng-repeat='room in rooms'>
+				<li class='list-group-item unselectable-text'>
+					<div class='row'>
+						<div class='col-md-4'>
+							<span class='glyphicon glyphicon-bed glyphicon-large'></span>
+						</div>
+						<div class='col-md-4'>
+							<div>{{room.type.name}}</div>
+							<div>{{room.type.accessible | yesNo}}</div>
+							<div>{{room.type.capacity}}</div>
+						</div>
+						<div class='col-md-4'>
+							<button class='btn btn-primary btn-lg pull-right'
+								ng-click='assign(room)'>
+								<span class='glyphicon glyphicon-check'></span> Assign</button>
+						</div>
+					</div>
+				</li>
+			</div>
+		</ul>
+	</div>
+</div>
+<error-message ng-show='showError'>{{errorMessage}}<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeMessage()'></span></error-message>

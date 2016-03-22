@@ -1,1 +1,41 @@
-<div>Foo</div>
+<div ui-view>
+	<div ng-show='noUsers'>No users currently requiring accomodations</div>
+	<div ng-hide='noUsers'>
+		<h4>Select Attendees</h4>
+<!-- 		<label class='checkbox-inline'>
+			<input type="checkbox" 
+				ng-model='dependentsSelectAll'
+				ng-click='selectAll("selected", dependentsSelectAll, dependents)'>
+			Select All
+		</label> -->
+
+		<div class="list-group">
+			<button type="button" 
+				class="list-group-item" 
+				ng-repeat='(idx, value) in dependents' 
+				ng-click='dependents[idx].selected = !dependents[idx].selected'>
+				<div class='row'>
+					<div class='col-md-2'>
+						<input type="checkbox" ng-model='dependents[idx].selected'>
+					</div>
+					<div class='col-md-2'>
+						<span class='glyphicon glyphicon-user glyphicon-large'></span>
+					</div>
+					<div class='col-md-8'>
+						<div>{{dependents[idx].user.firstName}} {{dependents[idx].user.lastName}}</div>
+					</div>
+				</div>
+			</button>
+		</div>
+		<error-message ng-show='noSelection'>There must be one user selected<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeMessage()'></span></error-message>
+		<br>
+		<div class='row'>
+			<div class='col-md-6'>
+				<button class='btn btn-default btn-block' ng-click='cancel()'>Cancel</button>
+			</div>
+			<div class='col-md-6'>
+				<button class='btn btn-primary btn-block' ng-click='next()'>Next</button>
+			</div>
+		</div>
+	</div>
+</div>
