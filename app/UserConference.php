@@ -16,4 +16,8 @@ class UserConference extends Model
     public function user() {
         return $this->hasOne('App\User', 'id', 'userID');
     }
+
+    public function room() {
+        return $this->belongsTo('App\UserRoom', 'id', 'registrationId');
+    }
 }
