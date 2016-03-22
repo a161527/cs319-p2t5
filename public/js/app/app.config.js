@@ -211,6 +211,16 @@
 					templateUrl: 'js/inventory/inventory.view.request.html',
 					controller: 'requestInventoryCtrl'
 				})
+
+				/*
+				ROOMS
+				*/
+
+				.state('dashboard.conferences.room-allocate', {
+					url: '/allocate-room/?:cid',
+					templateUrl: 'js/rooms/rooms.view.html',
+					controller: 'AllocateRoomsCtrl'
+				})
 		})
 
 })()

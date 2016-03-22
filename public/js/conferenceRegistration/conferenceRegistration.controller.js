@@ -297,9 +297,9 @@
 				})
 
 				modal.result.then(function () {
-					$state.go('dashboard.conferences')
+					$state.go('dashboard.conferences.list')
 				}, function () {
-					$state.go('dashboard.conferences')
+					
 				})
 
 			}

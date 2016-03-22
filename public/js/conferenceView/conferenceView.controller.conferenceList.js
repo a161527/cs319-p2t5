@@ -7,7 +7,7 @@
 			$scope.conferences = conferenceData[0] || []
 			$scope.noConferences = ($scope.conferences.length === 0)
 			$scope.canCreateConference = (conferenceData[1].indexOf('create-conference') !== -1)
-
+			console.log($scope.conferences)
 			$scope.registered = function(registeredList) {
 				return registeredList.length > 0
 			}
