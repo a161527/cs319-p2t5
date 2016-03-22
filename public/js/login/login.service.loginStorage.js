@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('login')
-		.service('loginStorage', function($window, $q, ajax) {
+		.service('loginStorage', function($window, $q, ajax, conferenceList) {
 
 			this.emailKey = 'gobind_sarvar_email'
 			this.tokenKey = 'satellizer_token'
@@ -12,9 +12,10 @@
 				$window.localStorage.setItem(this.emailKey, email)
 			}
 
-			this.clearAll = function() {
+			this.logout = function() {
 				$window.localStorage.removeItem(this.tokenKey)
 				$window.localStorage.removeItem(this.emailKey)
+				conferenceList.clearPermissions()
 				_permissions = null
 			}
 

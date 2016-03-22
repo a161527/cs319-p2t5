@@ -151,12 +151,12 @@
 
 				.state('dashboard.conferences.registration.3', {
 					url: '',
-					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.transportation.html'
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.flights.html'
 				})
 
 				.state('dashboard.conferences.registration.4', {
 					url: '',
-					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.flights.html'
+					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.review.html'
 				})
 
 

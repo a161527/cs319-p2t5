@@ -1,9 +1,19 @@
+<h4>Select Attendees</h4>
+<label class='checkbox-inline'>
+	<input type="checkbox" 
+	ng-model='dependentsSelectAll'
+	ng-click='selectAll("register", dependentsSelectAll, dependents)'>
+	Select All
+</label>
+
 <ul class="list-group">
 	<div ng-repeat='(idx, value) in dependents'>
 		<li class='list-group-item unselectable-text' ng-click='dependents[idx].register = !dependents[idx].register'>
 			<div class='row'>
 				<div class='col-md-2'>
-					<input type="checkbox" ng-model='dependents[idx].register'>
+					<input type="checkbox" 
+						ng-model='dependents[idx].register' 
+						ng-click='dependents[idx].register = !dependents[idx].register'>
 				</div>
 				<div class='col-md-2'>
 					<span class='glyphicon glyphicon-user glyphicon-large'></span>
