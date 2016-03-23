@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Conference;
 
 use Illuminate\Http\Request;
 
@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use DB;
 use JWTAuth;
+use Validator;
 
 use App\Flight;
 use App\User;
@@ -19,6 +20,7 @@ use App\Utility\PermissionNames;
 
 use App\Jobs\RegistrationFlightAggregator;
 
+use Illuminate\Foundation\Validation\ValidationException;
 /**
  * Controller for handling conference registration.
  *
@@ -26,7 +28,7 @@ use App\Jobs\RegistrationFlightAggregator;
  * applications by admins.  This results in handling of flight data as well,
  * as flights are created in the DB as registrations are created.
  */
-class ConfRegistrationController extends Controller
+class RegistrationController extends Controller
 {
     //Types of access to a registration application
     const REGISTRATION_FULL_ACCESS_TYPE = "full";
@@ -52,23 +54,24 @@ class ConfRegistrationController extends Controller
     /*
      * Registers a group of attendees for a conference.
      */
-    private function registerAttendees($confID, $users, $needsTransport, $flight) {
+    private function registerAttendees($confID, $users, $needsTransport, $needsAccommodation, $flight) {
         $registryIDs = [];
         foreach ($users as $attendee) {
-            $newRegistryID = $this->addConferenceRegistration($confID, $attendee, $needsTransport, $flight);
+            $newRegistryID = $this->addConferenceRegistration($confID, $attendee, $needsTransport, $needsAccommodation, $flight);
             $registryIDs[] = $newRegistryID;
         }
-        return response()->json(['ids' => $registryIDs]);
+        return ['ids' => $registryIDs, "attendees" => $users, "code" => 200];
     }
 
     /*
      * Registers a single attendee for a conference
      */
-    private function addConferenceRegistration($conferenceID, $userID, $needsTransportation, $flight) {
+    private function addConferenceRegistration($conferenceID, $userID, $needsTransportation, $needsAccommodation, $flight) {
         $userConf = new UserConference;
         $userConf->userID = $userID;
         $userConf->conferenceID = $conferenceID;
         $userConf->needsTransportation = $needsTransportation;
+        $userConf->needsAccommodation = $needsAccommodation;
         $userConf->approved = false;
         $userConf->flightID = $flight;
 
@@ -83,26 +86,27 @@ class ConfRegistrationController extends Controller
     private function processRegistration($req, $conferenceID, $accountID) {
         return DB::transaction(function () use ($req, $conferenceID, $accountID){
             //Grab request data for use later
-            $number = $req->input('flight.number');
-            $arrivalDay = $req->input('flight.arrivalDate');
-            $arrivalTime = $req->input('flight.arrivalTime');
-            $airline = $req->input('flight.airline');
-            $airport = $req->input('flight.airport');
-
-            $needsTransport = $req->input('needsTransportation');
-            $attendees = $req->input('attendees');
+            $needsTransport = $req['needsTransportation'];
+            $needsAccommodation = $req['needsAccommodation'];
+            $attendees = $req['attendees'];
 
             //Check whether dependents are okay/owned by the current user
             if(!$this->dependentsAreOkay($accountID, $attendees)) {
-                return response("Dependent(s) not owned by user or currently unapproved", 400);
+                return ["message" => "Dependent(s) not owned by user or currently unapproved", "code" => 400, "attendees" => $attendees];
             }
 
             //If the request explicitly doesn't have a flight, just register attendees without one
-            if ($req->has('hasFlight')) {
-                if (!$req->input('hasFlight')) {
-                   return $this->registerAttendees($conferenceID, $attendees, $needsTransport, null);
+            if (isset($req['hasFlight'])) {
+                if (!$req['hasFlight']) {
+                   return $this->registerAttendees($conferenceID, $attendees, $needsTransport, $needsAccommodation, null);
                 }
             }
+
+            $number = $req['flight']['number'];
+            $arrivalDay = $req['flight']['arrivalDate'];
+            $arrivalTime = $req['flight']['arrivalTime'];
+            $airline = $req['flight']['airline'];
+            $airport = $req['flight']['airport'];
 
             //Grab (checked) matching flights for airline/flight number/date
             $flights =
@@ -115,10 +119,10 @@ class ConfRegistrationController extends Controller
             if(sizeof($flights) >= 1) {
                 foreach($flights as $row) {
                     if ($row->arrivalTime == $arrivalTime && $row->airport == $airport) {
-                        return $this->registerAttendees($conferenceID, $attendees, $needsTransport, $row->id);
+                        return $this->registerAttendees($conferenceID, $attendees, $needsTransport, $needsAccommodation, $row->id);
                     }
                 }
-                return response("Flight data does not match known data for flight", 400);
+                return ["message" => "Flight data does not match known data for flight", "code" => 400, "attendees" => $attendees];
             } else {
                 //Create a new flight with the given data
 
@@ -131,15 +135,16 @@ class ConfRegistrationController extends Controller
                 $flight->isChecked = false;
 
                 $flight->save();
-                return $this->registerAttendees($conferenceID, $attendees, $needsTransport, $flight->id);
+                return $this->registerAttendees($conferenceID, $attendees, $needsTransport, $needsAccommodation, $flight->id);
             }
         });
     }
 
     private function validateRegistrationRequest($request) {
-        $this->validate($request, [
+        $v = Validator::make($request, [
             'attendees' => 'required|idarray',
             'needsTransportation' => 'required|boolean',
+            'needsAccommodation' => 'required|boolean',
             'hasFlight' => 'boolean',
             'flight.number' => 'numeric|required_unless:hasFlight,false',
             'flight.arrivalDate' => 'date_format:Y-m-d|required_unless:hasFlight,false',
@@ -147,13 +152,34 @@ class ConfRegistrationController extends Controller
             'flight.airline' => 'required_unless:hasFlight,false|string',
             'flight.airport' => 'required_unless:hasFlight,false|string'
         ]);
+
+        if ($v->fails()) {
+            throw new ValidationException($v);
+        }
     }
 
     public function userRegistration(Request $req, $conferenceID) {
-        $this->validateRegistrationRequest($req);
         $user = Auth::user();
 
-        return $this->processRegistration($req, $conferenceID, $user->id);
+        $data = [];
+
+        foreach ($req->all() as $request) {
+            $this->validateRegistrationRequest($request);
+        }
+        foreach ($req->all() as $request) {
+            $data[] = $this->processRegistration($request, $conferenceID, $user->id);
+        }
+
+        //Ugly, but works - go through the results.  If we find one that isn't okay (200)
+        //then use that as the response code.  Otherwise, we finish the loop and just
+        //return a 200 status code.
+        foreach ($data as $d) {
+            if ($d["code"] != 200) {
+                return response()->json($data, $d["code"]);
+            }
+        }
+
+        return response()->json($data);
     }
 
     //This should validate whether the currently logged in user is
@@ -229,15 +255,25 @@ class ConfRegistrationController extends Controller
             return response("", 403);
         }
 
-        $flightData = $registration->flight->toArray();
-        $flightData["number"] = (int) $flightData["flightNumber"];
-        unset($flightData["flightNumber"]);
+        $flightData = $registration->flight;
 
-        return response()->json(
-            ['needsTransportation' => $registration->needsTransportation,
+        $hasFlight = $flightData !== null;
+
+        if($hasFlight) {
+            $flightData["number"] = (int) $flightData["flightNumber"];
+            unset($flightData["flightNumber"]);
+        }
+
+        $data = ['needsTransportation' => $registration->needsTransportation,
              'approved' => $registration->approved,
              'attendee' => $registration->user->firstName . " " . $registration->user->lastName,
-             'flight' => $flightData,
-             'access' => $accessType]);
+             'hasFlight' => $hasFlight,
+             'access' => $accessType];
+
+        if ($hasFlight) {
+            $data['flight'] = $flightData->toArray();
+        }
+
+        return response()->json($data);
     }
 }

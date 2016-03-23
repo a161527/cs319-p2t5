@@ -8,6 +8,9 @@ use Auth;
 use Entrust;
 use JWTAuth;
 use App\Event;
+use App\User;
+use App\UserEvent;
+use App\Conference;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Utility\RoleCreate;
@@ -41,11 +44,28 @@ class Events extends Controller {
      * @return Response
      */
     public function getEventByConferenceID($conferenceID) {
+        $conf = Conference::find($conferenceID);
+        if (is_null($conf)) {
+            return response("No conference for id {$conferenceID}.", 405);
+        }
+
         $event = Event::where('conferenceID', $conferenceID)->get();
         if (count($event) == 0) {
             return response("No events for conferenceID {$conferenceID}.", 404);
         }
         return $event;
+    }
+
+    private function validateEventInput($req) {
+        $this->validate($req,[
+            "eventName" => 'required|string',
+            "date" => 'required|date_format:Y-m-d',
+            "location"=> 'string|required',
+            "startTime" => 'required|date_format:H:i:s',
+            "endTime" => 'required|date_formate:H:i:s',
+            "capacity" => 'required|numeric',
+            "description" => 'required|string'
+        ]);
     }
 
     /**
@@ -54,11 +74,16 @@ class Events extends Controller {
      * @return Response
      */
     public function store(Request $request, $id) {
-        if (!Entrust::can(PermissionNames::ConferenceEventCreate($id))) {
-            return response("not found", 403);
+        $conf = Conference::find($id);
+        if (is_null($conf)) {
+            return response("No conference for id {$id}.", 405);
         }
 
-        return DB::transaction(function () use ($request) {
+        if (!Entrust::can(PermissionNames::ConferenceEventCreate($id))) {
+            return response("Permission not found", 403);
+        }
+
+        return DB::transaction(function () use ($request, $id) {
           $event = new Event;
           $event->eventName = $request->input('eventName');
           $event->date = $request->input('date');
@@ -67,7 +92,7 @@ class Events extends Controller {
           $event->endTime = $request->input('endTime');
           $event->capacity = $request->input('capacity');
           $event->description = $request->input('description');
-          $event->conferenceID = $request->input('conferenceID');
+          $event->conferenceID = $id;
           $event->save();
 
           $role = RoleCreate::EventManager($event->id);
@@ -99,7 +124,7 @@ class Events extends Controller {
      */
     public function update(Request $request, $id) {
         if (!Entrust::can(PermissionNames::EventInfoEdit($id))) {
-            return response("", 403);
+            return response("Permission not found", 403);
         }
 
         $event = Event::find($id);
@@ -127,7 +152,7 @@ class Events extends Controller {
      */
     public function destroy($id) {
         if (!Entrust::hasRole(RoleNames::EventManager($id))) {
-            return response("", 403);
+            return response("Permission not found", 403);
         }
 
         $event = Event::find($id);
@@ -137,6 +162,35 @@ class Events extends Controller {
 
         $event->delete();
         return response()->json(['id' => $event->id]);
+    }
+
+    /**
+     * Register the user given the userID to the event given the eventID.
+     * @param  int  $id, int $eventId
+     * @return Response
+     */
+    public function register($id, $userId) {
+        $event = Event::find($id);
+        if (is_null($event)) {
+            return response("No event for id {$id}.", 404);
+        }
+
+        $user = User::find($userId);
+        if (is_null($user)) {
+            return response("No user for id {$userId}.", 405);
+        }
+
+        $eventUser = UserEvent::where('eventID','=',$id)->where('userID','=',$userId)->get();
+        if (count($eventUser) > 0) {
+            return response("userId {$userId} already registered for event id {$id}.", 406);
+        }
+
+        $userEvent = new UserEvent;
+        $userEvent->userID = $userId;
+        $userEvent->eventID = $id;
+        $userEvent->save();
+
+        return response()->json(['id' => $userEvent->id]);
     }
 
 }
