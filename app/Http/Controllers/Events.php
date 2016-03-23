@@ -27,13 +27,26 @@ class Events extends Controller {
         $this->middleware('jwt.auth');
     }
 
+    private function rewriteEventListWithAttendees(&$evtList) {
+        foreach ($evtList as &$e) {
+            $this->rewriteEventWithAttendees($e);
+        }
+    }
+
+    private function rewriteEventWithAttendees(&$e) {
+        $e['remainingCapacity'] = $e['capacity'] - sizeof($e['attendees']);
+        unset($e['attendees']);
+    }
+
     /**
      * Display a listing of all events in the database.
      * @return Response
      */
     public function index($id = null) {
         if ($id == null) {
-            return Event::orderBy('id', 'asc')->get();
+            $events = Event::with("attendees")->orderBy('id', 'asc')->get()->toArray();
+            $this->rewriteEventListWithAttendees($events);
+            return $events;
         } else {
             return $this->show($id);
         }
@@ -56,11 +69,7 @@ class Events extends Controller {
 
         $evtArray = $event->toArray();
 
-        foreach ($evtArray as &$e) {
-            echo "\n" . $e['eventName'] . ": " .  sizeof($e['attendees']);
-            $e['remainingCapacity'] = $e['capacity'] - sizeof($e['attendees']);
-            unset($e['attendees']);
-        }
+        $this->rewriteEventListWithAttendees($evtArray);
 
         if (sizeof($evtArray) == 0) {
             return response("No events for conferenceID {$conferenceID}.", 404);
@@ -121,11 +130,15 @@ class Events extends Controller {
      * @return Response
      */
     public function show($id) {
-        $event = Event::find($id);
-        if (count($event) == 0) {
-            return response("No event for id {$id}.", 404);
-        }
-        return $event;
+        //Select events, populate with "attendees" so we can calculate the
+        //remaining capacity
+        $event = Event::with("attendees")->find($id);
+
+        $e = $event->toArray();
+
+        $this->rewriteEventWithAttendees($e);
+
+        return $e;
     }
 
     /**
