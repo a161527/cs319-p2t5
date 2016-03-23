@@ -56,6 +56,18 @@ class Events extends Controller {
         return $event;
     }
 
+    private function validateEventInput($req) {
+        $this->validate($req,[
+            "eventName" => 'required|string',
+            "date" => 'required|date_format:Y-m-d',
+            "location"=> 'string|required',
+            "startTime" => 'required|date_format:H:i:s',
+            "endTime" => 'required|date_formate:H:i:s',
+            "capacity" => 'required|numeric',
+            "description" => 'required|string'
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      * @param  Request  $request
@@ -71,7 +83,7 @@ class Events extends Controller {
             return response("Permission not found", 403);
         }
 
-        return DB::transaction(function () use ($request) {
+        return DB::transaction(function () use ($request, $id) {
           $event = new Event;
           $event->eventName = $request->input('eventName');
           $event->date = $request->input('date');
@@ -80,7 +92,7 @@ class Events extends Controller {
           $event->endTime = $request->input('endTime');
           $event->capacity = $request->input('capacity');
           $event->description = $request->input('description');
-          $event->conferenceID = $request->input('conferenceID');
+          $event->conferenceID = $id;
           $event->save();
 
           $role = RoleCreate::EventManager($event->id);
