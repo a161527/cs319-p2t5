@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Conference;
 
 use Illuminate\Http\Request;
 
@@ -28,7 +28,7 @@ use Illuminate\Foundation\Validation\ValidationException;
  * applications by admins.  This results in handling of flight data as well,
  * as flights are created in the DB as registrations are created.
  */
-class ConfRegistrationController extends Controller
+class RegistrationController extends Controller
 {
     //Types of access to a registration application
     const REGISTRATION_FULL_ACCESS_TYPE = "full";
@@ -255,15 +255,25 @@ class ConfRegistrationController extends Controller
             return response("", 403);
         }
 
-        $flightData = $registration->flight->toArray();
-        $flightData["number"] = (int) $flightData["flightNumber"];
-        unset($flightData["flightNumber"]);
+        $flightData = $registration->flight;
 
-        return response()->json(
-            ['needsTransportation' => $registration->needsTransportation,
+        $hasFlight = $flightData !== null;
+
+        if($hasFlight) {
+            $flightData["number"] = (int) $flightData["flightNumber"];
+            unset($flightData["flightNumber"]);
+        }
+
+        $data = ['needsTransportation' => $registration->needsTransportation,
              'approved' => $registration->approved,
              'attendee' => $registration->user->firstName . " " . $registration->user->lastName,
-             'flight' => $flightData,
-             'access' => $accessType]);
+             'hasFlight' => $hasFlight,
+             'access' => $accessType];
+
+        if ($hasFlight) {
+            $data['flight'] = $flightData->toArray();
+        }
+
+        return response()->json($data);
     }
 }

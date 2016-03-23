@@ -38,7 +38,7 @@ class AuthenticationController extends Controller
         // source: https://github.com/tymondesigns/jwt-auth/issues/125
 
         $account = JWTAuth::parseToken()->authenticate();
-        $accountId = $account->id;
+        $accountID = $account->id;
 
         return $account;
     }
@@ -58,9 +58,10 @@ class AuthenticationController extends Controller
         }
 
         $permissions = $this->buildPermissionsJson();
-
+        $accountID = Account::where('email', '=', $credentials['email'])->select('id')->first()['id'];
+        
         // if no errors are encountered we can return a JWT
-        return response()->json(['message' => 'successful_login', 'token' => $token, 'permissions' => $permissions]);
+        return response()->json(['message' => 'successful_login', 'token' => $token, 'permissions' => $permissions, 'accountID' => $accountID]);
     }
 
     public function token()

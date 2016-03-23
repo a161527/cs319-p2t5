@@ -11,7 +11,9 @@
 		<li class='list-group-item unselectable-text' ng-click='dependents[idx].register = !dependents[idx].register'>
 			<div class='row'>
 				<div class='col-md-2'>
-					<input type="checkbox" ng-model='dependents[idx].register'>
+					<input type="checkbox" 
+						ng-model='dependents[idx].register' 
+						ng-click='dependents[idx].register = !dependents[idx].register'>
 				</div>
 				<div class='col-md-2'>
 					<span class='glyphicon glyphicon-user glyphicon-large'></span>

@@ -11,21 +11,41 @@
 |
 */
 
-Route::group(['prefix' => 'api/conferences'], function () {
-    Route::get('', 'ConferenceController@getInfoList');
-    Route::post('', 'ConferenceController@createNew');
+//All conference endpoints
+Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], function () {
+    Route::get('', 'MainController@getInfoList');
+    Route::post('', 'MainController@createNew');
 
     Route::group(['prefix' => '{confId}'], function () {
-        Route::get('', 'ConferenceController@getInfo');
-        Route::put('', 'ConferenceController@replace');
-        Route::delete('', 'ConferenceController@delete');
+        Route::get('', 'MainController@getInfo');
+        Route::put('', 'MainController@replace');
+        Route::delete('', 'MainController@delete');
 
-        Route::get('permissions', 'ConferenceController@getPermissions');
+        Route::get('permissions', 'MainController@getPermissions');
 
         //New registration request
-        Route::post('register', 'ConfRegistrationController@userRegistration');
-        Route::post('register/{registryId}/approve', 'ConfRegistrationController@approveRegistration');
-        Route::get('register/{registryId}', 'ConfRegistrationController@getRegistrationData');
+        Route::post('register', 'RegistrationController@userRegistration');
+        Route::post('register/{registryId}/approve', 'RegistrationController@approveRegistration');
+        Route::get('register/{registryId}', 'RegistrationController@getRegistrationData');
+
+        Route::group(['prefix' => 'residences'], function () {
+            Route::get('', 'RoomSetupController@getResidenceList');
+            Route::post('upload', 'RoomSetupController@uploadRoomData');
+            Route::post('', 'RoomSetupController@createResidence');
+
+            Route::group(['prefix' => '{residenceId}'], function () {
+                Route::get('rooms', 'RoomSetupController@getResidenceRooms');
+                Route::get('roomTypes', 'RoomSetupController@getResidenceRoomTypes');
+                Route::post('rooms', 'RoomSetupController@createRoomSet');
+
+                Route::get('rooms/{roomId}/users', 'RoomAssignmentController@getRoomUsers');
+            });
+
+            Route::post('assign', 'RoomAssignmentController@assignRoom');
+            Route::delete('assign/{assignId}', 'RoomAssignmentController@deleteAssignment');
+            Route::get('assign', 'RoomAssignmentController@listAssignments');
+            Route::get('assign/missing', 'RoomAssignmentController@missingAssignments');
+        });
     });
 });
 
@@ -81,6 +101,18 @@ Route::group(['prefix' => 'api'], function()
         Route::patch('/{depId}', 'UserController@editDependent');
         Route::delete('/{depId}', 'UserController@deleteDependent');
     });
+
+    // inventory management
+    Route::group(['prefix' => 'conferences/{conferenceId}/inventory'], function() {
+        Route::get('/', 'InventoryController@index');
+        Route::post('/', 'InventoryController@addItem');
+        Route::put('/', 'InventoryController@addItem');
+        Route::post('/reserve', 'InventoryController@reserveItem');
+
+        Route::patch('/{itemId}', 'InventoryController@editItem');
+        Route::delete('/{itemId}', 'InventoryController@deleteItem');
+    });
+
 });
 
 // Routes for Event
@@ -88,4 +120,5 @@ Route::get('/api/event/{id?}', 'Events@index');
 Route::get('/api/event/conference/{id?}', 'Events@getEventByConferenceID');
 Route::post('/api/event/{id}', 'Events@store');
 Route::post('/api/event/{id}/update', 'Events@update');
+Route::post('/api/event/{id}/{userId}', 'Events@register');
 Route::delete('/api/event/{id}', 'Events@destroy');

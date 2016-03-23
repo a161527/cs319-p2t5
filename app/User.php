@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'id',
         'firstName',
@@ -19,4 +22,6 @@ class User extends Model
     public function account() {
         return $this->hasOne('App\Models\Account', 'id', 'accountID');
     }
+
+    protected $dates = ['deleted_at'];
 }
