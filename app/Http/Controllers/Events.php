@@ -16,7 +16,7 @@ use App\Http\Controllers\Controller;
 use App\Utility\RoleCreate;
 use App\Utility\PermissionNames;
 use App\Utility\RoleNames;
-use Config;
+use App\Utility\CheckDependents;
 
 class Events extends Controller {
 
@@ -49,11 +49,23 @@ class Events extends Controller {
             return response("No conference for id {$conferenceID}.", 405);
         }
 
-        $event = Event::where('conferenceID', $conferenceID)->get();
-        if (count($event) == 0) {
+        //Select events, populate with "attendees" so we can calculate the
+        //remaining capacity
+        $event = Event::with("attendees")
+                    ->where('conferenceID', $conferenceID)->get();
+
+        $evtArray = $event->toArray();
+
+        foreach ($evtArray as &$e) {
+            echo "\n" . $e['eventName'] . ": " .  sizeof($e['attendees']);
+            $e['remainingCapacity'] = $e['capacity'] - sizeof($e['attendees']);
+            unset($e['attendees']);
+        }
+
+        if (sizeof($evtArray) == 0) {
             return response("No events for conferenceID {$conferenceID}.", 404);
         }
-        return $event;
+        return $evtArray;
     }
 
     private function validateEventInput($req) {
@@ -164,33 +176,59 @@ class Events extends Controller {
         return response()->json(['id' => $event->id]);
     }
 
+    private function validateInputIDs($req) {
+        $this->validate($req, [
+            "ids" => "idarray|required"
+        ]);
+    }
+
+    private function checkConferenceAttendees($eventId, $userIds) {
+        //Select event with conference.attendees populated, but only
+        //populate with attendees of the conference within our ID list
+        $withAttendees = Event::where("id", $eventId)
+                ->with([
+                    "conference.attendees" => function($query) use ($userIds) {
+                        $query->whereIn("userID", $userIds);
+                    }])->get()->first();
+        return sizeof($withAttendees->conference->attendees);
+    }
+
     /**
      * Register the user given the userID to the event given the eventID.
      * @param  int  $id, int $eventId
      * @return Response
      */
-    public function register($id, $userId) {
+    public function register(Request $req, $id) {
         $event = Event::find($id);
         if (is_null($event)) {
-            return response("No event for id {$id}.", 404);
+            return response()->json(["message"=>"no_such_event"], 404);
         }
 
-        $user = User::find($userId);
-        if (is_null($user)) {
-            return response("No user for id {$userId}.", 405);
+        $this->validateInputIDs($req);
+
+        $idList = $req->input('ids');
+        if (!CheckDependents::dependentsOkay($idList)) {
+            return response()->json(["message"=>"bad_dependents"], 400);
         }
 
-        $eventUser = UserEvent::where('eventID','=',$id)->where('userID','=',$userId)->get();
+        if(!$this->checkConferenceAttendees($id, $idList)) {
+            return response()->json(["message"=>"not_in_conference"], 400);
+        }
+
+        $eventUser = UserEvent::where('eventID', $id)
+                        ->whereIn('userID',$idList)->get();
         if (count($eventUser) > 0) {
-            return response("userId {$userId} already registered for event id {$id}.", 406);
+            return response()->json(["message"=>"already_registered"], 400);
         }
 
-        $userEvent = new UserEvent;
-        $userEvent->userID = $userId;
-        $userEvent->eventID = $id;
-        $userEvent->save();
-
-        return response()->json(['id' => $userEvent->id]);
+        $data = array_map(
+            function ($userId) use ($id){
+                return ["userID" => $userId, "eventID" => $id];
+            },
+            $idList);
+        UserEvent::insert($data);
+        return UserEvent::select(["id", "userID"])
+                    ->whereIn("userID", $idList)->get();
     }
 
 }
