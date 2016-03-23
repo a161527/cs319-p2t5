@@ -101,7 +101,7 @@
 			}
 
 			$scope.removeMessage = function() {
-				$scope.noSelection = false
+				$scope.showError = false
 			}
 
 		})

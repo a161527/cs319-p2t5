@@ -11,12 +11,26 @@
 				ng-repeat='res in residences'
 				ng-click='getRooms(res.id); $parent.selected = res.id'>
 				<div class='row'>
-					<div class='col-md-4'>
+					<div class='col-sm-4'>
 						<span class='glyphicon glyphicon-home glyphicon-large'></span>
 					</div>
-					<div class='col-md-8'>
-						<div>{{res.name}}</div>
-						<div>{{res.location}}</div>
+					<div class='col-sm-8'>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Name:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{res.name}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Location:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{res.location}}
+							</div>
+						</div>
 					</div>
 				</div>
 			</button>
@@ -31,15 +45,36 @@
 			<div ng-repeat='room in rooms'>
 				<li class='list-group-item unselectable-text'>
 					<div class='row'>
-						<div class='col-md-4'>
+						<div class='col-sm-3'>
 							<span class='glyphicon glyphicon-bed glyphicon-large'></span>
 						</div>
-						<div class='col-md-4'>
-							<div>{{room.type.name}}</div>
-							<div>{{room.type.accessible | yesNo}}</div>
-							<div>{{room.type.capacity}}</div>
+						<div class='col-sm-6'>
+							<div class='row'>
+								<div class='col-sm-6'>
+									<b>Name:</b>
+								</div>
+								<div class='col-sm-6'>
+									{{room.type.name}}
+								</div>
+							</div>
+							<div class='row'>
+								<div class='col-sm-6'>
+									<b>Accessible:</b>
+								</div>
+								<div class='col-sm-6'>
+									{{room.type.accessible | yesNo}}
+								</div>
+							</div>
+							<div class='row'>
+								<div class='col-sm-6'>
+									<b>Capacity:</b>
+								</div>
+								<div class='col-sm-6'>
+									{{room.type.capacity}}
+								</div>
+							</div>
 						</div>
-						<div class='col-md-4'>
+						<div class='col-sm-3'>
 							<button class='btn btn-primary btn-lg pull-right'
 								ng-click='assign(room)'>
 								<span class='glyphicon glyphicon-check'></span> Assign</button>
