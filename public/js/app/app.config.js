@@ -211,6 +211,35 @@
 					templateUrl: 'js/inventory/inventory.view.request.html',
 					controller: 'requestInventoryCtrl'
 				})
+
+				/*
+				ROOMS
+				*/
+
+				.state('dashboard.conferences.room-allocate', {
+					url: '/allocate-room/?:cid',
+					templateUrl: 'js/rooms/rooms.view.html',
+					controller: 'AllocateRoomsCtrl',
+					resolve: {
+						roomDependents: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/residences/assign/missing')
+						}
+					}
+				})
+
+				.state('dashboard.conferences.room-allocate.2', {
+					url: '',
+					templateUrl: 'js/rooms/rooms.view.roomList.html',
+					controller: 'ResidenceSelectCtrl',
+					params: {
+						selectedDependents: null
+					},
+					resolve: {
+						residences: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/residences')
+						}
+					}
+				})
 		})
 
 })()
