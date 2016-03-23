@@ -2,12 +2,9 @@
 	'use strict'
 
 	angular.module('conferenceRegistration')
-		.controller('conferenceRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat, $uibModal) {
+		.controller('conferenceRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat, dependents, $uibModal) {
 
-			$scope.dependents = {'2': {firstname: 'Uncle', lastname: 'Jimmy Joe', id: '2'}, 
-			'3':{firstname: 'Billy', lastname: 'from the Jungles of Vancouver', id: '3'},
-			'4':{firstname: 'Kevin', lastname: '', id: '4'}
-			}
+			$scope.dependents = dataFormat.dependentsFormat(dependents.data.dependents, 'id')
 
 			//a new dependents object created so modifications can be made without affecting original object
 			$scope.selectDependents = {}
@@ -259,7 +256,7 @@
 					openModal()
 
 				}, function(resData) {
-					
+
 					$scope.showSubmitError = true
 
 				})

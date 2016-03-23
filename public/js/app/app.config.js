@@ -142,7 +142,12 @@
 					url: '/conferenceRegistration/?:cid',
 					abstract: true,
 					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.html',
-					controller: 'conferenceRegistrationCtrl'
+					controller: 'conferenceRegistrationCtrl',
+					resolve: {
+						dependents: function($http, loginStorage) {
+							return $http.get('api/accounts/' + loginStorage.getId() + '/dependents')
+						}
+					}
 				})
 
 				.state('dashboard.conferences.registration.1', {
