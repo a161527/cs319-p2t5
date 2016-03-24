@@ -45,7 +45,7 @@
 
 		})
 
-		.controller('ResidenceSelectCtrl', function($scope, $http, $stateParams, $state, $uibModal, residences) {
+		.controller('ResidenceSelectCtrl', function($scope, $http, $stateParams, $state, modal, residences) {
 
 			$scope.residences = residences.data
 			$scope.rooms = []
@@ -75,7 +75,9 @@
 				var route = 'api/conferences/' + $stateParams.cid + '/residences/assign'
 
 				$http.post(route, {registrations: dependents, roomSet: room.id}).then(function(data) {
-					openModal()
+					modal.open('Successfully assigned users', function() {
+						$state.go('dashboard.conferences.room-allocate', null, { reload: true })
+					})
 
 				}, function(resData) {
 					
@@ -83,27 +85,6 @@
 					$scope.errorMessage = resData.data.message
 					$scope.showError = true
 
-				})
-
-			}
-
-			var openModal = function() {
-
-				var modal = $uibModal.open({
-					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.modalConfirm.html',
-					controller: function($scope, $uibModalInstance) {
-
-						$scope.ok = function() {
-							$uibModalInstance.close()
-						}
-
-					}
-				})
-
-				modal.result.then(function () {
-					$state.go('dashboard.conferences.room-allocate', null, { reload: true })
-				}, function () {
-					
 				})
 
 			}

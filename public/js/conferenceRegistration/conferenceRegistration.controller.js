@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('conferenceRegistration')
-		.controller('conferenceRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat, dependents, $uibModal) {
+		.controller('conferenceRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat, modal, dependents) {
 
 			$scope.dependents = {}
 			var fullDepList = dataFormat.dependentsFormat(dependents.data.dependents, 'id')
@@ -263,7 +263,9 @@
 				$scope.showSubmitError = false
 				ajax.serviceCall('Submitting...', 'post', 'api/conferences/' + $stateParams.cid + '/register', $scope.formattedData).then(function(resData) {
 
-					openModal()
+					modal.open('Registration Successful', function() {
+						$state.go('dashboard.conferences.list')
+					})
 
 				}, function(resData) {
 
@@ -288,27 +290,6 @@
 				}
 
 				return selected
-			}
-
-			var openModal = function() {
-
-				var modal = $uibModal.open({
-					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.modalConfirm.html',
-					controller: function($scope, $uibModalInstance) {
-
-						$scope.ok = function() {
-							$uibModalInstance.close()
-						}
-
-					}
-				})
-
-				modal.result.then(function () {
-					$state.go('dashboard.conferences.list')
-				}, function () {
-					
-				})
-
 			}
 
 		})
