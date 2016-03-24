@@ -25,12 +25,11 @@
 				var data = formatData()
 				console.log(data)
 				ajax.serviceCall('Creating Account...', 'post', 'api/register', data).then(function(resData) {
-					console.log(resData)
+					accountCredentials.resetAll()
+					$state.go('login')
 				}, function(resData) {
 					console.log(resData)
 				})
-				// accountCredentials.resetAll()
-				// $state.go('login')
 			}
 
 			var formatData = function() {
@@ -118,6 +117,10 @@
 			$scope.nextStep = function(form, toState, set, model) {
 				accountCredentials.setTransfer($scope.transfer)
 				accountCredentials.setEmailAvailable($scope.emailAvailable)
+
+				if (toState === '4') {
+					accountCredentials.setFormattedData(formatData())
+				}
 				
 				if (model === 'dependents') {
 					
@@ -126,9 +129,7 @@
 				}
 
 				else if (form.$valid && $scope.emailAvailable) {
-					if (toState === '4') {
-						accountCredentials.setFormattedData(formatData())
-					}
+					
 					onNavigate(toState, set, model)
 				}
 

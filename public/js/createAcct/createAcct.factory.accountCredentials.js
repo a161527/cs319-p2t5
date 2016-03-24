@@ -53,6 +53,8 @@
 					_accountInfo = null
 					_contact = null
 					_transfer = false
+					_formattedData = null
+					_emailAvailable = false
 				}
 			}
 

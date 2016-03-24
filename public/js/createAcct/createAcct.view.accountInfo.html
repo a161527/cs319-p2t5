@@ -15,7 +15,14 @@
 						<div class='form-group' ng-class='{"has-error": !createAcctForm.email.$valid && createAcctForm.email.$dirty || !emailAvailable && showAvailMsg, "has-success": emailAvailable && createAcctForm.email.$dirty && showAvailMsg}'>
 							<label for='email'>Email</label>
 
-							<input type='email' ng-model-options='{updateOn: "blur"}' ng-model='createAcct.email' ng-change='checkEmailAvail(createAcctForm.email, createAcct.email); checkMatch(createAcctForm.confirmEmail, createAcct.email, createAcct.confirmEmail)' class='form-control' id='email' name='email' required>
+							<input type='text' 
+									ng-model-options='{updateOn: "blur"}' 
+									ng-model='createAcct.email' 
+									ng-change='checkEmailAvail(createAcctForm.email, createAcct.email); checkMatch(createAcctForm.confirmEmail, createAcct.email, createAcct.confirmEmail)' class='form-control' 
+									id='email' 
+									name='email' 
+									ng-pattern='/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/' 
+									required>
 
 							<div class='alert alert-success' ng-show='emailAvailable && createAcctForm.email.$dirty && showAvailMsg'><span class="glyphicon glyphicon-ok"></span> Email is available</div>
 
@@ -23,7 +30,7 @@
 								Email is already in use
 							</error-message>
 
-							<error-message ng-show='createAcctForm.email.$error.email && !createAcctForm.email.$error.required'>
+							<error-message ng-show='createAcctForm.email.$error.pattern && !createAcctForm.email.$error.required'>
 								Not a valid email
 							</error-message>
 
