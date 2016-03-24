@@ -24,13 +24,40 @@ class RoleCreate {
         return array_map(function ($p) {return self::createPermission($p);}, $permissionNames);
     }
 
-    public static function ConferenceManager($confId) {
+    private static function findPermissions($permissionNames) {
+        return Permission::whereIn("name", $permissionNames)->get();
+    }
+
+    public static function AllConferenceRoles($confId) {
         return DB::transaction(function() use ($confId) {
             $permissionList = PermissionNames::AllConferencePermissions($confId);
 
             $permissions = self::createAllPermissions($permissionList);
 
-            $rolename = RoleNames::ConferenceManager($confId);
+            $managerRoleId = self::ConferenceManager($confId);
+            return $managerRoleId;
+        });
+    }
+
+    public static function ConferenceManager($confId) {
+        $permissions = self::findPermissions(PermissionNames::AllConferencePermissions($confId));
+        $rolename = RoleNames::ConferenceManager($confId);
+
+        $role = new Role;
+        $role->name = $rolename;
+        $role->save();
+        $role->attachPermissions($permissions);
+
+        return $role;
+    }
+
+    public static function EventManager($eventId) {
+        return DB::transaction(function() use ($eventId) {
+            $permissionList = PermissionNames::AllEventPermissions($eventId);
+
+            $permissions = self::createAllPermissions($permissionList);
+
+            $rolename = RoleNames::EventManager($eventId);
 
             $role = new Role;
             $role->name = $rolename;
@@ -40,23 +67,4 @@ class RoleCreate {
             return $role;
         });
     }
-
-    public static function EventManager($eventId) {
-    return DB::transaction(function() use ($eventId) {
-    $permissionList = [PermissionNames::EventInfoEdit($eventId),
-                       PermissionNames::EventDetailView($eventId),
-                       PermissionNames::EventAnnounce($eventId)];
-
-    $permissions = self::createAllPermissions($permissionList);
-
-    $rolename = RoleNames::EventManager($eventId);
-
-    $role = new Role;
-    $role->name = $rolename;
-    $role->save();
-    $role->attachPermissions($permissions);
-
-    return $role;
-    });
-}
 }

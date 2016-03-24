@@ -100,6 +100,10 @@ class ConferenceTest extends TestCase
     public function testGetPermissions() {
         $this->get("/api/conferences/1/permissions");
         $result = json_decode($this->response->getContent());
-        $this->assertArraySubset(["conference-event-create", "conference-registration-approval", "conference-info-edit"], $result);
+        $expected = ["conference-event-create", "conference-registration-approval", "conference-info-edit"];
+
+        foreach ($expected as $exp) {
+            $this->assertContains($exp, $result);
+        }
     }
 }
