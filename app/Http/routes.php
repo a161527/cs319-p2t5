@@ -120,5 +120,5 @@ Route::get('/api/event/{id?}', 'Events@index');
 Route::get('/api/event/conference/{id?}', 'Events@getEventByConferenceID');
 Route::post('/api/event/{id}', 'Events@store');
 Route::post('/api/event/{id}/update', 'Events@update');
-Route::post('/api/event/{id}/{userId}', 'Events@register');
+Route::post('/api/event/{id}/register', 'Events@register');
 Route::delete('/api/event/{id}', 'Events@destroy');

@@ -17,4 +17,8 @@ class Conference extends Model
         'description',
         'hasTransportation',
         'hasAccommodations'];
+
+    public function attendees() {
+        return $this->hasMany("App\UserConference", "conferenceID", "id");
+    }
 }
