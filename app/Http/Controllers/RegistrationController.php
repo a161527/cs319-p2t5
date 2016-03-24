@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
+use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Logging\Log;
 use DB;
+use Hash;
 
 class RegistrationController extends Controller
 {
@@ -31,9 +33,7 @@ class RegistrationController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('jwt.auth', ['except' => ['authenticate', 'token']]);
-        // provides an authorization header with each response
-        // $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token']]);
+        //
     }
 
     /**
@@ -56,13 +56,12 @@ class RegistrationController extends Controller
     protected function userValidator($data)
     {
         // TODO: make rules same as front-end validation
-        $users = json_decode($data["dependents"]);
+        $users = $data["dependents"];
         $validator = Validator::make($users, [
             '*.firstName' => 'required',
             '*.lastName' => 'required',
             '*.dateOfBirth' => 'required',
-            '*.gender' => 'required',
-            '*.accountID' => 'required'
+            '*.gender' => 'required|in:male,female,Male,Female,M,F'
         ]);
 
         return $validator;
@@ -77,18 +76,29 @@ class RegistrationController extends Controller
         $account->email = $request->email;
         $account->password = Hash::make($request->password);
         $account->save();
+        return $account->id;
     }
 
     /**
      * Create a new user instance after a valid registration.
      */
-    protected function createUsers(Request $request)
+    protected function createUsers(Request $request, $id)
     {
-        $users = json_decode($request->all()['dependents']);
+        $users = $request->all()["dependents"];
         foreach ($users as $u)
         {
             $user = new User();
-            $user->name = $u->name;
+            $user->firstName = $u["firstName"];
+            $user->lastName = $u["lastName"];
+            $user->gender = $u["gender"];
+            $user->dateOfBirth = $u["dateOfBirth"];
+            $user->accountID = $id;
+            $user->approved = 0;
+            if (isset($u["location"]))
+                $user->location = $u["location"];
+            if (isset($u["notes"]))
+                $user->location = $u["notes"];
+            $user->save();
         }
     }
 
@@ -103,11 +113,11 @@ class RegistrationController extends Controller
                 try 
                 {
                     DB::beginTransaction();
-                    $this->createAccount($request);
-                    $this->createUsers($request);
+                    $id = $this->createAccount($request);
+                    $this->createUsers($request, $id);
                 } catch (\Exception $e) {
                     DB::rollback();
-                    return response()->json(['message' => 'db_error', 'errors' => $e.errors()], 500);
+                    return response()->json(['message' => 'insert_error', 'errors' => $e->getMessage()], 500);
                 }
                 DB::commit();
                 return response()->json(['message' => 'account_created']);
