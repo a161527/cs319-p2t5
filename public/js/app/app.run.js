@@ -11,7 +11,7 @@
 				//dashboard is the only state that requires login
 				if (parentState === 'dashboard') {
 
-					if (!loginStorage.getAuthToken() || !loginStorage.getEmail()) {
+					if (!loginStorage.getAuthToken() || !loginStorage.getCreds()) {
 
 						e.preventDefault()
 						loginStorage.logout()
@@ -22,7 +22,7 @@
 				//if credentials are valid, go to dashboard
 				} else if (parentState === 'login') {
 
-					if (loginStorage.getAuthToken() && loginStorage.getEmail()) {
+					if (loginStorage.getAuthToken() && loginStorage.getCreds()) {
 
 						e.preventDefault()
 						$state.go('dashboard')

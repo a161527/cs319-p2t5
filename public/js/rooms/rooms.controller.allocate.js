@@ -11,7 +11,7 @@
 			$scope.selectedDependents = []
 
 			if (roomDependents.data.length !== 0) {
-				$scope.dependents = dataFormat.dependentsFormat(roomDependents.data)
+				$scope.dependents = dataFormat.dependentsFormat(roomDependents.data, 'userID')
 			}
 
 			//Select all checkboxes

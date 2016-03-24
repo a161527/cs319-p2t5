@@ -16,10 +16,10 @@
 				return moment(time).format('hh:mm:ss')
 			}
 
-			this.dependentsFormat = function(dependentsList) {
+			this.dependentsFormat = function(dependentsList, id) {
 				var obj = {}
 				angular.forEach(dependentsList, function(dep) {
-					obj[dep.userID] = dep
+					obj[dep[id]] = dep
 				})
 				return obj
 			}
