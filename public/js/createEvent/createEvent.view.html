@@ -1,0 +1,76 @@
+<div class='container'>
+    <br>
+    <div class='row'>
+        <div class='col-md-offset-3 col-md-6'>
+            <h4>Event Information</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form name='createEventForm' novalidate>
+                        <div ng-model='eventInfo'>
+                            <div class='row'>
+                                <div class='col-sm-12'>
+                                    <input-with-validation model='eventName' validation='createEventForm' identifier='eventName' inp-type='text'>Event Name</input-with-validation>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col-sm-12'>
+                                    <label for='description'>Description (optional) </label>
+                                    <textarea class='form-control' ng-model='description' rows='3' id='description' name='description'></textarea>
+                                </div>
+                            </div>
+                            <br>
+                            <div class='row'>
+                                <div class='col-sm-6'>
+                                    <date-picker-input model='date' validation='createEventForm' identifier='date' label='Date'><date-picker-input>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col-sm-6'>
+                                	<timepicker-with-validation model='start' label='Start Time' identifier='start' validation='createEventForm'></time-picker-with-validation>
+                                </div>
+                                <div class='col-sm-6'>
+                                	<timepicker-with-validation model='end' label='End Time' identifier='end' validation='createEventForm'></time-picker-with-validation>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col-sm-12'>
+                                    <input-with-validation model='location' validation='createEventForm' identifier='location' inp-type='text'>Location</input-with-validation>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col-sm-12'>
+                                    <div class='form-group' ng-class='{"has-error": !createEventForm.capacity.$valid && createEventForm.capacity.$dirty}'>
+                                        <label>Capacity</label>
+
+                                        <input type='text' ng-model-options='{updateOn: "blur"}' 
+                                            ng-model='capacity' 
+                                            class='form-control' 
+                                            ng-pattern='/^\d+$/'
+                                            name='capacity' required>
+
+                                        <error-message ng-show='createEventForm.capacity.$error.pattern && !createEventForm.capacity.$error.required'>
+                                            Input must be a non-negative integer
+                                        </error-message>
+
+                                        <error-message ng-show='createEventForm.capacity.$error.required && createEventForm.capacity.$dirty'>
+                                            Capacity is required
+                                        </error-message>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class='row'>
+                <div class='col-xs-6'>
+                    <button class='btn btn-default btn-block' ng-click='cancel()'>Cancel</button>
+                </div>
+                <div class='col-xs-6'>
+                    <button class='btn btn-primary btn-block' ng-click='createEvent(createEventForm)'>Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

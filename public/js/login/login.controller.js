@@ -16,7 +16,7 @@
 					ajax.login($scope.credentials).then(function(resData) {
 
 						loginStorage.storeCreds($scope.credentials.email, resData.data.accountID)
-						$state.go('dashboard')
+						$state.go('dashboard.home')
 
 					}, function(resData) {
 
