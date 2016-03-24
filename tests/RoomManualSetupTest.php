@@ -53,26 +53,11 @@ class RoomManualSetupTest extends TestCase
             ]
         ];
 
-        $this->json('POST', '/api/conferences/1/residences/1/rooms', $data);
+        $this->json('POST', '/api/conferences/1/residences/1/roomSets', $data);
         $id = $this->assertGetResponseID();
         $data['type']['id'] = json_decode($this->response->getContent())->typeID;
 
-        $this->get("/api/conferences/1/residences/1/rooms")
-             ->seeJson($data);
-
-
-        $data = [
-            "rangeStart" => 20,
-            "rangeEnd" => 29,
-            "typeID" => 3,
-        ];
-
-        $this->json('POST', '/api/conferences/1/residences/2/rooms', $data);
-        $id = $this->assertGetResponseID();
-        unset ($data["typeID"]);
-        $data["type"] = ["id" => 3, "name" => "TypeA-R2", "accessible"=>1,"capacity"=>4];
-
-        $this->get("/api/conferences/1/residences/2/rooms")
+        $this->get("/api/conferences/1/residences/1/roomSets")
              ->seeJson($data);
     }
 
