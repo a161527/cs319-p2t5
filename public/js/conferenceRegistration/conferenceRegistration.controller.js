@@ -174,7 +174,7 @@
 			}
 
 			$scope.cancel = function() {
-				$state.go('dashboard.conferences')
+				$state.go('dashboard.conferences.list')
 			}
 
 
@@ -255,7 +255,7 @@
 			$scope.submit = function() {
 				$scope.showSubmitError = false
 				ajax.serviceCall('Submitting...', 'post', 'api/conferences/' + $stateParams.cid + '/register', $scope.formattedData).then(function(resData) {
-					
+
 					openModal()
 
 				}, function(resData) {
@@ -297,9 +297,9 @@
 				})
 
 				modal.result.then(function () {
-					$state.go('dashboard.conferences')
+					$state.go('dashboard.conferences.list')
 				}, function () {
-					$state.go('dashboard.conferences')
+					
 				})
 
 			}
