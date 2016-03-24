@@ -54,8 +54,10 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
     });
 });
 
-Route::group(['prefix' => '/api/permissions'], function() {
+Route::group(['prefix' => '/api/roles'], function() {
     Route::get('/user/{userMail}', 'PermissionsController@listUserRoles');
+    Route::patch('/user/{userMail}', 'PermissionsController@changeUserPermissions');
+    Route::get('/assignable', 'PermissionsController@listAssignableRoles');
 });
 
 Route::get('/', function()
