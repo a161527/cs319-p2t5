@@ -102,7 +102,7 @@ class MainController extends Controller
             $this->assignInputToConference($req, $conf);
             $conf->save();
 
-            $role = RoleCreate::ConferenceManager($conf->id);
+            $role = RoleCreate::AllConferenceRoles($conf->id);
             $user = Auth::user();
             $user->attachRole($role);
 
@@ -175,15 +175,11 @@ class MainController extends Controller
     private function buildPermissionList($confId) {
          $permissions = [];
 
-         $this->checkAddPermission(
-             PermissionNames::ConferenceEventCreate($confId),
-             $permissions);
-         $this->checkAddPermission(
-             PermissionNames::ConferenceRegistrationApproval($confId),
-             $permissions);
-         $this->checkAddPermission(
-             PermissionNames::ConferenceInfoEdit($confId),
-             $permissions);
+         foreach (PermissionNames::AllConferencePermissions($confId) as $pname) {
+            $this->checkAddPermission(
+                $pname,
+                $permissions);
+         }
          return $permissions;
     }
 

@@ -17,6 +17,7 @@ use App\UserConference;
 use Auth;
 use Entrust;
 use App\Utility\PermissionNames;
+use App\Utility\CheckDependents;
 
 use App\Jobs\RegistrationFlightAggregator;
 
@@ -36,19 +37,6 @@ class RegistrationController extends Controller
 
     public function __construct() {
         $this->middleware('jwt.auth');
-    }
-
-    //Checks whether the list of dependents is valid for the user specified by
-    //accountID.  (This essentially means checking whether the dependents are associated
-    //with that account)
-    private function dependentsAreOkay($accountID, $dependentIDList) {
-        $matchCount =
-            User::whereIn('id', $dependentIDList)
-                ->where(function ($query) use ($accountID) {
-                    $query->where('accountId', '<>', $accountID)
-                          ->orWhere('approved', 'false');
-                })->count();
-        return $matchCount == 0;
     }
 
     /*
@@ -91,7 +79,7 @@ class RegistrationController extends Controller
             $attendees = $req['attendees'];
 
             //Check whether dependents are okay/owned by the current user
-            if(!$this->dependentsAreOkay($accountID, $attendees)) {
+            if(!CheckDependents::dependentsOkay($attendees)) {
                 return ["message" => "Dependent(s) not owned by user or currently unapproved", "code" => 400, "attendees" => $attendees];
             }
 
