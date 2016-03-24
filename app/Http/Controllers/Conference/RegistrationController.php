@@ -189,7 +189,7 @@ class RegistrationController extends Controller
 
         $success = DB::transaction(function () use ($conferenceID, $requestID) {
             $conference = UserConference::find($requestID);
-            if ($conferenceID != $conference->conferenceID) {
+            if(!isset($conference) || $conferenceID != $conference->conferenceID) {
                 return false;
             }
             //Set conference attendance to approved

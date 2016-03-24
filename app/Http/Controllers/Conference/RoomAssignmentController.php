@@ -21,10 +21,17 @@ class RoomAssignmentController extends Controller
         $this->middleware('jwt.auth');
     }
 
+    private function findRoomUsers($resId, $roomName) {
+        return UserRoom::where('roomName', $roomName)
+            ->whereHas("roomSet", function ($query) use ($resId) {
+                $query->where("residenceID", $resId);
+            })->with('registration.user')->get();
+    }
+
     private function validateAssignmentRequest($req) {
         $this->validate($req, [
-            'registrations.*.id' => 'numeric|required',
-            'registrations.*.roomName' => 'string|required',
+            'registrationIds' => 'idarray|required',
+            'roomName' => 'string|required',
             'roomSet' => 'numeric|required'
         ]);
     }
@@ -35,18 +42,10 @@ class RoomAssignmentController extends Controller
         }
 
         $this->validateAssignmentRequest($req);
+        $roomName = $req->input('roomName');
+        $registrationIDs = $req->input('registrationIds');
 
-        $roomSet = RoomSet::find($req->input('roomSet'));
-        $capacity = $roomSet->type->capacity - count($roomSet->assignments);
-        $registrations = $req->input('registrations');
-
-        if ($capacity < sizeof($registrations)) {
-            return response()->json(['message'=>'insufficient_capacity'], 400);
-        }
-
-        $registrationIDs = array_map(function($r) {return $r['id'];}, $registrations);
-
-        if(UserConference::whereIn('id', $registrationIDs)->count() != sizeof($registrations)) {
+        if(UserConference::whereIn('id', $registrationIDs)->count() != sizeof($registrationIDs)) {
             return response()->json(['message'=>'nonexistant_registration'], 400);
         }
 
@@ -54,21 +53,38 @@ class RoomAssignmentController extends Controller
             return response()->json(['message'=>'already_assigned'], 400);
         }
 
+        $roomSet = RoomSet::find($req->input('roomSet'));
+
+        $currentUsers = $this->findRoomUsers($roomSet->residenceID, $roomName);
+
+        foreach ($currentUsers as $userRoom) {
+            if ($userRoom->roomSetID != $roomSet->id) {
+                return response()->json(["message"=>'name_not_in_set'], 400);
+            }
+        }
+
+        $capacity = $roomSet->type->capacity - count($currentUsers);
+        $registrations = $req->input('registrations');
+
+        if ($capacity < sizeof($registrations)) {
+            return response()->json(['message'=>'insufficient_capacity'], 400);
+        }
+
         $roomAssignments = [];
 
-        foreach ($registrations as $registration) {
+        foreach ($registrationIDs as $registration) {
             $roomAssignments[] =
                 ['roomSetID' => $roomSet->id,
-                 'registrationID' => $registration['id'],
-                 'roomName' => $registration['roomName']];
+                 'registrationID' => $registration,
+                 'roomName' => $roomName];
         }
 
         UserRoom::insert($roomAssignments);
 
-        return UserRoom::whereIn('registrationID', $registrationIDs)->select('id')->get();
+        return UserRoom::whereIn('registrationID', $registrationIDs)->where('roomSetID', $roomSet->id)->select('id', 'registrationID')->get();
     }
 
-    public function getRoomUsers($confId, $resId, $roomId) {
+    public function getRoomUsers($confId, $resId, $roomName) {
         if(!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
             return response("", 403);
         }
@@ -78,12 +94,7 @@ class RoomAssignmentController extends Controller
             return response("", 404);
         }
 
-        $room = RoomSet::find($roomId);
-        if (is_null($room) || $room->residenceID != $resId) {
-            return response("", 404);
-        }
-
-        return UserRoom::where('roomSetID', $room->id)->with('registration.user')->get();
+        return $this->findRoomUsers($resId,  $roomName);
     }
 
     public function listAssignments(Request $req, $confId) {
@@ -98,7 +109,9 @@ class RoomAssignmentController extends Controller
         } else {
             return UserRoom::whereHas('registration', function($query) use ($confId) {
                 $query->where('conferenceID', $confId);
-                $query->where('userID', Auth::user()->id);
+                $query->whereHas('user', function ($userQuery) {
+                    $userQuery->where("accountID", Auth::user()->id);
+                });
             })->with('registration.user')->get();
         }
     }
@@ -125,5 +138,20 @@ class RoomAssignmentController extends Controller
                 ->has("room", "<", 1)
                 ->with("user")
                 ->get();
+    }
+
+    public function roomsInSet($confId, $setId) {
+        if(!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
+            return response("", 403);
+        }
+
+        $set = RoomSet::with("residence")->find($setId);
+        if (is_null($set) || $set->residence->conferenceID != $confId) {
+            return response()->json(["message" => "no_such_set"], 404);
+        }
+
+        return UserRoom::selectRaw('roomName, count(*) as currentUsers')
+            ->where('roomSetID', $set->id)
+            ->groupBy('roomName')->get();
     }
 }

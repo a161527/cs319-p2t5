@@ -8,4 +8,8 @@ class RoomType extends Model
 {
     protected $fillable = ["name", "capacity", "accessible"];
     public $timestamps = false;
+
+    public function roomSets() {
+        return $this->hasMany("App\RoomSet", "typeID", "id");
+    }
 }

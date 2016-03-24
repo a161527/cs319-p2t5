@@ -31,9 +31,7 @@ class RoomTablesSetup extends Migration
 
         Schema::create('room_sets', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->nullable();
-            $table->integer('rangeStart')->unsigned()->nullable();
-            $table->integer('rangeEnd')->unsigned()->nullable();
+            $table->string('name');
 
             $table->integer('residenceID')->unsigned();
             $table->integer('typeID')->unsigned();

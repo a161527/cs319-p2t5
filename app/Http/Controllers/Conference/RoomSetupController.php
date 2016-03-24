@@ -48,19 +48,18 @@ class RoomSetupController extends Controller
         return response()->json(["id" => $residence->id]);
     }
 
-    public function getResidenceRooms($confId, $residenceId) {
+    public function getResidenceRoomSets($confId, $residenceId) {
         if (!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
             return response("", 403);
         }
 
-        $res = Residence::find($residenceId);
+        $res = Residence::with("roomSets.type")->find($residenceId);
         if (is_null($res) || $res->conferenceID != $confId) {
             return response("", 404);
         }
-        $res->load('roomSets.type');
 
         $result = [];
-        foreach ($res->roomSets()->get() as $roomSet) {
+        foreach ($res->roomSets as $roomSet) {
             $setRepr = ["type" => $roomSet->type->toArray(),
                         "id" => $roomSet->id];
             $setRepr["id"] = $roomSet->id;
@@ -79,11 +78,14 @@ class RoomSetupController extends Controller
         if(!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
             return response("", 403);
         }
-        $res = Residence::find($residenceId);
+        $res = Residence::with("roomSets.roomType")->find($residenceId);
         if (is_null($res) || $res->conferenceID != $confId) {
             return response("", 404);
         }
-        return $res->roomSets->type()->distinct()->get();
+
+        return RoomType::whereHas("roomSets", function ($query) use ($res){
+            $query->where("residenceID", $res->id);
+        })->get();
     }
 
     public function createRoomSet(Request $request, $confId, $residenceId) {

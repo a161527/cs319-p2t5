@@ -35,6 +35,9 @@ class RegistrationFlightAggregator extends Job implements ShouldQueue
         DB::transaction(function() {
             $registration = UserConference::find($this->registrationId);
             $currentFlight = $registration->flight;
+            if (!isset($currentFlight)) {
+                return;
+            }
             $others =
                 Flight::where('flightNumber', $currentFlight->flightNumber)
                 ->where('airline', $currentFlight->airline)
