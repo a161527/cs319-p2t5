@@ -13,6 +13,8 @@ use App\Models\Role;
 
 use App\Utility\PermissionNames;
 
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+
 class PermissionsController extends Controller
 {
     public function __construct() {
@@ -39,7 +41,7 @@ class PermissionsController extends Controller
         return $roleJson;
     }
 
-    public function listUserRoles($email) {
+    public function listAccountRoles($email) {
         if(!Entrust::can(PermissionNames::ManageGlobalPermissions())) {
             return response()->json(["message" => "no_global_permissions_ability"], 403);
         }
@@ -52,19 +54,28 @@ class PermissionsController extends Controller
         return $this->roleListJson($acc->roles);
     }
 
-    private function doUserRoleChange($roleNames, $alterUsing) {
+    private function doAccountRoleChange($roleNames, $alterUsing) {
         $roles = Role::whereIn("name", $roleNames)->get();
         if(count($roles) != sizeof($roleNames)) {
-            return response()->json(["message" => "role_not_found"], 400);
+            return false;
         }
         $alterUsing($roles);
+        return true;
     }
 
-    public function changeUserPermissions(Request $req, $email) {
+    public function changeAccountRoles(Request $req, $email) {
         if(!Entrust::can(PermissionNames::ManageGlobalPermissions())) {
             return response()->json(["message" => "no_global_permissions_ability"], 403);
         }
 
+        try {
+            $this->executeRoleChange($req, $email);
+        } catch(BadRequestHttpException $e) {
+            return response()->json(["message"=> $e->getMessage()], 400);
+        }
+    }
+
+    private function executeRoleChange(Request $req, $email) {
         return DB::transaction(function () use ($email, $req) {
             $acc = Account::with("roles")->where("email", $email)->get()->first();
             if(!isset($acc)) {
@@ -89,11 +100,14 @@ class PermissionsController extends Controller
                         function($name) use ($accRoleNames) {
                             return !in_array($name, $accRoleNames);
                         });
-                $this->doUserRoleChange($add, function($roles) use ($acc) {$acc->attachRoles($roles);});
+                $okay = $this->doAccountRoleChange($add, function($roles) use ($acc) {$acc->attachRoles($roles);});
             }
             if ($req->has("remove")) {
                 $remove = $req->all()["remove"];
-                $this->doUserRoleChange($remove, function($roles) use ($acc) {$acc->detachRoles($roles);});
+                $okay = $this->doAccountRoleChange($remove, function($roles) use ($acc) {$acc->detachRoles($roles);});
+            }
+            if (isset($okay) && !$okay) {
+                throw new BadRequestHttpException("role_not_found");
             }
             return response()->json(["message" => "roles_patched"]);
         });
