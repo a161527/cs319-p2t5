@@ -16,7 +16,7 @@
 					ajax.login($scope.credentials).then(function(resData) {
 
 						loginStorage.storeEmail($scope.credentials.email)
-						$state.go('dashboard')
+						$state.go('dashboard.home')
 
 					}, function(resData) {
 

@@ -44,7 +44,7 @@
 						"</div>" +
 
 						"<error-message ng-show='validation.{{identifier}}.$error.required && validation.{{identifier}}.$dirty'>" +
-							"Birth Date is required" +
+							"Date is required" +
 						"</error-message>" +
 						"<error-message ng-show='!validation.{{identifier}}.$error.required && validation.{{identifier}}.$dirty && validation.{{identifier}}.$invalid'>" +
 							"Date must be in the format 'mm/dd/yyyy'" +

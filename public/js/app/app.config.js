@@ -66,12 +66,27 @@
 					}
 				})
 
+				/* 
+				DASHBOARD TEMPLATE
+				*/
 				.state('dashboard', {
-					url: '/dashboard',
 					templateUrl: 'js/dashboard/dashboard.view.html',
 					controller: 'dashboardCtrl'
 				})
 
+				/*
+				DASHBOARD HOME
+				*/
+				.state('dashboard.home', {
+					url: '/dashboard',
+					templateUrl: 'js/dashboard/dashboard.view.home.html',
+					controller: 'dashboardCtrl'
+				})
+
+
+				/*
+				CONFERENCE LIST
+				*/
 				.state('dashboard.conferences', {
 					url: '/conferences',
 					abstract: true,
@@ -92,6 +107,9 @@
 					}
 				}) 
 
+				/*
+				CONFERENCE MANAGEMENT
+				*/
 				.state('dashboard.conferences.manage', {
 					url: '/manage/?:cid',
 					templateUrl: 'js/conferenceWidget/conferenceWidget.view.html',
@@ -99,10 +117,17 @@
 					resolve: {
 						permissions: function(conferenceList, $stateParams) {
 							return conferenceList.getPermissions($stateParams.cid)
+						},
+						conferenceInfo: function($http, $stateParams) {
+							var conferenceInfo = $http.get('api/conferences/' + $stateParams.cid)
+							return conferenceInfo
 						}
 					}
 				})
 
+				/*
+				CONFERENCE CREATION
+				*/
 				.state('dashboard.conferences.create', {
 					url: '/create',
 					abstract: true,
@@ -240,6 +265,36 @@
 						}
 					}
 				})
+
+				/*
+				EVENT LIST
+				*/
+				.state('dashboard.events', {
+					url: '/dashboard/:cid/events',
+					templateUrl: 'js/eventView/eventView.view.eventList.html',
+					controller: 'eventListCtrl',
+					resolve: {
+						eventData: function(eventList, $q, loginStorage, $stateParams) {
+							return $q.all([
+								eventList.refresh($stateParams.cid),
+								eventList.getPermissions($stateParams.cid)
+							])
+						},
+						conferenceName: function(eventList, $stateParams) {
+							return eventList.getConferenceName($stateParams.cid)
+						}
+					}
+				})
+
+				/*
+				EVENT CREATION
+				*/
+				.state('dashboard.events.create', {
+					url: '/create',
+					templateUrl: 'js/createEvent/createEvent.view.html',
+					controller: 'createEventCtrl'
+				})
+				
 		})
 
 })()
