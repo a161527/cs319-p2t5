@@ -4,7 +4,17 @@
 	angular.module('conferenceRegistration')
 		.controller('conferenceRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat, dependents, $uibModal) {
 
-			$scope.dependents = dataFormat.dependentsFormat(dependents.data.dependents, 'id')
+			$scope.dependents = {}
+			var fullDepList = dataFormat.dependentsFormat(dependents.data.dependents, 'id')
+
+			angular.forEach(fullDepList, function(dep) {
+				if (dep.approved) {
+					$scope.dependents[dep.id] = dep
+				}
+				if (Object.keys($scope.dependents).length === 0) {
+					$scope.dependents = null
+				}
+			})
 
 			//a new dependents object created so modifications can be made without affecting original object
 			$scope.selectDependents = {}

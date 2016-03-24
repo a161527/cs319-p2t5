@@ -11,12 +11,6 @@
 			$scope.invalidAge = false
 			$scope.formattedData = accountCredentials.getFormattedData() || {}
 
-			// $http.post('api/register', {email: 'foo@foo.com', password: 'secret', password_confirmation: 'secret'}).then(function() {
-
-			// }, function(data) {
-			// 	console.log(data)
-			// })
-
 			//Need this to show message in sync with ajax call for check email
 			$scope.showAvailMsg = false
 			$scope.emailAvailable = accountCredentials.getEmailAvailable() || false
