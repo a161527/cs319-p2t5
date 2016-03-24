@@ -88,9 +88,15 @@
 				CONFERENCE LIST
 				*/
 				.state('dashboard.conferences', {
-					url: '/dashboard/conferences',
+					url: '/conferences',
+					abstract: true,
+					template: '<div ui-view></div>'
+				})
+
+				.state('dashboard.conferences.list', {
 					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
 					controller: 'conferenceListCtrl',
+					url: '/list',
 					resolve: {
 						conferenceData: function(conferenceList, $q, loginStorage) {
 							return $q.all([
@@ -99,7 +105,7 @@
 							])
 						}
 					}
-				})
+				}) 
 
 				/*
 				CONFERENCE MANAGEMENT
@@ -181,6 +187,43 @@
 				})
 
 
+				//Expects conference object
+				.state('dashboard.conferences.registrationDetails', {
+					url: '/details/?:cid',
+					templateUrl: 'js/conferenceRegistrationDetails/conferenceRegistrationDetails.view.html',
+					controller: 'conferenceRegistrationDetailsCtrl',
+					params: {
+						conference: null
+					},
+					resolve: {
+						confDetails: function($stateParams, $http, $q) {
+							
+							//If the object is already passed, no need to make api call
+							if ($stateParams.conference) {
+
+								//match object from api call by setting data field
+								return $q.resolve({data: $stateParams.conference})
+
+							} else {
+								return $http.get('api/conferences/' + $stateParams.cid + '?includePermissions=1&includeRegistration=1')
+							}
+
+						},
+						regDetails: function($stateParams, $http, $q, confDetails) {
+
+							var promises = []
+							angular.forEach(confDetails.data.registered, function(reg) {
+								promises.push($http.get('api/conferences/' + $stateParams.cid + '/register/' + reg.id))
+							})
+
+							return $q.all(promises)
+
+						}
+
+					}
+				})
+
+
 				/*
 				INVENTORY
 				*/
@@ -188,6 +231,35 @@
 					url: '/requestInventory',
 					templateUrl: 'js/inventory/inventory.view.request.html',
 					controller: 'requestInventoryCtrl'
+				})
+
+				/*
+				ROOMS
+				*/
+
+				.state('dashboard.conferences.room-allocate', {
+					url: '/allocate-room/?:cid',
+					templateUrl: 'js/rooms/rooms.view.html',
+					controller: 'AllocateRoomsCtrl',
+					resolve: {
+						roomDependents: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/residences/assign/missing')
+						}
+					}
+				})
+
+				.state('dashboard.conferences.room-allocate.2', {
+					url: '',
+					templateUrl: 'js/rooms/rooms.view.roomList.html',
+					controller: 'ResidenceSelectCtrl',
+					params: {
+						selectedDependents: null
+					},
+					resolve: {
+						residences: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/residences')
+						}
+					}
 				})
 		})
 

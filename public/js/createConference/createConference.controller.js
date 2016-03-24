@@ -73,7 +73,7 @@
 
 			$scope.cancel = function() {
 				conferenceFields.resetAll()
-				$state.go('dashboard.conferences')
+				$state.go('dashboard.conferences.list')
 			}
 
 			$scope.back = function(toState, set, model) {
