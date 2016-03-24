@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('rooms')
-		.controller('AllocateRoomsCtrl', function($scope, $state, roomDependents, dataFormat) {
+		.controller('AllocateRoomsCtrl', function($scope, $state, $stateParams, roomDependents, dataFormat) {
 
 			$scope.noUsers = (roomDependents.data.length === 0)
 			$scope.dependents = {}
@@ -39,6 +39,10 @@
 				$scope.noSelection = false
 			}
 
+			$scope.cancel = function() {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
+			}
+
 		})
 
 		.controller('ResidenceSelectCtrl', function($scope, $http, $stateParams, $state, $uibModal, residences) {
@@ -47,6 +51,10 @@
 			$scope.rooms = []
 			$scope.errorMessage = null
 			$scope.showError = false
+
+			$scope.back = function() {
+				$state.go('dashboard.conferences.room-allocate', {cid: $stateParams.cid})
+			}
 
 			$scope.getRooms = function(residenceId) {
 				var route = 'api/conferences/' + $stateParams.cid + '/residences/' + residenceId + '/rooms'
