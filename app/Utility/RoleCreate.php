@@ -33,14 +33,19 @@ class RoleCreate {
             $permissionList = PermissionNames::AllConferencePermissions($confId);
 
             $permissions = self::createAllPermissions($permissionList);
+            foreach ($permissions as $p) {
+                $role = new Role;
+                $role->name = $p->name;
+                $role->save();
+                $role->attachPermission($p);
+            }
 
-            $managerRoleId = self::ConferenceManager($confId);
+            $managerRoleId = self::ConferenceManager($confId, $permissions);
             return $managerRoleId;
         });
     }
 
-    public static function ConferenceManager($confId) {
-        $permissions = self::findPermissions(PermissionNames::AllConferencePermissions($confId));
+    public static function ConferenceManager($confId, $permissions) {
         $rolename = RoleNames::ConferenceManager($confId);
 
         $role = new Role;
