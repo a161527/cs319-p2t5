@@ -2,6 +2,8 @@
 
 namespace App\Utility;
 
+use StdClass;
+
 /**
  * Provides functions to get the names for permissions.  This
  * is essentially used to centralize names, and also to avoid issues
@@ -100,7 +102,17 @@ class PermissionNames {
             self::EventAnnounce($evtId)];
     }
 
-    public static function normalizeConferencePermission($permName) {
+    public static function normalizePermissionName($permName) {
         return explode(".", $permName)[0];
+    }
+
+    public static function extractPermissionData($permName) {
+        $perm = new StdClass;
+        $split = explode(".", $permName);
+        $perm->namePart = $split[0];
+        if (isset($split[1])) {
+            $perm->idPart = $split[1];
+        }
+        return $perm;
     }
 }

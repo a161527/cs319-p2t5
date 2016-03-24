@@ -185,7 +185,7 @@ class MainController extends Controller
 
     private function checkAddPermission($pname, &$permList) {
         if (Entrust::can($pname)) {
-            $permList[] = PermissionNames::normalizeConferencePermission($pname);
+            $permList[] = PermissionNames::normalizePermissionName($pname);
         }
     }
 }

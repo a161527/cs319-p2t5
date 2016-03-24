@@ -54,6 +54,10 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
     });
 });
 
+Route::group(['prefix' => '/api/permissions'], function() {
+    Route::get('/user/{userMail}', 'PermissionsController@listUserRoles');
+});
+
 Route::get('/', function()
 {
     // change login.html to whatever the index page for angular will be
