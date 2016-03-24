@@ -12,6 +12,8 @@
 	angular.module('conferenceRegistration', [])
 	angular.module('inventory', [])
 	angular.module('rooms', [])
+	angular.module('eventView', [])
+	angular.module('createEvent', [])
 
 	angular.module('app', [
 		'format',
@@ -25,6 +27,8 @@
 		'createConference',
 		'inventory',
 		'rooms',
+		'eventView',
+		'createEvent',
 		'ui.select',
 		'satellizer',
 		'ui.router',

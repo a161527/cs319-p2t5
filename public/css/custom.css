@@ -88,15 +88,6 @@
     padding-top: 15%;
 }
 
-.logo-footer {
-    width: 10%;
-    height: 5%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    padding-bottom: 10px;
-}
-
 .logo-text {
     text-align: center;
     padding-right: 5px;
@@ -136,4 +127,8 @@ td.uib-day > button {
 
 .navbar-dropdown {
     left: 0 !important;
+}
+
+.review-text {
+    padding-bottom:5px;
 }

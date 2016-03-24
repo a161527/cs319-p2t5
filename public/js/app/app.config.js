@@ -261,6 +261,36 @@
 						}
 					}
 				})
+
+				/*
+				EVENT LIST
+				*/
+				.state('dashboard.events', {
+					url: '/dashboard/:cid/events',
+					templateUrl: 'js/eventView/eventView.view.eventList.html',
+					controller: 'eventListCtrl',
+					resolve: {
+						eventData: function(eventList, $q, loginStorage, $stateParams) {
+							return $q.all([
+								eventList.refresh($stateParams.cid),
+								eventList.getPermissions($stateParams.cid)
+							])
+						},
+						conferenceName: function(eventList, $stateParams) {
+							return eventList.getConferenceName($stateParams.cid)
+						}
+					}
+				})
+
+				/*
+				EVENT CREATION
+				*/
+				.state('dashboard.events.create', {
+					url: '/create',
+					templateUrl: 'js/createEvent/createEvent.view.html',
+					controller: 'createEventCtrl'
+				})
+				
 		})
 
 })()
