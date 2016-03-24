@@ -102,7 +102,7 @@ class MainController extends Controller
             $this->assignInputToConference($req, $conf);
             $conf->save();
 
-            $role = RoleCreate::ConferenceManager($conf->id);
+            $role = RoleCreate::AllConferenceRoles($conf->id);
             $user = Auth::user();
             $user->attachRole($role);
 

@@ -93,6 +93,13 @@ class PermissionNames {
         return "event-announce." . $evtId;
     }
 
+    public static function AllEventPermissions($evtId) {
+        return [
+            self::EventInfoEdit($evtId),
+            self::EventDetailView($evtId),
+            self::EventAnnounce($evtId)];
+    }
+
     public static function normalizeConferencePermission($permName) {
         return explode(".", $permName)[0];
     }

@@ -35,7 +35,7 @@ class ConferenceTableSeeder extends Seeder
         ];
         foreach ($conferences as $conf){
             $c = Conference::create($conf);
-            $role = RoleCreate::ConferenceManager($c->id);
+            $role = RoleCreate::AllConferenceRoles($c->id);
             Account::where('email', 'root@localhost')->get()->first()->attachRole($role);
         }
     }
