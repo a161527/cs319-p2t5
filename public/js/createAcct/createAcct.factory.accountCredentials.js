@@ -9,6 +9,7 @@
 			var _contact = null
 			var _transfer = false
 			var _emailAvailable = false
+			var _formattedData = null
 
 			return {
 				setDependents: function(t) {
@@ -40,6 +41,12 @@
 				},
 				getEmailAvailable:function() {
 					return _emailAvailable
+				},
+				setFormattedData: function(t) {
+					_formattedData = t
+				},
+				getFormattedData: function() {
+					return _formattedData
 				},
 				resetAll: function() {
 					_dependents = null

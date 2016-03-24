@@ -28,18 +28,18 @@
 
 							<div class='row'>
 								<div class='col-md-6'>
-									<input-with-validation model='dependents[idx].firstname' validation='dependentsForm' identifier='firstname{{idx}}' inp-type='text'>First Name</input-with-validation>
+									<input-with-validation model='dependents[idx].firstName' validation='dependentsForm' identifier='firstname{{idx}}' inp-type='text'>First Name</input-with-validation>
 								</div>
 
 								<div class='col-md-6'>
-									<input-with-validation model='dependents[idx].lastname' validation='dependentsForm' identifier='lastname{{idx}}' inp-type='text'>Last Name</input-with-validation>
+									<input-with-validation model='dependents[idx].lastName' validation='dependentsForm' identifier='lastname{{idx}}' inp-type='text'>Last Name</input-with-validation>
 								</div>
 							</div>
 
 							<div class='row'>
 								<div class='col-md-6'>
 
-									<date-picker-input model='dependents[idx].birthdate' validation='dependentsForm' identifier='birthdate{{idx}}' label='Birth Date'><date-picker-input>
+									<date-picker-input model='dependents[idx].dateOfBirth' validation='dependentsForm' identifier='birthdate{{idx}}' label='Birth Date'><date-picker-input>
 
 								</div>
 
@@ -58,12 +58,8 @@
 							</div>
 
 							<div class='row'>
-								<div class='col-md-6'>
-									<input-with-validation model='dependents[idx].city' validation='dependentsForm' identifier='city{{idx}}' inp-type='text'>City</input>
-								</div>
-
-								<div class='col-md-6'>
-									<input-with-validation model='dependents[idx].country' validation='dependentsForm' identifier='country{{idx}}' inp-type='text'>Country</input>
+								<div class='col-md-12'>
+									<input-with-validation model='dependents[idx].location' validation='dependentsForm' identifier='location{{idx}}' inp-type='text'>Location</input>
 								</div>
 							</div>
 
