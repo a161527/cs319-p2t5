@@ -117,6 +117,10 @@
 					resolve: {
 						permissions: function(conferenceList, $stateParams) {
 							return conferenceList.getPermissions($stateParams.cid)
+						},
+						conferenceInfo: function($http, $stateParams) {
+							var conferenceInfo = $http.get('api/conferences/' + $stateParams.cid)
+							return conferenceInfo
 						}
 					}
 				})

@@ -38,8 +38,24 @@
                                 </div>
                             </div>
                             <div class='row'>
-                                <div class='form-group col-sm-12'>
-                                    <input-with-validation model='capacity' validation='createEventForm' identifier='capacity' inp-type='text'>Capacity</input-with-validation>
+                                <div class='col-sm-12'>
+                                    <div class='form-group' ng-class='{"has-error": !createEventForm.capacity.$valid && createEventForm.capacity.$dirty}'>
+                                        <label>Capacity</label>
+
+                                        <input type='text' ng-model-options='{updateOn: "blur"}' 
+                                            ng-model='capacity' 
+                                            class='form-control' 
+                                            ng-pattern='/^\d+$/'
+                                            name='capacity' required>
+
+                                        <error-message ng-show='createEventForm.capacity.$error.pattern && !createEventForm.capacity.$error.required'>
+                                            Input must be a non-negative integer
+                                        </error-message>
+
+                                        <error-message ng-show='createEventForm.capacity.$error.required && createEventForm.capacity.$dirty'>
+                                            Capacity is required
+                                        </error-message>
+                                    </div>
                                 </div>
                             </div>
                         </div>

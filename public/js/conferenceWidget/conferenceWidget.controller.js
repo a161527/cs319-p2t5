@@ -2,17 +2,12 @@
 	'use strict'
 
 	angular.module('conferenceWidget')
-		.controller('conferenceWidgetCtrl', function($scope, $state, $stateParams, permissions, ajax) {
+		.controller('conferenceWidgetCtrl', function($scope, $state, $stateParams, permissions, ajax, conferenceInfo) {
 
 			//Hide all buttons.
 			// $('div[class="col-md-3"]').hide()
 
-			$scope.conferenceName = null
-			ajax.serviceCall('Loading...', 'get', 'api/conferences/' + $stateParams.cid).then(function(resData) {
-				$scope.conferenceName = resData.data.name
-			}, function(resData) {
-				$scope.conferenceName = null
-			})
+			$scope.conferenceName = conferenceInfo.data.name
 
 			var showWidgets = function(list) {
 				list.forEach(function(permission) {
