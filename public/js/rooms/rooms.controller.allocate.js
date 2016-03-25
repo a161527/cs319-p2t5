@@ -48,12 +48,17 @@
 		.controller('ResidenceSelectCtrl', function($scope, $http, $stateParams, $state, $uibModal, residences) {
 
 			$scope.residences = residences.data
+
 			$scope.rooms = []
 			$scope.roomSets = []
+
 			$scope.errorMessage = null
 			$scope.showError = false
+
 			$scope.residence = {name: '', id: null}
 			$scope.roomSet = {name:'', id: null}
+
+			$scope.newRoomNameError = false
 
 			$scope.back = function() {
 				$state.go('dashboard.conferences.room-allocate', {cid: $stateParams.cid})
@@ -105,6 +110,14 @@
 
 				})
 
+			}
+
+			$scope.assignNewRoom = function() {
+				if (!$scope.roomNameAssign) {
+					$scope.newRoomNameError = true
+				} else {
+					$scope.assign()
+				}
 			}
 
 			var formatData = function(room) {
