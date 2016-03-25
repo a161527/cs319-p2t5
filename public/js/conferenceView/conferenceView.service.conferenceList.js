@@ -32,11 +32,13 @@
 					if (_confList) {
 						resolve(checkPermission(_confList, cid))
 					} else {
-						refresh().then(function(resData) {
-							var permissions = checkPermission(resData, cid)
+						var route = 'api/conferences/' + cid + '?includePermissions=1&includeRegistration=1'
+
+						ajax.serviceCall('Loading ...', 'get', route).then(function(resData) {
+							var permissions = resData.data.permissions
 							resolve(permissions)
 						}, function(resData) {
-							reject(resData)
+							reject(null)
 						})
 					}
 				})

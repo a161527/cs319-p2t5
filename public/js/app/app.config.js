@@ -158,8 +158,8 @@
 					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.html',
 					controller: 'conferenceRegistrationCtrl',
 					resolve: {
-						dependents: function($http, loginStorage) {
-							return $http.get('api/accounts/' + loginStorage.getId() + '/dependents')
+						dependents: function(getDependentsService) {
+							return getDependentsService.getApproved()
 						}
 					}
 				})
