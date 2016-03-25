@@ -3,15 +3,15 @@
 
 	angular.module('rooms')
 		.controller('AllocateRoomsCtrl', function($scope, $state, $stateParams, roomDependents, dataFormat) {
-
-			$scope.noUsers = (roomDependents.data.length === 0)
+			
+			$scope.noUsers = (roomDependents.length === 0)
 			$scope.dependents = {}
 			$scope.noSelection = false
 
 			$scope.selectedDependents = []
 
-			if (roomDependents.data.length !== 0) {
-				$scope.dependents = dataFormat.dependentsFormat(roomDependents.data)
+			if (roomDependents.length !== 0) {
+				$scope.dependents = dataFormat.dependentsFormat(roomDependents, 'userID')
 			}
 
 			//Select all checkboxes
