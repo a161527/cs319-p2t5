@@ -1,6 +1,6 @@
 <div class='row'>
 	<div class='col-sm-6'>
-		<h4>Residences</h4>
+		<h4>Residences:</h4>
 		<div ng-show='residences.length === 0'>
 			No available residences
 		</div>
@@ -9,12 +9,9 @@
 				class="list-group-item"
 				ng-class='{"active": selected === res.id}' 
 				ng-repeat='res in residences'
-				ng-click='getRooms(res.id); $parent.selected = res.id'>
+				ng-click='getRoomSets(res.id, res.name); $parent.selected = res.id'>
 				<div class='row'>
-					<div class='col-sm-4'>
-						<span class='glyphicon glyphicon-home glyphicon-large'></span>
-					</div>
-					<div class='col-sm-8'>
+					<div class='col-sm-12'>
 						<div class='row'>
 							<div class='col-sm-6'>
 								<b>Name:</b>
@@ -35,49 +32,114 @@
 				</div>
 			</button>
 		</div>
+
+		<h4>Room Sets: {{residence.name}}</h4>
+		<div ng-show='false'>
+			No available residences
+		</div>
+		<div class="list-group">
+			<button type="button" 
+				class="list-group-item"
+				ng-class='{"active": selected === rs.name}' 
+				ng-repeat='rs in roomSets'
+				ng-click='getRooms(rs.id, rs.name); $parent.selected = rs.name'>
+				<div class='row'>
+					<div class='col-sm-12'>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Name:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{rs.name}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Type:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{rs.type.name}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Capacity:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{rs.type.capacity}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Accessible:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{rs.type.accessible | yesNo}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</button>
+		</div>
 	</div>
+
+
 	<div class='col-sm-6'>
-		<h4>Rooms</h4>
+		<h4>Rooms: {{roomSet.name}}</h4>
+
 		<div ng-show='rooms.length === 0'>
 			No rooms available
 		</div>
+
+		<div ng-show='roomSet.id'>
+			<h5 ng-hide='rooms.length === 0'>Assign to a new room</h5>
+			<div class='panel panel-default'>
+				<div class='panel panel-body'>
+					<div class="form-group">
+						<input class='form-control' 
+							ng-model='roomNameAssign'
+							placeholder='Enter a room name'
+							required>
+					</div>
+					
+					<button class='btn btn-primary btn-block' ng-click='assign()'>
+						<span class='glyphicon glyphicon-check'></span> Assign
+					</button>
+				</div>
+			</div>
+		</div>
+	
+		<h5 ng-hide='rooms.length === 0'>Existing Rooms</h5>
+
 		<ul class="list-group">
 			<div ng-repeat='room in rooms'>
 				<li class='list-group-item unselectable-text'>
 					<div class='row'>
-						<div class='col-sm-3'>
-							<span class='glyphicon glyphicon-bed glyphicon-large'></span>
-						</div>
-						<div class='col-sm-6'>
+						<div class='col-sm-9'>
 							<div class='row'>
 								<div class='col-sm-6'>
 									<b>Name:</b>
 								</div>
 								<div class='col-sm-6'>
-									{{room.type.name}}
+									{{room.roomName}}
 								</div>
 							</div>
 							<div class='row'>
 								<div class='col-sm-6'>
-									<b>Accessible:</b>
+									<b>Occupancy:</b>
 								</div>
 								<div class='col-sm-6'>
-									{{room.type.accessible | yesNo}}
-								</div>
-							</div>
-							<div class='row'>
-								<div class='col-sm-6'>
-									<b>Capacity:</b>
-								</div>
-								<div class='col-sm-6'>
-									{{room.type.capacity}}
+									{{room.currentUsers}}
 								</div>
 							</div>
 						</div>
-						<div class='col-sm-3'>
-							<button class='btn btn-primary btn-lg pull-right'
+					</div>
+					<div class='row'>
+						<div class='col-sm-12'>
+							<button class='btn btn-primary btn-block'
 								ng-click='assign(room)'>
-								<span class='glyphicon glyphicon-check'></span> Assign</button>
+								<span class='glyphicon glyphicon-check'></span> Assign
+							</button>
 						</div>
 					</div>
 				</li>

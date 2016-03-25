@@ -3,7 +3,7 @@
 
 	angular.module('rooms')
 		.controller('AllocateRoomsCtrl', function($scope, $state, $stateParams, roomDependents, dataFormat) {
-			
+
 			$scope.noUsers = (roomDependents.length === 0)
 			$scope.dependents = {}
 			$scope.noSelection = false
@@ -49,32 +49,52 @@
 
 			$scope.residences = residences.data
 			$scope.rooms = []
+			$scope.roomSets = []
 			$scope.errorMessage = null
 			$scope.showError = false
+			$scope.residence = {name: '', id: null}
+			$scope.roomSet = {name:'', id: null}
 
 			$scope.back = function() {
 				$state.go('dashboard.conferences.room-allocate', {cid: $stateParams.cid})
 			}
 
-			$scope.getRooms = function(residenceId) {
-				var route = 'api/conferences/' + $stateParams.cid + '/residences/' + residenceId + '/rooms'
+			$scope.getRoomSets = function(residenceId, name) {
+
+				var route = 'api/conferences/' + $stateParams.cid + '/residences/' + residenceId + '/roomSets'
 				$http.get(route).then(function(resData) {
-					$scope.rooms = resData.data
-					console.log($scope.rooms)
+
+					$scope.roomSet.name = ''
+					$scope.roomSet.id = null
+
+					$scope.rooms = []
+
+					$scope.residence.name = name
+					$scope.residence.id = residenceId
+
+					$scope.roomSets = resData.data
+					console.log($scope.roomSets)
 				})
 			}
 
-			$scope.assign = function(room) {
-				var dependents = $stateParams.selectedDependents
-				$scope.showError = false
+			$scope.getRooms = function(roomSetId, name) {
+				var route = 'api/conferences/' + $stateParams.cid + '/residences' + '/roomSets/' + roomSetId + '/rooms'
 
-				angular.forEach(dependents, function(dep) {
-					dep['roomName'] = room.name
+				$http.get(route).then(function(resData) {
+					$scope.rooms = resData.data
+
+					$scope.roomSet.name = name
+					$scope.roomSet.id = roomSetId
 				})
 
-				var route = 'api/conferences/' + $stateParams.cid + '/residences/assign'
+			}
 
-				$http.post(route, {registrations: dependents, roomSet: room.id}).then(function(data) {
+			$scope.assign = function(room) {
+				
+				$scope.showError = false
+
+				var route = 'api/conferences/' + $stateParams.cid + '/residences/assign'
+				$http.post(route, formatData(room)).then(function(data) {
 					openModal()
 
 				}, function(resData) {
@@ -85,6 +105,21 @@
 
 				})
 
+			}
+
+			var formatData = function(room) {
+				var dependents = $stateParams.selectedDependents
+				var obj = {}
+				obj['registrationIds'] = []
+
+				angular.forEach(dependents, function(dep) {
+					obj['registrationIds'].push(dep.id)
+				})
+
+				obj['roomName'] = room? room.roomName : $scope.roomNameAssign
+				obj['roomSet'] = $scope.roomSet.id
+
+				return obj
 			}
 
 			var openModal = function() {
