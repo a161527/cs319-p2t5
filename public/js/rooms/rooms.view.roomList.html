@@ -87,12 +87,8 @@
 	<div class='col-sm-6'>
 		<h4>Rooms: {{roomSet.name}}</h4>
 
-		<div ng-show='rooms.length === 0'>
-			No rooms available
-		</div>
-
 		<div ng-show='roomSet.id'>
-			<h5 ng-hide='rooms.length === 0'>Assign to a new room</h5>
+			<h5>Create a new room and assign</h5>
 			<div class='panel panel-default'>
 				<div class='panel panel-body'>
 					<div class="form-group"
@@ -111,6 +107,10 @@
 					</button>
 				</div>
 			</div>
+		</div>
+
+		<div ng-show='rooms.length === 0'>
+			No existing rooms for this room set
 		</div>
 	
 		<h5 ng-hide='rooms.length === 0'>Existing Rooms</h5>
