@@ -267,6 +267,20 @@
 				})
 
 				/*
+				REGISTRATION APPROVAL
+				*/
+				.state('dashboard.conferences.approve-registration', {
+					url: '/approveRegistration/?:cid',
+					templateUrl: 'js/approveRegistration/approveRegistration.view.html',
+					controller: 'approveRegistrationCtrl',
+					resolve: {
+						unapproved: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/register')
+						}
+					}
+				})
+
+				/*
 				EVENT LIST
 				*/
 				.state('dashboard.events', {
