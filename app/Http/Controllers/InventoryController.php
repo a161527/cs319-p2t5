@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Inventory;
+use App\UserInventory;
 use App\Conference;
 use Validator;
 use DB;
@@ -73,6 +74,19 @@ class InventoryController extends Controller
     {
     	// TODO: reduce total qty and current qty by the difference, after doing checks 
     	//       to make sure both do not go below zero
+    }
+
+    /*
+     *
+     *
+     */
+    protected function createUserInventoryEntry($dependentId, $inventoryId, $quantity)
+    {
+        $entry = new UserInventory();
+        $entry->userID = $dependentId;
+        $entry->inventoryID = $inventoryId;
+        $entry->unitCount = $quantity;
+        $entry->save();
     }
 
     /*
@@ -145,6 +159,8 @@ class InventoryController extends Controller
 		        	if ($r["quantity"] <= $item->currentQuantity)
 		        	{
 		        		$item->currentQuantity -= $r["quantity"];
+                        $item->save();
+                        $this->createUserInventoryEntry($r["dependentID"], $r["id"], $r["quantity"]);
 		        	}
 		        	else
 		        	{
