@@ -237,9 +237,17 @@
 				INVENTORY
 				*/
 				.state('dashboard.conferences.inventoryRequest', {
-					url: '/requestInventory',
+					url: '/requestInventory/?:cid',
 					templateUrl: 'js/inventory/inventory.view.request.html',
-					controller: 'requestInventoryCtrl'
+					controller: 'requestInventoryCtrl',
+					resolve: {
+						inventoryList: function($stateParams, $http, $q) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/inventory')
+						},
+						dependents: function($http, loginStorage) {
+							return $http.get('api/accounts/' + loginStorage.getId() + '/dependents')
+						}
+					}
 				})
 
 				/*

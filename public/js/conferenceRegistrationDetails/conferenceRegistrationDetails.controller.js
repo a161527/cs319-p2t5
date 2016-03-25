@@ -11,7 +11,7 @@
 			})
 
 			$scope.requestInventory = function() {
-				$state.go('dashboard.conferences.inventoryRequest')
+				$state.go('dashboard.conferences.inventoryRequest', {cid: $stateParams.cid})
 			}
 
 		})
