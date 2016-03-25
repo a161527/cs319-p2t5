@@ -83,6 +83,7 @@
 							var currItem = {}
 							currItem.id = item.id
 							currItem.quantity = dep[item.itemName]
+							currItem.dependentID = dep.id
 
 							items.push(currItem)
 						}
