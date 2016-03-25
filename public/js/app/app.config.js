@@ -274,8 +274,8 @@
 					templateUrl: 'js/approveRegistration/approveRegistration.view.html',
 					controller: 'approveRegistrationCtrl',
 					resolve: {
-						unapproved: function($stateParams, $http) {
-							return $http.get('api/conferences/' + $stateParams.cid + '/register')
+						unapproved: function($stateParams, getUnapprovedService) {
+							return getUnapprovedService.get($stateParams.cid)
 						}
 					}
 				})

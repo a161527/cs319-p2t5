@@ -1,1 +1,63 @@
-<h1>Foo</h1>
+<div ng-show='unapprovedList.length === 0'>
+	No users requiring approval
+</div>
+<ul class="list-group">
+	<div ng-repeat='unapproved in unapprovedList'>
+		<li class='list-group-item unselectable-text'>
+			<div class='row'>
+				<div class='col-sm-3'>
+					<span class='glyphicon glyphicon-user glyphicon-large'></span>
+				</div>
+				<div class='col-sm-6'>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Name:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{unapproved.user.firstName}} {{unapproved.user.lastName}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Needs Accomodations:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{unapproved.needsAccommodation | yesNo}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Needs Transportation:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{unapproved.needsTransportation | yesNo}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Has Flight:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{unapproved.hasFlight | yesNo}}
+						</div>
+					</div>
+				</div>
+
+				<div class='col-md-3'>
+
+					<button class='btn btn-success pull-right btn-block'
+						ng-click='approve(unapproved.id)'>
+						<span class='glyphicon glyphicon-ok'></span><br> Approve
+					</button>
+
+<!-- 					<button ng-click=''
+						class='btn btn-danger btn-block pull-left'>
+						<span class='glyphicon glyphicon-remove'></span><br> Reject
+					</button> -->
+
+				</div>
+
+			</div>
+		</li>
+	</div>
+</ul>
