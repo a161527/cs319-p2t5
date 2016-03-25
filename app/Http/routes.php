@@ -27,6 +27,7 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
         Route::post('register', 'RegistrationController@userRegistration');
         Route::post('register/{registryId}/approve', 'RegistrationController@approveRegistration');
         Route::get('register/{registryId}', 'RegistrationController@getRegistrationData');
+        Route::get('register', 'RegistrationController@outstandingRegistrationRequests');
 
         Route::group(['prefix' => 'residences'], function () {
             Route::get('', 'RoomSetupController@getResidenceList');
