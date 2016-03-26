@@ -10,7 +10,7 @@ class ConferenceRegistrationTest extends TestCase
     const TEST_ATTENDEE_ID = 1;
 
     const FLIGHT_DATA = [
-        "number" => 1,
+        "number" => "1",
         "airline" => "Laravair",
         "arrivalDate" => "2016-02-02",
         "arrivalTime" => "12:00:00",
@@ -70,7 +70,10 @@ class ConferenceRegistrationTest extends TestCase
         $id = json_decode($this->response->getContent())[0]->ids[0];
 
         $this->get("/api/conferences/1/register/${id}");
-        $this->seeJson(self::FLIGHT_DATA);
+        $data = self::FLIGHT_DATA;
+        $data['flightNumber'] = $data['number'];
+        unset($data['number']);
+        $this->seeJson($data);
 
         $this->noTokenNextReq = true;
         $this->get("/api/conferences/1/register/${id}");
