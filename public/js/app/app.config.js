@@ -251,8 +251,8 @@
 					templateUrl: 'js/rooms/rooms.view.html',
 					controller: 'AllocateRoomsCtrl',
 					resolve: {
-						roomDependents: function($stateParams, $http) {
-							return $http.get('api/conferences/' + $stateParams.cid + '/residences/assign/missing')
+						roomDependents: function($stateParams, getRoomUsersService) {
+							return getRoomUsersService.get($stateParams.cid)
 						}
 					}
 				})
