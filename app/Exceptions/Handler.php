@@ -46,12 +46,21 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        //There should really be a better way to get this into json,
+        //but this works as well
         if ($e instanceof ValidationException) {
-            $message = "Validation failed:\n";
+            $message = "[";
+            $doneOne = false;
             foreach ($e->validator->messages()->all() as $err) {
+                if (!$doneOne) {
+                    $doneOne = true;
+                } else {
+                    $message = $message . ",";
+                }
                 $message = $message . $err . "\n";
             }
-            return response($message, 400);
+            $message = $message . "]";
+            return response($message, 400)->header("Content-Type", "application/json");
         }
 
         return parent::render($request, $e);
