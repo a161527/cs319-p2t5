@@ -32,18 +32,15 @@
 			//return an object with data formatted for service call
 			$scope.formatData = function() {
 
-				var list = []
+				var formatted = {'ids': []}
 
 				angular.forEach($scope.selectedDependents, function(dependent) {
-
-					var obj = {}
-
-					obj['attendees'] = [parseInt(dependent.id)]
  					
- 					list.push(obj)
+ 					formatted.ids.push(parseInt(dependent.id))
+
 				})
 
-				return list
+				return formatted
 			}
 
 
@@ -85,10 +82,12 @@
 				$scope.selectedDependents = addSelectedDependents($scope.dependents, 'register')
 				$scope.formattedData = $scope.formatData()
 
-				$scope.showSubmitError = false
-				ajax.serviceCall('Submitting...', 'post', 'api/events/' + $stateParams.cid + '/register', $scope.formattedData).then(function(resData) {
+				console.log($scope.formattedData)
 
-					openModal()
+				$scope.showSubmitError = false
+				ajax.serviceCall('Submitting...', 'post', 'api/event/' + $stateParams.cid + '/register', $scope.formattedData).then(function(resData) {
+
+					$state.go('dashboard.events')
 
 				}, function(resData) {
 					
