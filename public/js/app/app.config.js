@@ -105,8 +105,8 @@
 					templateUrl: 'js/conferenceWidget/conferenceWidget.view.html',
 					controller: 'conferenceWidgetCtrl',
 					resolve: {
-						permissions: function(conferenceList, $stateParams) {
-							return conferenceList.getPermissions($stateParams.cid)
+						permissions: function(loginStorage, $stateParams) {
+							return loginStorage.getConferencePermissions($stateParams.cid)
 						},
 						conferenceInfo: function($http, $stateParams) {
 							var conferenceInfo = $http.get('api/conferences/' + $stateParams.cid)
