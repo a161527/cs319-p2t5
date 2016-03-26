@@ -27,6 +27,7 @@
 					$scope.errorMessage = errorCodes[resData.data.message]
 
 				})
+				conferenceFields.resetAll()
 			}
 
 			$scope.removeMessage = function() {
