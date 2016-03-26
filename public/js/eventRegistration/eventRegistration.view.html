@@ -1,0 +1,42 @@
+<div class='row'>
+	<div class='col-md-12'>
+		<h4>Select Event Attendees</h4>
+		<label class='checkbox-inline'>
+			<input type="checkbox" 
+			ng-model='dependentsSelectAll'
+			ng-click='selectAll("register", dependentsSelectAll, dependents)'>
+			Select All
+		</label>
+
+		<ul class="list-group">
+			<div ng-repeat='(idx, value) in dependents'>
+				<li class='list-group-item unselectable-text' ng-click='dependents[idx].register = !dependents[idx].register'>
+					<div class='row'>
+						<div class='col-md-2'>
+							<input type="checkbox" 
+								ng-model='dependents[idx].register' 
+								ng-click='dependents[idx].register = !dependents[idx].register'>
+						</div>
+						<div class='col-md-2'>
+							<span class='glyphicon glyphicon-user glyphicon-large'></span>
+						</div>
+						<div class='col-md-8'>
+							<div>{{dependents[idx].firstName}} {{dependents[idx].lastName}}</div>
+						</div>
+					</div>
+				</li>
+			</div>
+		</ul>
+		<error-message ng-show='noSelection'>There must be one user selected<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeMessage()'></span></error-message>
+		<br>
+		<div class='row'>
+			<div class='col-md-6'>
+				<button class='btn btn-default btn-block' ng-click='cancel()'>Cancel</button>
+			</div>
+			<div class='col-md-6'>
+				<button class='btn btn-primary btn-block' ng-click='submit()'>Submit</button>
+			</div>
+		</div>
+
+	</div>
+</div>

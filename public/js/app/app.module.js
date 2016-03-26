@@ -15,6 +15,7 @@
 	angular.module('eventView', [])
 	angular.module('createEvent', [])
 	angular.module('approveRegistration', [])
+	angular.module('eventRegistration', [])
 
 	angular.module('app', [
 		'format',
@@ -30,6 +31,7 @@
 		'rooms',
 		'eventView',
 		'createEvent',
+		'eventRegistration',
 		'ui.select',
 		'satellizer',
 		'ui.router',

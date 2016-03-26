@@ -7,6 +7,7 @@
 			var _eventList = null
 			var _conferenceName = null
 			var _permissions = null
+			var _registration = null
 
 			this.getEventList = function(cid) {
 
@@ -42,6 +43,17 @@
 					}
 				})
 
+			}
+
+			this.getRegistration = function(cid) {
+				return $q(function(resolve, reject) {
+					ajax.serviceCall('Loading...', 'get', 'api/conferences/' + cid + '?includeRegistration=1').then(function(resData) {
+						_registration = resData.data.registered
+						resolve(_registration)
+					}, function(resData) {
+						reject(resData)
+					})
+				})
 			}
 
 			this.refresh = function(cid) {

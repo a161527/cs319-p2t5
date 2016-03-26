@@ -9,9 +9,10 @@
 			$scope.noEvents = ($scope.events.length === 0)
 			$scope.conferenceName = conferenceName
 			$scope.canCreateEvent = (eventData[1].indexOf('conference-event-create') !== -1)
+			$scope.confRegistered = false
 
-			$scope.goToCreateEvent = function() {
-				$state.go('dashboard.events.create')
+			$scope.goToEventState = function(state) {
+				$state.go('dashboard.events.' + state, {reload: true})
 			}
 
 			var formatEvents = function() {
@@ -22,7 +23,24 @@
 				};
 			}
 
+			var getApprovedUsers = function() {
+				var registered = eventData[2].length > 0
+
+				if (registered) {
+					for (var i = eventData[2].length - 1; i >= 0; i--) {
+						if (eventData[2][i]['status'] == 'approved') {
+							$scope.confRegistered = true
+							continue
+						}
+					}
+				}
+				else {
+					$scope.confRegistered = false
+				}
+			}
+
 			formatEvents()
+			getApprovedUsers()
 
 		})
 
