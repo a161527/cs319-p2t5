@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Inventory;
+use App\UserInventory;
 use App\Conference;
 use Validator;
 use DB;
@@ -15,9 +16,9 @@ class InventoryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt.auth', ['except' => ['authenticate', 'token']]);
+        // $this->middleware('jwt.auth', ['except' => ['authenticate', 'token']]);
         // provides an authorization header with each response
-        $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token']]);
+        // $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token']]);
     }
 
     /*
@@ -76,6 +77,20 @@ class InventoryController extends Controller
     }
 
     /*
+     *
+     *
+     */
+    protected function createUserInventoryEntry($dependentId, $inventoryId, $quantity, $conferenceId)
+    {
+        $entry = new UserInventory();
+        $entry->userID = $dependentId;
+        $entry->inventoryID = $inventoryId;
+        $entry->unitCount = $quantity;
+        $entry->conferenceID = $conferenceId;
+        $entry->save();
+    }
+
+    /*
      * GET api/conferences/{conferenceId}/inventory
      * - return a list showing the inventory of a conference
      */
@@ -89,6 +104,25 @@ class InventoryController extends Controller
         {
             $inventory = Inventory::where('conferenceID', '=', $conf->id)->get();
             return response()->json(['message' => 'returned_inventory', 'inventory' => $inventory]);
+        }
+    }
+
+    /*
+     * GET api/conferences/{conferenceId}/inventory/unapproved
+     * - return a list showing the inventory of a conference
+     */
+    public function unapproved($conferenceId)
+    {
+        // TODO: add permission/role filter
+        $conf = Conference::where('id', '=', $conferenceId)->first();
+        if ($conf === null)
+            return response()->json(['message' => 'conference_not_found'], 404);
+        else
+        {
+            $inventory = UserInventory::where('conferenceID', $conf->id)
+                                    ->where('approved', 0)
+                                    ->get();
+            return response()->json(['message' => 'returned_unapproved_inventory', 'inventory' => $inventory]);
         }
     }
 
@@ -145,6 +179,8 @@ class InventoryController extends Controller
 		        	if ($r["quantity"] <= $item->currentQuantity)
 		        	{
 		        		$item->currentQuantity -= $r["quantity"];
+                        $item->save();
+                        $this->createUserInventoryEntry($r["dependentID"], $r["id"], $r["quantity"], $conferenceId);
 		        	}
 		        	else
 		        	{

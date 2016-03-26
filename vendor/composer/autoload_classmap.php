@@ -7,6 +7,8 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AccountTableSeeder' => $baseDir . '/database/seeds/AccountTableSeeder.php',
+    'AddApprovedColumnToUserInventoryTable' => $baseDir . '/database/migrations/2016_03_26_035557_add_approved_column_to_user_inventory_table.php',
+    'AddConferenceidColumnToUserInventory' => $baseDir . '/database/migrations/2016_03_26_045705_add_conferenceid_column_to_user_inventory.php',
     'AddSoftDeletesToUsersTable' => $baseDir . '/database/migrations/2016_03_15_190220_add_soft_deletes_to_users_table.php',
     'AddTimestampsToInventoryTable' => $baseDir . '/database/migrations/2016_03_21_205420_add_timestamps_to_inventory_table.php',
     'ConferenceTableSeeder' => $baseDir . '/database/seeds/ConferenceTableSeeder.php',
@@ -104,6 +106,7 @@ return array(
     'Hamcrest\\Util' => $vendorDir . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Util.php',
     'Hamcrest\\Xml\\HasXPath' => $vendorDir . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Xml/HasXPath.php',
     'IlluminateQueueClosure' => $vendorDir . '/laravel/framework/src/Illuminate/Queue/IlluminateQueueClosure.php',
+    'InventorySeeder' => $baseDir . '/database/seeds/InventorySeeder.php',
     'PHPUnit_Exception' => $vendorDir . '/phpunit/phpunit/src/Exception.php',
     'PHPUnit_Extensions_GroupTestSuite' => $vendorDir . '/phpunit/phpunit/src/Extensions/GroupTestSuite.php',
     'PHPUnit_Extensions_PhptTestCase' => $vendorDir . '/phpunit/phpunit/src/Extensions/PhptTestCase.php',
@@ -539,6 +542,7 @@ return array(
     'SebastianBergmann\\Version' => $vendorDir . '/sebastian/version/src/Version.php',
     'TestCase' => $baseDir . '/tests/TestCase.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
+    'UserInventorySeeder' => $baseDir . '/database/seeds/UserInventorySeeder.php',
     'UserTableSeeder' => $baseDir . '/database/seeds/UserTableSeeder.php',
     'Zizaco\\Entrust\\MigrationCommand' => $vendorDir . '/zizaco/entrust/src/commands/MigrationCommand.php',
 );
