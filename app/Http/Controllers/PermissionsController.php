@@ -13,6 +13,7 @@ use App\Models\Account;
 use App\Models\Role;
 use App\Models\Permission;
 use App\Event;
+use App\Conference;
 
 use App\Utility\PermissionNames;
 
@@ -26,6 +27,30 @@ class PermissionsController extends Controller
 
     private function roleListJson($roles) {
         $roleJson = [];
+        $conferences = [];
+        $events = [];
+
+        foreach ($roles as $r) {
+            if (PermissionNames::isConferencePermission($r->name)) {
+                $conferences[] = PermissionNames::extractPermissionData($r->name)->idPart;
+            } else if (PermissionNames::isEventPermission($r->name)){
+                $events[] = PermissionNames::extractPermissionData($r->name)->idPart;
+            }
+        }
+
+        $eventData = Event::whereIn('id', $events)->get();
+        $conferenceData = Conference::whereIn('id', $conferences)->get();
+
+        $conferences = [];
+        $events = [];
+
+        foreach ($conferenceData as $conf) {
+            $conferences[$conf->id] = $conf->conferenceName;
+        }
+        foreach ($eventData as $evt) {
+            $events[$evt->id] = $evt->eventName;
+        }
+
         foreach ($roles as $r) {
             $permData = PermissionNames::extractPermissionData($r->name);
             if (isset($r->displayName)) {
@@ -34,9 +59,16 @@ class PermissionsController extends Controller
                 $wordified = str_replace("-", " ", $permData->namePart);
                 $displayName = ucwords($wordified);
             }
-            $retData = ["name" => $r->name, "displayName" => $displayName];
+            $retData = ["name" => $r->name, "displayName" => $displayName, "type" => "global"];
             if (isset($permData->idPart)) {
                 $retData["forId"] = $permData->idPart;
+                if (PermissionNames::isConferencePermission($r->name)) {
+                    $retData['forName'] = $conferences[(string) $permData->idPart];
+                    $retData['type'] = "conference";
+                } else if (PermissionNames::isEventPermission($r->name)) {
+                    $retData['forName'] = $events[$permData->idPart];
+                    $retData['type'] = "event";
+                }
             }
             $roleJson[] = $retData;
         }
