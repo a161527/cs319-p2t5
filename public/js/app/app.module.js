@@ -14,7 +14,9 @@
 	angular.module('rooms', [])
 	angular.module('eventView', [])
 	angular.module('createEvent', [])
+	angular.module('dependents', [])
 	angular.module('approveRegistration', [])
+
 
 	angular.module('app', [
 		'format',
@@ -28,6 +30,7 @@
 		'createConference',
 		'inventory',
 		'rooms',
+		'dependents',
 		'eventView',
 		'createEvent',
 		'ui.select',

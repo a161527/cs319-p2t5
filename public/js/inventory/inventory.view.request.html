@@ -2,10 +2,10 @@
 	<div class='col-md-10'>
 		<ui-select ng-model="selected.value">
 			<ui-select-match allow-clear="true" placeholder="Select an item to add">
-				<span ng-bind="$select.selected.name"></span>
+				<span ng-bind="$select.selected.itemName"></span>
 			</ui-select-match>
 			<ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id">
-				<span ng-bind="item.name"></span>
+				<span ng-bind="item.itemName"></span>
 			</ui-select-choices>
 		</ui-select>
 	</div>
@@ -22,8 +22,9 @@
 	<li class='list-group-item' ng-repeat='i in currentItems'>
 		<div class='row'>
 			<div class='col-md-5'>
-				<h1>{{i.name}}</h1>
-				<h6><b>Quantity: </b>{{i.quantity}}</h6>
+				<h1>{{i.itemName}}</h1>
+				<h6><b>Current Quantity: </b>{{i.currentQuantity}} {{i.units}}</h6>
+				<h6><b>Disposable: </b>{{i.disposable | yesNo}}</h6>
 			</div>
 			<div class='col-md-6'>
 				<table class="table">
@@ -35,8 +36,8 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat='(key, value) in dependents'>
-							<td>{{dependents[key].firstname}} {{dependents[key].lastname}}</td>
-							<td class="col-md-6"><input-add-subtract model='dependents[key][i.name]' items='i.quantity'></input-add-subtract></td>
+							<td>{{dependents[key].firstName}} {{dependents[key].lastName}}</td>
+							<td class="col-md-6"><input-add-subtract model='dependents[key][i.itemName]' items='i.currentQuantity'></input-add-subtract></td>
 						<tr>
 					</tbody>
 				</table>
@@ -47,3 +48,14 @@
 		</div>
 	</li>
 </ul>
+
+<error-message ng-show='showError.value'>{{showError.message}}<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeError()'></span></error-message>
+
+<div class='row'>
+	<div class='col-sm-6'>
+		<button class='btn btn-default btn-block' ng-click='cancel()'>Cancel</button>
+	</div>
+	<div class='col-sm-6'>
+		<button class='btn btn-primary btn-block' ng-click='submit()'>Submit</button>
+	</div>
+</div>
