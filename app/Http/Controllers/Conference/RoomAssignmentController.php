@@ -136,6 +136,7 @@ class RoomAssignmentController extends Controller
 
         return UserConference::where("needsAccommodation", true)
                 ->has("room", "<", 1)
+                ->where('conferenceID', $confId)
                 ->with("user")
                 ->get();
     }
