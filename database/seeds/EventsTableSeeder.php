@@ -35,10 +35,10 @@ class EventsTableSeeder extends Seeder
             'capacity' => 123,
             'conferenceID' => 1],
       ]);
-      $role = RoleCreate::EventManager(1);
+      $role = RoleCreate::AllEventRoles(1);
       Account::where('email', 'root@localhost')->get()->first()->attachRole($role);
 
-      $role = RoleCreate::EventManager(2);
+      $role = RoleCreate::AllEventRoles(2);
       Account::where('email', 'root@localhost')->get()->first()->attachRole($role);
     }
 }

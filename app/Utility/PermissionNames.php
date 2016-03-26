@@ -103,7 +103,7 @@ class PermissionNames {
     }
 
     public static function EventPermissionsManagement($evtId) {
-        return 'event-permissions-management.' . $evtID;
+        return 'event-permissions-management.' . $evtId;
     }
 
     public static function AllEventPermissions($evtId) {

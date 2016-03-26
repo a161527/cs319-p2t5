@@ -28,17 +28,21 @@ class RoleCreate {
         return Permission::whereIn("name", $permissionNames)->get();
     }
 
+    private static function createPermissionRoles($permissions) {
+        foreach ($permissions as $p) {
+            $role = new Role;
+            $role->name = $p->name;
+            $role->save();
+            $role->attachPermission($p);
+        }
+    }
+
     public static function AllConferenceRoles($confId) {
         return DB::transaction(function() use ($confId) {
             $permissionList = PermissionNames::AllConferencePermissions($confId);
 
             $permissions = self::createAllPermissions($permissionList);
-            foreach ($permissions as $p) {
-                $role = new Role;
-                $role->name = $p->name;
-                $role->save();
-                $role->attachPermission($p);
-            }
+            self::createPermissionRoles($permissions);
 
             $managerRoleId = self::ConferenceManager($confId, $permissions);
             return $managerRoleId;
@@ -56,12 +60,19 @@ class RoleCreate {
         return $role;
     }
 
-    public static function EventManager($eventId) {
-        return DB::transaction(function() use ($eventId) {
+    public static function AllEventRoles($eventId) {
+        return DB::transaction(function () use ($eventId) {
             $permissionList = PermissionNames::AllEventPermissions($eventId);
 
             $permissions = self::createAllPermissions($permissionList);
+            self::createPermissionRoles($permissions);
+            $managerRole = self::EventManager($eventId, $permissions);
+            return $managerRole;
+        });
+    }
 
+    public static function EventManager($eventId, $permissions) {
+        return DB::transaction(function() use ($eventId, $permissions) {
             $rolename = RoleNames::EventManager($eventId);
 
             $role = new Role;

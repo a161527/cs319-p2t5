@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use Entrust;
 use DB;
+use Auth;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Models\Account;
 use App\Models\Role;
+use App\Models\Permission;
+use App\Event;
 
 use App\Utility\PermissionNames;
 
@@ -42,16 +45,22 @@ class PermissionsController extends Controller
     }
 
     public function listAccountRoles($email) {
-        if(!Entrust::can(PermissionNames::ManageGlobalPermissions())) {
-            return response()->json(["message" => "no_global_permissions_ability"], 403);
-        }
-
         $acc = Account::with("roles")->where("email", $email)->get()->first();
         if(!isset($acc)) {
             return response()->json(["message" => "user_not_found"], 400);
         }
 
-        return $this->roleListJson($acc->roles);
+        $accessibleRoleNames = $this->manageableRoleNamesForUser();
+
+        $roles = [];
+
+        foreach ($acc->roles as $r) {
+            if (in_array($r->name, $accessibleRoleNames)) {
+                $roles[] = $r;
+            }
+        }
+
+        return $this->roleListJson($roles);
     }
 
     private function doAccountRoleChange($roleNames, $alterUsing) {
@@ -64,28 +73,45 @@ class PermissionsController extends Controller
     }
 
     public function changeAccountRoles(Request $req, $email) {
-        if(!Entrust::can(PermissionNames::ManageGlobalPermissions())) {
-            return response()->json(["message" => "no_global_permissions_ability"], 403);
-        }
-
         try {
-            $this->executeRoleChange($req, $email);
+            return $this->executeRoleChange($req, $email);
         } catch(BadRequestHttpException $e) {
             return response()->json(["message"=> $e->getMessage()], 400);
         }
     }
 
+    private function manageableRoleNamesForUser() {
+        $roles = $this->manageableRolesForUser()->toArray();
+
+        return array_map(
+            function ($r) { return $r['name']; },
+            $roles);
+    }
+
+    private function roleResultToList($roles) {
+        $roleArray = [];
+        foreach ($roles as $r) {
+            $roleArray[] = $r;
+        }
+
+        return $roleArray;
+    }
+
+
     private function manageableRolesForUser() {
-        $roles = Role::with('permissions');
+        $roles = Role::with('perms')->get();
         if (Entrust::can(PermissionNames::ManageGlobalPermissions())) {
             return $roles;
         }
+
+        $roles = $this->roleResultToList($roles);
+
         //Filter out global permissions
         $roles = array_filter(
             $roles,
             function ($r) {
                 $globalPerms = PermissionNames::AllGlobalPermissions();
-                foreach ($r->permissions as $p) {
+                foreach ($r->perms as $p) {
                     if (in_array($p->name, $globalPerms)) {
                         return false;
                     }
@@ -101,15 +127,21 @@ class PermissionsController extends Controller
             PermissionNames::normalizePermissionName(
                 PermissionNames::EventPermissionsManagement(1));
 
-        $currentPermRoles = Auth::user()->roles()->permissions()
-            ->where('name', 'like', $confPermNamePart . '%')
-            ->orWhere('name', 'like', $evtPermNamePart . '%')
-            ->get();
+        //Get the permissions this user has which are permissions management
+        //permissions
+        $currentPermManagement = Permission::whereHas("roles", function ($query) {
+            $query->whereHas("users", function ($query) {
+                //on Account table
+                $query->where("id", Auth::user()->id);
+            });
+        })->where('name', 'like', $confPermNamePart . '%')
+          ->orWhere('name', 'like', $evtPermNamePart . '%')
+          ->get();
 
         $conferences = [];
         $events = [];
 
-        foreach ($currentPerms as $perm) {
+        foreach ($currentPermManagement as $perm) {
             if (PermissionNames::isConferencePermission($perm->name)) {
                 $conferences[] = PermissionNames::extractPermissionData($perm->name)->idPart;
             } else {
@@ -117,18 +149,19 @@ class PermissionsController extends Controller
             }
         }
 
-        $ownedEvents = Event::whereIn('conferenceID', $conferences)->get();
+        $ownedEvents = Event::whereIn('conferenceID', $conferences)->select('id')->get();
+        $ownedEvents = array_map(function ($e) { return $e['id']; }, $ownedEvents->toArray());
         $events = array_merge($events, $ownedEvents);
 
         //Filter out permissions not associated with the conferences/events
         //this user can control.
         $roles = array_filter(
             $roles,
-            function($r) {
-                foreach ($r->permissions as $p) {
+            function($r) use ($events, $conferences){
+                foreach ($r->perms as $p) {
                     if (PermissionNames::isConferencePermission($p->name)) {
                         $confId = PermissionNames::extractPermissionData($p->name)->idPart;
-                        if (!in_array($cid, $conferences)) {
+                        if (!in_array($confId, $conferences)) {
                             return false;
                         }
                     } else if (PermissionNames::isEventPermission($p->name)) {
@@ -150,9 +183,16 @@ class PermissionsController extends Controller
                 return response()->json(["message" => "user_not_found"], 400);
             }
 
+            $accessibleRoleNames = $this->manageableRoleNamesForUser();
 
             if ($req->has("add")) {
                 $allAdd = $req->all()["add"];
+
+                foreach ($allAdd as $rname) {
+                    if (!in_array($rname, $accessibleRoleNames)) {
+                        throw new BadRequestHttpException("role_not_accessible");
+                    }
+                }
 
                 //Need to be careful not to add roles that are already in
                 //as this causes primary key violations.
@@ -170,10 +210,20 @@ class PermissionsController extends Controller
                         });
                 $okay = $this->doAccountRoleChange($add, function($roles) use ($acc) {$acc->attachRoles($roles);});
             }
+
             if ($req->has("remove")) {
                 $remove = $req->all()["remove"];
+
+
+                foreach ($remove as $rname) {
+                    if (!in_array($rname, $accessibleRoleNames)) {
+                        throw new BadRequestHttpException("role_not_accessible");
+                    }
+                }
+
                 $okay = $this->doAccountRoleChange($remove, function($roles) use ($acc) {$acc->detachRoles($roles);});
             }
+
             if (isset($okay) && !$okay) {
                 throw new BadRequestHttpException("role_not_found");
             }
@@ -182,10 +232,6 @@ class PermissionsController extends Controller
     }
 
     public function listAssignableRoles() {
-        if(!Entrust::can(PermissionNames::ManageGlobalPermissions())) {
-            return response()->json(["message" => "no_global_permissions_ability"], 403);
-        }
-
-        return $this->roleListJson(Role::all());
+        return $this->roleListJson($this->manageableRolesForUser());
     }
 }
