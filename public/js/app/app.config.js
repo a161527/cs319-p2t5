@@ -132,18 +132,6 @@
 
 				.state('dashboard.conferences.create.2', {
 					url: '',
-					templateUrl: 'js/createConference/createConference.view.conferenceInventory.html',
-					controller: 'createConferenceCtrl'
-				})
-
-				.state('dashboard.conferences.create.3', {
-					url: '',
-					templateUrl: 'js/createConference/createConference.view.conferenceRooms.html',
-					controller: 'createConferenceCtrl'
-				})
-
-				.state('dashboard.conferences.create.4', {
-					url: '',
 					templateUrl: 'js/createConference/createConference.view.reviewInfo.html',
 					controller: 'createConferenceCtrl'
 				})
@@ -248,8 +236,8 @@
 					templateUrl: 'js/rooms/rooms.view.html',
 					controller: 'AllocateRoomsCtrl',
 					resolve: {
-						roomDependents: function($stateParams, $http) {
-							return $http.get('api/conferences/' + $stateParams.cid + '/residences/assign/missing')
+						roomDependents: function($stateParams, getRoomUsersService) {
+							return getRoomUsersService.get($stateParams.cid)
 						}
 					}
 				})
@@ -264,6 +252,20 @@
 					resolve: {
 						residences: function($stateParams, $http) {
 							return $http.get('api/conferences/' + $stateParams.cid + '/residences')
+						}
+					}
+				})
+
+				/*
+				REGISTRATION APPROVAL
+				*/
+				.state('dashboard.conferences.approve-registration', {
+					url: '/approveRegistration/?:cid',
+					templateUrl: 'js/approveRegistration/approveRegistration.view.html',
+					controller: 'approveRegistrationCtrl',
+					resolve: {
+						unapproved: function($stateParams, getUnapprovedService) {
+							return getUnapprovedService.get($stateParams.cid)
 						}
 					}
 				})

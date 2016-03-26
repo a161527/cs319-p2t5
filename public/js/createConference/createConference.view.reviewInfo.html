@@ -1,97 +1,47 @@
-<div class='container'>
-    <br>
-    <div class='row'>
-        <div class='col-md-offset-3 col-md-6'>
-			<div class="progress">
-			    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="75"
-			    aria-valuemin="0" aria-valuemax="100" style="width:75%">
-			    </div>
-			    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="25"
-			    aria-valuemin="0" aria-valuemax="100" style="width:25%">
-			        Review
-			    </div>
-			</div>
 
-			<h4>Review Conference Details</h4>
-			<div class='panel panel-default'>
-				<div class='panel panel-body break-all'>
-					<h4><b><u>Conference Information</u></b></h4>
-					<div class='review-text'>
-						<b>Name:</b> {{conferenceInfo.name}}
-					</div>
-					<div class='review-text' ng-show='conferenceInfo.description'>
-						<b>Description:</b> {{conferenceInfo.description}}
-					</div>
-					<div class='review-text'>
-						<b>Start Date:</b> {{conferenceInfo.startFormatted}}
-					</div>
-					<div class='review-text'>
-						<b>End Date:</b> {{conferenceInfo.endFormatted}}
-					</div>
-					<div class='review-text'>
-						<b>Location:</b> {{conferenceInfo.location}}
-					</div>
-					<div class='review-text'>
-						<b>Provides Transportation:</b> {{conferenceInfo.hasTransportation}}
-					</div>
-					<div class='review-text'>
-						<b>Provides Boarding Accommodations:</b> {{conferenceInfo.hasAccommodations}}
-					</div>
-					<br>
-					<div ng-show='inventory[1].name'>
-						<h4><b><u>Inventory</u></b></h4>
-						<div ng-repeat='(idx, value) in inventory'>
-							<div class='row'>
-								<div class='col-xs-12 col-sm-6'>
-									<h5><b>{{inventory[idx].name}}</b></h5>
-								</div>
-								<div class='col-xs-12 col-sm-6'>
-									<b>Quantity:</b> {{inventory[idx].quantity}} {{inventory[idx].units}}
-									<br>
-									<b>Disposable:</b> {{inventory[idx].disposable}}
-								</div>
-							</div>
-							<br>
-						</div>
-						<br>
-					</div>
-					<div ng-show='conferenceInfo.hasAccommodations'>
-						<h4><b><u>Conference Accommodations</u></b></h4>
-						<div ng-repeat='(idx, value) in rooms'>
-							<div class='row'>
-								<div class='col-xs-12 col-sm-6'>
-									<div><h5><b>{{rooms[idx].name}}</b></h5></div>
-								</div>
-								<div class='col-xs-12 col-sm-6'>
-									<div class='review-text'>
-										<b>Address:</b> {{rooms[idx].location}}
-									</div>
-									<div class='review-text' ng-show='rooms[idx].number'>
-										<b>Rooms:</b> {{rooms[idx].number}}
-									</div>
-									<div class='review-text' ng-show='rooms[idx].capacity'>
-										<b>Capacity:</b> {{rooms[idx].capacity}}
-									</div>
-								</div>
-							</div>
-							<br>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class='row'>
-				<div class='col-xs-6'>
-					<div ng-show='conferenceInfo.hasAccommodations'>
-						<a class='btn btn-default btn-block' ui-sref='dashboard.conferences.create.3'>Back</a>
-					</div>
-					<div ng-hide='conferenceInfo.hasAccommodations'>
-						<a class='btn btn-default btn-block' ui-sref='dashboard.conferences.create.2'>Back</a>
-					</div>
-				</div>
-				<div class='col-xs-6'>
-					<button class='btn btn-primary btn-block' ng-click='createConference(createConferenceForm.$valid)'>Submit</button>
-				</div>
-			</div>
-		</div>
+<div class="progress">
+    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="75"
+    aria-valuemin="0" aria-valuemax="100" style="width:75%">
     </div>
+    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="25"
+    aria-valuemin="0" aria-valuemax="100" style="width:25%">
+        Review
+    </div>
+</div>
+
+<h4>Review Conference Details</h4>
+<div class='panel panel-default'>
+	<div class='panel panel-body break-all'>
+		<h4><b><u>Conference Information</u></b></h4>
+		<div class='review-text'>
+			<b>Name:</b> {{conferenceInfo.name}}
+		</div>
+		<div class='review-text' ng-show='conferenceInfo.description'>
+			<b>Description:</b> {{conferenceInfo.description}}
+		</div>
+		<div class='review-text'>
+			<b>Start Date:</b> {{conferenceInfo.startFormatted}}
+		</div>
+		<div class='review-text'>
+			<b>End Date:</b> {{conferenceInfo.endFormatted}}
+		</div>
+		<div class='review-text'>
+			<b>Location:</b> {{conferenceInfo.location}}
+		</div>
+		<div class='review-text'>
+			<b>Provides Transportation:</b> {{conferenceInfo.hasTransportation}}
+		</div>
+		<div class='review-text'>
+			<b>Provides Boarding Accommodations:</b> {{conferenceInfo.hasAccommodations}}
+		</div>
+		<br>
+	</div>
+</div>
+<div class='row'>
+	<div class='col-xs-6'>
+		<a class='btn btn-default btn-block' ui-sref='dashboard.conferences.create.1'>Back</a>
+	</div>
+	<div class='col-xs-6'>
+		<button class='btn btn-primary btn-block' ng-click='createConference(createConferenceForm.$valid)'>Submit</button>
+	</div>
 </div>

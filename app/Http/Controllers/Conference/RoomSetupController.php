@@ -48,28 +48,22 @@ class RoomSetupController extends Controller
         return response()->json(["id" => $residence->id]);
     }
 
-    public function getResidenceRooms($confId, $residenceId) {
+    public function getResidenceRoomSets($confId, $residenceId) {
         if (!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
             return response("", 403);
         }
 
-        $res = Residence::find($residenceId);
+        $res = Residence::with("roomSets.type")->find($residenceId);
         if (is_null($res) || $res->conferenceID != $confId) {
             return response("", 404);
         }
-        $res->load('roomSets.type');
 
         $result = [];
-        foreach ($res->roomSets()->get() as $roomSet) {
+        foreach ($res->roomSets as $roomSet) {
             $setRepr = ["type" => $roomSet->type->toArray(),
                         "id" => $roomSet->id];
             $setRepr["id"] = $roomSet->id;
-            if (is_null($roomSet->name)) {
-                $setRepr["rangeStart"] = $roomSet->rangeStart;
-                $setRepr["rangeEnd"] = $roomSet->rangeEnd;
-            } else {
-                $setRepr["name"] = $roomSet->name;
-            }
+            $setRepr["name"] = $roomSet->name;
             $result[] = $setRepr;
         }
         return response()->json($result);
@@ -79,11 +73,14 @@ class RoomSetupController extends Controller
         if(!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
             return response("", 403);
         }
-        $res = Residence::find($residenceId);
+        $res = Residence::with("roomSets.type")->find($residenceId);
         if (is_null($res) || $res->conferenceID != $confId) {
             return response("", 404);
         }
-        return $res->roomSets->type()->distinct()->get();
+
+        return RoomType::whereHas("roomSets", function ($query) use ($res){
+            $query->where("residenceID", $res->id);
+        })->get();
     }
 
     public function createRoomSet(Request $request, $confId, $residenceId) {
@@ -110,12 +107,7 @@ class RoomSetupController extends Controller
             $set = new RoomSet;
             $set->typeID = $type;
             $set->residenceID = $residenceId;
-            if ($request->has('name')) {
-                $set->name = $request->input('name');
-            } else {
-                $set->rangeStart = $request->input('rangeStart');
-                $set->rangeEnd = $request->input('rangeEnd');
-            }
+            $set->name = $request->input('name');
             $set->save();
             return response()->json(['id' => $set->id, 'typeID' => $type]);
         });
@@ -130,9 +122,7 @@ class RoomSetupController extends Controller
 
     private function validateRoomSet($req) {
         $this->validate($req, [
-            'name' => 'required_without:rangeStart,rangeEnd|string',
-            'rangeStart' => 'required_without:name',
-            'rangeEnd' => 'required_without:name',
+            'name' => 'required|string',
             'typeID' => 'numeric',
             'type.name' => 'required_without:typeID|string',
             'type.capacity' => 'required_without:typeID|numeric',

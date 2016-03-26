@@ -10,6 +10,10 @@ class Residence extends Model
     public $timestamps = false;
 
     public function roomSets() {
-        return $this->belongsTo('App\RoomSet', 'id', 'residenceID');
+        return $this->hasMany('App\RoomSet', 'residenceID', 'id');
+    }
+
+    public function conference() {
+        return $this->hasOne('App\Conference', 'id', 'conferenceID');
     }
 }

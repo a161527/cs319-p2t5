@@ -1,11 +1,16 @@
 <div ng-repeat='reg in registered'>
 	<div>
-		<h4>{{reg.attendee}}</h4>
+		<h4>{{reg.user.firstName}} {{reg.user.lastName}}</h4>
 	</div>
 	<div>
 		<b>Approved:</b>
 		<br>
 		{{reg.approved | yesNo}}
+	</div>
+	<div>
+		<b>Needs Accommodation:</b>
+		<br>
+		{{reg.needsAccommodation | yesNo}}
 	</div>
 	<div>
 		<b>Needs Transportation:</b>

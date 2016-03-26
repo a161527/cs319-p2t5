@@ -15,6 +15,8 @@
 	angular.module('eventView', [])
 	angular.module('createEvent', [])
 	angular.module('dependents', [])
+	angular.module('approveRegistration', [])
+
 
 	angular.module('app', [
 		'format',
@@ -35,6 +37,7 @@
 		'satellizer',
 		'ui.router',
 		'blockUI',
-		'ui.bootstrap'
+		'ui.bootstrap',
+		'approveRegistration'
 	])
 })()

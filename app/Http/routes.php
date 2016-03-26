@@ -27,6 +27,7 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
         Route::post('register', 'RegistrationController@userRegistration');
         Route::post('register/{registryId}/approve', 'RegistrationController@approveRegistration');
         Route::get('register/{registryId}', 'RegistrationController@getRegistrationData');
+        Route::get('register', 'RegistrationController@outstandingRegistrationRequests');
 
         Route::group(['prefix' => 'residences'], function () {
             Route::get('', 'RoomSetupController@getResidenceList');
@@ -34,18 +35,22 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
             Route::post('', 'RoomSetupController@createResidence');
 
             Route::group(['prefix' => '{residenceId}'], function () {
-                Route::get('rooms', 'RoomSetupController@getResidenceRooms');
+                Route::get('roomSets', 'RoomSetupController@getResidenceRoomSets');
                 Route::get('roomTypes', 'RoomSetupController@getResidenceRoomTypes');
-                Route::post('rooms', 'RoomSetupController@createRoomSet');
+                Route::post('roomSets', 'RoomSetupController@createRoomSet');
 
-                Route::get('rooms/{roomId}/users', 'RoomAssignmentController@getRoomUsers');
+                Route::get('rooms/{roomName}/users', 'RoomAssignmentController@getRoomUsers');
             });
+
+
+            Route::get('roomSets/{setId}/rooms', 'RoomAssignmentController@roomsInSet');
 
             Route::post('assign', 'RoomAssignmentController@assignRoom');
             Route::delete('assign/{assignId}', 'RoomAssignmentController@deleteAssignment');
             Route::get('assign', 'RoomAssignmentController@listAssignments');
             Route::get('assign/missing', 'RoomAssignmentController@missingAssignments');
         });
+
     });
 });
 

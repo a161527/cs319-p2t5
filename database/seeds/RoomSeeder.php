@@ -45,14 +45,13 @@ class RoomSeeder extends Seeder
         }
 
         $sets = array(
-            ["name" => "104A",
+            ["name" => "104A-104D",
              "residenceID" => 1,
              "typeID" => 1],
-            ["name" => "204B",
+            ["name" => "204B-204Y",
              "residenceID" => 1,
              "typeID" => 2],
-            ["rangeStart" => 10,
-             "rangeEnd" => 19,
+            ["name" => "21-29",
              "residenceID" => 2,
              "typeID" => 3]);
 
