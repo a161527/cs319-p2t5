@@ -102,16 +102,25 @@ class PermissionNames {
         return "event-announce." . $evtId;
     }
 
-    public static function EventPermissionsManagement($evtId) {
+    public static function EventPermissionManagement($evtId) {
         return 'event-permissions-management.' . $evtId;
     }
 
-    public static function AllEventPermissions($evtId) {
+    public static function AllEventPermission($evtId) {
         return [
             self::EventInfoEdit($evtId),
             self::EventDetailView($evtId),
             self::EventAnnounce($evtId),
-            self::EventPermissionsManagement($evtId)];
+            self::EventPermissionManagement($evtId)];
+    }
+
+
+
+    public static function permissionManagementPermissionBases() {
+        return [
+            self::ManageGlobalPermissions(),
+            self::normalizePermissionName(self::ConferencePermissionManagement(1)),
+            self::normalizePermissionName(self::EventPermissionManagement(1))];
     }
 
     public static function normalizePermissionName($permName) {

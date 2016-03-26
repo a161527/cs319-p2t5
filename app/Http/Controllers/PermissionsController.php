@@ -125,7 +125,7 @@ class PermissionsController extends Controller
 
         $evtPermNamePart =
             PermissionNames::normalizePermissionName(
-                PermissionNames::EventPermissionsManagement(1));
+                PermissionNames::EventPermissionManagement(1));
 
         //Get the permissions this user has which are permissions management
         //permissions
