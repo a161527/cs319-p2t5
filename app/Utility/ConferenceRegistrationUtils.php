@@ -3,6 +3,7 @@
 namespace App\Utility;
 
 use App\UserConference;
+use App\UserEvent;
 use App\User;
 use Auth;
 
@@ -32,6 +33,32 @@ class ConferenceRegistrationUtils {
                 "user" => $a->userID,
                 "status" => $a->approved ? "approved" : "pending",
                 "id" => $a->id];
+        }
+
+        return $attendees;
+    }
+
+    public static function getAccountEventRegistrationData($evtId, $account = null) {
+        if(is_null($account)) {
+            $account = Auth::user();
+        }
+
+        //No user logged in
+        if (is_null($account)) {
+            return [];
+        }
+
+        $attendances =
+            UserEvent::where('eventID', $evtId)
+                ->whereHas('user', function($query) use ($account) {
+                    $query->where('accountID', $account->id);
+                })->get();
+
+        $attendees = [];
+        foreach ($attendances as $a) {
+            $attendees[] = [
+                "userId" => $a->userID,
+                "registrationId" => $a->id];
         }
 
         return $attendees;
