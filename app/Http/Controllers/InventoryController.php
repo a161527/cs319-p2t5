@@ -80,12 +80,13 @@ class InventoryController extends Controller
      *
      *
      */
-    protected function createUserInventoryEntry($dependentId, $inventoryId, $quantity)
+    protected function createUserInventoryEntry($dependentId, $inventoryId, $quantity, $conferenceId)
     {
         $entry = new UserInventory();
         $entry->userID = $dependentId;
         $entry->inventoryID = $inventoryId;
         $entry->unitCount = $quantity;
+        $entry->conferenceID = $conferenceId;
         $entry->save();
     }
 
@@ -179,7 +180,7 @@ class InventoryController extends Controller
 		        	{
 		        		$item->currentQuantity -= $r["quantity"];
                         $item->save();
-                        $this->createUserInventoryEntry($r["dependentID"], $r["id"], $r["quantity"]);
+                        $this->createUserInventoryEntry($r["dependentID"], $r["id"], $r["quantity"], $conferenceId);
 		        	}
 		        	else
 		        	{
