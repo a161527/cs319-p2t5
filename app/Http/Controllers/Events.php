@@ -17,6 +17,7 @@ use App\Utility\RoleCreate;
 use App\Utility\PermissionNames;
 use App\Utility\RoleNames;
 use App\Utility\CheckDependents;
+use App\Utility\ConferenceRegistrationUtils;
 
 class Events extends Controller {
 
@@ -25,12 +26,6 @@ class Events extends Controller {
         //auth stuff if they want detailed info, but right now we don't
         //make that distinction
         $this->middleware('jwt.auth');
-    }
-
-    private function rewriteEventListWithAttendees(&$evtList) {
-        foreach ($evtList as &$e) {
-            $this->rewriteEventWithAttendees($e);
-        }
     }
 
     private function rewriteEventWithAttendees(&$e) {
@@ -42,13 +37,18 @@ class Events extends Controller {
      * Display a listing of all events in the database.
      * @return Response
      */
-    public function index($id = null) {
+    public function index(Request $req, $id = null) {
         if ($id == null) {
             $events = Event::with("attendees")->orderBy('id', 'asc')->get()->toArray();
-            $this->rewriteEventListWithAttendees($events);
+            $events = array_map(function ($e) use ($req) { return $this->show($req, $e); }, $events);
             return $events;
         } else {
-            return $this->show($id);
+            $evt = Event::with("attendees")->find($id);
+            if (isset($evt)) {
+                return $this->show($req, $evt);
+            } else {
+                return response()->json(["message" => "event_not_found"], 404);
+            }
         }
     }
 
@@ -56,7 +56,7 @@ class Events extends Controller {
      * Display a listing of events given the conferenceID.
      * @return Response
      */
-    public function getEventByConferenceID($conferenceID) {
+    public function getEventByConferenceID(Request $req, $conferenceID) {
         $conf = Conference::find($conferenceID);
         if (is_null($conf)) {
             return response("No conference for id {$conferenceID}.", 405);
@@ -69,11 +69,11 @@ class Events extends Controller {
 
         $evtArray = $event->toArray();
 
-        $this->rewriteEventListWithAttendees($evtArray);
-
         if (sizeof($evtArray) == 0) {
             return response("No events for conferenceID {$conferenceID}.", 404);
         }
+
+        $evtArray = array_map(function ($e) use ($req) { return $this->show($req, $e); }, $evtArray);
         return $evtArray;
     }
 
@@ -129,16 +129,14 @@ class Events extends Controller {
      * @param  int  $id
      * @return Response
      */
-    public function show($id) {
-        //Select events, populate with "attendees" so we can calculate the
-        //remaining capacity
-        $event = Event::with("attendees")->find($id);
+    public function show(Request $req, $event) {
+        $this->rewriteEventWithAttendees($event);
 
-        $e = $event->toArray();
+        if($req->input("includeRegistration")) {
+            $event["registrations"] = ConferenceRegistrationUtils::getAccountEventRegistrationData($event['id']);
+        }
 
-        $this->rewriteEventWithAttendees($e);
-
-        return $e;
+        return $event;
     }
 
     /**

@@ -2,23 +2,47 @@
 	'use strict'
 
 	angular.module('inventory')
-		.controller('requestInventoryCtrl', function($scope) {
+		.controller('requestInventoryCtrl', function($scope, $stateParams, $http, $state, inventoryList, conferenceList, dependents, dataFormat, modal, ajax) {
 
-			$scope.dependents = {'1': {firstname: 'Uncle', lastname: 'Jimmy Joe'}, 
-			'2':{firstname: 'Billy', lastname: 'from the Jungles of Vancouver'},
-			'3':{firstname: 'Kevin', lastname: ''}
-			}
-
-			$scope.itemArray = [
-				{id: 1, name: 'Uranium', quantity: 1000},
-				{id: 2, name: 'Mystery Box', quantity: 1000},
-				{id: 3, name: 'Socks', quantity: 1000},
-				{id: 4, name: 'Something', quantity: 1000},
-			]
+			$scope.dependents = dataFormat.dependentsFormat(dependents.data.dependents, 'id')
+			$scope.itemArray = inventoryList.data.inventory
 
 			$scope.selected = { value: null }
 
 			$scope.currentItems = []
+			$scope.formattedData = []
+
+			$scope.showError = {value: false, message: ''}
+
+			$scope.submit = function() {
+				$scope.formattedData = formatData()
+
+				if ($scope.formattedData.length !== 0) {
+
+					var route = 'api/conferences/' + $stateParams.cid+ '/inventory/reserve'
+						ajax.serviceCall('Requesting Inventory...', 'post', route, $scope.formattedData).then(function(resData) {
+
+							modal.open('Inventory requested', function() {
+								$state.go('dashboard.home') 
+							})
+
+						}, function(resData) {
+
+							$scope.showError.message = 'Something went wrong'
+							$scope.showError.value = true
+
+						})
+
+				} else {
+					$scope.showError.message = 'No items selected'
+					$scope.showError.value = true
+				}
+
+			}
+
+			$scope.removeError = function() {
+				$scope.showError.value = false
+			}
 
 			$scope.addItem = function(item) {
 				if (item) {
@@ -46,6 +70,30 @@
 					}
 				}
 			}
+
+			var formatData = function() {
+				var items = []
+
+				angular.forEach($scope.currentItems, function(item) {
+
+					angular.forEach($scope.dependents, function(dep) {
+
+						if (dep[item.itemName] && dep[item.itemName] > 0) {
+
+							var currItem = {}
+							currItem.id = item.id
+							currItem.quantity = dep[item.itemName]
+							currItem.dependentID = dep.id
+
+							items.push(currItem)
+						}
+					})
+
+				})
+
+				return items
+			}
+
 		})
 
 })()

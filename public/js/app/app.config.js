@@ -55,17 +55,6 @@
 					}
 				})
 
-				.state('viewConference', {
-					url: '/conference/:cid',
-					templateUrl: 'js/conferenceView/conferenceView.view.conferenceDetails.html',
-					controller: 'conferenceDetailsCtrl',
-					resolve: {
-						conferenceInfo: function($stateParams, $http, $q) {
-							return $q.all([$http.get('api/conferences/' + $stateParams.cid), $http.get('/api/event/conference/' + $stateParams.cid)])
-						}
-					}
-				})
-
 				/* 
 				DASHBOARD TEMPLATE
 				*/
@@ -157,8 +146,8 @@
 					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.html',
 					controller: 'conferenceRegistrationCtrl',
 					resolve: {
-						dependents: function($http, loginStorage) {
-							return $http.get('api/accounts/' + loginStorage.getId() + '/dependents')
+						dependents: function(getDependentsService) {
+							return getDependentsService.getApproved()
 						}
 					}
 				})
@@ -215,6 +204,9 @@
 
 							return $q.all(promises)
 
+						},
+						inventory: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/inventory')
 						}
 
 					}
@@ -225,9 +217,17 @@
 				INVENTORY
 				*/
 				.state('dashboard.conferences.inventoryRequest', {
-					url: '/requestInventory',
+					url: '/requestInventory/?:cid',
 					templateUrl: 'js/inventory/inventory.view.request.html',
-					controller: 'requestInventoryCtrl'
+					controller: 'requestInventoryCtrl',
+					resolve: {
+						inventoryList: function($stateParams, $http, $q) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/inventory')
+						},
+						dependents: function($http, loginStorage) {
+							return $http.get('api/accounts/' + loginStorage.getId() + '/dependents')
+						}
+					}
 				})
 
 				/*

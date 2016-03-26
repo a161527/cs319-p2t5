@@ -4,14 +4,7 @@
 	angular.module('conferenceRegistration')
 		.controller('conferenceRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat, modal, dependents) {
 
-			$scope.dependents = {}
-			var fullDepList = dataFormat.dependentsFormat(dependents.data.dependents, 'id')
-
-			angular.forEach(fullDepList, function(dep) {
-				if (dep.approved) {
-					$scope.dependents[dep.id] = dep
-				}
-			})
+			$scope.dependents = dependents
 
 			//a new dependents object created so modifications can be made without affecting original object
 			$scope.selectDependents = {}
