@@ -143,18 +143,6 @@
 
 				.state('dashboard.conferences.create.2', {
 					url: '',
-					templateUrl: 'js/createConference/createConference.view.conferenceInventory.html',
-					controller: 'createConferenceCtrl'
-				})
-
-				.state('dashboard.conferences.create.3', {
-					url: '',
-					templateUrl: 'js/createConference/createConference.view.conferenceRooms.html',
-					controller: 'createConferenceCtrl'
-				})
-
-				.state('dashboard.conferences.create.4', {
-					url: '',
 					templateUrl: 'js/createConference/createConference.view.reviewInfo.html',
 					controller: 'createConferenceCtrl'
 				})

@@ -5,8 +5,6 @@
 		.factory('conferenceFields', function() {
 
 			var _conferenceInfo = null
-			var _inventory = null
-			var _rooms = null
 
 			return {
 				setConferenceInfo: function(t) {
@@ -23,27 +21,8 @@
 				getConferenceInfo: function() {
 					return _conferenceInfo
 				},
-				setInventory: function(t) {
-					//format boolean
-					for (var key in t) {
-						t[key].disposable = t[key].disposable || false;
-					}
-
-					_inventory = t
-				},
-				getInventory: function() {
-					return _inventory
-				},
-				setRooms: function(t) {
-					_rooms = t
-				},
-				getRooms: function() {
-					return _rooms
-				},
 				resetAll: function() {
 					_conferenceInfo = null
-					_inventory = null
-					_rooms = null
 				}
 			}
 
