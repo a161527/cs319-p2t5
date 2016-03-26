@@ -2,12 +2,16 @@
 	'use strict'
 
 	angular.module('conferenceRegistration')
-		.controller('conferenceRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat, $uibModal) {
+		.controller('conferenceRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat, modal, dependents) {
 
-			$scope.dependents = {'2': {firstname: 'Uncle', lastname: 'Jimmy Joe', id: '2'}, 
-			'3':{firstname: 'Billy', lastname: 'from the Jungles of Vancouver', id: '3'},
-			'4':{firstname: 'Kevin', lastname: '', id: '4'}
-			}
+			$scope.dependents = {}
+			var fullDepList = dataFormat.dependentsFormat(dependents.data.dependents, 'id')
+
+			angular.forEach(fullDepList, function(dep) {
+				if (dep.approved) {
+					$scope.dependents[dep.id] = dep
+				}
+			})
 
 			//a new dependents object created so modifications can be made without affecting original object
 			$scope.selectDependents = {}
@@ -256,10 +260,12 @@
 				$scope.showSubmitError = false
 				ajax.serviceCall('Submitting...', 'post', 'api/conferences/' + $stateParams.cid + '/register', $scope.formattedData).then(function(resData) {
 
-					openModal()
+					modal.open('Registration Successful', function() {
+						$state.go('dashboard.conferences.list')
+					})
 
 				}, function(resData) {
-					
+
 					$scope.showSubmitError = true
 
 				})
@@ -281,27 +287,6 @@
 				}
 
 				return selected
-			}
-
-			var openModal = function() {
-
-				var modal = $uibModal.open({
-					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.modalConfirm.html',
-					controller: function($scope, $uibModalInstance) {
-
-						$scope.ok = function() {
-							$uibModalInstance.close()
-						}
-
-					}
-				})
-
-				modal.result.then(function () {
-					$state.go('dashboard.conferences.list')
-				}, function () {
-					
-				})
-
 			}
 
 		})

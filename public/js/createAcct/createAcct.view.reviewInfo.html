@@ -2,32 +2,31 @@
 <div class='panel panel-default'>
 	<div class='panel panel-body break-all'>
 		<h3>Account Information</h3>
-		Email: {{createAcct.email}}
+		Email: {{formattedData.email}}
 
 		<br>
 
 		<div ng-hide='transfer'>
 			<h3>Dependent Users</h3>
-			<div ng-repeat='(idx, value) in dependents'>
-				<div><h4>{{dependents[idx].firstname}} {{dependents[idx].lastname}}</h4></div>
-				<div>Birth Date: {{dependents[idx].birthdate}}</div>
-				<div>Gender: {{dependents[idx].gender}}</div>
-				<div>City: {{dependents[idx].city}}</div>
-				<div>Country: {{dependents[idx].country}}</div>
-				<div ng-show='dependents[idx].accomodations'>Special Accomodations: {{dependents[idx].accomodations}}</div>
+			<div ng-repeat='dependent in formattedData.dependents'>
+				<div><h4>{{dependent.firstName}} {{dependent.lastName}}</h4></div>
+				<div>Birth Date: {{dependent.dateOfBirth}}</div>
+				<div>Gender: {{dependent.gender}}</div>
+				<div>Location: {{dependent.location}}</div>
+				<div ng-show='dependent.accomodations'>Special Accomodations: {{dependent.accomodations}}</div>
 			</div>
 			<br>
 		</div>
-
+<!-- 
 		<h3>Emergency Contact</h3>
-		<div>Full Name: {{contact.emergencyContactName}}</div>
-		<div>Phone Number: {{contact.phone}}</div>
+		<div>Full Name: {{formattedData.emergencyContactName}}</div>
+		<div>Phone Number: {{formattedData.phone}}</div> -->
 
 	</div>
 </div>
 <div class='row'>
 	<div class='col-md-6'>
-		<a class='btn btn-default btn-block' ui-sref='createAccount.3'>Back</a>
+		<a class='btn btn-default btn-block' ui-sref='createAccount.2'>Back</a>
 	</div>
 	<div class='col-md-6'>
 		<button class='btn btn-primary btn-block' ng-click='createAccount()'>Submit</button>
