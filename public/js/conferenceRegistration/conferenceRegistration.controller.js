@@ -11,9 +11,6 @@
 				if (dep.approved) {
 					$scope.dependents[dep.id] = dep
 				}
-				if (Object.keys($scope.dependents).length === 0) {
-					$scope.dependents = null
-				}
 			})
 
 			//a new dependents object created so modifications can be made without affecting original object
