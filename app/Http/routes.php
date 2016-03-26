@@ -119,6 +119,10 @@ Route::group(['prefix' => 'api'], function()
         Route::delete('/{itemId}', 'InventoryController@deleteItem');
     });
 
+    Route::group(['prefix' => 'userinventory/{id}'], function() {
+        Route::get('/approve', 'InventoryController@approveRequest');
+    });
+
 });
 
 // Routes for Event

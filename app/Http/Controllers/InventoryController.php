@@ -16,7 +16,7 @@ class InventoryController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('jwt.auth', ['except' => ['authenticate', 'token']]);
+        $this->middleware('jwt.auth', ['except' => ['authenticate', 'token']]);
         // provides an authorization header with each response
         // $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token']]);
     }
@@ -255,5 +255,20 @@ class InventoryController extends Controller
             return response()->json(['message' => 'item_deleted'], 200);
         else
             return response()->json(['message' => 'item_could_not_be_deleted'], 500);
+    }
+
+    /*
+     * GET /api/userinventory/{id}/approve
+     * POST /api/userinventory/{id}/approve
+     * - approves an item request
+     */
+    public function approveRequest($userInventoryId)
+    {
+        $item = UserInventory::where('id', $userInventoryId)->first();
+        $item->approved = 1;
+        if ($item->save())
+            return response()->json(['message' => 'item_approved'], 200);
+        else
+            return response()->json(['message' => 'item_could_not_be_approved'], 500);
     }
 }
