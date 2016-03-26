@@ -30,7 +30,7 @@
 				})
 
 				if ($scope.selectedDependents.length > 0) {
-					$state.go('dashboard.conferences.room-allocate.2', {selectedDependents: $scope.selectedDependents})
+					$state.go('dashboard.conferences.manage.room-allocate.2', {selectedDependents: $scope.selectedDependents})
 				} else {
 					$scope.noSelection = true
 				}
@@ -62,7 +62,7 @@
 			$scope.newRoomNameError = false
 
 			$scope.back = function() {
-				$state.go('dashboard.conferences.room-allocate', {cid: $stateParams.cid})
+				$state.go('dashboard.conferences.manage.room-allocate.1', {cid: $stateParams.cid})
 			}
 
 			$scope.getRoomSets = function(residenceId, name) {
@@ -105,7 +105,7 @@
 
 
 					modal.open('Successfully assigned users', function() {
-						$state.go('dashboard.conferences.room-allocate', null, { reload: true })
+						$state.go('dashboard.conferences.manage.room-allocate.1', null, { reload: true })
 					})
 
 

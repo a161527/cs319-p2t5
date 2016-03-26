@@ -11,12 +11,11 @@
 				return $q(function(resolve, reject) {
 
 					$http.get('api/conferences/' + cid + '/residences/assign/missing').then(function(resData) {
-						console.log(resData)
 
 						var resList = []
 
 						angular.forEach(resData.data, function(dep) {
-							if (dep.approved && dep.user.approved) {
+							if (dep.approved && dep.user.approved && parseInt(cid) === parseInt(dep.conferenceID)) {
 								resList.push(dep)
 							}
 						})

@@ -29,18 +29,14 @@
 			this.getPermissions = function(cid) {
 
 				return $q(function(resolve, reject) {
-					if (_confList) {
-						resolve(checkPermission(_confList, cid))
-					} else {
-						var route = 'api/conferences/' + cid + '?includePermissions=1&includeRegistration=1'
+					var route = 'api/conferences/' + cid + '?includePermissions=1&includeRegistration=1'
 
-						ajax.serviceCall('Loading ...', 'get', route).then(function(resData) {
-							var permissions = resData.data.permissions
-							resolve(permissions)
-						}, function(resData) {
-							reject(null)
-						})
-					}
+					ajax.serviceCall('Loading ...', 'get', route).then(function(resData) {
+						var permissions = resData.data.permissions
+						resolve(permissions)
+					}, function(resData) {
+						reject(null)
+					})
 				})
 
 			}
