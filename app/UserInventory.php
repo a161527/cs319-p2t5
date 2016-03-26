@@ -8,7 +8,8 @@ class UserInventory extends Model
 {
     //
     protected $table = 'user_inventory';
-
+    public $timestamps = false;
+    
     /**
      *	Get the conference associated with the inventory entry
      */
