@@ -8,6 +8,7 @@
 
 				var modal = $uibModal.open({
 					templateUrl: 'js/forms/forms.view.modalConfirm.html',
+					backdrop: 'static',
 					controller: function($scope, $uibModalInstance) {
 
 						$scope.message = message

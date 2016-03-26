@@ -79,7 +79,12 @@
 				.state('dashboard.approveAccts', {
 					url: '/approve-accounts',
 					templateUrl: 'js/approveAccts/approveAccts.view.html',
-					controller: 'approveAcctsCtrl'
+					controller: 'approveAcctsCtrl',
+					resolve: {
+						unapprovedDependents: function($http) {
+							return $http.get('api/unapprovedUsers')
+						}
+					}
 				})
 
 

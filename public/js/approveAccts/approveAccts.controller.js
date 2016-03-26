@@ -2,10 +2,20 @@
 	'use strict'
 
 	angular.module('approveAccts')
-		.controller('approveAcctsCtrl', function($scope, $state, ajax, errorCodes, loginStorage) {
+		.controller('approveAcctsCtrl', function($scope, $state, ajax, unapprovedDependents) {
 
-			console.log('foo')
+			$scope.dependents = unapprovedDependents.data
 
+			$scope.approve = function(id) {
+				var route = 'api/register/' + id + '/approve'
+				ajax.serviceCall('Approving...', 'post', route).then(function(resData) {
+
+					$state.reload()
+
+				}, function(resData) {
+					console.log(resData)
+				})
+			}
 		})
 
 })()
