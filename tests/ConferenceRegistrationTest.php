@@ -5,6 +5,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class ConferenceRegistrationTest extends TestCase
 {
     use \TokenTestCase;
+    use DatabaseTransactions;
 
     const TEST_CONF_ID = 1;
     const TEST_ATTENDEE_ID = 1;
@@ -44,7 +45,9 @@ class ConferenceRegistrationTest extends TestCase
         $this->json("POST", "/api/conferences/1/register", self::SIMPLE_REGISTRY_DATA);
         $this->assertResponseOK();
 
-        $this->json("POST", "/api/conferences/1/register", self::SIMPLE_REGISTRY_DATA);
+        $dataTwo = self::SIMPLE_REGISTRY_DATA;
+        $dataTwo[0]["attendees"] = [2];
+        $this->json("POST", "/api/conferences/1/register", $dataTwo);
         $this->assertResponseOK();
     }
 

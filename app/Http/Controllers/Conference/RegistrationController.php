@@ -80,7 +80,13 @@ class RegistrationController extends Controller
 
             //Check whether dependents are okay/owned by the current user
             if(!CheckDependents::dependentsOkay($attendees)) {
-                return ["message" => "Dependent(s) not owned by user or currently unapproved", "code" => 400, "attendees" => $attendees];
+                return ["message" => "bad_attendee_listing", "code" => 400, "attendees" => $attendees];
+            }
+
+            $existing = UserConference::where('conferenceID', $conferenceID)
+                        ->whereIn('userID', $attendees)->count();
+            if ($existing > 0) {
+                return ["message" => "already_registered", "code" => 400, "attendees" => $attendees];
             }
 
             //If the request explicitly doesn't have a flight, just register attendees without one
@@ -110,7 +116,7 @@ class RegistrationController extends Controller
                         return $this->registerAttendees($conferenceID, $attendees, $needsTransport, $needsAccommodation, $row->id);
                     }
                 }
-                return ["message" => "Flight data does not match known data for flight", "code" => 400, "attendees" => $attendees];
+                return ["message" => "flight_data_mismatch", "code" => 400, "attendees" => $attendees];
             } else {
                 //Create a new flight with the given data
 
