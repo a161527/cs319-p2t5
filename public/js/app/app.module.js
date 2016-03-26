@@ -16,6 +16,7 @@
 	angular.module('createEvent', [])
 	angular.module('dependents', [])
 	angular.module('approveRegistration', [])
+	angular.module('eventRegistration', [])
 
 
 	angular.module('app', [
@@ -33,6 +34,7 @@
 		'dependents',
 		'eventView',
 		'createEvent',
+		'eventRegistration',
 		'ui.select',
 		'satellizer',
 		'ui.router',

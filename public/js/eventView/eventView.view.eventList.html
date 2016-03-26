@@ -4,7 +4,7 @@
 			<h2>{{conferenceName}}: Events</h2>
 		</div>
 		<div class='col-sm-3'>
-			<button id='createEventBtn' ng-show='canCreateEvent' ng-click='goToCreateEvent()' class='btn btn-primary btn-block pull'><span class='glyphicon glyphicon-plus'></span><br> Create Event</button>
+			<button id='createEventBtn' ng-show='canCreateEvent' ng-click='goToEventState("create")' class='btn btn-primary btn-block pull'><span class='glyphicon glyphicon-plus'></span><br> Create Event</button>
 		</div>
 	</div>
 
@@ -81,10 +81,15 @@
 							<br>
 							<div class='row'>
 								<div class='col-md-12'>
-									<button class='btn btn-primary pull-right btn-block'
-										ng-show='!registered(event.registered)'
-										ui-sref='dashboard.events.registration.1({cid: event.id})'>
+									<button ng-hide='event.isEventRegistered' 
+											class='btn btn-primary pull-right btn-block' 
+											ng-click='goToEventState("register", {eid: event.id});'>
 										<span class='glyphicon glyphicon-pencil'></span><br> Register
+									</button>
+									<button ng-show='event.isEventRegistered && isConfRegistered' 
+											class='btn btn-primary pull-right btn-block' 
+											disabled>
+										All attendees registered
 									</button>
 								</div>
 							</div>

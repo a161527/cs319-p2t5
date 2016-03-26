@@ -288,10 +288,12 @@
 					templateUrl: 'js/eventView/eventView.view.eventList.html',
 					controller: 'eventListCtrl',
 					resolve: {
-						eventData: function(eventList, $q, loginStorage, $stateParams) {
+						eventData: function(eventList, $q, $stateParams) {
 							return $q.all([
 								eventList.refresh($stateParams.cid),
-								eventList.getPermissions($stateParams.cid)
+								eventList.getPermissions($stateParams.cid),
+								eventList.getConferenceRegistration($stateParams.cid),
+								eventList.getEventInfo($stateParams.cid)
 							])
 						},
 						conferenceName: function(eventList, $stateParams) {
@@ -307,6 +309,26 @@
 					url: '/create',
 					templateUrl: 'js/createEvent/createEvent.view.html',
 					controller: 'createEventCtrl'
+				})
+
+				/*
+				EVENT REGISTRATION
+				*/
+				.state('dashboard.events.register', {
+					url: '/register/:eid',
+					templateUrl: 'js/eventRegistration/eventRegistration.view.html',
+					controller: 'eventRegistrationCtrl',
+					resolve: {
+						conferenceData: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid + '?includeRegistration=1')
+						},
+						dependents: function($http, loginStorage) {
+							return $http.get('api/accounts/' + loginStorage.getId() + '/dependents')
+						},
+						eventData: function($http, $stateParams) {
+							return $http.get('api/event/' + $stateParams.eid + '?includeRegistration=1')
+						}
+					}
 				})
 				
 		})
