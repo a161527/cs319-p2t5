@@ -19,5 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ConferenceTableSeeder::class);
         $this->call(EventsTableSeeder::class);
         $this->call(RoomSeeder::class);
+        $this->call(InventorySeeder::class);
+        $this->call(UserInventorySeeder::class);
     }
 }
