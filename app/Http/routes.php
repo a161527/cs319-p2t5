@@ -97,6 +97,9 @@ Route::group(['prefix' => 'api'], function()
     Route::post('login', 'AuthenticationController@authenticate');
     Route::post('register', 'RegistrationController@register');
 
+    Route::get('unapprovedUsers', 'RegistrationController@listUnapproved');
+    Route::post('register/{id}/approve', 'RegistrationController@approveUser');
+
     // check if email is taken
     Route::get('checkemail', 'RegistrationController@checkEmail');
     Route::post('checkemail', 'RegistrationController@checkEmail');

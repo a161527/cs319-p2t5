@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\Logging\Log;
 use DB;
 use Hash;
+use Entrust;
+use App\Utility\PermissionNames;
 
 class RegistrationController extends Controller
 {
@@ -33,7 +35,7 @@ class RegistrationController extends Controller
      */
     public function __construct()
     {
-        //
+        $this->middleware('jwt.auth', ["only" => ["listUnapproved", "approveUser"]]);
     }
 
     /**
@@ -110,7 +112,7 @@ class RegistrationController extends Controller
             // save user and dependents in DB
             $userValidator = $this->userValidator($request->all());
             if ( $userValidator->passes() ) {
-                try 
+                try
                 {
                     DB::beginTransaction();
                     $id = $this->createAccount($request);
@@ -136,5 +138,30 @@ class RegistrationController extends Controller
             return response()->json(['taken' => false]);
         else
             return response()->json(['taken' => true]);
+    }
+
+    public function listUnapproved() {
+        if (!Entrust::can(PermissionNames::ApproveUserRegistration())) {
+            return response()->json(["message" => "cannot_approve_users"], 403);
+        }
+
+        return User::where('approved', false)->with("account")->get();
+    }
+
+    public function approveUser($id) {
+        if (!Entrust::can(PermissionNames::ApproveUserRegistration())) {
+            return response()->json(["message" => "cannot_approve_users"], 403);
+        }
+
+        $user = User::find($id);
+        if(!isset($user)) {
+            return response()->json(["message" => "user_does_not_exist", 404]);
+        }
+
+        $user->approved = 1;
+        $user->save();
+
+        //return 200 OKAY
+        return "";
     }
 }
