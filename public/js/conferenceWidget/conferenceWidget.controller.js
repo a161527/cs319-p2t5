@@ -18,8 +18,8 @@
 			showWidgets(permissions)
 
 			$scope.showWidget = function(toState) {
-				var state = 'dashboard.conferences.' + toState;
-				$state.go(state, {cid: $stateParams.cid});
+				var state = 'dashboard.conferences.manage.' + toState;
+				$state.go(state);
 			}
 			
 			$scope.goBack = function(currState) {

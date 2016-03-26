@@ -59,6 +59,7 @@
 				DASHBOARD TEMPLATE
 				*/
 				.state('dashboard', {
+					url: '/dashboard',
 					templateUrl: 'js/dashboard/dashboard.view.html',
 					controller: 'dashboardCtrl'
 				})
@@ -67,7 +68,7 @@
 				DASHBOARD HOME
 				*/
 				.state('dashboard.home', {
-					url: '/dashboard',
+					url: '/home',
 					templateUrl: 'js/dashboard/dashboard.view.home.html',
 					controller: 'dashboardCtrl'
 				})
@@ -100,7 +101,7 @@
 				CONFERENCE MANAGEMENT
 				*/
 				.state('dashboard.conferences.manage', {
-					url: '/manage/?:cid',
+					url: '/manage/:cid',
 					templateUrl: 'js/conferenceWidget/conferenceWidget.view.html',
 					controller: 'conferenceWidgetCtrl',
 					resolve: {
@@ -141,7 +142,7 @@
 				CONFERENCE REGISTRATION
 				*/
 				.state('dashboard.conferences.registration', {
-					url: '/conferenceRegistration/?:cid',
+					url: '/conferenceRegistration/:cid',
 					abstract: true,
 					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.html',
 					controller: 'conferenceRegistrationCtrl',
@@ -175,7 +176,7 @@
 
 				//Expects conference object
 				.state('dashboard.conferences.registrationDetails', {
-					url: '/details/?:cid',
+					url: '/details/:cid',
 					templateUrl: 'js/conferenceRegistrationDetails/conferenceRegistrationDetails.view.html',
 					controller: 'conferenceRegistrationDetailsCtrl',
 					params: {
@@ -217,7 +218,7 @@
 				INVENTORY
 				*/
 				.state('dashboard.conferences.inventoryRequest', {
-					url: '/requestInventory/?:cid',
+					url: '/requestInventory/:cid',
 					templateUrl: 'js/inventory/inventory.view.request.html',
 					controller: 'requestInventoryCtrl',
 					resolve: {
@@ -234,8 +235,14 @@
 				ROOMS
 				*/
 
-				.state('dashboard.conferences.room-allocate', {
-					url: '/allocate-room/?:cid',
+				.state('dashboard.conferences.manage.room-allocate', {
+					url: '/allocate-room',
+					abstract: true,
+					template: '<div ui-view></div>'
+				})
+
+				.state('dashboard.conferences.manage.room-allocate.1', {
+					url: '',
 					templateUrl: 'js/rooms/rooms.view.html',
 					controller: 'AllocateRoomsCtrl',
 					resolve: {
@@ -245,7 +252,7 @@
 					}
 				})
 
-				.state('dashboard.conferences.room-allocate.2', {
+				.state('dashboard.conferences.manage.room-allocate.2', {
 					url: '',
 					templateUrl: 'js/rooms/rooms.view.roomList.html',
 					controller: 'ResidenceSelectCtrl',
@@ -262,8 +269,8 @@
 				/*
 				REGISTRATION APPROVAL
 				*/
-				.state('dashboard.conferences.approve-registration', {
-					url: '/approveRegistration/?:cid',
+				.state('dashboard.conferences.manage.approve-registration', {
+					url: '/approveRegistration',
 					templateUrl: 'js/approveRegistration/approveRegistration.view.html',
 					controller: 'approveRegistrationCtrl',
 					resolve: {
@@ -277,7 +284,7 @@
 				EVENT LIST
 				*/
 				.state('dashboard.events', {
-					url: '/dashboard/:cid/events',
+					url: '/:cid/events',
 					templateUrl: 'js/eventView/eventView.view.eventList.html',
 					controller: 'eventListCtrl',
 					resolve: {
