@@ -2,6 +2,8 @@
 
 namespace App\Utility;
 
+use StdClass;
+
 /**
  * Provides functions to get the names for permissions.  This
  * is essentially used to centralize names, and also to avoid issues
@@ -25,6 +27,13 @@ class PermissionNames {
         return "view-site-statistics";
     }
 
+    public static function AllGlobalPermissions() {
+        return [
+            self::CreateConference(),
+            self::ManageGlobalPermissions(),
+            self::ApproveUserRegistration(),
+            self::ViewSiteStatistics()];
+    }
 
     //==============CONFERENCE PERMISSIONS===========
     public static function ConferenceEventCreate($confId) {
@@ -93,14 +102,46 @@ class PermissionNames {
         return "event-announce." . $evtId;
     }
 
-    public static function AllEventPermissions($evtId) {
+    public static function EventPermissionManagement($evtId) {
+        return 'event-permissions-management.' . $evtId;
+    }
+
+    public static function AllEventPermission($evtId) {
         return [
             self::EventInfoEdit($evtId),
             self::EventDetailView($evtId),
-            self::EventAnnounce($evtId)];
+            self::EventAnnounce($evtId),
+            self::EventPermissionManagement($evtId)];
     }
 
-    public static function normalizeConferencePermission($permName) {
+
+
+    public static function permissionManagementPermissionBases() {
+        return [
+            self::ManageGlobalPermissions(),
+            self::normalizePermissionName(self::ConferencePermissionManagement(1)),
+            self::normalizePermissionName(self::EventPermissionManagement(1))];
+    }
+
+    public static function normalizePermissionName($permName) {
         return explode(".", $permName)[0];
+    }
+
+    public static function extractPermissionData($permName) {
+        $perm = new StdClass;
+        $split = explode(".", $permName);
+        $perm->namePart = $split[0];
+        if (isset($split[1])) {
+            $perm->idPart = (int) $split[1];
+        }
+        return $perm;
+    }
+
+    public static function isConferencePermission($permName) {
+        return starts_with($permName, 'conference');
+    }
+
+    public static function isEventPermission($permName) {
+        return starts_with($permName, 'event');
     }
 }

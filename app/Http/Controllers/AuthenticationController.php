@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Models\Account;
+use App\Models\Permission;
 use Auth;
 use Entrust;
 use App\Utility\PermissionNames;
@@ -59,7 +60,7 @@ class AuthenticationController extends Controller
 
         $permissions = $this->buildPermissionsJson();
         $accountID = Account::where('email', '=', $credentials['email'])->select('id')->first()['id'];
-        
+
         // if no errors are encountered we can return a JWT
         return response()->json(['message' => 'successful_login', 'token' => $token, 'permissions' => $permissions, 'accountID' => $accountID]);
     }
@@ -102,6 +103,25 @@ class AuthenticationController extends Controller
         $this->checkPermission(PermissionNames::ManageGlobalPermissions(), $permissions);
         $this->checkPermission(PermissionNames::ApproveUserRegistration(), $permissions);
         $this->checkPermission(PermissionNames::ViewSiteStatistics(), $permissions);
+
+        if (!is_null(Auth::user())) {
+            $pnames = Permission::whereHas("roles", function ($query) {
+                $query->whereHas("users", function ($query) {
+                    $query->where("id", Auth::user()->id);
+                });
+            })->select("name")->get()->toArray();
+
+            $pnames = array_map(function($p) {return $p['name'];}, $pnames);
+            $lookFor = PermissionNames::permissionManagementPermissionBases();
+            foreach($pnames as $permName) {
+                $normal = PermissionNames::normalizePermissionName($permName);
+                if (in_array($normal, $lookFor)) {
+                    $permissions[] = "manage-some-permissions";
+                    break;
+                }
+            }
+        }
+
         return $permissions;
     }
 

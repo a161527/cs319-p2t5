@@ -75,6 +75,8 @@ return [
         //     'table' => 'users',
         // ],
     ],
+    // For Entrust, version we're using needs this for relations apparently
+    'model' => App\Models\Account::class,
 
     /*
     |--------------------------------------------------------------------------
