@@ -73,6 +73,15 @@
 					controller: 'dashboardCtrl'
 				})
 
+				/*
+				APPROVE ACCOUNTS
+				*/
+				.state('dashboard.approveAccts', {
+					url: '/approve-accounts',
+					templateUrl: 'js/approveAccts/approveAccts.view.html',
+					controller: 'approveAcctsCtrl'
+				})
+
 
 				/*
 				CONFERENCE LIST
