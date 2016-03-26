@@ -41,7 +41,7 @@
 					}
 
 					scope.subtract = function() {
-						if (scope.model > 0 && scope.items + 1 <= maxItems) {
+						if (scope.model - 1 >= 0) {
 							scope.model -= 1
 						}
 					}

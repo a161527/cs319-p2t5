@@ -204,6 +204,9 @@
 
 							return $q.all(promises)
 
+						},
+						inventory: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/inventory')
 						}
 
 					}
