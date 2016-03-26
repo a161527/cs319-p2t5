@@ -1,7 +1,7 @@
 (function() {
 	'use strict'
 
-	angular.module('approveAccts')
+	angular.module('auditAccts')
 		.controller('approveAcctsCtrl', function($scope, $state, ajax, unapprovedDependents) {
 
 			$scope.dependents = unapprovedDependents.data

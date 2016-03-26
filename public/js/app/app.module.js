@@ -15,7 +15,7 @@
 	angular.module('eventView', [])
 	angular.module('createEvent', [])
 	angular.module('dependents', [])
-	angular.module('approveAccts', [])
+	angular.module('auditAccts', [])
 	angular.module('approveRegistration', [])
 	angular.module('eventRegistration', [])
 
@@ -36,7 +36,7 @@
 		'eventView',
 		'createEvent',
 		'eventRegistration',
-		'approveAccts',
+		'auditAccts',
 		'ui.select',
 		'satellizer',
 		'ui.router',

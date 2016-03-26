@@ -78,13 +78,22 @@
 				*/
 				.state('dashboard.approveAccts', {
 					url: '/approve-accounts',
-					templateUrl: 'js/approveAccts/approveAccts.view.html',
+					templateUrl: 'js/auditAccts/auditAccts.view.approve.html',
 					controller: 'approveAcctsCtrl',
 					resolve: {
 						unapprovedDependents: function($http) {
 							return $http.get('api/unapprovedUsers')
 						}
 					}
+				})
+
+				/*
+				ASSIGN PERMISSIONS
+				*/
+				.state('dashboard.assignPermissions', {
+					url: '/assign-permissions',
+					templateUrl: 'js/auditAccts/auditAccts.view.assign.html',
+					controller: 'assignPermissionsCtrl'
 				})
 
 
