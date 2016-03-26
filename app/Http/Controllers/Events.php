@@ -40,18 +40,16 @@ class Events extends Controller {
     public function index(Request $req, $id = null) {
         if ($id == null) {
             $events = Event::with("attendees")->orderBy('id', 'asc')->get()->toArray();
+            $events = array_map(function ($e) use ($req) { return $this->show($req, $e); }, $events);
+            return $events;
         } else {
             $evt = Event::with("attendees")->find($id);
             if (isset($evt)) {
-                $events = [
-                    $evt->toArray()
-                ];
+                return $this->show($req, $evt);
             } else {
-                $events = [];
+                return response()->json(["message" => "event_not_found"], 404);
             }
         }
-        $events = array_map(function ($e) use ($req) { return $this->show($req, $e); }, $events);
-        return $events;
     }
 
     /**
