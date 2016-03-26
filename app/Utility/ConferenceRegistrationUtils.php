@@ -31,7 +31,9 @@ class ConferenceRegistrationUtils {
             $attendees[] = [
                 "user" => $a->userID,
                 "status" => $a->approved ? "approved" : "pending",
-                "id" => $a->id];
+                "id" => $a->id,
+                "flight" => $a->flight,
+                "room" => $a->room()->with('roomSet.residence', 'roomSet.type')->get()->toArray()];
         }
 
         return $attendees;
