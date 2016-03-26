@@ -2,22 +2,29 @@
 	'use strict'
 
 	angular.module('eventRegistration')
-		.controller('eventRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat, conferenceData, dependents) {
+		.controller('eventRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat, conferenceData, dependents, eventData) {
 
 			$scope.dependents = {}
 			var fullDepList = dataFormat.dependentsFormat(dependents.data.dependents, 'id')
 			var approvedReg = []
+			var registered = []
 
 			// get users w/ approved conference registration
 			angular.forEach(conferenceData.data.registered, function(confReg) {
 				if (confReg.status == 'approved') {
+
 					approvedReg.push(confReg.id)
 				}
 			})
 
-			// only show users who have approved conference registration
+			// get users who are already registered for event
+			angular.forEach(eventData.data.registrations, function(user) {
+				registered.push(user.userId)
+			})
+
+			// only show users who have approved conference registration and aren't already registered
 			angular.forEach(fullDepList, function(dep) {
-				if (approvedReg.indexOf(dep.id) !== -1) {
+				if ((approvedReg.indexOf(dep.id) !== -1) && (registered.indexOf(dep.id) == -1)) {
 					$scope.dependents[dep.id] = dep
 				}
 			})
@@ -66,7 +73,7 @@
 			}
 
 			$scope.cancel = function() {
-				$state.go('dashboard.events')
+				$state.go('dashboard.events', {reload: true})
 			}
 
 			//Select all checkboxes
@@ -82,16 +89,15 @@
 				$scope.selectedDependents = addSelectedDependents($scope.dependents, 'register')
 				$scope.formattedData = $scope.formatData()
 
-				console.log($scope.formattedData)
-
 				$scope.showSubmitError = false
-				ajax.serviceCall('Submitting...', 'post', 'api/event/' + $stateParams.cid + '/register', $scope.formattedData).then(function(resData) {
-
-					$state.go('dashboard.events')
+				ajax.serviceCall('Submitting...', 'post', 'api/event/' + $stateParams.eid + '/register', $scope.formattedData).then(function(resData) {
+					
+					$state.go('dashboard.events', $stateParams, {reload: true})
 
 				}, function(resData) {
 					
 					$scope.showSubmitError = true
+					$state.go('dashboard.events', $stateParams, {reload: true})
 
 				})
 			}
@@ -112,27 +118,6 @@
 				}
 
 				return selected
-			}
-
-			var openModal = function() {
-
-				var modal = $uibModal.open({
-					templateUrl: 'js/eventRegistration/eventRegistration.view.modalConfirm.html',
-					controller: function($scope, $uibModalInstance) {
-
-						$scope.ok = function() {
-							$uibModalInstance.close()
-						}
-
-					}
-				})
-
-				modal.result.then(function () {
-					$state.go('dashboard.events.list')
-				}, function () {
-					
-				})
-
 			}
 
 			var getConfRegistered = function () {

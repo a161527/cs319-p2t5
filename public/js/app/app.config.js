@@ -285,7 +285,8 @@
 							return $q.all([
 								eventList.refresh($stateParams.cid),
 								eventList.getPermissions($stateParams.cid),
-								eventList.getRegistration($stateParams.cid)
+								eventList.getConferenceRegistration($stateParams.cid),
+								eventList.getEventInfo($stateParams.cid)
 							])
 						},
 						conferenceName: function(eventList, $stateParams) {
@@ -307,7 +308,7 @@
 				EVENT REGISTRATION
 				*/
 				.state('dashboard.events.register', {
-					url: '/register',
+					url: '/register/:eid',
 					templateUrl: 'js/eventRegistration/eventRegistration.view.html',
 					controller: 'eventRegistrationCtrl',
 					resolve: {
@@ -316,6 +317,9 @@
 						},
 						dependents: function($http, loginStorage) {
 							return $http.get('api/accounts/' + loginStorage.getId() + '/dependents')
+						},
+						eventData: function($http, $stateParams) {
+							return $http.get('api/event/' + $stateParams.eid + '?includeRegistration=1')
 						}
 					}
 				})

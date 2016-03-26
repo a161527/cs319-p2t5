@@ -81,9 +81,15 @@
 							<br>
 							<div class='row'>
 								<div class='col-md-12'>
-									<button class='btn btn-primary pull-right btn-block'
-										ng-show='confRegistered' ng-click='goToEventState("register");'>
+									<button ng-hide='event.isEventRegistered' 
+											class='btn btn-primary pull-right btn-block' 
+											ng-click='goToEventState("register", {eid: event.id});'>
 										<span class='glyphicon glyphicon-pencil'></span><br> Register
+									</button>
+									<button ng-show='event.isEventRegistered && isConfRegistered' 
+											class='btn btn-primary pull-right btn-block' 
+											disabled>
+										All attendees registered
 									</button>
 								</div>
 							</div>
