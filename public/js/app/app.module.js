@@ -14,6 +14,7 @@
 	angular.module('rooms', [])
 	angular.module('eventView', [])
 	angular.module('createEvent', [])
+	angular.module('approveRegistration', [])
 
 	angular.module('app', [
 		'format',
@@ -33,6 +34,7 @@
 		'satellizer',
 		'ui.router',
 		'blockUI',
-		'ui.bootstrap'
+		'ui.bootstrap',
+		'approveRegistration'
 	])
 })()

@@ -167,7 +167,12 @@
 					url: '/conferenceRegistration/?:cid',
 					abstract: true,
 					templateUrl: 'js/conferenceRegistration/conferenceRegistration.view.html',
-					controller: 'conferenceRegistrationCtrl'
+					controller: 'conferenceRegistrationCtrl',
+					resolve: {
+						dependents: function($http, loginStorage) {
+							return $http.get('api/accounts/' + loginStorage.getId() + '/dependents')
+						}
+					}
 				})
 
 				.state('dashboard.conferences.registration.1', {
@@ -262,6 +267,20 @@
 					resolve: {
 						residences: function($stateParams, $http) {
 							return $http.get('api/conferences/' + $stateParams.cid + '/residences')
+						}
+					}
+				})
+
+				/*
+				REGISTRATION APPROVAL
+				*/
+				.state('dashboard.conferences.approve-registration', {
+					url: '/approveRegistration/?:cid',
+					templateUrl: 'js/approveRegistration/approveRegistration.view.html',
+					controller: 'approveRegistrationCtrl',
+					resolve: {
+						unapproved: function($stateParams, getUnapprovedService) {
+							return getUnapprovedService.get($stateParams.cid)
 						}
 					}
 				})

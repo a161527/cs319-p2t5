@@ -4,19 +4,23 @@
 	angular.module('login')
 		.service('loginStorage', function($window, $q, ajax, conferenceList) {
 
-			this.emailKey = 'gobind_sarvar_email'
+			this.credKey = 'gobind_sarvar'
 			this.tokenKey = 'satellizer_token'
 			var _permissions = null
 
-			this.storeEmail = function(email) {
-				$window.localStorage.setItem(this.emailKey, email)
+			this.storeCreds = function(email, id) {
+				$window.localStorage.setItem(this.credKey, JSON.stringify({email: email, id: id}))
 			}
 
 			this.logout = function() {
 				$window.localStorage.removeItem(this.tokenKey)
-				$window.localStorage.removeItem(this.emailKey)
+				$window.localStorage.removeItem(this.credKey)
 				conferenceList.clearPermissions()
 				_permissions = null
+			}
+
+			this.getCreds = function() {
+				return JSON.parse($window.localStorage.getItem(this.credKey))
 			}
 
 			this.getAuthToken = function() {
@@ -24,7 +28,11 @@
 			}
 
 			this.getEmail = function() {
-				return $window.localStorage.getItem(this.emailKey)
+				return JSON.parse($window.localStorage.getItem(this.credKey)).email
+			}
+
+			this.getId = function() {
+				return JSON.parse($window.localStorage.getItem(this.credKey)).id
 			}
 
 			this.getPermissions = function() {

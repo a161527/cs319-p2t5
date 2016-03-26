@@ -2,22 +2,48 @@
 	'use strict'
 
 	angular.module('createAcct')
-		.controller('createAcctCtrl', function($scope, $state, accountCredentials, ajax) {
+		.controller('createAcctCtrl', function($scope, $state, accountCredentials, ajax, dataFormat, $http) {
 
 			$scope.dependents = accountCredentials.getDependents() || {'1':{}} 
 			$scope.createAcct = accountCredentials.getAccountInfo() || {}
 			$scope.contact = accountCredentials.getContact() || {}
 			$scope.transfer = accountCredentials.getTransfer() || false
 			$scope.invalidAge = false
+			$scope.formattedData = accountCredentials.getFormattedData() || {}
 
 			//Need this to show message in sync with ajax call for check email
 			$scope.showAvailMsg = false
 			$scope.emailAvailable = accountCredentials.getEmailAvailable() || false
 
 			$scope.createAccount = function() {
-				alert('You did it!')
-				accountCredentials.resetAll()
-				$state.go('login')
+				var data = formatData()
+				console.log(data)
+				ajax.serviceCall('Creating Account...', 'post', 'api/register', data).then(function(resData) {
+					accountCredentials.resetAll()
+					$state.go('login')
+				}, function(resData) {
+					console.log(resData)
+				})
+			}
+
+			var formatData = function() {
+				var obj = {}
+				angular.copy($scope.createAcct, obj)
+
+				delete obj['confirmEmail']
+				var depList = []
+
+				angular.forEach($scope.dependents, function(dep) {
+					var dependent = {}
+
+					angular.copy(dep, dependent)
+
+					dependent.dateOfBirth = dataFormat.dateFormat(dep.dateOfBirth)
+					depList.push(dependent)
+				})
+
+				obj.dependents = depList
+				return obj
 			}
 
 			$scope.checkMatch = function(validation, field, confirmationField) {
@@ -86,6 +112,10 @@
 				accountCredentials.setTransfer($scope.transfer)
 				accountCredentials.setEmailAvailable($scope.emailAvailable)
 
+				if (toState === '4') {
+					accountCredentials.setFormattedData(formatData())
+				}
+				
 				if (model === 'dependents') {
 					
 					checkDependentsForm(form, toState, set, model)
@@ -93,8 +123,9 @@
 				}
 
 				else if (form.$valid && $scope.emailAvailable) {
+					
 					onNavigate(toState, set, model)
-				} 
+				}
 
 				else {
 					setFormDirty(form)
@@ -145,7 +176,7 @@
 
 					if (dependents.hasOwnProperty(key)) {
 
-						var dateM = moment(dependents[key].birthdate)
+						var dateM = moment(dependents[key].dateOfBirth)
 						var age = parseInt(moment.duration(todayM.diff(dateM)).asYears())
 
 						if (age >= minAge) {
