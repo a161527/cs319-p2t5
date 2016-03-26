@@ -27,6 +27,13 @@ class PermissionNames {
         return "view-site-statistics";
     }
 
+    public static function AllGlobalPermissions() {
+        return [
+            self::CreateConference(),
+            self::ManageGlobalPermissions(),
+            self::ApproveUserRegistration(),
+            self::ViewSiteStatistics()];
+    }
 
     //==============CONFERENCE PERMISSIONS===========
     public static function ConferenceEventCreate($confId) {
@@ -95,11 +102,16 @@ class PermissionNames {
         return "event-announce." . $evtId;
     }
 
+    public static function EventPermissionsManagement($evtId) {
+        return 'event-permissions-management.' . $evtID;
+    }
+
     public static function AllEventPermissions($evtId) {
         return [
             self::EventInfoEdit($evtId),
             self::EventDetailView($evtId),
-            self::EventAnnounce($evtId)];
+            self::EventAnnounce($evtId),
+            self::EventPermissionsManagement($evtId)];
     }
 
     public static function normalizePermissionName($permName) {
@@ -111,8 +123,16 @@ class PermissionNames {
         $split = explode(".", $permName);
         $perm->namePart = $split[0];
         if (isset($split[1])) {
-            $perm->idPart = $split[1];
+            $perm->idPart = (int) $split[1];
         }
         return $perm;
+    }
+
+    public static function isConferencePermission($permName) {
+        return starts_with($permName, 'conference');
+    }
+
+    public static function isEventPermission($permName) {
+        return starts_with($permName, 'event');
     }
 }

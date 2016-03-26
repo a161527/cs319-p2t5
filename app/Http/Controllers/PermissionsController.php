@@ -75,6 +75,74 @@ class PermissionsController extends Controller
         }
     }
 
+    private function manageableRolesForUser() {
+        $roles = Role::with('permissions');
+        if (Entrust::can(PermissionNames::ManageGlobalPermissions())) {
+            return $roles;
+        }
+        //Filter out global permissions
+        $roles = array_filter(
+            $roles,
+            function ($r) {
+                $globalPerms = PermissionNames::AllGlobalPermissions();
+                foreach ($r->permissions as $p) {
+                    if (in_array($p->name, $globalPerms)) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+
+        $confPermNamePart =
+            PermissionNames::normalizePermissionName(
+                PermissionNames::ConferencePermissionManagement(1));
+
+        $evtPermNamePart =
+            PermissionNames::normalizePermissionName(
+                PermissionNames::EventPermissionsManagement(1));
+
+        $currentPermRoles = Auth::user()->roles()->permissions()
+            ->where('name', 'like', $confPermNamePart . '%')
+            ->orWhere('name', 'like', $evtPermNamePart . '%')
+            ->get();
+
+        $conferences = [];
+        $events = [];
+
+        foreach ($currentPerms as $perm) {
+            if (PermissionNames::isConferencePermission($perm->name)) {
+                $conferences[] = PermissionNames::extractPermissionData($perm->name)->idPart;
+            } else {
+                $events[] = PermissionNames::extractPermissionData($perm->name)->idPart;
+            }
+        }
+
+        $ownedEvents = Event::whereIn('conferenceID', $conferences)->get();
+        $events = array_merge($events, $ownedEvents);
+
+        //Filter out permissions not associated with the conferences/events
+        //this user can control.
+        $roles = array_filter(
+            $roles,
+            function($r) {
+                foreach ($r->permissions as $p) {
+                    if (PermissionNames::isConferencePermission($p->name)) {
+                        $confId = PermissionNames::extractPermissionData($p->name)->idPart;
+                        if (!in_array($cid, $conferences)) {
+                            return false;
+                        }
+                    } else if (PermissionNames::isEventPermission($p->name)) {
+                        $evtId = PermissionNames::extractPermissionData($p->name)->idPart;
+                        if (!in_array($evtId, $events)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            });
+        return $roles;
+    }
+
     private function executeRoleChange(Request $req, $email) {
         return DB::transaction(function () use ($email, $req) {
             $acc = Account::with("roles")->where("email", $email)->get()->first();
