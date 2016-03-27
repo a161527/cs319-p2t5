@@ -348,6 +348,15 @@
 					templateUrl: 'js/createResidence/createResidence.view.html',
 					controller: 'createResidenceCtrl'
 				})
+
+				/*
+				CREATE TRANSPORTATION
+				*/
+				.state('dashboard.conferences.manage.createTransportation', {
+					url: '/transportation/create',
+					templateUrl: 'js/createTransportation/createTransportation.view.html',
+					controller: 'createTransportationCtrl'
+				})
 				
 		})
 

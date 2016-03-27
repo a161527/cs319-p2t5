@@ -16,6 +16,7 @@
 	angular.module('createEvent', [])
 	angular.module('createInventory', [])
 	angular.module('createResidence', [])
+	angular.module('createTransportation', [])
 	angular.module('dependents', [])
 	angular.module('approveRegistration', [])
 	angular.module('eventRegistration', [])
@@ -38,6 +39,7 @@
 		'createEvent',
 		'createInventory',
 		'createResidence',
+		'createTransportation',
 		'eventRegistration',
 		'ui.select',
 		'satellizer',
