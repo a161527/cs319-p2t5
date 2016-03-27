@@ -2,11 +2,13 @@
 	'use strict'
 
 	angular.module('auditAccts')
-		.controller('assignPermissionsCtrl', function($scope, $state, $q, ajax, roles) {
+		.controller('assignPermissionsCtrl', function($scope, $state, $q, ajax, roles, loginStorage) {
 
-			$scope.emailExists = false
+			$scope.validEmail = {value: true, message: 'Account does not exist'}
 			$scope.availableRoles = roles.data
  			$scope.assignedRoles = {value: []}
+
+ 			$scope.showPermissions = false
 
  			$scope.add = []
  			$scope.remove = []
@@ -14,24 +16,45 @@
  			var origRoles = []
 
 			$scope.checkEmailExists = function(email) {
-				ajax.serviceCall('Checking email...', 'post', 'api/checkemail', {'email': email}).then(function(resData) {
-					$scope.emailExists = resData.data.taken? true : false
 
-					if ($scope.emailExists) {
+				if (email === loginStorage.getEmail()) {
+					$scope.validEmail.value = false
+					$scope.validEmail.message = 'You cannot edit your own permissions'
+					return
+				}
+
+				else if (email) {
+
+					ajax.serviceCall('Checking email...', 'post', 'api/checkemail', {'email': email}).then(function(resData) {
+
+					if (resData.data.taken) {
+
+						$scope.validEmail.value = true
+						$scope.showPermissions = true
+
 						var route = '/api/roles/account/' + email
 						return ajax.serviceCall('Retrieving permissions...', 'get', route)
+
 					} else {
+
+						$scope.validEmail.message = 'Account does not exist'
+						$scope.validEmail.value = false
+						$scope.showPermissions = false
+						
 						return $q.when(null)
 					}
 					
 
-				}).then(function(resData) {
+					}).then(function(resData) {
 
-					reloadRoles(resData)
+						reloadRoles(resData)
 
-				}).catch(function(resData) {
-					console.log(resData)
-				})
+					}).catch(function(resData) {
+						console.log(resData)
+					})
+
+				}
+
 			}
 
 			$scope.submit = function() {

@@ -1,13 +1,17 @@
-<div class="form-group">
-	<label>Email</label>
-	<input class='form-control' 
-		ng-model='email'
-		ng-change='checkEmailExists(email)'
-		ng-model-options='{updateOn: "blur"}'
-		required>
-	{{emailExists}}
-</div>
-<div class='form-group'>
+<form name='emailInp'>
+	<div class="form-group" ng-class='{"has-error": !validEmail.value && emailInp.email.$dirty && email}' >
+		<label>Email</label>
+		<input class='form-control'
+			name='email'
+			ng-model='email'
+			ng-change='checkEmailExists(email)'
+			ng-model-options='{updateOn: "blur"}'
+			required>
+		<error-message ng-show='!validEmail.value && emailInp.email.$dirty && email'>{{validEmail.message}}</error-message>
+	</div>
+</form>
+<div class='form-group'
+	ng-show='showPermissions'>
 	<label>Roles</label>
 	<div>
 		<ui-select multiple 
