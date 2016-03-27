@@ -28,7 +28,7 @@ class RoleCreate {
         return Permission::whereIn("name", $permissionNames)->get();
     }
 
-    private static function createPermissionRoles($permissions) {
+    public static function createPermissionRoles($permissions) {
         foreach ($permissions as $p) {
             $role = new Role;
             $role->name = $p->name;
@@ -43,6 +43,12 @@ class RoleCreate {
 
             $permissions = self::createAllPermissions($permissionList);
             self::createPermissionRoles($permissions);
+
+            // Create permissions/roles for things which are more limited permissions
+            // (and therefore not in the permissions we want for management)
+            self::createPermissionRoles(
+                self::createAllPermissions(
+                    PermissionNames::ExclusiveConferencePermissions($confId)));
 
             $managerRoleId = self::ConferenceManager($confId, $permissions);
             return $managerRoleId;
