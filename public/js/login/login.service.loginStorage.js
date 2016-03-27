@@ -7,6 +7,7 @@
 			this.credKey = 'gobind_sarvar'
 			this.tokenKey = 'satellizer_token'
 			var _permissions = null
+			var _confPerm = null
 
 			this.storeCreds = function(email, id) {
 				$window.localStorage.setItem(this.credKey, JSON.stringify({email: email, id: id}))
@@ -17,6 +18,7 @@
 				$window.localStorage.removeItem(this.credKey)
 				conferenceList.clearPermissions()
 				_permissions = null
+				_confPerm = null
 			}
 
 			this.getCreds = function() {
@@ -56,6 +58,34 @@
 
 					}
 				})
+			}
+
+			this.getConferencePermissions = function(cid) {
+
+				return $q(function(resolve, reject) {
+
+					if (_confPerm && _confPerm.cid === cid && _confPerm.permissions) {
+
+						resolve(_confPerm.permissions)
+
+					} else {
+						var route = 'api/conferences/' + cid + '?includePermissions=1'
+
+						ajax.serviceCall('Loading ...', 'get', route).then(function(resData) {
+							var permissions = resData.data.permissions
+
+							_confPerm = {cid: cid, permissions: permissions}
+
+							resolve(permissions)
+
+						}, function(resData) {
+							reject(resData)
+						})
+
+					}
+
+				})
+
 			}
 
 

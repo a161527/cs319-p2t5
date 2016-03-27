@@ -78,7 +78,7 @@
 								</a>
 
 								<button class='btn btn-primary pull-right btn-block'
-									ng-show='!registered(conference.registered)'
+									ng-show='!registered(conference.registered) && hasApprovedDependents'
 									ui-sref='dashboard.conferences.registration.1({cid: conference.id})'>
 									<span class='glyphicon glyphicon-pencil'></span><br> Register
 								</button>

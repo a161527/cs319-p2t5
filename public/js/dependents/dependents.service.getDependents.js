@@ -29,6 +29,20 @@
 				
 			}
 
+			this.getNumberOfApproved = function() {
+				return $q(function(resolve, reject) {
+
+					$http.get('api/accounts/' + loginStorage.getId() + '/dependents').then(function(resData) {
+
+						resolve(resData.data.dependents.length)
+
+					}, function(resData) {
+						reject(resData)
+					})
+
+				})
+			}
+
 		})
 
 })()

@@ -1,0 +1,66 @@
+<div ng-show='dependents.length === 0'>
+	No users requiring approval
+</div>
+<ul class="list-group">
+	<div ng-repeat='unapproved in dependents'>
+		<li class='list-group-item unselectable-text'>
+			<div class='row'>
+				<div class='col-sm-3'>
+					<span class='glyphicon glyphicon-user glyphicon-large'></span>
+				</div>
+				<div class='col-sm-6'>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Name:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{unapproved.firstName}} {{unapproved.lastName}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Date of Birth:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{unapproved.dateOfBirth}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Gender:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{unapproved.gender}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Location:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{unapproved.location || 'None'}}
+						</div>
+					</div>
+					<div class='row' ng-show='unapproved.notes'>
+						<div class='col-sm-6'>
+							<b>Notes:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{unapproved.notes}}
+						</div>
+					</div>
+				</div>
+
+				<div class='col-sm-3'>
+
+					<button class='btn btn-success pull-right btn-block'
+						ng-click='approve(unapproved.id)'>
+						<span class='glyphicon glyphicon-ok'></span><br> Approve
+					</button>
+
+				</div>
+
+			</div>
+		</li>
+	</div>
+</ul>
