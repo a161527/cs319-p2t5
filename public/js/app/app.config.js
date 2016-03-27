@@ -93,7 +93,12 @@
 				.state('dashboard.assignPermissions', {
 					url: '/assign-permissions',
 					templateUrl: 'js/auditAccts/auditAccts.view.assign.html',
-					controller: 'assignPermissionsCtrl'
+					controller: 'assignPermissionsCtrl',
+					resolve: {
+						roles: function($http) {
+							return $http.get('/api/roles/assignable')
+						}
+					}
 				})
 
 
