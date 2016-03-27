@@ -15,7 +15,7 @@ class UserInventory extends Model
      */
     public function user()
     {
-    	return $this->hasOne('App\User', 'userID');
+    	return $this->hasOne('App\User', 'id', 'userID');
     }
 
     /**
@@ -23,6 +23,6 @@ class UserInventory extends Model
      */
     public function inventory()
     {
-    	return $this->hasOne('App\Inventory', 'inventoryID');
+    	return $this->hasOne('App\Inventory', 'id', 'inventoryID');
     }
 }
