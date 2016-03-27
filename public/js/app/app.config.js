@@ -61,7 +61,12 @@
 				.state('dashboard', {
 					url: '/dashboard',
 					templateUrl: 'js/dashboard/dashboard.view.html',
-					controller: 'dashboardCtrl'
+					controller: 'dashboardCtrl',
+					resolve: {
+						globalPermissions: function(loginStorage) {
+							return loginStorage.getPermissions()
+						}
+					}
 				})
 
 				/*

@@ -18,7 +18,7 @@
 				//returns the name of the management widget
 				//if the last result of the split is an number, then it is a multistep widget
 				//in this case, the state name is the result prior to that
-				var getManageStateName = function(toState) {
+				var getStateName = function(toState) {
 					var states = toState.name.split(delimiter)
 					var last = states.length - 1
 
@@ -30,8 +30,27 @@
 					
 				}
 
+				var checkGlobalPermissions = function(toState, permissions) {
+					switch(getStateName(toState)) {
+
+						case 'assignPermissions':
+							var somePerms = permissions.indexOf('manage-some-permissions') === 1
+							var allPerms = permissions.indexOf('manage-global-permissions') === 1
+							if (!(somePerms || allPerms)) {
+								console.log('You do not have permission')
+								$state.go('dashboard.home')
+							}
+							break
+
+						case 'approveAccts':
+							checkHasPermission('approve-user-registration', permissions)
+							break
+							
+					}
+				}
+
 				var checkConferencePermissions = function(toState, permissions) {
-					switch(getManageStateName(toState)) {
+					switch(getStateName(toState)) {
 						case 'room-allocate':
 							checkHasPermission('conference-room-edit', permissions)
 							break
@@ -49,7 +68,7 @@
 				}
 
 				/*
-				Start of route handling
+				************Start of route handling*******
 				*/
 
 				//dashboard is the only state that requires login
@@ -70,6 +89,7 @@
 
 					else {
 
+						//Check conference permissions
 						if (checkIfManageState(toState)) {
 							
 							//check permissions
@@ -87,12 +107,19 @@
 									}
 
 								}, function(resData) {
-									
 									console.log('Something went wrong')
-
 								})
 							}
 
+						//Check global permissions
+						} 
+
+						else {
+							loginStorage.getPermissions().then(function(resData) {
+								checkGlobalPermissions(toState, resData)
+							}, function(resData) {
+								console.log('Something went wrong')
+							})
 						}
 
 					}
