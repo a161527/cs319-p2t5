@@ -267,6 +267,12 @@
 					}
 				})
 
+				.state('dashboard.conferences.manage.approve-inventory', {
+					url: '/approveInventory',
+					templateUrl: 'js/inventory/inventory.view.approve.html',
+					controller: 'approveInventoryCtrl'
+				})
+
 				/*
 				ROOMS
 				*/
