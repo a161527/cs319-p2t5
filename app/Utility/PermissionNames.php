@@ -89,6 +89,11 @@ class PermissionNames {
                 self::ConferenceViewStatistics($confId)];
     }
 
+    public static function ExclusiveConferencePermissions($confId) {
+        return [
+            self::ConferenceExternalTransportView($confId)];
+    }
+
     //================EVENT PERMISSIONS============
     public static function EventInfoEdit($evtId) {
         return "event-info-edit." . $evtId;
@@ -106,7 +111,7 @@ class PermissionNames {
         return 'event-permissions-management.' . $evtId;
     }
 
-    public static function AllEventPermission($evtId) {
+    public static function AllEventPermissions($evtId) {
         return [
             self::EventInfoEdit($evtId),
             self::EventDetailView($evtId),
