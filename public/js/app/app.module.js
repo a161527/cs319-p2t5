@@ -14,6 +14,7 @@
 	angular.module('rooms', [])
 	angular.module('eventView', [])
 	angular.module('createEvent', [])
+	angular.module('createInventory', [])
 	angular.module('dependents', [])
 	angular.module('approveRegistration', [])
 	angular.module('eventRegistration', [])
@@ -34,6 +35,7 @@
 		'dependents',
 		'eventView',
 		'createEvent',
+		'createInventory',
 		'eventRegistration',
 		'ui.select',
 		'satellizer',

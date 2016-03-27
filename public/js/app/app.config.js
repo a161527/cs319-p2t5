@@ -330,6 +330,15 @@
 						}
 					}
 				})
+
+				/*
+				CREATE INVENTORY
+				*/
+				.state('dashboard.conferences.manage.createInventory', {
+					url: '/inventory/create',
+					templateUrl: 'js/createInventory/createInventory.view.html',
+					controller: 'createInventoryCtrl'
+				})
 				
 		})
 

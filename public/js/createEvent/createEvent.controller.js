@@ -21,11 +21,9 @@
 				if (form.$valid) {
 					ajax.serviceCall('Creating event...', 'post', 'api/event/' + $stateParams.cid, eventInfo).then(function(resData) {
 
-						console.log(resData)
 						$state.go('dashboard.events', {'cid': $stateParams.cid}, {reload: true})
 
 					}, function(resData) {
-						console.log(resData)
 
 						$scope.showError = true
 						$scope.errorMessage = errorCodes[resData.data.message]

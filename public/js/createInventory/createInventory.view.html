@@ -1,0 +1,68 @@
+<div class='container'>
+    <br>
+    <div class='row'>
+        <div class='col-sm-offset-3 col-sm-6'>
+			<form name='inventoryForm' novalidate>
+				<div ng-repeat='(idx, value) in inventory'>
+					<div class="panel panel-default" id='inventory{{idx}}'>
+						<div class="panel-body" ng-model='inventory[idx]'>
+							<div class='row' ng-show='showRemoveButton(idx)'>
+								<div class='col-sm-offset-11 col-sm-1'>
+									<div class='glyphicon glyphicon-remove hand-cursor remove-button' name='removeButton{{idx}}' ng-click='deleteInventory(idx)'></div>
+								</div>
+							</div>
+
+							<div class='row'>
+								<div class='col-sm-12'>
+									<input-with-validation model='inventory[idx].itemName' validation='inventoryForm' identifier='itemName{{idx}}' inp-type='text'>Item Name</input-with-validation>
+								</div>
+							</div>
+
+							<div class='row'>
+								<div class='col-sm-6'>
+                                    <div class='form-group' ng-class='{"has-error": !inventoryForm.quantity.$valid && inventoryForm.quantity.$dirty}'>
+                                        <label>Quantity</label>
+
+                                        <input type='text' ng-model-options='{updateOn: "blur"}' ng-model='inventory[idx].quantity' class='form-control' 
+                                        	   ng-pattern='/^\d+$/'
+                                               name='quantity' required>
+
+                                        <error-message ng-show='inventoryForm.quantity.$error.pattern && !inventoryForm.quantity.$error.required'>
+                                            Input must be a non-negative integer
+                                        </error-message>
+
+                                        <error-message ng-show='inventoryForm.quantity.$error.required && inventoryForm.quantity.$dirty'>
+                                            Quantity is required
+                                        </error-message>
+                                    </div>
+                                </div>
+								<div class='col-sm-6'>
+									<label for='units{{idx}}'>Units (optional)</label>
+									<input type='text' class='form-control' ng-model='inventory[idx].units' rows='3' id='units{{idx}}' name='units{{idx}}'></input>
+								</div>
+							</div>
+
+							<div class='row'>
+			                    <div class='form-group col-sm-12'>
+			                        <label class='checkbox-inline'><input type='checkbox' ng-model='inventory[idx].disposable'>Disposable</label>
+			                    </div>
+			                </div>
+
+						</div>
+					</div>
+				</div>
+		
+				<button class='btn btn-success btn-block' ng-click='addInventory()'><span class="glyphicon glyphicon-plus"></span> Add Another Item</button>
+				<br>
+				<div class='row'>
+					<div class='col-xs-6'>
+				        <button class='btn btn-default btn-block' ng-click='cancel()'>Cancel</button>
+				    </div>
+					<div class='col-xs-6'>
+						<button class='btn btn-primary btn-block' ng-click='createInventory(inventoryForm)'>Submit</button>
+					</div>
+				</div>
+			</form>
+        </div>
+    </div>
+</div>
