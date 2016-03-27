@@ -123,6 +123,16 @@ Route::group(['prefix' => 'api'], function()
         Route::get('/approve', 'InventoryController@approveRequest');
     });
 
+    Route::group(['prefix' => 'transportation'], function() {
+        Route::post('/', 'TransportationController@addTransport');
+        Route::delete('/{id}', 'TransportationController@deleteTransport');
+        Route::patch('{id}', 'TransportationController@patchTransport');
+        // list all transports
+        Route::get('/', 'TransportationController@index');
+        Route::post('/{id}/assignflight', 'TransportationController@assignFlight');
+        // view users needing transport (conf id, time)
+    });
+
 });
 
 // Routes for Event

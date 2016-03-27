@@ -14,7 +14,7 @@ class CreateTableTransportation extends Migration
     {
         Schema::create('transportation', function (Blueprint $table) {
           $table->increments('id');
-          $table->integer('capacity');
+          $table->integer('capacity')->unsigned();
         });
     }
 
