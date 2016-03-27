@@ -9,6 +9,7 @@
  			$scope.assignedRoles = {value: []}
 
  			$scope.showPermissions = false
+ 			$scope.showPermChange = {value: false}
 
  			$scope.add = []
  			$scope.remove = []
@@ -124,6 +125,7 @@
 			var reloadRoles = function(resData) {
 				if (resData) {
 
+					$scope.showPermChange.value = false
 					origRoles = []
 
 					$scope.assignedRoles.value = resData.data

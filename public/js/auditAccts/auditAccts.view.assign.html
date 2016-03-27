@@ -1,21 +1,28 @@
-<form name='emailInp'>
-	<div class="form-group" ng-class='{"has-error": !validEmail.value && emailInp.email.$dirty && email}' >
-		<label>Input an account to assign permissions to</label>
-		<input class='form-control'
-			name='email'
-			ng-model='email'
-			ng-change='checkEmailExists(email)'
-			placeholder='Email'
-			ng-model-options='{updateOn: "blur"}'
-			required>
-		<error-message ng-show='!validEmail.value && emailInp.email.$dirty && email'>{{validEmail.message}}</error-message>
+<label>Input an Email</label>
+<div class='row'>
+	<div class='col-sm-9'>
+		<form name='emailInp'>
+			<div class="form-group" ng-class='{"has-error": !validEmail.value && emailInp.email.$dirty && email}' >
+				<input class='form-control'
+					name='email'
+					ng-model='email'
+					placeholder='Email'
+					ng-model-options='{updateOn: "blur"}'
+					required>
+				<error-message ng-show='!validEmail.value && emailInp.email.$dirty && email'>{{validEmail.message}}</error-message>
+			</div>
+		</form>
 	</div>
-</form>
+	<div class='col-sm-3'>
+		<button class='btn btn-success btn-block' ng-click='checkEmailExists(email)'>Get Account Permissions</button>
+	</div>
+</div>
 <div class='form-group'
 	ng-show='showPermissions'>
 	<label>Roles</label>
 	<div>
-		<ui-select multiple 
+		<ui-select multiple
+			ng-change='showPermChange.value = true' 
 			ng-model='assignedRoles.value'
 			ng-disabled="disabled">
 
@@ -26,6 +33,7 @@
 
 		</ui-select>
 	</div>
+	<div ng-show='showPermChange.value'>Permissions for this user have changed. Please click the button below to update</div>
 	<br>
 	<div class='form-group'>
 		<button class='btn btn-success btn-block' ng-click='submit()'>Update Roles</button>
