@@ -270,7 +270,12 @@
 				.state('dashboard.conferences.manage.approve-inventory', {
 					url: '/approveInventory',
 					templateUrl: 'js/inventory/inventory.view.approve.html',
-					controller: 'approveInventoryCtrl'
+					controller: 'approveInventoryCtrl',
+					resolve: {
+						unapprovedInventory: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/inventory/unapproved')
+						}
+					}
 				})
 
 				/*

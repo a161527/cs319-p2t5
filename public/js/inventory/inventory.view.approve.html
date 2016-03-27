@@ -1,1 +1,32 @@
-<h1>Foo</h1>
+<div ng-show='inventory.length === 0'>
+	No inventory requests requiring approval
+</div>
+<div ng-repeat= 'inv in inventory'>
+	<li class='list-group-item unselectable-text'>
+		<div class='row'>
+			<div class='col-sm-3'>
+				<span class='glyphicon glyphicon-apple glyphicon-large'></span>
+			</div>
+			<div class='col-sm-6'>
+				<div class='row'>
+					<div class='col-sm-6'>
+						<b>Request ID:</b>
+					</div>
+					<div class='col-sm-6'>
+						{{inv.id}}
+					</div>
+				</div>
+			</div>
+
+			<div class='col-md-3'>
+
+				<button class='btn btn-success pull-right btn-block'
+					ng-click='approve(inv.id)'>
+					<span class='glyphicon glyphicon-ok'></span><br> Approve
+				</button>
+
+			</div>
+
+		</div>
+	</li>
+</div>
