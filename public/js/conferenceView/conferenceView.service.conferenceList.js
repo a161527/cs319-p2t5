@@ -66,18 +66,6 @@
 				})
 			}
 
-			var checkPermission = function(list, cid) {
-				var permissions = null
-				for (var i = 0; i < list.length; i++) {
-					if (parseInt(cid) === list[i].id) {
-						permissions = list[i].permissions
-						break
-					}
-				}
-
-				return permissions
-			}
-
 		})
 
 })()

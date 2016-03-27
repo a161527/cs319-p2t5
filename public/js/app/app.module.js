@@ -18,6 +18,7 @@
 	angular.module('createResidence', [])
 	angular.module('createTransportation', [])
 	angular.module('dependents', [])
+	angular.module('auditAccts', [])
 	angular.module('approveRegistration', [])
 	angular.module('eventRegistration', [])
 
@@ -41,6 +42,7 @@
 		'createResidence',
 		'createTransportation',
 		'eventRegistration',
+		'auditAccts',
 		'ui.select',
 		'satellizer',
 		'ui.router',

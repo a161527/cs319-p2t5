@@ -4,14 +4,23 @@
 	angular.module('conferenceWidget')
 		.controller('conferenceWidgetCtrl', function($scope, $state, $stateParams, permissions, ajax, conferenceInfo) {
 
-			//Hide all buttons.
-			// $('div[class="col-md-3"]').hide()
+			$scope.permissions = {
+				"conference-event-create": false,
+				"conference-registration-approval": false,
+				"conference-permission-management": false,
+				"conference-info-edit": false,
+				"conference-inventory-edit": false,
+				"conference-room-edit": false,
+				"conference-transportation-edit": false,
+				"conference-announce": false,
+				"conference-view-statistics": false
+			}
 
 			$scope.conferenceName = conferenceInfo.data.name
 
 			var showWidgets = function(list) {
-				list.forEach(function(permission) {
-					$('#' + permission).show()
+				angular.forEach(list, function(permission) {
+					$scope.permissions[permission] = true
 				}) 
 			}
 

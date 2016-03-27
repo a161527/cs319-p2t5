@@ -61,7 +61,12 @@
 				.state('dashboard', {
 					url: '/dashboard',
 					templateUrl: 'js/dashboard/dashboard.view.html',
-					controller: 'dashboardCtrl'
+					controller: 'dashboardCtrl',
+					resolve: {
+						globalPermissions: function(loginStorage) {
+							return loginStorage.getPermissions()
+						}
+					}
 				})
 
 				/*
@@ -71,6 +76,34 @@
 					url: '/home',
 					templateUrl: 'js/dashboard/dashboard.view.home.html',
 					controller: 'dashboardCtrl'
+				})
+
+				/*
+				APPROVE ACCOUNTS
+				*/
+				.state('dashboard.approveAccts', {
+					url: '/approve-accounts',
+					templateUrl: 'js/auditAccts/auditAccts.view.approve.html',
+					controller: 'approveAcctsCtrl',
+					resolve: {
+						unapprovedDependents: function($http) {
+							return $http.get('api/unapprovedUsers')
+						}
+					}
+				})
+
+				/*
+				ASSIGN PERMISSIONS
+				*/
+				.state('dashboard.assignPermissions', {
+					url: '/assign-permissions',
+					templateUrl: 'js/auditAccts/auditAccts.view.assign.html',
+					controller: 'assignPermissionsCtrl',
+					resolve: {
+						roles: function($http) {
+							return $http.get('/api/roles/assignable')
+						}
+					}
 				})
 
 
@@ -93,6 +126,9 @@
 								conferenceList.refresh(), 
 								loginStorage.getPermissions()
 							])
+						},
+						approvedDependents: function(getDependentsService) {
+							return getDependentsService.getNumberOfApproved()
 						}
 					}
 				}) 
@@ -105,8 +141,8 @@
 					templateUrl: 'js/conferenceWidget/conferenceWidget.view.html',
 					controller: 'conferenceWidgetCtrl',
 					resolve: {
-						permissions: function(conferenceList, $stateParams) {
-							return conferenceList.getPermissions($stateParams.cid)
+						permissions: function(loginStorage, $stateParams) {
+							return loginStorage.getConferencePermissions($stateParams.cid)
 						},
 						conferenceInfo: function($http, $stateParams) {
 							var conferenceInfo = $http.get('api/conferences/' + $stateParams.cid)
