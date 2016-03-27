@@ -339,6 +339,15 @@
 					templateUrl: 'js/createInventory/createInventory.view.html',
 					controller: 'createInventoryCtrl'
 				})
+
+				/*
+				CREATE ROOMS
+				*/
+				.state('dashboard.conferences.manage.createResidence', {
+					url: '/residence/create',
+					templateUrl: 'js/createResidence/createResidence.view.html',
+					controller: 'createResidenceCtrl'
+				})
 				
 		})
 

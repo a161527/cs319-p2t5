@@ -1,0 +1,45 @@
+<div class='container'>
+    <br>
+    <div class='row'>
+        <div class='col-sm-offset-3 col-sm-6'>
+        	<h4>Residence Information</h4>
+			<form name='residenceForm' novalidate>
+				<div ng-repeat='(idx, value) in residence'>
+					<div class="panel panel-default" id='residence{{idx}}'>
+						<div class="panel-body" ng-model='residence[idx]'>
+							<div class='row' ng-show='showRemoveButton(idx)'>
+								<div class='col-sm-offset-11 col-sm-1'>
+									<div class='glyphicon glyphicon-remove hand-cursor remove-button' name='removeButton{{idx}}' ng-click='deleteResidence(idx)'></div>
+								</div>
+							</div>
+
+							<div class='row'>
+								<div class='col-sm-12'>
+									<input-with-validation model='residence[idx].name' validation='residenceForm' identifier='name{{idx}}' inp-type='text'>Residence Name</input-with-validation>
+								</div>
+							</div>
+
+							<div class='row'>
+								<div class='col-sm-12'>
+									<input-with-validation model='residence[idx].address' validation='residenceForm' identifier='address{{idx}}' inp-type='text'>Residence Address</input-with-validation>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+		
+				<button class='btn btn-success btn-block' ng-click='addResidence()'><span class="glyphicon glyphicon-plus"></span> Add Another Residence</button>
+				<br>
+				<div class='row'>
+					<div class='col-xs-6'>
+				        <button class='btn btn-default btn-block' ng-click='cancel()'>Cancel</button>
+				    </div>
+					<div class='col-xs-6'>
+						<button class='btn btn-primary btn-block' ng-click='createResidence(residenceForm)'>Submit</button>
+					</div>
+				</div>
+			</form>
+        </div>
+    </div>
+</div>
