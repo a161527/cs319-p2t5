@@ -126,6 +126,9 @@
 								conferenceList.refresh(), 
 								loginStorage.getPermissions()
 							])
+						},
+						approvedDependents: function(getDependentsService) {
+							return getDependentsService.getNumberOfApproved()
 						}
 					}
 				}) 

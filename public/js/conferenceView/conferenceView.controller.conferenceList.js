@@ -2,11 +2,12 @@
 	'use strict'
 
 	angular.module('conferenceView')
-		.controller('conferenceListCtrl', function($scope, $state, $http, conferenceData, $q) {
+		.controller('conferenceListCtrl', function($scope, $state, $http, conferenceData, approvedDependents, $q) {
 
 			$scope.conferences = conferenceData[0] || []
 			$scope.noConferences = ($scope.conferences.length === 0)
 			$scope.canCreateConference = (conferenceData[1].indexOf('create-conference') !== -1)
+			$scope.hasApprovedDependents = approvedDependents > 0
 
 			$scope.registered = function(registeredList) {
 				return registeredList.length > 0

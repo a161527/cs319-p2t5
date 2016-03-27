@@ -66,26 +66,27 @@
 			}
 
 			$scope.submit = function() {
-				formatData()
+				if ($scope.showPermChange.value) {
+					formatData()
 
-				var email = $scope.email
-				var params = {add: $scope.add, remove: $scope.remove}
-				var route = '/api/roles/account/' + $scope.email
+					var email = $scope.email
+					var params = {add: $scope.add, remove: $scope.remove}
+					var route = '/api/roles/account/' + $scope.email
 
-				ajax.serviceCall('Updating permissions...', 'patch', route, params).then(function(resData) {
+					ajax.serviceCall('Updating permissions...', 'patch', route, params).then(function(resData) {
 
-					modal.open('Permissions assigned', function() {
-						ajax.serviceCall('Retrieving permissions...', 'get', route).then(function(resData) {
-							reloadRoles(resData)
-						}, function(resData) {
-							console.log(resData)
+						modal.open('Permissions assigned', function() {
+							ajax.serviceCall('Retrieving permissions...', 'get', route).then(function(resData) {
+								reloadRoles(resData)
+							}, function(resData) {
+								console.log(resData)
+							})
 						})
+
+					}, function(resData) {
+						console.log(resData)
 					})
-
-				}, function(resData) {
-					console.log(resData)
-				})
-
+				}	
 			}
 
 			//helper function for submit
