@@ -34,8 +34,9 @@
 					switch(getStateName(toState)) {
 
 						case 'assignPermissions':
-							var somePerms = permissions.indexOf('manage-some-permissions') === 1
-							var allPerms = permissions.indexOf('manage-global-permissions') === 1
+							var somePerms = permissions.indexOf('manage-some-permissions') !== -1
+							var allPerms = permissions.indexOf('manage-global-permissions') !== -1
+
 							if (!(somePerms || allPerms)) {
 								console.log('You do not have permission')
 								$state.go('dashboard.home')
@@ -45,7 +46,7 @@
 						case 'approveAccts':
 							checkHasPermission('approve-user-registration', permissions)
 							break
-							
+
 					}
 				}
 
