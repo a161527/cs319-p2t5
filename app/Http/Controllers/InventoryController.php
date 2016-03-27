@@ -16,7 +16,7 @@ class InventoryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt.auth', ['except' => ['authenticate', 'token']]);
+        $this->middleware('jwt.auth');
         // provides an authorization header with each response
         // $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token']]);
     }
@@ -66,14 +66,14 @@ class InventoryController extends Controller
         $item->save();
     }
 
-    /* 
-     * 
-     * 
+    /*
+     *
+     *
      */
     protected function editTotalQuantity(&$item, $newValue)
     {
-    	// TODO: reduce total qty and current qty by the difference, after doing checks 
-    	//       to make sure both do not go below zero
+        // TODO: reduce total qty and current qty by the difference, after doing checks
+        //       to make sure both do not go below zero
     }
 
     /*
@@ -113,7 +113,10 @@ class InventoryController extends Controller
      */
     public function unapproved($conferenceId)
     {
-        // TODO: add permission/role filter
+        if (!Entrust::can(PermissionNames::ConferenceInventoryEdit($conferenceId))) {
+            return response()->json(['message' => 'inventory_request_list_inaccessible'], 403);
+        }
+
         $conf = Conference::where('id', '=', $conferenceId)->first();
         if ($conf === null)
             return response()->json(['message' => 'conference_not_found'], 404);
@@ -134,14 +137,17 @@ class InventoryController extends Controller
      */
     public function addItem($conferenceId, Request $req)
     {
+        if (!Entrust::can(PermissionNames::ConferenceInventoryEdit($conferenceId))) {
+            return response()->json(['message' => 'inventory_list_edit_denied'], 403);
+        }
         $items = $req->all();
         try
-        {   
-        	$validator = $this->itemValidator($items);
+        {
+            $validator = $this->itemValidator($items);
             if ($validator->passes()) {
-            	DB::beginTransaction();
-	            foreach ($items as $i)
-	            {
+                DB::beginTransaction();
+                foreach ($items as $i)
+                {
                     $this->insertItem($conferenceId, $i);
                 }
             }
@@ -169,36 +175,36 @@ class InventoryController extends Controller
         $reservations = $req->all();
         try
         {
-	        DB::beginTransaction();
-	        $validator = $this->reserveItemValidator($reservations);
-	        if ($validator->passes())
-	        {
-		        foreach ($reservations as $r)
-		        {
-		        	$item = Inventory::where('id', $r["id"])->where('conferenceID', $conferenceId)->first();
-		        	if ($r["quantity"] <= $item->currentQuantity)
-		        	{
-		        		$item->currentQuantity -= $r["quantity"];
+            DB::beginTransaction();
+            $validator = $this->reserveItemValidator($reservations);
+            if ($validator->passes())
+            {
+                foreach ($reservations as $r)
+                {
+                    $item = Inventory::where('id', $r["id"])->where('conferenceID', $conferenceId)->first();
+                    if ($r["quantity"] <= $item->currentQuantity)
+                    {
+                        $item->currentQuantity -= $r["quantity"];
                         $item->save();
                         $this->createUserInventoryEntry($r["dependentID"], $r["id"], $r["quantity"], $conferenceId);
-		        	}
-		        	else
-		        	{
-		        		DB::rollback();
-		        		return response()->json(['message' => 'out_of_stock', 'errors' => 'item id='+$r["id"]+'has less items remaining than requested'], 422);
-		        	}
-		        }
-		    }
-		    else
-		    	return response()->json(['message' => 'validation_failed', 'errors' => $validator->errors()], 422);
-		    DB::commit();
-		    return response()->json(['message' => 'items_reserved']);
-	    } catch (ValidationException $e) {
-	    	return response()->json(['message' => 'validation_failed', 'errors' => $e->getMessage()], 422);
-	    } catch (\Exception $e) {
-	    	DB::rollback();
+                    }
+                    else
+                    {
+                        DB::rollback();
+                        return response()->json(['message' => 'out_of_stock', 'errors' => 'item id='+$r["id"]+'has less items remaining than requested'], 422);
+                    }
+                }
+            }
+            else
+                return response()->json(['message' => 'validation_failed', 'errors' => $validator->errors()], 422);
+            DB::commit();
+            return response()->json(['message' => 'items_reserved']);
+        } catch (ValidationException $e) {
+            return response()->json(['message' => 'validation_failed', 'errors' => $e->getMessage()], 422);
+        } catch (\Exception $e) {
+            DB::rollback();
             return response()->json(['message' => 'unknown_error', 'errors' => $e->getMessage()], 500);
-	    }
+        }
     }
 
     /*
@@ -207,13 +213,16 @@ class InventoryController extends Controller
      */
     public function editItem($conferenceId, $itemId, Request $req)
     {
+        if (!Entrust::can(PermissionNames::ConferenceInventoryEdit($conferenceId))) {
+            return response()->json(['message' => 'inventory_list_edit_denied'], 403);
+        }
         $changes = $req->all();
         $item = Inventory::where('id', $itemId)
                     ->where('conferenceID', $conferenceId)
                     ->first();
         if (!$item)
             return response()->json(['message' => 'item_does_not_exist'], 422);
-        else 
+        else
         {
             $validator = $this->itemEditValidator($changes);
             if ($validator->passes())
@@ -249,7 +258,11 @@ class InventoryController extends Controller
      */
     public function deleteItem($conferenceId, $itemId)
     {
-		$item = Inventory::where('conferenceID', $conferenceId)
+        if (!Entrust::can(PermissionNames::ConferenceInventoryEdit($conferenceId))) {
+            return response()->json(['message' => 'inventory_list_edit_denied'], 403);
+        }
+
+        $item = Inventory::where('conferenceID', $conferenceId)
                     ->where('id', $itemId);
         if ($item->delete())
             return response()->json(['message' => 'item_deleted'], 200);
@@ -264,6 +277,10 @@ class InventoryController extends Controller
      */
     public function approveRequest($userInventoryId)
     {
+        if (!Entrust::can(PermissionNames::ConferenceInventoryEdit($conferenceId))) {
+            return response()->json(['message' => 'inventory_list_edit_denied'], 403);
+        }
+
         $item = UserInventory::where('id', $userInventoryId)->first();
         $item->approved = 1;
         if ($item->save())
