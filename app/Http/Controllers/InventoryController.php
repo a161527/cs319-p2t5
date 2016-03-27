@@ -121,6 +121,8 @@ class InventoryController extends Controller
         {
             $inventory = UserInventory::where('conferenceID', $conf->id)
                                     ->where('approved', 0)
+                                    ->with('user')
+                                    ->with('inventory')
                                     ->get();
             return response()->json(['message' => 'returned_unapproved_inventory', 'inventory' => $inventory]);
         }
