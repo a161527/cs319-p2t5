@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Role;
 use App\Utility\PermissionNames;
 use App\Models\Permission;
+use App\Utility\RoleCreate;
 
 class DefaultRolesSeeder extends Seeder
 {
@@ -61,5 +62,8 @@ class DefaultRolesSeeder extends Seeder
                 unset($permissions);
             }
         }
+
+        $rolePermissions = Permission::whereIn('name', PermissionNames::AllGlobalPermissions())->get();
+        RoleCreate::createPermissionRoles($rolePermissions);
     }
 }
