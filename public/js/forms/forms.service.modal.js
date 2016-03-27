@@ -9,6 +9,7 @@
 				var modal = $uibModal.open({
 					templateUrl: 'js/forms/forms.view.modalConfirm.html',
 					backdrop: 'static',
+					animation: false,
 					controller: function($scope, $uibModalInstance) {
 
 						$scope.message = message
@@ -21,7 +22,11 @@
 				})
 
 				modal.result.then(function () {
-					handler()
+
+					if (handler) {
+						handler()
+					}
+
 				}, function () {
 					
 				})

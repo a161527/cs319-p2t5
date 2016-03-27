@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('auditAccts')
-		.controller('assignPermissionsCtrl', function($scope, $state, $q, ajax, roles, loginStorage) {
+		.controller('assignPermissionsCtrl', function($scope, $state, $q, ajax, roles, loginStorage, modal) {
 
 			$scope.validEmail = {value: true, message: 'Account does not exist'}
 			$scope.availableRoles = roles.data
@@ -73,14 +73,16 @@
 
 				ajax.serviceCall('Updating permissions...', 'patch', route, params).then(function(resData) {
 
-					return ajax.serviceCall('Retrieving permissions...', 'get', route)
+					modal.open('Permissions assigned', function() {
+						ajax.serviceCall('Retrieving permissions...', 'get', route).then(function(resData) {
+							reloadRoles(resData)
+						}, function(resData) {
+							console.log(resData)
+						})
+					})
 
-				}).then(function(resData) {
-
-					reloadRoles(resData)
-
-				}).catch(function(resData) {
-
+				}, function(resData) {
+					console.log(resData)
 				})
 
 			}
