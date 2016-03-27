@@ -4,21 +4,67 @@
 <div ng-repeat= 'inv in inventory'>
 	<li class='list-group-item unselectable-text'>
 		<div class='row'>
-			<div class='col-sm-3'>
+			<div class='col-sm-2'>
 				<span class='glyphicon glyphicon-apple glyphicon-large'></span>
 			</div>
-			<div class='col-sm-6'>
+
+			<div class='col-sm-4'>
+				<h3><u>Item:</u></h3>
 				<div class='row'>
 					<div class='col-sm-6'>
-						<b>Request ID:</b>
+						<b>Name:</b>
 					</div>
 					<div class='col-sm-6'>
-						{{inv.id}}
+						{{inv.inventory.itemName}}
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-6'>
+						<b>Current Quantity:</b>
+					</div>
+					<div class='col-sm-6'>
+						{{inv.inventory.currentQuantity}}
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-6'>
+						<b>Total Quantity:</b>
+					</div>
+					<div class='col-sm-6'>
+						{{inv.inventory.totalQuantity}}
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-6'>
+						<b>Disposable:</b>
+					</div>
+					<div class='col-sm-6'>
+						{{inv.inventory.disposable | yesNo}}
+					</div>
+				</div>
+			</div>
+			
+			<div class='col-sm-4'>
+				<h3><u>Request:</u></h3>
+				<div class='row'>
+					<div class='col-sm-6'>
+						<b>User:</b>
+					</div>
+					<div class='col-sm-6'>
+						{{inv.user.firstName}} {{inv.user.lastName}}
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-6'>
+						<b>Requested Units:</b>
+					</div>
+					<div class='col-sm-6'>
+						{{inv.unitCount}}
 					</div>
 				</div>
 			</div>
 
-			<div class='col-md-3'>
+			<div class='col-sm-2'>
 
 				<button class='btn btn-success pull-right btn-block'
 					ng-click='approve(inv.id)'>

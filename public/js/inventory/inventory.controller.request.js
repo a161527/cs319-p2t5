@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('inventory')
-		.controller('requestInventoryCtrl', function($scope, $stateParams, $http, $state, inventoryList, conferenceList, dependents, dataFormat, modal, ajax) {
+		.controller('requestInventoryCtrl', function($scope, $stateParams, $http, $state, inventoryList, errorCodes, conferenceList, dependents, dataFormat, modal, ajax) {
 
 			$scope.dependents = dataFormat.dependentsFormat(dependents.data.dependents, 'id')
 			$scope.itemArray = inventoryList.data.inventory
@@ -28,7 +28,7 @@
 
 						}, function(resData) {
 
-							$scope.showError.message = 'Something went wrong'
+							$scope.showError.message = errorCodes[resData.data.message]
 							$scope.showError.value = true
 
 						})
