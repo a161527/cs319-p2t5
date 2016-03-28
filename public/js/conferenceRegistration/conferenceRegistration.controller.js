@@ -2,9 +2,14 @@
 	'use strict'
 
 	angular.module('conferenceRegistration')
-		.controller('conferenceRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat, modal, dependents) {
+		.controller('conferenceRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat, modal, dependents, registeredDependents) {
 
 			$scope.dependents = dependents
+
+			//Check against all registered dependents and delete the ones that are registered
+			angular.forEach(registeredDependents.data.registered, function(dep) {
+				delete $scope.dependents[dep.user]
+			})
 
 			//a new dependents object created so modifications can be made without affecting original object
 			$scope.selectDependents = {}
@@ -254,7 +259,7 @@
 				ajax.serviceCall('Submitting...', 'post', 'api/conferences/' + $stateParams.cid + '/register', $scope.formattedData).then(function(resData) {
 
 					modal.open('Registration Successful', function() {
-						$state.go('dashboard.conferences.list')
+						$state.go('dashboard.conferences.registrationDetails', {cid: $stateParams.cid})
 					})
 
 				}, function(resData) {

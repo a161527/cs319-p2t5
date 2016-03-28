@@ -57,6 +57,10 @@
 							break
 						case 'approve-registration':
 							checkHasPermission('conference-registration-approval', permissions)
+							break
+						case 'approve-inventory':
+							checkHasPermission('conference-inventory-edit', permissions)
+							break
 					}
 				}
 

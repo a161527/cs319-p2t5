@@ -2,10 +2,27 @@
 	'use strict'
 
 	angular.module('inventory')
-		.controller('requestInventoryCtrl', function($scope, $stateParams, $http, $state, inventoryList, conferenceList, dependents, dataFormat, modal, ajax) {
+		.controller('requestInventoryCtrl', function($scope, $stateParams, $http, $state, inventoryList, registered, errorCodes, dependents, dataFormat, modal, ajax) {
 
-			$scope.dependents = dataFormat.dependentsFormat(dependents.data.dependents, 'id')
-			$scope.itemArray = inventoryList.data.inventory
+			var getConferenceApprovedUsers = function(dependents, registered) {
+				var registeredObj = dataFormat.dependentsFormat(registered.data.registered, 'user')
+				var regDep = []
+				angular.forEach(dependents.data.dependents, function(dep) {
+					if (registeredObj[dep.id] && registeredObj[dep.id].status === 'approved') {
+						regDep.push(dep)
+					}
+				})
+				return dataFormat.dependentsFormat(regDep, 'id')
+			}
+
+			$scope.dependents = getConferenceApprovedUsers(dependents, registered)
+			$scope.itemArray = []
+
+			angular.forEach(inventoryList.data.inventory, function(inv) {
+				if (inv.currentQuantity > 0) {
+					$scope.itemArray.push(inv)
+				}
+			})
 
 			$scope.selected = { value: null }
 
@@ -23,21 +40,25 @@
 						ajax.serviceCall('Requesting Inventory...', 'post', route, $scope.formattedData).then(function(resData) {
 
 							modal.open('Inventory requested', function() {
-								$state.go('dashboard.home') 
+								$state.go('dashboard.conferences.registrationDetails', {cid: $stateParams.cid}) 
 							})
 
 						}, function(resData) {
 
-							$scope.showError.message = 'Something went wrong'
+							$scope.showError.message = errorCodes[resData.data.message]
 							$scope.showError.value = true
 
 						})
 
 				} else {
-					$scope.showError.message = 'No items selected'
+					$scope.showError.message = 'No items added'
 					$scope.showError.value = true
 				}
 
+			}
+
+			$scope.cancel = function() {
+				$state.go('dashboard.conferences.registrationDetails', {cid: $stateParams.cid}) 
 			}
 
 			$scope.removeError = function() {

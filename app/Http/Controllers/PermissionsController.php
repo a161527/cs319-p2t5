@@ -113,7 +113,7 @@ class PermissionsController extends Controller
     }
 
     private function manageableRoleNamesForUser() {
-        $roles = $this->manageableRolesForUser()->toArray();
+        $roles = $this->manageableRolesForUser();
 
         return array_map(
             function ($r) { return $r['name']; },
@@ -166,8 +166,12 @@ class PermissionsController extends Controller
                 //on Account table
                 $query->where("id", Auth::user()->id);
             });
-        })->where('name', 'like', $confPermNamePart . '%')
-          ->orWhere('name', 'like', $evtPermNamePart . '%')
+        })->where(
+            //Only take conference or event permission management permissions
+            function ($query) use ($confPermNamePart, $evtPermNamePart) {
+                $query->where('name', 'like', $confPermNamePart . '%');
+                $query->orWhere('name', 'like', $evtPermNamePart . '%');
+            })
           ->get();
 
         $conferences = [];
