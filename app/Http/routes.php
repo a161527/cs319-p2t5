@@ -129,7 +129,7 @@ Route::group(['prefix' => 'api'], function()
         Route::patch('{id}', 'TransportationController@patchTransport');
         // list all transports
         Route::get('/', 'TransportationController@index');
-        Route::post('/{id}/assignflight', 'TransportationController@assignFlight');
+        Route::post('/{id}/assignTransport', 'TransportationController@assignTransport');
         // view users needing transport (conf id, time)
         Route::get('/summary', 'TransportationController@transportSummary');
     });

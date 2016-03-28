@@ -10,11 +10,16 @@ use App\Conference;
 use App\Flight;
 use App\UserConference;
 use App\User;
+use App\UserTransportation;
 use DB;
 use Validator;
 
 class TransportationController extends Controller
 {
+    public function __construct()
+    {
+        // $this->middleware('jwt.auth', ['except' => ['authenticate', 'token']]);
+    }
     private function transportValidator(array $data)
     {
         $validator = Validator::make($data, [
@@ -197,23 +202,40 @@ class TransportationController extends Controller
 
 
     /*
-     * POST /api/transportation/{transportationId}/assignFlight
+     * POST /api/transportation/{transportationId}/assignTransport
      * - assigns a transportation to a flight
-     * takes {flightId: 1}
+     * takes {userConferenceIDs: [1,2,...]} (a list of userConferenceID)
      */
-    public function assignFlight($transportId, $flightId) 
+    public function assignTransport($transportId, Request $req) 
     {
-        $flight = Flight::where('id', '=', $flightId)->first();
-        if ($flight === null)
-            return response()->json(['message' => 'flight_not_found'], 404);
+        $data = $req->all();
 
-        $transport = Transportation::where('id', $transportId);
-        $transport->flightID = $flightId;
+        foreach ($data['userConferenceIDs'] as $userconfId)
+        {
+            $userconf = UserConference::where('id', '=', $userconfId)->first();
+            if ($userconf === null)
+                return response()->json(['message' => 'userconference_not_found'], 404);
+        }
 
-        if ($transport->save())
-            return response()->json(['message' => 'flight_assigned'], 200);
-        else
-            return response()->json(['message' => 'flight_could_not_be_updated'], 500);
+        $transport = Transportation::where('id', '=', $transportId)->first();
+        if ($transport === null)
+            return response()->json(['message' => 'transportation_not_found'], 404);
+
+        DB::beginTransaction();
+        foreach ($data['userConferenceIDs'] as $userconferenceId)
+        {
+            $ut = new UserTransportation();
+            $ut->userconferenceID = $userconferenceId;
+            $ut->transportationID = $transportId;
+            if (!$ut->save())
+            {
+                DB::rollback();
+                return response()->json(['message' => 'error_assigning_transport'], 500);    
+            }
+        }
+        
+        DB::commit();
+        return response()->json(['message' => 'transport_assigned'], 200);
     }
 
     /*
