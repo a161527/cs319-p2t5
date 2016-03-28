@@ -322,6 +322,17 @@
 					}
 				})
 
+				.state('dashboard.conferences.manage.room-allocate.3', {
+					url: '',
+					templateUrl: 'js/rooms/rooms.view.approved.html',
+					controller: 'ApprovedRoomsCtrl',
+					resolve: {
+						assignedRooms: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/residences/assign')
+						}
+					}
+				})
+
 				/*
 				REGISTRATION APPROVAL
 				*/
