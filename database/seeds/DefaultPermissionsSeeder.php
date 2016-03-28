@@ -3,7 +3,6 @@
 use Illuminate\Database\Seeder;
 use App\Models\Permission;
 use App\Utility\PermissionNames;
-use App\Utility\RoleCreate;
 
 //Creates global permissions along with single-permission roles for
 //those permissions
@@ -41,8 +40,6 @@ class DefaultPermissionsSeeder extends Seeder
             self::pArray(PermissionNames::ViewSiteStatistics(), "View Site Statistics")
         );
 
-        $dbPerms = [];
-
         foreach ($permissions as $p) {
             $entry = new Permission();
             $entry->name = $p['name'];
@@ -54,9 +51,6 @@ class DefaultPermissionsSeeder extends Seeder
                 $entry->description = $p['description'];
 
             $entry->save();
-            $dbPerms[] = $entry;
         }
-
-        RoleCreate::createPermissionRoles($dbPerms);
     }
 }
