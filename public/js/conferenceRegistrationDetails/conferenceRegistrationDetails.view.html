@@ -59,11 +59,11 @@
 </button>
 <button class='btn btn-primary pull-right btn-block'
 	ng-show='!allDependentsRegistered'
-	ui-sref='dashboard.conferences.registration.1({cid: conference.id})'>
+	ng-click='register()'>
 	<span class='glyphicon glyphicon-pencil'></span><br> Register More Users
 </button>
 <button ng-show='allDependentsRegistered' 
 		class='btn btn-primary pull-right btn-block' 
 		disabled>
-	All attendees registered
+	All users registered
 </button>

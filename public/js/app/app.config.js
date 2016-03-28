@@ -185,6 +185,9 @@
 					resolve: {
 						dependents: function(getDependentsService) {
 							return getDependentsService.getApproved()
+						},
+						registeredDependents: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '?includeRegistration=1')
 						}
 					}
 				})
