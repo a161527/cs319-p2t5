@@ -83,6 +83,12 @@
 				*/
 				.state('dashboard.approveAccts', {
 					url: '/approve-accounts',
+					abstract: true,
+					template: '<div ui-view></div>'
+				})
+
+				.state('dashboard.approveAccts.1', {
+					url: '',
 					templateUrl: 'js/auditAccts/auditAccts.view.approve.html',
 					controller: 'approveAcctsCtrl',
 					resolve: {
@@ -278,6 +284,12 @@
 
 				.state('dashboard.conferences.manage.approve-inventory', {
 					url: '/approveInventory',
+					abstract: true,
+					template: '<div ui-view></div>'
+				})
+
+				.state('dashboard.conferences.manage.approve-inventory.1', {
+					url: '',
 					templateUrl: 'js/inventory/inventory.view.approve.html',
 					controller: 'approveInventoryCtrl',
 					resolve: {
@@ -353,6 +365,7 @@
 					}
 				})
 
+				//state for viewing approved registrations
 				.state('dashboard.conferences.manage.approve-registration.2', {
 					url: '',
 					templateUrl: 'js/approveRegistration/approveRegistration.view.html',
