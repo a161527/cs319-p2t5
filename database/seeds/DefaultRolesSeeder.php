@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Role;
 use App\Utility\PermissionNames;
 use App\Models\Permission;
+use App\Utility\RoleCreate;
 
 class DefaultRolesSeeder extends Seeder
 {
@@ -31,16 +32,10 @@ class DefaultRolesSeeder extends Seeder
          */
 
         $roles = array(
-            array('name'          => 'user',
-                  'display_name'  => 'Basic User',
-                  'description'   => 'An approved user who can view and register for conferences and events.'),
             array('name'          => 'owner',
                   'display_name'  => 'Owner',
                   'description'   => 'Owner of the management system. Has access to all aspects of the system.',
                   'permissions'   => PermissionNames::AllGlobalPermissions())
-             // array(    'name'            => '',
-             //         'display_name'    => '',
-             //         'description'    => ''),
         );
 
         foreach ($roles as $r) {
@@ -67,5 +62,8 @@ class DefaultRolesSeeder extends Seeder
                 unset($permissions);
             }
         }
+
+        $rolePermissions = Permission::whereIn('name', PermissionNames::AllGlobalPermissions())->get();
+        RoleCreate::createPermissionRoles($rolePermissions);
     }
 }
