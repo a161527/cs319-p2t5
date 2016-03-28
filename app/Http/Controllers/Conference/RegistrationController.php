@@ -231,12 +231,12 @@ class RegistrationController extends Controller
                 return response()->json(["message" => "request_not_in_conference"], 404);
             }
 
-            if (is_null($this->determineAccessType($conferenceID, $registration)))
+            if (is_null($this->determineAccessType($conferenceID, $registration))) {
                 return response()->json(["message" => "not_conference_registration_approver"], 403);
             }
 
             $registration->delete();
-            return response()->json(["message" => "request__removed"]);
+            return response()->json(["message" => "request_removed"]);
         });
     }
 
@@ -295,7 +295,7 @@ class RegistrationController extends Controller
 
         if($include === "pending") {
             $query->where("approved", false);
-        }else if ($include == "approved") {
+        }else if ($include === "approved") {
             $query->where("approved", true);
         }
 

@@ -101,7 +101,7 @@ Route::group(['prefix' => 'api'], function()
 
     Route::post('login', 'AuthenticationController@authenticate');
     Route::post('register', 'RegistrationController@register');
-    Route::delete('account/{email}', 'RegistrationController@deleteAccount');
+    Route::post('account/{email}/delete', 'RegistrationController@deleteAccount');
 
     Route::get('unapprovedUsers', 'RegistrationController@listUnapproved');
     Route::post('register/{id}/approve', 'RegistrationController@approveUser');
