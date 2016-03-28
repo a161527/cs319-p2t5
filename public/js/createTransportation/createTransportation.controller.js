@@ -2,10 +2,11 @@
 	'use strict'
 
 	angular.module('createTransportation')
-		.controller('createTransportationCtrl', function($scope, $state, $stateParams, ajax, errorCodes) {
+		.controller('createTransportationCtrl', function($scope, $state, $stateParams, ajax, errorCodes, conferenceInfo) {
 
 			$scope.transportation = {'1':{}} 
 			$scope.showError = false
+			$scope.conferenceName = conferenceInfo.data.name
 
 			$scope.createTransportation = function(form) {
 				$scope.showError = false

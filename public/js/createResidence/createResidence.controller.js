@@ -2,10 +2,11 @@
 	'use strict'
 
 	angular.module('createResidence')
-		.controller('createResidenceCtrl', function($scope, $state, $stateParams, ajax, errorCodes) {
+		.controller('createResidenceCtrl', function($scope, $state, $stateParams, ajax, errorCodes, conferenceInfo) {
 
 			$scope.residence = {'1':{}} 
 			$scope.showError = false
+			$scope.conferenceName = conferenceInfo.data.name
 
 			$scope.createResidence = function(form) {
 				$scope.showError = false

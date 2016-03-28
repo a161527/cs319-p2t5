@@ -30,6 +30,10 @@
 				var state = 'dashboard.conferences.manage.' + toState;
 				$state.go(state);
 			}
+
+			$scope.showEventList = function() {
+				$state.go('dashboard.events', {cid: $stateParams.cid})
+			}
 			
 			$scope.goBack = function(currState) {
 				window.alert($state);

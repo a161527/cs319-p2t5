@@ -2,17 +2,19 @@
 	'use strict'
 
 	angular.module('createRoomSet')
-		.controller('createRoomSetCtrl', function($scope, $state, $stateParams, roomSetFields, ajax, errorCodes, roomTypes) {
+		.controller('createRoomSetCtrl', function($scope, $state, $stateParams, roomSetFields, ajax, errorCodes, roomTypes, conferenceInfo, residenceName) {
 
 			$scope.showError = false
 			$scope.cid = $stateParams.cid
 			$scope.rid = $stateParams.rid
+			$scope.conferenceName = conferenceInfo.data.name
 			$scope.roomTypes = roomTypes.data
 			$scope.hasRoomTypes = (roomTypes.data.length > 0)
 			$scope.roomType = {}
 			$scope.roomType = roomSetFields.getRoomType() || {}
 			$scope.roomTypeInfo = roomSetFields.getRoomTypeInfo() || {}
 			$scope.roomSetInfo = roomSetFields.getRoomSetInfo() || {'1':{}}
+			$scope.residenceName = residenceName
 
 			if (!$scope.roomType.id) {
 				$scope.roomType.id = 'newRoomType'

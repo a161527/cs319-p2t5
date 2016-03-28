@@ -2,10 +2,11 @@
 	'use strict'
 
 	angular.module('createEvent')
-		.controller('createEventCtrl', function($scope, $state, $stateParams, ajax, errorCodes) {
+		.controller('createEventCtrl', function($scope, $state, $stateParams, ajax, errorCodes, conferenceInfo) {
 
 			$scope.event = {} 
 			$scope.showError = false
+			$scope.conferenceName = conferenceInfo.data.name
 
 			$scope.createEvent = function(form) {
 				$scope.showError = false

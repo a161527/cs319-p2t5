@@ -396,6 +396,9 @@
 					resolve: {
 						roomTypes: function($http, $stateParams) {
 							return $http.get('/api/conferences/' + $stateParams.cid + '/residences/' + $stateParams.rid + '/roomTypes')
+						},
+						residenceName: function($http, $stateParams) {
+							return "TODO"
 						}
 					}
 				})

@@ -2,10 +2,11 @@
 	'use strict'
 
 	angular.module('createInventory')
-		.controller('createInventoryCtrl', function($scope, $state, $stateParams, ajax, errorCodes) {
+		.controller('createInventoryCtrl', function($scope, $state, $stateParams, ajax, errorCodes, conferenceInfo) {
 
 			$scope.inventory = {'1':{}} 
 			$scope.showError = false
+			$scope.conferenceName = conferenceInfo.data.name
 
 			$scope.createInventory = function(form) {
 				$scope.showError = false
