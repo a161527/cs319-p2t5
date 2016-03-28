@@ -16,6 +16,7 @@
 	angular.module('createEvent', [])
 	angular.module('createInventory', [])
 	angular.module('createResidence', [])
+	angular.module('createRoomSet', [])
 	angular.module('createTransportation', [])
 	angular.module('dependents', [])
 	angular.module('auditAccts', [])
@@ -42,6 +43,7 @@
 		'createEvent',
 		'createInventory',
 		'createResidence',
+		'createRoomSet',
 		'createTransportation',
 		'eventRegistration',
 		'auditAccts',

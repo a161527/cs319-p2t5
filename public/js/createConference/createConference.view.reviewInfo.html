@@ -29,10 +29,10 @@
 			<b>Location:</b> {{conferenceInfo.location}}
 		</div>
 		<div class='review-text'>
-			<b>Provides Transportation:</b> {{conferenceInfo.hasTransportation}}
+			<b>Provides Transportation:</b> {{conferenceInfo.hasTransportation | yesNo}}
 		</div>
 		<div class='review-text'>
-			<b>Provides Boarding Accommodations:</b> {{conferenceInfo.hasAccommodations}}
+			<b>Provides Boarding Accommodations:</b> {{conferenceInfo.hasAccommodations | yesNo}}
 		</div>
 		<br>
 	</div>

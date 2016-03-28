@@ -377,12 +377,52 @@
 				})
 
 				/*
-				CREATE ROOMS
+				CREATE RESIDENCE
 				*/
 				.state('dashboard.conferences.manage.createResidence', {
 					url: '/residence/create',
 					templateUrl: 'js/createResidence/createResidence.view.html',
 					controller: 'createResidenceCtrl'
+				})
+
+				/*
+				CREATE ROOM SET
+				*/
+				.state('dashboard.conferences.manage.createRoomSet', {
+					url: '/residence/:rid/roomset/create',
+					abstract: true,
+					templateUrl: 'js/createRoomSet/createRoomSet.view.html',
+					controller: 'createRoomSetCtrl',
+					resolve: {
+						roomTypes: function($http, $stateParams) {
+							return $http.get('/api/conferences/' + $stateParams.cid + '/residences/' + $stateParams.rid + '/roomTypes')
+						}
+					}
+				})
+				
+
+				.state('dashboard.conferences.manage.createRoomSet.1', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.roomType.html',
+					controller: 'createRoomSetCtrl'
+				})
+
+				.state('dashboard.conferences.manage.createRoomSet.2', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.roomTypeInfo.html',
+					controller: 'createRoomSetCtrl'
+				})
+
+				.state('dashboard.conferences.manage.createRoomSet.3', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.roomSetInfo.html',
+					controller: 'createRoomSetCtrl'
+				})
+
+				.state('dashboard.conferences.manage.createRoomSet.4', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.reviewInfo.html',
+					controller: 'createRoomSetCtrl'
 				})
 
 				/*
@@ -422,6 +462,9 @@
 							return $q.all([
 								roomSetList.refresh($stateParams.cid, $stateParams.rid)
 							])
+						},
+						roomTypes: function($http, $stateParams) {
+							return $http.get('/api/conferences/' + $stateParams.cid + '/residences/' + $stateParams.rid + '/roomTypes')
 						}
 					}
 				})

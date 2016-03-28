@@ -1,14 +1,14 @@
 <div ui-view>
 	<div class='row'>
 		<div class='col-sm-9'>
-			<h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> {{residenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Room Sets</h2>
+			<h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> {{residence.name}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Room Sets</h2>
 		</div>
 		<div class='col-sm-3'>
-			<button id='createRoomSetBtn' ng-click='showWidget("createRoomSet")' class='btn btn-primary btn-block pull'><span class='glyphicon glyphicon-plus'></span><br> Create Room Set</button>
+			<button id='createRoomSetBtn' ng-click='showWidget("createRoomSet.1", {rid: residence.id})' class='btn btn-primary btn-block pull'><span class='glyphicon glyphicon-plus'></span><br> Create Room Set</button>
 		</div>
 	</div>
 
-	<div ng-show='noRoomSets'>There are no room sets listed for this conference at this time.</div>
+	<div ng-show='noRoomSets'>There are no room sets listed for this residence at this time.</div>
 		<ul class="list-group">
 			<div ng-repeat='roomSet in roomSets'>
 				<li class="list-group-item">
@@ -44,7 +44,7 @@
 									<b>Accessible:</b>
 								</div>
 								<div class='col-md-6'>
-									{{roomSet.type.accessible}}
+									{{roomSet.type.accessible | yesNo}}
 								</div>
 							</div>
 						</div>
