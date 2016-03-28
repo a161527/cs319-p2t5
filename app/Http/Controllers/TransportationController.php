@@ -25,8 +25,8 @@ class TransportationController extends Controller
         $validator = Validator::make($data, [
             '*.capacity'        =>    'required|numeric|min:1|max:100',
             '*.name'            =>    'required|max:255',
-            '*.company'            =>    'required|max:255',
-            '*.phone'            =>    'required',
+            '*.company'         =>    'max:255',
+            '*.phone'           =>    'required',
             '*.conferenceID'    =>    'required|numeric'
         ]);
 
@@ -38,8 +38,8 @@ class TransportationController extends Controller
         $validator = Validator::make($data, [
             'capacity'        =>    'numeric|min:1|max:100',
             'name'            =>    'max:255',
-            'company'        =>    'max:255',
-            'phone'            =>    '',
+            'company'         =>    'max:255',
+            'phone'           =>    '',
             'conferenceID'    =>    'numeric'
         ]);
 
@@ -54,8 +54,6 @@ class TransportationController extends Controller
         $transport->company = $data['company'];
         $transport->phone = $data['phone'];
         $transport->conferenceID = $data['conferenceID'];
-        if (isset($data['flightID']))
-            $transport->flightID = $data['flightID'];
         
         $transport->save();
     }
