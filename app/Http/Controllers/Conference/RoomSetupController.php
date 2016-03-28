@@ -105,6 +105,18 @@ class RoomSetupController extends Controller
         }
     }
 
+    public function deleteResidence($confId, $residenceId) {
+        if (!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
+            return response("", 403);
+        }
+
+        $res = Residence::find($residenceId);
+        if (is_null($res) || $res->conferenceID != $confId) {
+            return response("", 404);
+        }
+        $res->delete();
+    }
+
     public function getResidenceRoomSets($confId, $residenceId) {
         if (!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
             return response("", 403);
@@ -263,6 +275,19 @@ class RoomSetupController extends Controller
         }
 
         return $set;
+    }
+
+    public function deleteRoomSet($confId, $roomSetId) {
+        if(!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
+            return response("", 403);
+        }
+
+        $set = RoomSet::with("residence")->find($roomSetId);
+        if (!isset($set) || $set->residence->conferenceID != $confId) {
+            return response("", 404);
+        }
+
+        $set->delete();
     }
 
     private function validateResidence($req) {
