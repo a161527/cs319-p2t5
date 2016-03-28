@@ -468,6 +468,22 @@
 						}
 					}
 				})
+
+				/*
+				INVENTORY LIST
+				*/
+				.state('dashboard.conferences.manage.viewInventory', {
+					url: '/inventory',
+					templateUrl: 'js/inventoryView/inventoryView.view.html',
+					controller: 'inventoryListCtrl',
+					resolve: {
+						inventoryData: function(inventoryList, $q, $stateParams) {
+							return $q.all([
+								inventoryList.refresh($stateParams.cid)
+							])
+						}
+					}
+				})
 				
 		})
 

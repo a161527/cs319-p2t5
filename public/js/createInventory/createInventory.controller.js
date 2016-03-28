@@ -27,7 +27,7 @@
 
 					ajax.serviceCall('Creating inventory...', 'post', 'api/conferences/' + $stateParams.cid + '/inventory', inventoryInfo).then(function(resData) {
 
-						$state.go('dashboard.conferences.manage', {'cid': $stateParams.cid}, {reload: true})
+						$state.go('dashboard.conferences.manage.viewInventory', {'cid': $stateParams.cid}, {reload: true})
 
 					}, function(resData) {
 

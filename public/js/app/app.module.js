@@ -24,6 +24,7 @@
 	angular.module('eventRegistration', [])
 	angular.module('residenceView', [])
 	angular.module('roomSetView', [])
+	angular.module('inventoryView', [])
 
 
 	angular.module('app', [
@@ -54,6 +55,7 @@
 		'ui.bootstrap',
 		'approveRegistration',
 		'residenceView',
-		'roomSetView'
+		'roomSetView',
+		'inventoryView'
 	])
 })()
