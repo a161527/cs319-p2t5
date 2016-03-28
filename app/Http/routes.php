@@ -131,6 +131,7 @@ Route::group(['prefix' => 'api'], function()
         Route::get('/', 'TransportationController@index');
         Route::post('/{id}/assignflight', 'TransportationController@assignFlight');
         // view users needing transport (conf id, time)
+        Route::get('/summary', 'TransportationController@transportSummary');
     });
 
 });

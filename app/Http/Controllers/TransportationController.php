@@ -6,41 +6,43 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Transportation;
-use App\conference;
+use App\Conference;
 use App\Flight;
+use App\UserConference;
+use App\User;
 use DB;
 use Validator;
 
 class TransportationController extends Controller
 {
-	private function transportValidator(array $data)
-	{
+    private function transportValidator(array $data)
+    {
         $validator = Validator::make($data, [
-            '*.capacity'		=>	'required|numeric|min:1|max:100',
-            '*.name'			=>	'required|max:255',
-            '*.company'			=>	'required|max:255',
-            '*.phone'			=>	'required',
-            '*.conferenceID'	=>	'required|numeric'
+            '*.capacity'        =>    'required|numeric|min:1|max:100',
+            '*.name'            =>    'required|max:255',
+            '*.company'            =>    'required|max:255',
+            '*.phone'            =>    'required',
+            '*.conferenceID'    =>    'required|numeric'
         ]);
 
         return $validator;
-	}
+    }
 
-	private function transportEditValidator(array $data)
-	{
+    private function transportEditValidator(array $data)
+    {
         $validator = Validator::make($data, [
-            'capacity'		=>	'numeric|min:1|max:100',
-            'name'			=>	'max:255',
-            'company'		=>	'max:255',
-            'phone'			=>	'',
-            'conferenceID'	=>	'numeric'
+            'capacity'        =>    'numeric|min:1|max:100',
+            'name'            =>    'max:255',
+            'company'        =>    'max:255',
+            'phone'            =>    '',
+            'conferenceID'    =>    'numeric'
         ]);
 
         return $validator;
-	}
+    }
 
-	private function insertTransport($data)
-	{
+    private function insertTransport($data)
+    {
         $transport = new Transportation();
         $transport->capacity = $data['capacity'];
         $transport->name = $data['name'];
@@ -48,28 +50,50 @@ class TransportationController extends Controller
         $transport->phone = $data['phone'];
         $transport->conferenceID = $data['conferenceID'];
         if (isset($data['flightID']))
-        	$transport->flightID = $data['flightID'];
+            $transport->flightID = $data['flightID'];
         
         $transport->save();
-	}
+    }
+
+    private function buildSummaryJson($conferences, $flights, $userConfs)
+    {
+        $r = $conferences[0];
+        $r['flights'] = $flights;
+
+        foreach ($userConfs as $user)
+        {
+            $r ['flights'] [$user['flightID']] ['accounts'] [$user['user']['accountID']] ['users'] [] = $user['user'];
+        }
+
+        foreach ($r['flights'] as &$fl)
+        {
+            foreach ($fl['accounts'] as &$acc)
+            {
+                $acc['count'] = count($acc['users']);
+            }
+        }
+
+        return $r;
+    }
 
     /*
      * GET /api/transportation [?confID=123 & flightID=123]
      * - gets a list of transportations 
      * confID and flightID optional
      */
-    public function index(Request $req) {
-    	$confId = isset($req->all()['confID']) ? $req->all()['confID'] : null;
-    	$flightId = isset($req->all()['flightID']) ? $req->all()['flightID'] : null;
+    public function index(Request $req) 
+    {
+        $confId = isset($req->all()['confID']) ? $req->all()['confID'] : null;
+        $flightId = isset($req->all()['flightID']) ? $req->all()['flightID'] : null;
 
-    	if ($confId && $flightId)
-    		$transport = Transportation::where('conferenceID', $confId)->where('flightID', $flightId)->get();
-    	else if ($confId)
-    		$transport = Transportation::where('conferenceID', $confId)->get();
-    	else if ($flightId)
-    		$transport = Transportation::where('flightID', $flightId);
-    	else
-    		$transport = Transportation::all();
+        if ($confId && $flightId)
+            $transport = Transportation::where('conferenceID', $confId)->where('flightID', $flightId)->get();
+        else if ($confId)
+            $transport = Transportation::where('conferenceID', $confId)->get();
+        else if ($flightId)
+            $transport = Transportation::where('flightID', $flightId);
+        else
+            $transport = Transportation::all();
         
         return response()->json(['message' => 'returned_transportation', 'transportation' => $transport]);
     }
@@ -80,7 +104,8 @@ class TransportationController extends Controller
      * takes [{...},{...}]
      * object params: capacity, name, company, phone, conferenceID, flightID (optional)
      */
-    public function addTransport(Request $req) {
+    public function addTransport(Request $req) 
+    {
         $transports = $req->all();
         try
         {   
@@ -88,12 +113,12 @@ class TransportationController extends Controller
             $validator = $this->transportValidator($transports);
             if ($validator->passes())
             {
-	            foreach ($transports as $t)
-	            {
-	                $this->insertTransport($t);    
-	            }
-	        }
-	        else
+                foreach ($transports as $t)
+                {
+                    $this->insertTransport($t);    
+                }
+            }
+            else
                 return response()->json(['message' => 'validation_failed', 'errors' => $validator->errors()], 422);
             DB::commit();
             return response()->json(['message' => 'transports_added']);
@@ -110,8 +135,9 @@ class TransportationController extends Controller
      * DELETE /api/transportation/{transportationId}
      * - deletes a transportation
      */
-    public function deleteTransport($transportId) {
-		$transport = Transportation::where('id', $transportId);
+    public function deleteTransport($transportId) 
+    {
+        $transport = Transportation::where('id', $transportId);
         if ($transport->delete())
             return response()->json(['message' => 'transportation_deleted'], 200);
         else
@@ -123,7 +149,8 @@ class TransportationController extends Controller
      * - edit a transportation
      * same object format as insertion, but only takes a single object of changes to be made (not a list)
      */
-    public function patchTransport($transportId, Request $req) {
+    public function patchTransport($transportId, Request $req) 
+    {
         $changes = $req->all();
         $transport = Transportation::where('id', $transportId)
                     ->first();
@@ -174,13 +201,45 @@ class TransportationController extends Controller
      * - assigns a transportation to a flight
      * takes {flightId: 1}
      */
-    public function assignFlight($transportId, $flightId) {
-    	$flight = Flight::where('id', '=', $flightId)->first();
+    public function assignFlight($transportId, $flightId) 
+    {
+        $flight = Flight::where('id', '=', $flightId)->first();
         if ($flight === null)
             return response()->json(['message' => 'flight_not_found'], 404);
 
-    	$transport = Transportation::where('id', $transportId);
-    	$transport->flightID = $flightId;
-    	$transport->save();
+        $transport = Transportation::where('id', $transportId);
+        $transport->flightID = $flightId;
+
+        if ($transport->save())
+            return response()->json(['message' => 'flight_assigned'], 200);
+        else
+            return response()->json(['message' => 'flight_could_not_be_updated'], 500);
+    }
+
+    /*
+     * GET /api/transportation/summary/
+     * - get transportation summary for a conference, and flight if specified
+     * takes {confID: 1}
+     */
+    public function transportSummary(Request $req)
+    {
+        $data = $req->all();
+        $confId = isset($data['confID']) ? $data['confID'] : null;
+        if (!$confId)
+            return response()->json(['message' => 'conference_not_found'], 422);
+
+        $userConfs = UserConference::where('needsTransportation', '=', true)->where('conferenceID', $confId)
+                                   ->with(array('user'=>function($q){
+                                        $q->select('id','firstName','lastName','accountID');
+                                   }));
+        // $usersList = $userConfs->distinct()->lists('userID');
+        $flightsList = $userConfs->distinct()->lists('flightID');
+        // $confsList = $userConfs->distinct()->lists('conferenceID');
+        $flights = Flight::whereIn('id', $flightsList)->get()->keyBy('id')->toArray();
+        $conference = Conference::where('id', $confId)->get()->toArray();
+        
+        // return $userConfs->get();
+        $summary = $this->buildSummaryJson($conference, $flights, $userConfs->get()->toArray());
+        return response()->json($summary, 200);
     }
 }
