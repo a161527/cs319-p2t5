@@ -393,6 +393,22 @@
 					templateUrl: 'js/createTransportation/createTransportation.view.html',
 					controller: 'createTransportationCtrl'
 				})
+
+				/*
+				RESIDENCE LIST
+				*/
+				.state('dashboard.conferences.manage.viewResidence', {
+					url: '/residences',
+					templateUrl: 'js/residenceView/residenceView.view.html',
+					controller: 'residenceListCtrl',
+					resolve: {
+						residenceData: function(residenceList, $q, $stateParams) {
+							return $q.all([
+								residenceList.refresh($stateParams.cid)
+							])
+						}
+					}
+				})
 				
 		})
 

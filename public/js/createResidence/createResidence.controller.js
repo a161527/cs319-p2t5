@@ -24,7 +24,7 @@
 
 					ajax.serviceCall('Creating residences...', 'post', 'api/conferences/' + $stateParams.cid + '/residences', residenceInfo).then(function(resData) {
 
-						$state.go('dashboard.conferences.manage', {'cid': $stateParams.cid}, {reload: true})
+						$state.go('dashboard.conferences.manage.viewResidence', {'cid': $stateParams.cid}, {reload: true})
 
 					}, function(resData) {
 

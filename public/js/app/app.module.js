@@ -21,6 +21,7 @@
 	angular.module('auditAccts', [])
 	angular.module('approveRegistration', [])
 	angular.module('eventRegistration', [])
+	angular.module('residenceView', [])
 
 
 	angular.module('app', [
@@ -48,6 +49,7 @@
 		'ui.router',
 		'blockUI',
 		'ui.bootstrap',
-		'approveRegistration'
+		'approveRegistration',
+		'residenceView'
 	])
 })()
