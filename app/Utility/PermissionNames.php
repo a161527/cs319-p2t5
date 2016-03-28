@@ -27,12 +27,17 @@ class PermissionNames {
         return "view-site-statistics";
     }
 
+    public static function ManageAccounts() {
+        return "manage-accounts";
+    }
+
     public static function AllGlobalPermissions() {
         return [
             self::CreateConference(),
             self::ManageGlobalPermissions(),
             self::ApproveUserRegistration(),
-            self::ViewSiteStatistics()];
+            self::ViewSiteStatistics(),
+            self::ManageAccounts()];
     }
 
     //==============CONFERENCE PERMISSIONS===========

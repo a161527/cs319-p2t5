@@ -26,6 +26,7 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
         //New registration request
         Route::post('register', 'RegistrationController@userRegistration');
         Route::post('register/{registryId}/approve', 'RegistrationController@approveRegistration');
+        Route::delete('register/{registryId}', 'RegistrationController@removeRequest');
         Route::get('register/{registryId}', 'RegistrationController@getRegistrationData');
         Route::get('register', 'RegistrationController@outstandingRegistrationRequests');
 
@@ -100,6 +101,7 @@ Route::group(['prefix' => 'api'], function()
 
     Route::post('login', 'AuthenticationController@authenticate');
     Route::post('register', 'RegistrationController@register');
+    Route::delete('account/{email}', 'RegistrationController@deleteAccount');
 
     Route::get('unapprovedUsers', 'RegistrationController@listUnapproved');
     Route::post('register/{id}/approve', 'RegistrationController@approveUser');
