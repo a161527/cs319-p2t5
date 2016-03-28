@@ -10,12 +10,14 @@ use App\Models\Account;
 use App\User;
 use Validator;
 use DB;
+use Entrust;
+use App\Utility\PermissionNames;
 
 class UserController extends Controller
 {
      public function __construct()
      {
-         // $this->middleware('jwt.auth', ['except' => ['authenticate', 'token']]);
+        $this->middleware('jwt.auth');
         // provides an authorization header with each response
         // $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token']]);
      }

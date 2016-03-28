@@ -11,6 +11,8 @@ use App\UserInventory;
 use App\Conference;
 use Validator;
 use DB;
+use Entrust;
+use App\Utility\PermissionNames;
 
 class InventoryController extends Controller
 {
