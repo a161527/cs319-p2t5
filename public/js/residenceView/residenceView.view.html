@@ -1,7 +1,7 @@
 <div ui-view>
 	<div class='row'>
 		<div class='col-sm-9'>
-			<h2>{{conferenceName}}: Residences</h2>
+			<h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Residences</h2>
 		</div>
 		<div class='col-sm-3'>
 			<button id='createResidenceBtn' ng-click='showWidget("createResidence")' class='btn btn-primary btn-block pull'><span class='glyphicon glyphicon-plus'></span><br> Create Residence</button>
@@ -31,8 +31,17 @@
 									{{residence.location}}
 								</div>
 							</div>
-						</div>
 
+							<br>
+							<div class='row'>
+								<div class='col-md-12'>
+									<button class='btn btn-primary pull-right btn-block' 
+											ng-click='showWidget("viewResidence.viewRoomSet", {rid: residence.id})'>
+										<span class='glyphicon glyphicon-pencil'></span><br> View Room Sets
+									</button>
+								</div>
+							</div>
+						</div>
 					</div>
 				</li>
 			</div>

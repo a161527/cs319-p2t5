@@ -409,6 +409,22 @@
 						}
 					}
 				})
+
+				/*
+				ROOM SET LIST
+				*/
+				.state('dashboard.conferences.manage.viewResidence.viewRoomSet', {
+					url: '/:rid/roomsets',
+					templateUrl: 'js/roomSetView/roomSetView.view.html',
+					controller: 'roomSetListCtrl',
+					resolve: {
+						roomSetData: function(roomSetList, $q, $stateParams) {
+							return $q.all([
+								roomSetList.refresh($stateParams.cid, $stateParams.rid)
+							])
+						}
+					}
+				})
 				
 		})
 

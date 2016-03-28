@@ -3,17 +3,23 @@
 
 	angular.module('residenceView')
 		.controller('residenceListCtrl', function($scope, $state, $stateParams, residenceData, ajax, conferenceInfo) {
-			console.log(conferenceInfo)
 			
 			var cid = $stateParams.cid
 			$scope.residences = residenceData[0] || []
 			$scope.noResidences = ($scope.residences.length === 0)
 			$scope.conferenceName = conferenceInfo.data.name
 
-			$scope.showWidget = function(toState) {
+			$scope.showWidget = function(toState, params) {
 				var state = 'dashboard.conferences.manage.' + toState;
-				$state.go(state, {cid: $stateParams.cid});
+				var allParams = {cid: $stateParams.cid}
+				if (params) {
+					angular.forEach(params, function(val, key) {
+						allParams[key] = val
+					})
+				}
+				$state.go(state, allParams);
 			}
+
 		})
 
 })()

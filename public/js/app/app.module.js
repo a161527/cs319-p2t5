@@ -22,6 +22,7 @@
 	angular.module('approveRegistration', [])
 	angular.module('eventRegistration', [])
 	angular.module('residenceView', [])
+	angular.module('roomSetView', [])
 
 
 	angular.module('app', [
@@ -50,6 +51,7 @@
 		'blockUI',
 		'ui.bootstrap',
 		'approveRegistration',
-		'residenceView'
+		'residenceView',
+		'roomSetView'
 	])
 })()
