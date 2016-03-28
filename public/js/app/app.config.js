@@ -244,6 +244,9 @@
 						},
 						inventory: function($stateParams, $http) {
 							return $http.get('api/conferences/' + $stateParams.cid + '/inventory')
+						},
+						numOfDependents: function(getDependentsService) {
+							return getDependentsService.getNumberOfApproved()
 						}
 
 					}

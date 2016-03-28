@@ -44,9 +44,26 @@
 			{{reg.flight.arrivalTime}}
 		</div>
 	</div>
+	<div ng-show='conf[reg.userID].room.length > 0'>
+		<div>
+			<b>Room:</b>
+			<br>
+			{{conf[reg.userID].room}}
+		</div>
+	</div>
 </div>
 <button class='btn btn-primary' 
 	ng-click='requestInventory()'
 	ng-show='showAddInv'>
 	Request Inventory
+</button>
+<button class='btn btn-primary pull-right btn-block'
+	ng-show='!allDependentsRegistered'
+	ui-sref='dashboard.conferences.registration.1({cid: conference.id})'>
+	<span class='glyphicon glyphicon-pencil'></span><br> Register More Users
+</button>
+<button ng-show='allDependentsRegistered' 
+		class='btn btn-primary pull-right btn-block' 
+		disabled>
+	All attendees registered
 </button>
