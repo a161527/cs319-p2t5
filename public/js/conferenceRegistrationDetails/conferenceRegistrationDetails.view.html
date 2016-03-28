@@ -1,69 +1,87 @@
-<div ng-repeat='reg in registered'>
-	<div>
-		<h4>{{reg.user.firstName}} {{reg.user.lastName}}</h4>
-	</div>
-	<div>
-		<b>Approved:</b>
-		<br>
-		{{reg.approved | yesNo}}
-	</div>
-	<div>
-		<b>Needs Accommodation:</b>
-		<br>
-		{{reg.needsAccommodation | yesNo}}
-	</div>
-	<div>
-		<b>Needs Transportation:</b>
-		<br>
-		{{reg.needsTransportation | yesNo}}
-	</div>
-	<div ng-show='reg.flight'>
-		<div>
-			<b>Airline:</b>
-			<br>
-			{{reg.flight.airline}}
+<div class='row'>
+	<div class='col-sm-9'>
+		<div ng-repeat='reg in registered'>
+			<h4>{{reg.user.firstName}} {{reg.user.lastName}}</h4>
+			<div class='panel panel-default'>
+				<div class='panel panel-body'>
+					<div>
+						<b>Approved:</b>
+						<br>
+						{{reg.approved | yesNo}}
+					</div>
+					<div>
+						<b>Needs Accommodation:</b>
+						<br>
+						{{reg.needsAccommodation | yesNo}}
+					</div>
+					<div>
+						<b>Needs Transportation:</b>
+						<br>
+						{{reg.needsTransportation | yesNo}}
+					</div>
+					<div ng-show='reg.flight'>
+						<div>
+							<b>Airline:</b>
+							<br>
+							{{reg.flight.airline}}
+						</div>
+						<div>
+							<b>Airport:</b>
+							<br>
+							{{reg.flight.airport}}
+						</div>
+						<div>
+							<b>Flight Number:</b>
+							<br>
+							{{reg.flight.number}}
+						</div>
+						<div>
+							<b>Arrival Date:</b>
+							<br>
+							{{reg.flight.arrivalDate}}
+						</div>
+						<div>
+							<b>Arrival Time:</b>
+							<br>
+							{{reg.flight.arrivalTime}}
+						</div>
+					</div>
+					<div ng-show='conf[reg.userID].room.length > 0'>
+						<div>
+							<b>Room:</b>
+							<br>
+							{{conf[reg.userID].room}}
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div>
-			<b>Airport:</b>
-			<br>
-			{{reg.flight.airport}}
-		</div>
-		<div>
-			<b>Flight Number:</b>
-			<br>
-			{{reg.flight.number}}
-		</div>
-		<div>
-			<b>Arrival Date:</b>
-			<br>
-			{{reg.flight.arrivalDate}}
-		</div>
-		<div>
-			<b>Arrival Time:</b>
-			<br>
-			{{reg.flight.arrivalTime}}
-		</div>
 	</div>
-	<div ng-show='conf[reg.userID].room.length > 0'>
-		<div>
-			<b>Room:</b>
-			<br>
-			{{conf[reg.userID].room}}
+	<div class='col-sm-3'>
+		<h5><span class='glyphicon glyphicon-cog'></span> Actions</h5>
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class='row'>
+					<div class='col-sm-12'>
+					<button class='btn btn-primary pull-right btn-block'
+						ng-show='!allDependentsRegistered'
+						ng-click='register()'>
+						<span class='glyphicon glyphicon-pencil'></span><br> Register More Users
+					</button>
+					<button ng-show='allDependentsRegistered' 
+							class='btn btn-primary pull-right btn-block' 
+							disabled>
+						All users registered
+					</button>
+					<button class='btn btn-primary btn-block pull-right' 
+						ng-click='requestInventory()'
+						ng-show='showAddInv'>
+						Request Inventory
+					</button>
+				</div>	
+			</div>
 		</div>
+		
 	</div>
+	<input type='text' class='form-control' ng-disabled='true'> 
 </div>
-<button class='btn btn-primary' 
-	ng-click='requestInventory()'
-	ng-show='showAddInv'>
-	Request Inventory
-</button>
-<button class='btn btn-primary pull-right btn-block'
-	ng-show='!allDependentsRegistered'
-	ng-click='register()'>
-	<span class='glyphicon glyphicon-pencil'></span><br> Register More Users
-</button>
-<button ng-show='allDependentsRegistered' 
-		class='btn btn-primary pull-right btn-block' 
-		disabled>
-	All users registered
-</button>
