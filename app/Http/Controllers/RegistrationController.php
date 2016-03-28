@@ -36,7 +36,7 @@ class RegistrationController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('jwt.auth', ["only" => ["listUnapproved", "approveUser"]]);
+        $this->middleware('jwt.auth.rejection', ["only" => ["listUnapproved", "approveUser", "deleteAccount"]]);
     }
 
     /**

@@ -20,11 +20,11 @@ class AuthenticationController extends Controller
 
     public function __construct()
     {
-        // Apply the jwt.auth middleware to all methods in this controller
+        // Apply the jwt.auth.rejection middleware to all methods in this controller
         // except for the authenticate method. We don't want to prevent
         // the user from retrieving their token if they don't already have it
 
-        $this->middleware('jwt.auth', ['except' => ['authenticate', 'token']]);
+        $this->middleware('jwt.auth.rejection', ['except' => ['authenticate', 'token']]);
         // provides an authorization header with each response
         $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token']]);
 

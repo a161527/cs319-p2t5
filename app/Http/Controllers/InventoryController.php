@@ -18,9 +18,7 @@ class InventoryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt.auth', ['except' => ['authenticate', 'token']]);
-        // provides an authorization header with each response
-        // $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token']]);
+        $this->middleware('jwt.auth.rejection');
     }
 
     /*

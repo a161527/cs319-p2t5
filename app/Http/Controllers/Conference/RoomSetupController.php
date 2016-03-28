@@ -23,7 +23,7 @@ use Illuminate\Foundation\Validation\ValidationException;
 class RoomSetupController extends Controller
 {
     public function __construct() {
-        $this->middleware('jwt.auth');
+        $this->middleware('jwt.auth.rejection');
     }
 
     public function getResidenceList($confId) {

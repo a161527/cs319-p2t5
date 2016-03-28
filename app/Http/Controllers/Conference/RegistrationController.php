@@ -36,7 +36,7 @@ class RegistrationController extends Controller
     const REGISTRATION_EDIT_ACCESS_TYPE = "edit";
 
     public function __construct() {
-        $this->middleware('jwt.auth');
+        $this->middleware('jwt.auth.rejection');
     }
 
     /*

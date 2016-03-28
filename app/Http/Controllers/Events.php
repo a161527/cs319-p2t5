@@ -25,7 +25,7 @@ class Events extends Controller {
         //Allow info requests without a token.  May need to do extra
         //auth stuff if they want detailed info, but right now we don't
         //make that distinction
-        $this->middleware('jwt.auth');
+        $this->middleware('jwt.auth.rejection');
     }
 
     private function rewriteEventWithAttendees(&$e) {
