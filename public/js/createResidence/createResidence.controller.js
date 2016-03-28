@@ -22,8 +22,7 @@
 						residenceInfo.push(res)
 					})
 
-					// TODO: residence creation endpoint needs to be updated to take in multiple objects
-					ajax.serviceCall('Creating residences...', 'post', 'api/conferences/' + $stateParams.cid + '/residences', residenceInfo[0]).then(function(resData) {
+					ajax.serviceCall('Creating residences...', 'post', 'api/conferences/' + $stateParams.cid + '/residences', residenceInfo).then(function(resData) {
 
 						$state.go('dashboard.conferences.manage', {'cid': $stateParams.cid}, {reload: true})
 
