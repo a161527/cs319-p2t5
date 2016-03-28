@@ -16,6 +16,10 @@ use App\RoomType;
 
 use App\Utility\PermissionNames;
 
+use Validator;
+
+use Illuminate\Foundation\Validation\ValidationException;
+
 class RoomSetupController extends Controller
 {
     public function __construct() {
@@ -38,14 +42,19 @@ class RoomSetupController extends Controller
         if (!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
             return response("", 403);
         }
-        $this->validateResidence($req);
-        $residence = new Residence;
-        $residence->name = $req->input('name');
-        $residence->location = $req->input('location');
-        $residence->conferenceID = $confId;
-        $residence->save();
+        $responses = [];
+        foreach ($req->all() as $request) {
+            $this->validateResidence($request);
+            $residence = new Residence;
+            $residence->name = $request['name'];
+            $residence->location = $request['location'];
+            $residence->conferenceID = $confId;
+            $residence->save();
 
-        return response()->json(["id" => $residence->id]);
+            $responses[] = ["id" => $residence->id, "name" => $residence->name];
+        }
+
+        return response()->json($responses);
     }
 
     public function getResidenceRoomSets($confId, $residenceId) {
@@ -83,50 +92,61 @@ class RoomSetupController extends Controller
         })->get();
     }
 
-    public function createRoomSet(Request $request, $confId, $residenceId) {
+    public function createRoomSet(Request $req, $confId, $residenceId) {
         if(!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
             return response("", 403);
         }
-        return DB::transaction(function() use ($request, $confId, $residenceId) {
+        return DB::transaction(function() use ($req, $confId, $residenceId) {
             $res = Residence::find($residenceId);
             if (is_null($res) || $res->conferenceID != $confId) {
                 return response("", 404);
             }
 
-            $this->validateRoomSet($request);
-            if ($request->has('typeID')) {
-                $type = $request->input('typeID');
-            } else {
-                $tyVal = new RoomType;
-                $tyVal->name = $request->input('type.name');
-                $tyVal->capacity = $request->input('type.capacity');
-                $tyVal->accessible = $request->input('type.accessible');
-                $tyVal->save();
-                $type = $tyVal->id;
+            $responses = [];
+            foreach ($req->all() as $request) {
+                $this->validateRoomSet($request);
+                if (isset($request['typeID'])) {
+                    $type = $request['typeID'];
+                } else {
+                    $tyVal = new RoomType;
+                    $tyVal->name = $request['type.name'];
+                    $tyVal->capacity = $request['type.capacity'];
+                    $tyVal->accessible = $request['type.accessible'];
+                    $tyVal->save();
+                    $type = $tyVal->id;
+                }
+                $set = new RoomSet;
+                $set->typeID = $type;
+                $set->residenceID = $residenceId;
+                $set->name = $request['name'];
+                $set->save();
+                $responses[] = ['name' => $set->name, 'id' => $set->id, 'typeID' => $type];
             }
-            $set = new RoomSet;
-            $set->typeID = $type;
-            $set->residenceID = $residenceId;
-            $set->name = $request->input('name');
-            $set->save();
-            return response()->json(['id' => $set->id, 'typeID' => $type]);
+            return response()->json($responses);
         });
     }
 
     private function validateResidence($req) {
-        $this->validate($req, [
+        $v = Validator::make($req, [
             'name' => 'required|string',
             'location' => 'required|string'
         ]);
+        if ($v->fails()) {
+            throw new ValidationException($v);
+        }
     }
 
     private function validateRoomSet($req) {
-        $this->validate($req, [
+        $v = Validator::make($req, [
             'name' => 'required|string',
             'typeID' => 'numeric',
             'type.name' => 'required_without:typeID|string',
             'type.capacity' => 'required_without:typeID|numeric',
             'type.accessible' => 'required_without:typeID|boolean'
         ]);
+
+        if ($v->fails()) {
+            throw new ValidationException($v);
+        }
     }
 }
