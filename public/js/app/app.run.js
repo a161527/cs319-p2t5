@@ -97,7 +97,6 @@
 
 							if (toStateParams.cid) {
 								loginStorage.getConferencePermissions(toStateParams.cid).then(function(resData) {
-									console.log(resData)
 
 									if (resData.length === 0) {
 										$state.go('dashboard.home')

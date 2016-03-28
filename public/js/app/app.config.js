@@ -307,11 +307,28 @@
 				*/
 				.state('dashboard.conferences.manage.approve-registration', {
 					url: '/approveRegistration',
+					abstract: true,
+					template: '<div ui-view></div>'
+				})
+
+				.state('dashboard.conferences.manage.approve-registration.1', {
+					url: '',
 					templateUrl: 'js/approveRegistration/approveRegistration.view.html',
 					controller: 'approveRegistrationCtrl',
 					resolve: {
 						unapproved: function($stateParams, getUnapprovedService) {
 							return getUnapprovedService.get($stateParams.cid)
+						}
+					}
+				})
+
+				.state('dashboard.conferences.manage.approve-registration.2', {
+					url: '',
+					templateUrl: 'js/approveRegistration/approveRegistration.view.html',
+					controller: 'conferenceApprovedUsersCtrl',
+					resolve: {
+						approved: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/register?include=approved')
 						}
 					}
 				})

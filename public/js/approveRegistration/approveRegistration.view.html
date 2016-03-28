@@ -1,5 +1,26 @@
-<div ng-show='unapprovedList.length === 0'>
+<div class='row'>
+	<div class='col-sm-9'>
+		<h4 ng-show='state1'>Approve Conference Registration</h4>
+		<h4 ng-show='state2'>Approve Conference Registration</h4>
+	</div>
+	<div class='col-sm-3' ng-show='state2'>
+		<button class='btn btn-info btn-block' 
+			ng-click='back()'>
+			Go to Approve Users
+		</button>
+	</div>
+	<div class='col-sm-3' ng-show='state1'>
+		<button class='btn btn-info btn-block' 
+			ng-click='viewApproved()'>
+			View Approved Users
+		</button>
+	</div>
+</div>
+<div ng-show='unapprovedList.length === 0 && state1'>
 	No users requiring approval
+</div>
+<div ng-show='unapprovedList.length === 0 && state2'>
+	No users currently approved
 </div>
 <ul class="list-group">
 	<div ng-repeat='unapproved in unapprovedList'>
@@ -43,17 +64,17 @@
 					</div>
 				</div>
 
-				<div class='col-md-3'>
+				<div class='col-md-3' ng-show='state1'>
 
 					<button class='btn btn-success pull-right btn-block'
 						ng-click='approve(unapproved.id)'>
 						<span class='glyphicon glyphicon-ok'></span><br> Approve
 					</button>
 
-<!-- 					<button ng-click=''
+					<button ng-click=''
 						class='btn btn-danger btn-block pull-left'>
 						<span class='glyphicon glyphicon-remove'></span><br> Reject
-					</button> -->
+					</button>
 
 				</div>
 
