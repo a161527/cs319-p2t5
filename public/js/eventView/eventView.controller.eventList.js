@@ -13,11 +13,14 @@
 
 			var regConference = []
 
-			$scope.goToEventState = function(state, params) {
-				if (!params) {
-					params = {}
-				}
-				$state.go('dashboard.events.' + state, params, {reload: true})
+			$scope.showWidget = function(toState) {
+				var state = 'dashboard.conferences.manage.' + toState;
+				$state.go(state, {cid: $stateParams.cid});
+			}
+
+			$scope.goToEventState = function(toState, params) {
+				var state = 'dashboard.events.' + toState;
+				$state.go(state, params, {reload: true})
 			}
 
 			var formatEvents = function() {

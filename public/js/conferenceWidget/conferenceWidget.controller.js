@@ -35,10 +35,6 @@
 				window.alert($state);
 			}
 
-			$scope.createEvent = function() {
-				$state.go('dashboard.events.create', {'cid': $stateParams.cid})
-			}
-
 		})
 
 })()

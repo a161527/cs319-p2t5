@@ -339,15 +339,6 @@
 				})
 
 				/*
-				EVENT CREATION
-				*/
-				.state('dashboard.events.create', {
-					url: '/create',
-					templateUrl: 'js/createEvent/createEvent.view.html',
-					controller: 'createEventCtrl'
-				})
-
-				/*
 				EVENT REGISTRATION
 				*/
 				.state('dashboard.events.register', {
@@ -365,6 +356,15 @@
 							return $http.get('api/event/' + $stateParams.eid + '?includeRegistration=1')
 						}
 					}
+				})
+
+				/*
+				CREATE EVENT
+				*/
+				.state('dashboard.conferences.manage.createEvent', {
+					url: '/event/create',
+					templateUrl: 'js/createEvent/createEvent.view.html',
+					controller: 'createEventCtrl'
 				})
 
 				/*

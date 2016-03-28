@@ -24,15 +24,11 @@
 						transportationInfo.push(trans)
 					})
 
-					console.log(transportationInfo)
-
 					ajax.serviceCall('Creating transportation...', 'post', 'api/conferences/' + $stateParams.cid + '/transportation', transportationInfo).then(function(resData) {
 
-						console.log(resData)
 						$state.go('dashboard.conferences.manage', {'cid': $stateParams.cid}, {reload: true})
 
 					}, function(resData) {
-						console.log(resData)
 
 						$scope.showError = true
 						$scope.errorMessage = errorCodes[resData.data.message]

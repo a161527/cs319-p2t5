@@ -25,15 +25,11 @@
 						inventoryInfo.push(inv)
 					})
 
-					console.log(inventoryInfo)
-
 					ajax.serviceCall('Creating inventory...', 'post', 'api/conferences/' + $stateParams.cid + '/inventory', inventoryInfo).then(function(resData) {
 
-						console.log(resData)
 						$state.go('dashboard.conferences.manage', {'cid': $stateParams.cid}, {reload: true})
 
 					}, function(resData) {
-						console.log(resData)
 
 						$scope.showError = true
 						$scope.errorMessage = errorCodes[resData.data.message]
