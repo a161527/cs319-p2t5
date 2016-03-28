@@ -269,6 +269,9 @@
 						},
 						dependents: function($http, loginStorage) {
 							return $http.get('api/accounts/' + loginStorage.getId() + '/dependents')
+						},
+						registered: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '?includeRegistration=1')
 						}
 					}
 				})
