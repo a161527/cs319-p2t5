@@ -485,6 +485,21 @@
 					}
 				})
 				
+				/*
+				TRANSPORTATION LIST
+				*/
+				.state('dashboard.conferences.manage.viewTransportation', {
+					url: '/transportation',
+					templateUrl: 'js/transportationView/transportationView.view.html',
+					controller: 'transportationListCtrl',
+					resolve: {
+						transportationData: function(transportationList, $q, $stateParams) {
+							return $q.all([
+								transportationList.refresh($stateParams.cid)
+							])
+						}
+					}
+				})
 		})
 
 })()

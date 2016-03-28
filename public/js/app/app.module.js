@@ -25,6 +25,7 @@
 	angular.module('residenceView', [])
 	angular.module('roomSetView', [])
 	angular.module('inventoryView', [])
+	angular.module('transportationView', [])
 
 
 	angular.module('app', [
@@ -56,6 +57,7 @@
 		'approveRegistration',
 		'residenceView',
 		'roomSetView',
-		'inventoryView'
+		'inventoryView',
+		'transportationView'
 	])
 })()
