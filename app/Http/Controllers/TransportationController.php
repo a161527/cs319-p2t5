@@ -218,7 +218,7 @@ class TransportationController extends Controller
 
     /*
      * GET /api/transportation/summary/
-     * - get transportation summary for a conference, and flight if specified
+     * - get transportation summary for a conference
      * takes {confID: 1}
      */
     public function transportSummary(Request $req)
