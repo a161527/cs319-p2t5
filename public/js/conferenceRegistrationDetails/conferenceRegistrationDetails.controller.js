@@ -12,7 +12,18 @@
 
 			$scope.allDependentsRegistered = numOfDependents === $scope.registered.length
 
-			$scope.showAddInv = inventory.data.inventory? inventory.data.inventory.length > 0 : false
+			$scope.usersApprovedAndInvExists = function(registered) {
+				var numApproved = 0
+				angular.forEach(registered, function(dep) {
+					if (dep.approved) {
+						numApproved += 1
+					}
+				})
+
+				return inventory.data.inventory? inventory.data.inventory.length > 0 && numApproved > 0 : false 
+			}
+
+			$scope.showAddInv = $scope.usersApprovedAndInvExists($scope.registered)
 
 			//Format into object indexed by dependent id for cross referencing
 			//This object currently contains info about rooms	
