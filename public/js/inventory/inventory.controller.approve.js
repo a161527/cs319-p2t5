@@ -5,7 +5,11 @@
 		.controller('approveInventoryCtrl', function($scope, $stateParams, $state, unapprovedInventory, ajax) {
 
 			$scope.inventory = unapprovedInventory.data.inventory
-			console.log($scope.inventory)
+			
+			angular.forEach($scope.inventory, function(inv) {
+				inv.user['fullName'] = inv.user.firstName + ' ' + inv.user.lastName
+			})
+
 			$scope.approve = function(id) {
 				var route = 'api/userinventory/' + id + '/approve'
 				ajax.serviceCall('Approving...', 'get', route).then(function(resData) {

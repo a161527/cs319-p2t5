@@ -9,9 +9,9 @@
 
 			$scope.unapprovedList = unapproved
 
-			$http.get('api/conferences/1/register?include=approved').then(function(resData) {
-				console.log(resData)
-			})
+			angular.forEach($scope.unapprovedList, function(dep){
+				dep['fullName'] = dep.user.firstName + ' ' + dep.user.lastName
+			}) 
 
 			$scope.approve = function(id) {
 				var route = 'api/conferences/' + $stateParams.cid + '/register/' + id + '/approve' 
@@ -35,6 +35,10 @@
 		.controller('conferenceApprovedUsersCtrl', function($scope, $stateParams, $state, approved) {
 
 			$scope.unapprovedList = approved.data
+
+			angular.forEach($scope.unapprovedList, function(dep){
+				dep['fullName'] = dep.user.firstName + ' ' + dep.user.lastName
+			}) 
 			
 			$scope.state1 = false
 			$scope.state2 = !$scope.state1

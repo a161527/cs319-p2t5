@@ -6,6 +6,10 @@
 
 			$scope.dependents = unapprovedDependents.data
 
+			angular.forEach($scope.dependents, function(dep) {
+				dep.fullName = dep.firstName + ' ' + dep.lastName
+			})
+
 			$scope.approve = function(id) {
 				var route = 'api/register/' + id + '/approve'
 				ajax.serviceCall('Approving...', 'post', route).then(function(resData) {
