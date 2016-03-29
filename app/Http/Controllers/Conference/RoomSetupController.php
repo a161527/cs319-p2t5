@@ -34,6 +34,19 @@ class RoomSetupController extends Controller
         return Residence::where("conferenceID", $confId)->get();
     }
 
+    public function getResidenceInfo($confId, $resId) {
+        if (!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
+            return response("", 403);
+        }
+
+        $result = Residence::where("conferenceID", $confId)->find($resId);
+        if(!isset($result)) {
+            return response("", 404);
+        }
+
+        return $result;
+    }
+
     public function uploadRoomData($confId) {
         return "NOTIMPLEMENTED";
     }
@@ -55,6 +68,41 @@ class RoomSetupController extends Controller
         }
 
         return response()->json($responses);
+    }
+
+    private function validateResidencePatch($req) {
+        $this->validate($req, [
+            "name" => "string",
+            "location" => "string"
+        ]);
+    }
+
+    public function editResidence(Request $req, $confId, $residenceId) {
+        if (!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
+            return response("", 403);
+        }
+
+        $res = Residence::find($residenceId);
+        if (is_null($res) || $res->conferenceID != $confId) {
+            return response("", 404);
+        }
+
+        $this->validateResidencePatch($req);
+        foreach ($req->all() as $key => $value) {
+            switch ((string)$key) {
+                case "name":
+                    $res->name = $value;
+                    break;
+                case "location":
+                    $res->name = $value;
+            }
+        }
+
+        if ($res->save()) {
+            return response()->json(["message" => "residence_updated"]);
+        } else {
+            return response()->json(["message" => "residence_update_failed"], 500);
+        }
     }
 
     public function getResidenceRoomSets($confId, $residenceId) {
@@ -124,6 +172,97 @@ class RoomSetupController extends Controller
             }
             return response()->json($responses);
         });
+    }
+
+    private function validateRoomSetPatch($req) {
+        $this->validate($req, [
+            "name" => "string",
+            "type.name" => "string",
+            "type.capacity" => "numeric|min:0",
+            "type.accessible" => "boolean",
+            "newType" => "boolean"
+        ]);
+
+    }
+
+    public function editRoomSet(Request $req, $confId, $setId) {
+        if(!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
+            return response("", 403);
+        }
+
+        $set = RoomSet::whereHas('residence', function ($q) use ($confId) {
+            $q->where('conferenceID', $confId);
+        })->with('type')->find($setId);
+
+        if (!isset($set)) {
+            return response("", 404);
+        }
+
+        $this->validateRoomSetPatch($req);
+
+        //Default to creating a new type
+        if (!$req->has('newType') || $req->input('newType')) {
+            $type = new RoomType;
+            $type->name = $set->type->name;
+            $type->capacity = $set->type->capacity;
+            $type->accessible = $set->type->accessible;
+        } else {
+            $type = $set->type;
+        }
+        $changedType = false;
+        foreach ($req->all() as $key => $value) {
+            switch ((string) $key) {
+                case "name":
+                    $set->name = $value;
+                    break;
+                case "type.name":
+                    $changedType = true;
+                    $type->name = $value;
+                    break;
+                case "type.accessible":
+                    $changedType = true;
+                    $type->accessible = $value;
+                    break;
+                case "type.capacity":
+                    $changedType = true;
+                    $type->capacity = $value;
+                    break;
+            }
+        }
+        //If the type didn't change at all, use the old one
+        if (!$changedType) {
+            $type = $set->type;
+        }
+        return DB::transaction(function () use ($type, $set) {
+            if(!$type->save()) {
+                throw new \Symfony\Component\HttpKernel\Exception\HttpException(500, 'type_save_failed');
+            }
+
+            $set->typeID = $type->id;
+
+            if(!$set->save()) {
+                throw new \Symfony\Component\HttpKernel\Exception\HttpException(500, 'set_save_failed');
+            } else {
+                return response()->json(["message" => "set_updated"]);
+            }
+        });
+
+    }
+
+    public function getRoomSetInfo(Request $req, $confId, $setId) {
+        if(!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
+            return response("", 403);
+        }
+
+        $set = RoomSet::with('type')->whereHas('residence', function ($q) use ($confId) {
+            $q->where('conferenceID', $confId);
+        })->find($setId);
+
+        if (!isset($set)) {
+            return response("", 404);
+        }
+
+        return $set;
     }
 
     private function validateResidence($req) {
