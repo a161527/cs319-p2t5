@@ -49,7 +49,8 @@ class TransportationController extends Controller
         $transport = new Transportation();
         $transport->capacity = $data['capacity'];
         $transport->name = $data['name'];
-        $transport->company = $data['company'];
+        if (isset($data['company']))
+            $transport->company = $data['company'];
         $transport->phone = $data['phone'];
         $transport->conferenceID = $confId;
         
