@@ -120,6 +120,8 @@ Route::group(['prefix' => 'api'], function()
         Route::delete('/{depId}', 'UserController@deleteDependent');
         Route::get('/approved', 'UserController@approvedDependents');
     });
+    Route::get('dependents/approved', 'UserController@allApproved');
+    Route::get('dependents/unapproved', 'UserController@allUnapproved');
 
     // inventory management
     Route::group(['prefix' => 'conferences/{confId}/inventory'], function() {
@@ -151,8 +153,9 @@ Route::group(['prefix' => 'api'], function()
         Route::post('/{id}/assign', 'TransportationController@assignTransport');
         Route::post('/{id}/unassign', 'TransportationController@unassignTransport');
         // view users needing transport (conf id, time)
-        Route::get('/summary', 'TransportationController@transportSummary');
+        // Route::get('summary/', 'TransportationController@transportSummary');
     });
+    Route::get('conferences/{confId}/transportationsummary', 'TransportationController@transportSummary');
 
 });
 
