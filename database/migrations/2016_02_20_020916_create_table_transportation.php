@@ -15,6 +15,11 @@ class CreateTableTransportation extends Migration
         Schema::create('transportation', function (Blueprint $table) {
           $table->increments('id');
           $table->integer('capacity')->unsigned();
+          $table->integer('conferenceID')->unsigned();
+          $table->foreign('conferenceID')
+                ->references('id')->on('conferences')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 
