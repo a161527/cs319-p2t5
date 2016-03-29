@@ -17,7 +17,6 @@
 					angular.forEach($scope.inventory, function(inventory) {
 						var inv = {}
 						inv.itemName = inventory.itemName
-						inv.currentQuantity = inventory.quantity
 						inv.totalQuantity = inventory.quantity
 						inv.units = inventory.units
 						inv.disposable = inventory.disposable || false

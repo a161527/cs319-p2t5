@@ -2,19 +2,40 @@
 	'use strict'
 
 	angular.module('createRoomSet')
-		.controller('createRoomSetCtrl', function($scope, $state, $stateParams, roomSetFields, ajax, errorCodes, roomTypes, conferenceInfo, residenceName) {
+		.controller('createRoomSetCtrl', function($scope, $state, $stateParams, roomSetFields, ajax, errorCodes, conferenceInfo, roomSetData) {
 
 			$scope.showError = false
 			$scope.cid = $stateParams.cid
 			$scope.rid = $stateParams.rid
 			$scope.conferenceName = conferenceInfo.data.name
-			$scope.roomTypes = roomTypes.data
-			$scope.hasRoomTypes = (roomTypes.data.length > 0)
+
+			$scope.roomTypes = roomSetData[2]
+
+			$scope.hasRoomTypes = ($scope.roomTypes.length > 0)
+
+			if (roomSetData[0]) {
+				$scope.editMode = true
+				var roomSet = roomSetData[0]
+
+				$scope.roomTypes.selectedOption = roomSetFields.getRoomType() || roomSet.type
+				roomSetFields.setRoomType($scope.roomTypes.selectedOption)
+				var rsInfo = roomSetFields.getRoomSetInfo()
+				var rsName = roomSet.name
+				if (rsInfo) {
+					rsName = rsInfo['1'].name
+				}
+				roomSetFields.setRoomSetInfo({'1': {'name': rsName}})
+
+
+			} else {
+				$scope.editMode = false
+			}
+
 			$scope.roomType = {}
 			$scope.roomType = roomSetFields.getRoomType() || {}
 			$scope.roomTypeInfo = roomSetFields.getRoomTypeInfo() || {}
 			$scope.roomSetInfo = roomSetFields.getRoomSetInfo() || {'1':{}}
-			$scope.residenceName = residenceName
+			$scope.residenceName = roomSetData[1]
 
 			if (!$scope.roomType.id) {
 				$scope.roomType.id = 'newRoomType'
@@ -22,11 +43,11 @@
 
 			$scope.addNewType = false
 			if ($scope.roomType.id !== 'newRoomType') {
-				for (var i = roomTypes.data.length - 1; i >= 0; i--) {
-					if (roomTypes.data[i].id.toString() === $scope.roomType.id) {
-						$scope.roomType.name = roomTypes.data[i].name
-						$scope.roomType.capacity = roomTypes.data[i].capacity
-						$scope.roomType.accessible = roomTypes.data[i].accessible
+				for (var i = $scope.roomTypes.length - 1; i >= 0; i--) {
+					if ($scope.roomTypes[i].id.toString() === $scope.roomType.id) {
+						$scope.roomType.name = $scope.roomTypes[i].name
+						$scope.roomType.capacity = $scope.roomTypes[i].capacity
+						$scope.roomType.accessible = $scope.roomTypes[i].accessible
 					}
 				};
 			} else {
@@ -56,17 +77,31 @@
 					roomSetInfo.push(rs)
 				})
 
-				ajax.serviceCall('Creating room sets...', 'post', 'api/conferences/' + $stateParams.cid + '/residences/' + $stateParams.rid + '/roomSets', roomSetInfo).then(function(resData) {
+				if ($scope.editMode) {
+					ajax.serviceCall('Updating room set...', 'patch', 'api/conferences/' + $stateParams.cid + '/residences/roomSets/' + $stateParams.rsid, roomSetInfo[0]).then(function(resData) {
 
-					roomSetFields.resetAll()
-					$state.go('dashboard.conferences.manage.viewResidence.viewRoomSet', {'cid': $stateParams.cid, 'rid': $stateParams.rid}, {reload: true})
+						roomSetFields.resetAll()
+						$state.go('dashboard.conferences.manage.viewResidence.viewRoomSet', {'cid': $stateParams.cid, 'rid': $stateParams.rid}, {reload: true})
 
-				}, function(resData) {
+					}, function(resData) {
 
-					$scope.showError = true
-					$scope.errorMessage = errorCodes[resData.data.message]
+						$scope.showError = true
+						$scope.errorMessage = errorCodes[resData.data.message]
 
-				})
+					})
+				} else {
+					ajax.serviceCall('Creating room sets...', 'post', 'api/conferences/' + $stateParams.cid + '/residences/' + $stateParams.rid + '/roomSets', roomSetInfo).then(function(resData) {
+
+						roomSetFields.resetAll()
+						$state.go('dashboard.conferences.manage.viewResidence.viewRoomSet', {'cid': $stateParams.cid, 'rid': $stateParams.rid}, {reload: true})
+
+					}, function(resData) {
+
+						$scope.showError = true
+						$scope.errorMessage = errorCodes[resData.data.message]
+
+					})
+				}
 				
 			}
 
@@ -88,6 +123,7 @@
 			}
 
 			$scope.nextStep = function(form, toState, set, model) {
+				$scope.roomType = $scope.roomTypes.selectedOption
 				
 				if (toState === "2" && !$scope.hasRoomTypes) {
 					$scope.addNewType = true
@@ -135,7 +171,15 @@
 
 			var onNavigate = function(toState, set, model) {
 				roomSetFields[set]($scope[model])
-				var state = 'dashboard.conferences.manage.createRoomSet.' + toState
+
+				var state = null
+
+				if ($scope.editMode) {
+					state = 'dashboard.conferences.manage.editRoomSet.' + toState
+				} else {
+					state = 'dashboard.conferences.manage.createRoomSet.' + toState
+				}
+				
 				$state.go(state)
 			}
 

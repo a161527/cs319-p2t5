@@ -13,9 +13,7 @@
                 <div class='col-sm-12'>
                     <div class='form-group' ng-class='{"has-error": !roomTypeForm["roomType"].$valid && roomTypeForm["roomType"].$dirty}'>
                         <label for='roomType'>Room Type</label>
-                        <select class='form-control' ng-model='roomType.id' id='roomType' name='roomType' required>
-                            <option ng-repeat='rt in roomTypes' value='{{rt.id}}'>{{rt.name}} (capacity: {{rt.capacity}}, accessible: {{rt.accessible | yesNo}})</option>
-                            <option value='newRoomType'>Add new room type</option>
+                        <select class='form-control' ng-model='roomTypes.selectedOption' id='roomType' name='roomType' ng-options='rt.name for rt in roomTypes track by rt.id' required>
                         </select>
 
                         <error-message ng-show='roomTypeForm["roomType"].$error.required && roomTypeForm["roomType"].$dirty'>Room Type is required</error-message>

@@ -372,21 +372,16 @@
 					templateUrl: 'js/createRoomSet/createRoomSet.view.html',
 					controller: 'createRoomSetCtrl',
 					resolve: {
-						roomTypes: function($http, $stateParams) {
-							return $http.get('/api/conferences/' + $stateParams.cid + '/residences/' + $stateParams.rid + '/roomTypes')
-						},
-						residenceName: function($http, $stateParams) {
-							return "TODO"
-						},
 						roomSetData: function(roomSetData, $q, $stateParams) {
 							return $q.all([
-								roomSetData.refresh($stateParams.cid, $stateParams.rid)
+								roomSetData.refresh($stateParams.cid, $stateParams.rsid),
+								roomSetData.getResidenceName($stateParams.cid, $stateParams.rid),
+								roomSetData.getRoomTypes($stateParams.cid, $stateParams.rid)
 							])
 						}
 					}
 				})
 				
-
 				.state('dashboard.conferences.manage.createRoomSet.1', {
 					url: '',
 					templateUrl: 'js/createRoomSet/createRoomSet.view.roomType.html',
@@ -594,22 +589,43 @@
 				EDIT ROOM SET
 				*/
 				.state('dashboard.conferences.manage.editRoomSet', {
-					url: 'residence/:rid/roomset/:rsid/edit',
+					url: '/residence/:rid/roomset/:rsid/edit',
+					abstract: true,
 					templateUrl: 'js/createRoomSet/createRoomSet.view.html',
 					controller: 'createRoomSetCtrl',
 					resolve: {
-						roomTypes: function($http, $stateParams) {
-							return $http.get('/api/conferences/' + $stateParams.cid + '/residences/' + $stateParams.rid + '/roomTypes')
-						},
-						residenceName: function($http, $stateParams) {
-							return "TODO"
-						},
 						roomSetData: function(roomSetData, $q, $stateParams) {
 							return $q.all([
-								roomSetData.refresh($stateParams.cid, $stateParams.rid)
+								roomSetData.refresh($stateParams.cid, $stateParams.rsid),
+								roomSetData.getResidenceName($stateParams.cid, $stateParams.rid),
+								roomSetData.getRoomTypes($stateParams.cid, $stateParams.rid)
 							])
 						}
 					}
+				})
+
+				.state('dashboard.conferences.manage.editRoomSet.1', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.roomType.html',
+					controller: 'createRoomSetCtrl'
+				})
+
+				.state('dashboard.conferences.manage.editRoomSet.2', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.roomTypeInfo.html',
+					controller: 'createRoomSetCtrl'
+				})
+
+				.state('dashboard.conferences.manage.editRoomSet.3', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.roomSetInfo.html',
+					controller: 'createRoomSetCtrl'
+				})
+
+				.state('dashboard.conferences.manage.editRoomSet.4', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.reviewInfo.html',
+					controller: 'createRoomSetCtrl'
 				})
 
 				/*
