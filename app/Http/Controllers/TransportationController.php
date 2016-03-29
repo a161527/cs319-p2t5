@@ -220,7 +220,7 @@ class TransportationController extends Controller
      * - assigns a transportation to a flight
      * takes {userConferenceIDs: [1,2,...]} (a list of userConferenceID)
      */
-    public function assignTransport($transportId, Request $req) 
+    public function assignTransport($confId, $transportId, Request $req) 
     {
         if (!($this->isValidConference($confId)))
             return response()->json(['message' => 'conference_not_found'], 404);
@@ -228,6 +228,9 @@ class TransportationController extends Controller
             return response()->json(['message' => 'transportation_not_found'], 404);
 
         $data = $req->all();
+        
+        if (!isset($data['userConferenceIDs']))
+            return response()->json(['message' => 'userConferenceIDs_not_provided'], 422);
 
         foreach ($data['userConferenceIDs'] as $userconfId)
         {
