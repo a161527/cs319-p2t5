@@ -377,6 +377,11 @@
 						},
 						residenceName: function($http, $stateParams) {
 							return "TODO"
+						},
+						roomSetData: function(roomSetData, $q, $stateParams) {
+							return $q.all([
+								roomSetData.refresh($stateParams.cid, $stateParams.rid)
+							])
 						}
 					}
 				})
@@ -580,6 +585,28 @@
 						residenceData: function(residenceData, $q, $stateParams) {
 							return $q.all([
 								residenceData.refresh($stateParams.cid, $stateParams.rid)
+							])
+						}
+					}
+				})
+
+				/*
+				EDIT ROOM SET
+				*/
+				.state('dashboard.conferences.manage.editRoomSet', {
+					url: 'residence/:rid/roomset/:rsid/edit',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.html',
+					controller: 'createRoomSetCtrl',
+					resolve: {
+						roomTypes: function($http, $stateParams) {
+							return $http.get('/api/conferences/' + $stateParams.cid + '/residences/' + $stateParams.rid + '/roomTypes')
+						},
+						residenceName: function($http, $stateParams) {
+							return "TODO"
+						},
+						roomSetData: function(roomSetData, $q, $stateParams) {
+							return $q.all([
+								roomSetData.refresh($stateParams.cid, $stateParams.rid)
 							])
 						}
 					}

@@ -47,6 +47,17 @@
 									{{roomSet.type.accessible | yesNo}}
 								</div>
 							</div>
+
+							<br>
+							<div class='row'>
+								<div class='col-md-12'>
+									<button class='btn btn-primary pull-right btn-block' 
+											ng-click='showWidget("editRoomSet", {rid: residence.id, rsid: roomSet.id})'
+											ng-show='canEdit'>
+										<span class='glyphicon glyphicon-pencil'></span><br> Edit Room Set
+									</button>
+								</div>
+							</div>
 						</div>
 
 					</div>

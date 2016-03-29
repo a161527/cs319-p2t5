@@ -1,7 +1,10 @@
 <div class='container'>
     <div class='row'>
-        <div class='col-sm-9'>
+        <div class='col-sm-9' ng-show='!editMode'>
             <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> {{residenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Create Room Set</h2>
+        </div>
+        <div class='col-sm-9' ng-show='editMode'>
+            <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> {{residenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> {{roomSet['1'].name}}</h2>
         </div>
     </div>
     <br>

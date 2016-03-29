@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('roomSetView')
-		.controller('roomSetListCtrl', function($scope, $state, $stateParams, roomSetData, residenceData, ajax, conferenceInfo, roomTypes) {
+		.controller('roomSetListCtrl', function($scope, $state, $stateParams, roomSetData, residenceData, ajax, conferenceInfo, roomTypes, permissions) {
 			var residence = {}
 
 			for (var i = residenceData[0].length - 1; i >= 0; i--) {
@@ -11,6 +11,8 @@
 					continue
 				}
 			};
+
+			$scope.canEdit = (permissions.indexOf('conference-room-edit') !== -1)
 			
 			var cid = $stateParams.cid
 			$scope.roomSets = roomSetData[0] || []
