@@ -13,12 +13,13 @@ use App\User;
 use App\UserTransportation;
 use DB;
 use Validator;
+use Entrust;
 
 class TransportationController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('jwt.auth', ['except' => ['authenticate', 'token']]);
+        $this->middleware('jwt.auth.rejection');
     }
     private function transportValidator(array $data)
     {
@@ -53,7 +54,7 @@ class TransportationController extends Controller
             $transport->company = $data['company'];
         $transport->phone = $data['phone'];
         $transport->conferenceID = $confId;
-        
+
         $transport->save();
     }
 
@@ -99,10 +100,10 @@ class TransportationController extends Controller
 
     /*
      * GET /api/conferences/{confId}/transportation ?flightID=123 (flightID is optional)
-     * - gets a list of transportations 
+     * - gets a list of transportations
      * confID and flightID optional
      */
-    public function index($confId) 
+    public function index($confId)
     {
         if (!($this->isValidConference($confId)))
             return response()->json(['message' => 'conference_not_found'], 404);
@@ -117,21 +118,24 @@ class TransportationController extends Controller
      * takes [{...},{...}]
      * object params: capacity, name, company (optional), phone, conferenceID
      */
-    public function addTransport($confId, Request $req) 
+    public function addTransport($confId, Request $req)
     {
+        if (!Entrust::can(PermissionNames::ConferenceTransportationEdit($confId))) {
+            return response()->json(['message' => 'cannot_manage_transport'], 403);
+        }
         if (!($this->isValidConference($confId)))
             return response()->json(['message' => 'conference_not_found'], 404);
 
         $transports = $req->all();
         try
-        {   
+        {
             DB::beginTransaction();
             $validator = $this->transportValidator($transports);
             if ($validator->passes())
             {
                 foreach ($transports as $t)
                 {
-                    $this->insertTransport($t, $confId);    
+                    $this->insertTransport($t, $confId);
                 }
             }
             else
@@ -151,8 +155,12 @@ class TransportationController extends Controller
      * DELETE /api/conferences/{confId}/transportation/{transportId}
      * - deletes a transportation
      */
-    public function deleteTransport($confId, $transportId) 
+    public function deleteTransport($confId, $transportId)
     {
+        if (!Entrust::can(PermissionNames::ConferenceTransportationEdit($confId))) {
+            return response()->json(['message' => 'cannot_manage_transport'], 403);
+        }
+
         if (!($this->isValidConference($confId)))
             return response()->json(['message' => 'conference_not_found'], 404);
         if (!($this->isValidTransport($transportId)))
@@ -170,8 +178,12 @@ class TransportationController extends Controller
      * - edit a transportation
      * same object format as insertion, but only takes a single object of changes to be made (not a list)
      */
-    public function patchTransport($confId, $transportId, Request $req) 
+    public function patchTransport($confId, $transportId, Request $req)
     {
+        if (!Entrust::can(PermissionNames::ConferenceTransportationEdit($confId))) {
+            return response()->json(['message' => 'cannot_manage_transport'], 403);
+        }
+
         if (!($this->isValidConference($confId)))
             return response()->json(['message' => 'conference_not_found'], 404);
         if (!($this->isValidTransport($transportId)))
@@ -182,7 +194,7 @@ class TransportationController extends Controller
                     ->first();
         if (!$transport)
             return response()->json(['message' => 'transportation_does_not_exist'], 422);
-        else 
+        else
         {
             $validator = $this->transportEditValidator($changes);
             if ($validator->passes())
@@ -222,6 +234,10 @@ class TransportationController extends Controller
      */
     public function assignTransport($confId, $transportId, Request $req) 
     {
+        if (!Entrust::can(PermissionNames::ConferenceTransportationEdit($confId))) {
+            return response()->json(['message' => 'cannot_manage_transport'], 403);
+        }
+
         if (!($this->isValidConference($confId)))
             return response()->json(['message' => 'conference_not_found'], 404);
         if (!($this->isValidTransport($transportId)))
@@ -248,10 +264,10 @@ class TransportationController extends Controller
             if (!$ut->save())
             {
                 DB::rollback();
-                return response()->json(['message' => 'error_assigning_transport'], 500);    
+                return response()->json(['message' => 'error_assigning_transport'], 500);
             }
         }
-        
+
         DB::commit();
         return response()->json(['message' => 'transport_assigned'], 200);
     }
@@ -262,10 +278,14 @@ class TransportationController extends Controller
      */
     public function unassignTransport($confId, $transportId, Request $req)
     {
+        if (!Entrust::can(PermissionNames::ConferenceTransportationEdit($confId))) {
+            return response()->json(['message' => 'cannot_manage_transport'], 403);
+        }
+
         $userIDs = $req->input('userIDs');
         if ($userIDs === null)
             return response()->json(['message' => 'userIDs_not_provided'], 422);
-        
+
         DB::beginTransaction();
         foreach ($userIDs as $id)
         {
@@ -309,7 +329,7 @@ class TransportationController extends Controller
     /*
      * GET /api/conferences/{confId}/transportationSummary/
      * - get transportation summary for a conference
-     * 
+     *
      */
     public function transportSummary($confId, Request $req)
     {
@@ -325,7 +345,7 @@ class TransportationController extends Controller
         $flightsList = $userConfs->distinct()->lists('flightID');
         $flights = Flight::whereIn('id', $flightsList)->get()->keyBy('id')->toArray();
         $conference = Conference::where('id', $confId)->get()->toArray();
-        
+
         $summary = $this->buildSummaryJson($conference, $flights, $userConfs->get()->toArray());
         return response()->json($summary, 200);
     }
