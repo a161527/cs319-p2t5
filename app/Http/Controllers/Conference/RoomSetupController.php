@@ -144,7 +144,7 @@ class RoomSetupController extends Controller
             return response("", 403);
         }
 
-        $set = RoomSet::whereHas('residence', function ($q) use ($confId) {
+        $set = RoomSet::with('type')->whereHas('residence', function ($q) use ($confId) {
             $q->where('conferenceID', $confId);
         })->find($setId);
 
