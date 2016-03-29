@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('createConference')
-		.controller('createConferenceCtrl', function($scope, $state, ajax, errorCodes, conferenceData) {
+		.controller('createConferenceCtrl', function($scope, $state, $stateParams, ajax, errorCodes, conferenceData) {
 			
 			$scope.conferenceInfo = conferenceData[0]
 			$scope.showError = false
@@ -35,10 +35,9 @@
 					conferenceInfo.hasAccommodations = $scope.conferenceInfo.hasAccommodations || false
 
 					if ($scope.editMode) {
-						$state.go('dashboard.conferences.manage', {cid: conferenceInfo.id}, {reload: true})
-						/*
-						ajax.serviceCall('Updating conference...', 'post', 'api/conferences', conferenceInfo).then(function(resData) {
-							$state.go('dashboard.conferences.manage', {cid: resData['data']['id']});
+			
+						ajax.serviceCall('Updating conference...', 'put', 'api/conferences/' + $stateParams.cid, conferenceInfo).then(function(resData) {
+							$state.go('dashboard.conferences.manage', {cid: conferenceInfo.id}, {reload: true})
 
 
 						}, function(resData) {
@@ -47,9 +46,11 @@
 							$scope.errorMessage = errorCodes[resData.data.message]
 
 						})
-						*/
+						
 					} else {
+
 						ajax.serviceCall('Creating conference...', 'post', 'api/conferences', conferenceInfo).then(function(resData) {
+
 							$state.go('dashboard.conferences.manage', {cid: resData['data']['id']}, {reload: true});
 
 
@@ -71,7 +72,12 @@
 			}
 
 			$scope.cancel = function() {
-				$state.go('dashboard.conferences.list')
+				if ($scope.editMode) {
+					$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
+				} else {
+					$state.go('dashboard.conferences.list')
+				}
+				
 			}
 
 			var setFormDirty = function(form) {
