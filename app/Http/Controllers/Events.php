@@ -136,6 +136,10 @@ class Events extends Controller {
             $event["registrations"] = ConferenceRegistrationUtils::getAccountEventRegistrationData($event['id']);
         }
 
+        if($req->input("includePermissions")) {
+            $event["permissions"] = $this->buildPermissionList($event['id']);
+        }
+
         return $event;
     }
 
@@ -240,6 +244,16 @@ class Events extends Controller {
         UserEvent::insert($data);
         return UserEvent::select(["id", "userID"])
                     ->whereIn("userID", $idList)->get();
+    }
+
+    private function buildPermissionList($eventId) {
+        $permissions = [];
+        foreach (PermissionNames::AllEventPermissions($eventId) as $pname) {
+            if (Entrust::can($pname)) {
+                $permissions[] = PermissionNames::normalizePermissionName($pname);
+            }
+        }
+        return $permissions;
     }
 
 }
