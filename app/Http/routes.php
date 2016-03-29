@@ -120,6 +120,8 @@ Route::group(['prefix' => 'api'], function()
         Route::delete('/{depId}', 'UserController@deleteDependent');
         Route::get('/approved', 'UserController@approvedDependents');
     });
+    Route::get('dependents/approved', 'UserController@allApproved');
+    Route::get('dependents/unapproved', 'UserController@allUnapproved');
 
     // inventory management
     Route::group(['prefix' => 'conferences/{confId}/inventory'], function() {
