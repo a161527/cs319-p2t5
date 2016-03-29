@@ -1,7 +1,10 @@
 <div class='container'>
     <div class='row'>
-        <div class='col-sm-9'>
+        <div class='col-sm-9' ng-show='!editMode'>
             <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Create Transportation</h2>
+        </div>
+        <div class='col-sm-9' ng-show='editMode'>
+            <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> {{transportationInfo.name}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Edit</h2>
         </div>
     </div>
     <br>

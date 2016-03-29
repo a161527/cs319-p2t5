@@ -19,32 +19,43 @@
 						</div>
 
 						<div class='col-sm-5'>
-							<h1 style='margin-top:0px;'>{{trans.itemName}}</h1>
+							<h1 style='margin-top:0px;'>{{trans.name}}</h1>
 						</div>
 
 						<div class='col-sm-3'>
-							<div class='row'>
-								<div class='col-sm-8'>
-									<b>Total Quantity:</b>
+							<div class='row' ng-show='trans.company'>
+								<div class='col-sm-6'>
+									<b>Company:</b>
 								</div>
-								<div class='col-sm-4'>
-									{{trans.totalQuantity}} {{trans.units}}
-								</div>
-							</div>
-							<div class='row'>
-								<div class='col-sm-8'>
-									<b>Remaining Quantity:</b>
-								</div>
-								<div class='col-sm-4'>
-									{{trans.currentQuantity}} {{trans.units}}
+								<div class='col-sm-6'>
+									{{trans.company}}
 								</div>
 							</div>
 							<div class='row'>
-								<div class='col-sm-8'>
-									<b>Disposable:</b>
+								<div class='col-sm-6'>
+									<b>Phone:</b>
 								</div>
-								<div class='col-sm-4'>
-									{{trans.disposable | yesNo}}
+								<div class='col-sm-6'>
+									{{trans.phone}}
+								</div>
+							</div>
+							<div class='row'>
+								<div class='col-sm-6'>
+									<b>Capacity:</b>
+								</div>
+								<div class='col-sm-6'>
+									{{trans.capacity}}
+								</div>
+							</div>
+
+							<br>
+							<div class='row'>
+								<div class='col-md-12'>
+									<button ng-show='canEdit' 
+											class='btn btn-primary pull-right btn-block'
+											ng-click='showWidget("editTransportation", {tid: trans.id})'>
+											<span class='glyphicon glyphicon-pencil'></span><br> Edit Transportation
+									</button>
 								</div>
 							</div>
 						</div>

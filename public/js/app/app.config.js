@@ -385,7 +385,14 @@
 				.state('dashboard.conferences.manage.createTransportation', {
 					url: '/transportation/create',
 					templateUrl: 'js/createTransportation/createTransportation.view.html',
-					controller: 'createTransportationCtrl'
+					controller: 'createTransportationCtrl',
+					resolve: {
+						transportationData: function(transportationData, $q, $stateParams) {
+							return $q.all([
+								transportationData.refresh($stateParams.tid)
+							])
+						}
+					}
 				})
 
 				/*
@@ -530,6 +537,23 @@
 						eventData: function(eventData, $q, $stateParams) {
 							return $q.all([
 								eventData.refresh($stateParams.eid)
+							])
+						}
+					}
+				})
+
+				/*
+				EDIT TRANSPORTATION
+				*/
+				.state('dashboard.conferences.manage.editTransportation', {
+					url: '/transportation/:tid/edit',
+					templateUrl: 'js/createTransportation/createTransportation.view.html',
+					controller: 'createTransportationCtrl',
+					resolve: {
+						transportationData: function(transportationData, $q, $stateParams) {
+							console.log('hello')
+							return $q.all([
+								transportationData.refresh($stateParams.tid)
 							])
 						}
 					}

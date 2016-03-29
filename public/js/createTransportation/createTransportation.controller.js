@@ -2,11 +2,23 @@
 	'use strict'
 
 	angular.module('createTransportation')
-		.controller('createTransportationCtrl', function($scope, $state, $stateParams, ajax, errorCodes, conferenceInfo) {
+		.controller('createTransportationCtrl', function($scope, $state, $stateParams, ajax, errorCodes, conferenceInfo, transportationData) {
 
 			$scope.transportation = {'1':{}} 
 			$scope.showError = false
 			$scope.conferenceName = conferenceInfo.data.name
+
+			$scope.transportationInfo = transportationData[0]
+
+			if ($scope.transportationInfo) {
+
+				$scope.editMode = true
+
+			} else {
+
+				$scope.editMode = false
+
+			}
 
 			$scope.createTransportation = function(form) {
 				$scope.showError = false
@@ -27,7 +39,7 @@
 
 					ajax.serviceCall('Creating transportation...', 'post', 'api/conferences/' + $stateParams.cid + '/transportation', transportationInfo).then(function(resData) {
 
-						$state.go('dashboard.conferences.manage', {'cid': $stateParams.cid}, {reload: true})
+						$state.go('dashboard.conferences.manage.viewTransportation', {'cid': $stateParams.cid}, {reload: true})
 
 					}, function(resData) {
 
@@ -46,7 +58,7 @@
 			}
 
 			$scope.cancel = function() {
-				$state.go('dashboard.conferences.manage', {'cid': $stateParams.cid}, {reload: true})
+				$state.go('dashboard.conferences.manage.viewTransportation', {'cid': $stateParams.cid}, {reload: true})
 			}
 
 			$scope.addTransportation = function() {

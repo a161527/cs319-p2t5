@@ -2,12 +2,13 @@
 	'use strict'
 
 	angular.module('transportationView')
-		.controller('transportationListCtrl', function($scope, $state, $stateParams, transportationData, ajax, conferenceInfo) {
+		.controller('transportationListCtrl', function($scope, $state, $stateParams, transportationData, ajax, conferenceInfo, permissions) {
 			
 			var cid = $stateParams.cid
 			$scope.transportation = transportationData[0].transportation || []
 			$scope.noTransportation = ($scope.transportation.length === 0)
 			$scope.conferenceName = conferenceInfo.data.name
+			$scope.canEdit = (permissions.indexOf('conference-transportation-edit') !== -1)
 
 			$scope.showWidget = function(toState, params) {
 				var state = 'dashboard.conferences.manage.' + toState;
