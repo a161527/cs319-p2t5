@@ -1,0 +1,66 @@
+<div ui-view>
+	<div class='row'>
+		<div class='col-sm-9'>
+			<h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Inventory</h2>
+		</div>
+		<div class='col-sm-3'>
+			<button id='createInventoryBtn' ng-click='showWidget("createInventory")' class='btn btn-primary btn-block pull'><span class='glyphicon glyphicon-plus'></span><br> Create Inventory</button>
+		</div>
+	</div>
+
+	<div ng-show='noInventory'>There is no inventory listed for this conference at this time.</div>
+		<ul class="list-group">
+			<div ng-repeat='inv in inventory'>
+				<li class="list-group-item">
+
+					<div class='row'>
+						<div class='col-sm-4'>
+							<img src="https://pixabay.com/static/uploads/photo/2015/05/15/14/22/conference-room-768441_960_720.jpg" class="img-thumbnail img-responsive"/>
+						</div>
+
+						<div class='col-sm-5'>
+							<h1 style='margin-top:0px;'>{{inv.itemName}}</h1>
+						</div>
+
+						<div class='col-sm-3'>
+							<div class='row'>
+								<div class='col-sm-8'>
+									<b>Total Quantity:</b>
+								</div>
+								<div class='col-sm-4'>
+									{{inv.totalQuantity}}
+								</div>
+							</div>
+							<div class='row'>
+								<div class='col-sm-8'>
+									<b>Remaining Quantity:</b>
+								</div>
+								<div class='col-sm-4'>
+									{{inv.currentQuantity}}
+								</div>
+							</div>
+							<div class='row'>
+								<div class='col-sm-8'>
+									<b>Disposable:</b>
+								</div>
+								<div class='col-sm-4'>
+									{{inv.disposable | yesNo}}
+								</div>
+							</div>
+							<div class='row'>
+								<div class='col-md-12'>
+									<button ng-show='canEdit' 
+											class='btn btn-primary pull-right btn-block'
+											ng-click='showWidget("editInventory", {iid: inv.id})'>
+											<span class='glyphicon glyphicon-pencil'></span><br> Edit Inventory
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</div>
+		<ul>
+	</div>
+</div>
+

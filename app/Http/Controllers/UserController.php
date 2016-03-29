@@ -16,11 +16,11 @@ use Auth;
 
 class UserController extends Controller
 {
-     public function __construct()
+     public function __construct() 
      {
         $this->middleware('jwt.auth');
      }
-
+    
     /*
      * Get a validator for an incoming registration request.
      */
@@ -71,15 +71,12 @@ class UserController extends Controller
     // TODO: isOwner() and isAdmin(), to set permission/role filters on managing dependents
     //
 
-    /*
+    /* 
      * GET api/accounts/{id}/dependents
      * - list all dependents
      */
      public function index($accountID)
     {
-        if (!Entrust::can(PermissionNames::ApproveUserRegistration()) && Auth::user()->id != $accountID) {
-            return response()->json(["message" => "no_user_approval_access"]);
-        }
         // TODO: add permission/role filter
         $account = Account::where('id', '=', $accountID)->first();
         if ($account === null)
@@ -98,12 +95,9 @@ class UserController extends Controller
      */
     public function addDependents($accountID, Request $req)
     {
-        if (!Entrust::can(PermissionNames::ApproveUserRegistration()) && Auth::user()->id != $accountID) {
-            return response()->json(["message" => "no_user_approval_access"]);
-        }
         $dependents = $req->all();
         try
-        {
+        {   
             DB::beginTransaction();
             foreach ($dependents as $d)
             {
@@ -130,9 +124,6 @@ class UserController extends Controller
      */
     public function editDependent($accountID, $depId, Request $req)
     {
-        if (!Entrust::can(PermissionNames::ApproveUserRegistration()) && Auth::user()->id != $accountID) {
-            return response()->json(["message" => "no_user_approval_access"]);
-        }
         $changes = $req->all();
         // dd($changes);
         $user = User::where('id', $depId)
@@ -140,7 +131,7 @@ class UserController extends Controller
                     ->first();
         if (!$user)
             return response()->json(['message' => 'user_does_not_exist'], 422);
-        else
+        else 
         {
             $validator = $this->dependentEditValidator($changes);
             if ($validator->passes())
@@ -167,7 +158,6 @@ class UserController extends Controller
                 return response()->json(['message' => 'validation_failed', 'errors' => $validator->errors()], 422);
         }
 
-        $user->approved = false;
         if ($user->save())
             return response()->json(['message' => 'user_updated'], 200);
         else
@@ -180,10 +170,6 @@ class UserController extends Controller
      */
     public function deleteDependent($accountID, $depId)
     {
-        if (!Entrust::can(PermissionNames::ApproveUserRegistration()) && Auth::user()->id != $accountID) {
-            return response()->json(["message" => "no_user_approval_access"]);
-        }
-
         $user = User::where('accountID', '=', $accountID)
                     ->where('id', '=', $depId);
         if ($user->delete())

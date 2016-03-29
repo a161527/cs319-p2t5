@@ -1,0 +1,56 @@
+<div ui-view>
+	<div class='row'>
+		<div class='col-sm-9'>
+			<h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Residences</h2>
+		</div>
+		<div class='col-sm-3'>
+			<button id='createResidenceBtn' ng-click='showWidget("createResidence")' class='btn btn-primary btn-block pull'><span class='glyphicon glyphicon-plus'></span><br> Create Residence</button>
+		</div>
+	</div>
+
+	<div ng-show='noResidences'>There are no residences listed for this conference at this time.</div>
+		<ul class="list-group">
+			<div ng-repeat='residence in residences'>
+				<li class="list-group-item">
+
+					<div class='row'>
+						<div class='col-md-4'>
+							<img src="https://pixabay.com/static/uploads/photo/2015/05/15/14/22/conference-room-768441_960_720.jpg" class="img-thumbnail img-responsive"/>
+						</div>
+
+						<div class='col-md-5'>
+							<h1 style='margin-top:0px;'>{{residence.name}}</h1>
+						</div>
+
+						<div class='col-md-3'>
+							<div class='row'>
+								<div class='col-md-6'>
+									<b>Location:</b>
+								</div>
+								<div class='col-md-6'>
+									{{residence.location}}
+								</div>
+							</div>
+
+							<br>
+							<div class='row'>
+								<div class='col-md-12'>
+									<button class='btn btn-primary pull-right btn-block' 
+											ng-click='showWidget("viewResidence.viewRoomSet", {rid: residence.id})'>
+										<span class='glyphicon glyphicon-home'></span><br> View Room Sets
+									</button>
+									<button class='btn btn-primary pull-right btn-block' 
+											ng-click='showWidget("editResidence", {rid: residence.id})'
+											ng-show='canEdit'>
+										<span class='glyphicon glyphicon-pencil'></span><br> Edit Residence
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</div>
+		<ul>
+	</div>
+</div>
+

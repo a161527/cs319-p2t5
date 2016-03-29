@@ -1,8 +1,65 @@
 <div class='container'>
+    <div class='row' ng-show='editMode'>
+        <div class='col-sm-9'>
+            <h2>{{conferenceInfo.name}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Edit</h2>
+        </div>
+    </div>
     <br>
     <div class='row'>
         <div class='col-md-offset-3 col-md-6'>
-            <ui-view></ui-view>
+			<h4>Conference Information</h4>
+			<div class="panel panel-default">
+			    <div class="panel-body">
+			        <form name='createConferenceForm' novalidate>
+			            <div ng-model='conferenceInfo'>
+			                <div class='row'>
+			                    <div class='col-md-12'>
+			                        <input-with-validation model='conferenceInfo.name' validation='createConferenceForm' identifier='name' inp-type='text'>Conference Name</input-with-validation>
+			                    </div>
+			                </div>
+			                <div class='row'>
+			                    <div class='col-md-12'>
+			                        <label for='description'>Description (optional) </label>
+			                        <textarea class='form-control' ng-model='conferenceInfo.description' rows='3' id='description' name='description'></textarea>
+			                    </div>
+			                </div>
+			                <br>
+			                <div class='row'>
+			                    <div class='col-md-6'>
+			                        <date-picker-input model='conferenceInfo.start' validation='createConferenceForm' identifier='start' label='Start Date'><date-picker-input>
+			                    </div>
+			                    <div class='col-md-6'>
+			                        <date-picker-input model='conferenceInfo.end' validation='createConferenceForm' identifier='end' label='End Date'><date-picker-input>
+			                    </div>
+			                </div>
+			                <div class='row'>
+			                    <div class='col-md-12' id='location-typeahead'>
+			                        <input-with-validation model='conferenceInfo.location' validation='createConferenceForm' identifier='location' inp-type='text' class='typeahead'>Location</input-with-validation>
+			                    </div>
+			                </div>
+			                <div class='row'>
+			                    <div class='form-group col-md-12'>
+			                        <label class='checkbox-inline'><input type='checkbox' ng-model='conferenceInfo.hasTransportation' ng-checked='conferenceInfo.hasTransportation'>Provide transportation for attendees</label>
+			                    </div>
+			                </div>
+			                <div class='row'>
+			                    <div class='form-group col-md-12'>
+			                        <label class='checkbox-inline'><input type='checkbox' ng-model='conferenceInfo.hasAccommodations' ng-checked='conferenceInfo.hasAccommodations'>Provide boarding accommodations for attendees</label>
+			                    </div>
+			                </div>
+			            </div>
+			        </form>
+			    </div>
+			</div>
+
+			<div class='row'>
+			    <div class='col-xs-6'>
+			        <button class='btn btn-default btn-block' ng-click='cancel()'>Cancel</button>
+			    </div>
+			    <div class='col-xs-6'>
+			        <button class='btn btn-primary btn-block' ng-click='createConference(createConferenceForm)'>Submit</button>
+			    </div>
+			</div>
         </div>
     </div>
 </div>

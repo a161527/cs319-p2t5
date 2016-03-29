@@ -106,33 +106,6 @@
 					}
 				})
 
-
-				/*
-				CONFERENCE LIST
-				*/
-				.state('dashboard.conferences', {
-					url: '/conferences',
-					abstract: true,
-					template: '<div ui-view></div>'
-				})
-
-				.state('dashboard.conferences.list', {
-					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
-					controller: 'conferenceListCtrl',
-					url: '/list',
-					resolve: {
-						conferenceData: function(conferenceList, $q, loginStorage) {
-							return $q.all([
-								conferenceList.refresh(), 
-								loginStorage.getPermissions()
-							])
-						},
-						approvedDependents: function(getDependentsService) {
-							return getDependentsService.getNumberOfApproved()
-						}
-					}
-				}) 
-
 				/*
 				CONFERENCE MANAGEMENT
 				*/
@@ -150,29 +123,6 @@
 						}
 					}
 				})
-
-				/*
-				CONFERENCE CREATION
-				*/
-				.state('dashboard.conferences.create', {
-					url: '/create',
-					abstract: true,
-					templateUrl: 'js/createConference/createConference.view.html',
-					controller: 'createConferenceCtrl'
-				})
-
-				.state('dashboard.conferences.create.1', {
-					url: '',
-					templateUrl: 'js/createConference/createConference.view.conferenceInfo.html',
-					controller: 'createConferenceCtrl'
-				})
-
-				.state('dashboard.conferences.create.2', {
-					url: '',
-					templateUrl: 'js/createConference/createConference.view.reviewInfo.html',
-					controller: 'createConferenceCtrl'
-				})
-
 
 				/*
 				CONFERENCE REGISTRATION
@@ -337,6 +287,175 @@
 				})
 
 				/*
+				EVENT REGISTRATION
+				*/
+				.state('dashboard.events.register', {
+					url: '/register/:eid',
+					templateUrl: 'js/eventRegistration/eventRegistration.view.html',
+					controller: 'eventRegistrationCtrl',
+					resolve: {
+						conferenceData: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid + '?includeRegistration=1')
+						},
+						dependents: function($http, loginStorage) {
+							return $http.get('api/accounts/' + loginStorage.getId() + '/dependents')
+						},
+						eventData: function($http, $stateParams) {
+							return $http.get('api/event/' + $stateParams.eid + '?includeRegistration=1')
+						}
+					}
+				})
+
+				/*
+				CREATE CONFERENCE
+				*/
+				.state('dashboard.conferences.create', {
+					url: '/create',
+					templateUrl: 'js/createConference/createConference.view.html',
+					controller: 'createConferenceCtrl',
+					resolve: {
+						conferenceData: function(conferenceData, $q, $stateParams) {
+							return $q.all([
+								conferenceData.refresh($stateParams.cid)
+							])
+						}
+					}
+				})
+
+				/*
+				CREATE EVENT
+				*/
+				.state('dashboard.conferences.manage.createEvent', {
+					url: '/event/create',
+					templateUrl: 'js/createEvent/createEvent.view.html',
+					controller: 'createEventCtrl',
+					resolve: {
+						eventData: function(eventData, $q, $stateParams) {
+							return $q.all([
+								eventData.refresh($stateParams.eid)
+							])
+						}
+					}
+				})
+
+				/*
+				CREATE RESIDENCE
+				*/
+				.state('dashboard.conferences.manage.createResidence', {
+					url: '/residence/create',
+					templateUrl: 'js/createResidence/createResidence.view.html',
+					controller: 'createResidenceCtrl',
+					resolve: {
+						residenceData: function(residenceData, $q, $stateParams) {
+							return $q.all([
+								residenceData.refresh($stateParams.cid, $stateParams.rid)
+							])
+						}
+					}
+				})
+
+				/*
+				CREATE ROOM SET
+				*/
+				.state('dashboard.conferences.manage.createRoomSet', {
+					url: '/residence/:rid/roomset/create',
+					abstract: true,
+					templateUrl: 'js/createRoomSet/createRoomSet.view.html',
+					controller: 'createRoomSetCtrl',
+					resolve: {
+						roomSetData: function(roomSetData, $q, $stateParams) {
+							return $q.all([
+								roomSetData.refresh($stateParams.cid, $stateParams.rsid),
+								roomSetData.getResidenceName($stateParams.cid, $stateParams.rid),
+								roomSetData.getRoomTypes($stateParams.cid, $stateParams.rid)
+							])
+						}
+					}
+				})
+				
+				.state('dashboard.conferences.manage.createRoomSet.1', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.roomType.html',
+					controller: 'createRoomSetCtrl'
+				})
+
+				.state('dashboard.conferences.manage.createRoomSet.2', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.roomTypeInfo.html',
+					controller: 'createRoomSetCtrl'
+				})
+
+				.state('dashboard.conferences.manage.createRoomSet.3', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.roomSetInfo.html',
+					controller: 'createRoomSetCtrl'
+				})
+
+				.state('dashboard.conferences.manage.createRoomSet.4', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.reviewInfo.html',
+					controller: 'createRoomSetCtrl'
+				})
+
+				/*
+				CREATE INVENTORY
+				*/
+				.state('dashboard.conferences.manage.createInventory', {
+					url: '/inventory/create',
+					templateUrl: 'js/createInventory/createInventory.view.html',
+					controller: 'createInventoryCtrl',
+					resolve: {
+						inventoryData: function(inventoryData, $q, $stateParams) {
+							return $q.all([
+								inventoryData.refresh($stateParams.cid, $stateParams.iid)
+							])
+						}
+					}
+				})
+
+				/*
+				CREATE TRANSPORTATION
+				*/
+				.state('dashboard.conferences.manage.createTransportation', {
+					url: '/transportation/create',
+					templateUrl: 'js/createTransportation/createTransportation.view.html',
+					controller: 'createTransportationCtrl',
+					resolve: {
+						transportationData: function(transportationData, $q, $stateParams) {
+							return $q.all([
+								transportationData.refresh($stateParams.tid)
+							])
+						}
+					}
+				})
+
+				/*
+				CONFERENCE LIST
+				*/
+				.state('dashboard.conferences', {
+					url: '/conferences',
+					abstract: true,
+					template: '<div ui-view></div>'
+				})
+
+				.state('dashboard.conferences.list', {
+					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
+					controller: 'conferenceListCtrl',
+					url: '/list',
+					resolve: {
+						conferenceData: function(conferenceList, $q, loginStorage) {
+							return $q.all([
+								conferenceList.refresh(), 
+								loginStorage.getPermissions()
+							])
+						},
+						approvedDependents: function(getDependentsService) {
+							return getDependentsService.getNumberOfApproved()
+						}
+					}
+				}) 
+
+				/*
 				EVENT LIST
 				*/
 				.state('dashboard.events', {
@@ -359,34 +478,194 @@
 				})
 
 				/*
-				EVENT CREATION
+				RESIDENCE LIST
 				*/
-				.state('dashboard.events.create', {
-					url: '/create',
-					templateUrl: 'js/createEvent/createEvent.view.html',
-					controller: 'createEventCtrl'
+				.state('dashboard.conferences.manage.viewResidence', {
+					url: '/residences',
+					templateUrl: 'js/residenceView/residenceView.view.html',
+					controller: 'residenceListCtrl',
+					resolve: {
+						residenceData: function(residenceList, $q, $stateParams) {
+							return $q.all([
+								residenceList.refresh($stateParams.cid)
+							])
+						}
+					}
 				})
 
 				/*
-				EVENT REGISTRATION
+				ROOM SET LIST
 				*/
-				.state('dashboard.events.register', {
-					url: '/register/:eid',
-					templateUrl: 'js/eventRegistration/eventRegistration.view.html',
-					controller: 'eventRegistrationCtrl',
+				.state('dashboard.conferences.manage.viewResidence.viewRoomSet', {
+					url: '/:rid/roomsets',
+					templateUrl: 'js/roomSetView/roomSetView.view.html',
+					controller: 'roomSetListCtrl',
 					resolve: {
-						conferenceData: function($stateParams, $http) {
-							return $http.get('api/conferences/' + $stateParams.cid + '?includeRegistration=1')
+						roomSetData: function(roomSetList, $q, $stateParams) {
+							return $q.all([
+								roomSetList.refresh($stateParams.cid, $stateParams.rid)
+							])
 						},
-						dependents: function($http, loginStorage) {
-							return $http.get('api/accounts/' + loginStorage.getId() + '/dependents')
-						},
-						eventData: function($http, $stateParams) {
-							return $http.get('api/event/' + $stateParams.eid + '?includeRegistration=1')
+						roomTypes: function($http, $stateParams) {
+							return $http.get('/api/conferences/' + $stateParams.cid + '/residences/' + $stateParams.rid + '/roomTypes')
+						}
+					}
+				})
+
+				/*
+				INVENTORY LIST
+				*/
+				.state('dashboard.conferences.manage.viewInventory', {
+					url: '/inventory',
+					templateUrl: 'js/inventoryView/inventoryView.view.html',
+					controller: 'inventoryListCtrl',
+					resolve: {
+						inventoryData: function(inventoryList, $q, $stateParams) {
+							return $q.all([
+								inventoryList.refresh($stateParams.cid)
+							])
 						}
 					}
 				})
 				
+				/*
+				TRANSPORTATION LIST
+				*/
+				.state('dashboard.conferences.manage.viewTransportation', {
+					url: '/transportation',
+					templateUrl: 'js/transportationView/transportationView.view.html',
+					controller: 'transportationListCtrl',
+					resolve: {
+						transportationData: function(transportationList, $q, $stateParams) {
+							return $q.all([
+								transportationList.refresh($stateParams.cid)
+							])
+						}
+					}
+				})
+
+				/*
+				EDIT CONFERENCE
+				*/
+				.state('dashboard.conferences.manage.editConference', {
+					url: '/edit',
+					templateUrl: 'js/createConference/createConference.view.html',
+					controller: 'createConferenceCtrl',
+					resolve: {
+						conferenceData: function(conferenceData, $q, $stateParams) {
+							return $q.all([
+								conferenceData.refresh($stateParams.cid)
+							])
+						}
+					}
+				})
+
+				/*
+				EDIT EVENT
+				*/
+				.state('dashboard.conferences.manage.editEvent', {
+					url: '/event/:eid/edit',
+					templateUrl: 'js/createEvent/createEvent.view.html',
+					controller: 'createEventCtrl',
+					resolve: {
+						eventData: function(eventData, $q, $stateParams) {
+							return $q.all([
+								eventData.refresh($stateParams.eid)
+							])
+						}
+					}
+				})
+
+				/*
+				EDIT RESIDENCES
+				*/
+				.state('dashboard.conferences.manage.editResidence', {
+					url: '/residence/:rid/edit',
+					templateUrl: 'js/createResidence/createResidence.view.html',
+					controller: 'createResidenceCtrl',
+					resolve: {
+						residenceData: function(residenceData, $q, $stateParams) {
+							return $q.all([
+								residenceData.refresh($stateParams.cid, $stateParams.rid)
+							])
+						}
+					}
+				})
+
+				/*
+				EDIT ROOM SET
+				*/
+				.state('dashboard.conferences.manage.editRoomSet', {
+					url: '/residence/:rid/roomset/:rsid/edit',
+					abstract: true,
+					templateUrl: 'js/createRoomSet/createRoomSet.view.html',
+					controller: 'createRoomSetCtrl',
+					resolve: {
+						roomSetData: function(roomSetData, $q, $stateParams) {
+							return $q.all([
+								roomSetData.refresh($stateParams.cid, $stateParams.rsid),
+								roomSetData.getResidenceName($stateParams.cid, $stateParams.rid),
+								roomSetData.getRoomTypes($stateParams.cid, $stateParams.rid)
+							])
+						}
+					}
+				})
+
+				.state('dashboard.conferences.manage.editRoomSet.1', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.roomType.html',
+					controller: 'createRoomSetCtrl'
+				})
+
+				.state('dashboard.conferences.manage.editRoomSet.2', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.roomTypeInfo.html',
+					controller: 'createRoomSetCtrl'
+				})
+
+				.state('dashboard.conferences.manage.editRoomSet.3', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.roomSetInfo.html',
+					controller: 'createRoomSetCtrl'
+				})
+
+				.state('dashboard.conferences.manage.editRoomSet.4', {
+					url: '',
+					templateUrl: 'js/createRoomSet/createRoomSet.view.reviewInfo.html',
+					controller: 'createRoomSetCtrl'
+				})
+
+				/*
+				EDIT INVENTORY
+				*/
+				.state('dashboard.conferences.manage.editInventory', {
+					url: '/inventory/:iid/edit',
+					templateUrl: 'js/createInventory/createInventory.view.html',
+					controller: 'createInventoryCtrl',
+					resolve: {
+						inventoryData: function(inventoryData, $q, $stateParams) {
+							return $q.all([
+								inventoryData.refresh($stateParams.cid, $stateParams.iid)
+							])
+						}
+					}
+				})
+
+				/*
+				EDIT TRANSPORTATION
+				*/
+				.state('dashboard.conferences.manage.editTransportation', {
+					url: '/transportation/:tid/edit',
+					templateUrl: 'js/createTransportation/createTransportation.view.html',
+					controller: 'createTransportationCtrl',
+					resolve: {
+						transportationData: function(transportationData, $q, $stateParams) {
+							return $q.all([
+								transportationData.refresh($stateParams.cid, $stateParams.tid)
+							])
+						}
+					}
+				})
 		})
 
 })()

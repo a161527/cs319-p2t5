@@ -116,7 +116,7 @@ class Events extends Controller {
           $event->conferenceID = $id;
           $event->save();
 
-          $role = RoleCreate::EventManager($event->id);
+          $role = RoleCreate::AllEventRoles($event->id);
           $user = Auth::user();
           $user->attachRole($role);
 

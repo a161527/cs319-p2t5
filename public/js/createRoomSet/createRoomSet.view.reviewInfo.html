@@ -1,0 +1,39 @@
+<div class="progress">
+    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="100"
+    aria-valuemin="0" aria-valuemax="100" style="width:100%">
+        Review
+    </div>
+</div>
+
+<h4>Review Room Set Details</h4>
+<div class='panel panel-default'>
+	<div class='panel panel-body break-all'>
+		<h4><b><u>Room Type Information</u></b></h4>
+		<div class='review-text'>
+			<b>Name:</b> {{roomType.name}}
+		</div>
+		<div class='review-text'>
+			<b>Capacity:</b> {{roomType.capacity}}
+		</div>
+		<div class='review-text'>
+			<b>Accessible:</b> {{roomType.accessible | yesNo}}
+		</div>
+		<div class='review-text'>
+			<b>New Room Type:</b> {{addNewType | yesNo}}
+		</div>
+		<br>
+		<h4><b><u>Room Set Names</u></b></h4>
+		<div class='review-text' ng-repeat='roomSet in roomSetInfo'>
+			{{roomSet.name}}
+		</div>
+		<br>
+	</div>
+</div>
+<div class='row'>
+	<div class='col-xs-6'>
+		<a class='btn btn-default btn-block' ui-sref='dashboard.conferences.manage.createRoomSet.3({cid: cid, rid: rid})'>Back</a>
+	</div>
+	<div class='col-xs-6'>
+		<button class='btn btn-primary btn-block' ng-click='createRoomSet()'>Submit</button>
+	</div>
+</div>
