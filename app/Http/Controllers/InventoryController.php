@@ -109,6 +109,14 @@ class InventoryController extends Controller
         }
     }
 
+    public function getItem($conferenceId, $itemId) {
+        $invItem = Inventory::where('conferenceID', $conferenceId)->find($itemId);
+        if (!isset($invItem)) {
+            return response("",404);
+        }
+        return $invItem;
+    }
+
     /*
      * GET api/conferences/{conferenceId}/inventory/unapproved
      * - return a list showing the inventory of a conference
