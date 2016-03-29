@@ -1,5 +1,10 @@
 <div class='container'>
-    <div class='row'>
+    <div class='row' ng-show='editMode'>
+        <div class='col-sm-9'>
+            <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Edit</h2>
+        </div>
+    </div>
+    <div class='row' ng-show='!editMode'>
         <div class='col-sm-9'>
             <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Create Event</h2>
         </div>
@@ -10,37 +15,37 @@
             <h4>Event Information</h4>
             <form name='eventForm' novalidate>
                 <div class="panel panel-default" id='event'>
-                    <div class="panel-body" ng-model='event'>
+                    <div class="panel-body" ng-model='eventInfo'>
                         <div class='row'>
                             <div class='col-sm-12'>
-                                <input-with-validation model='event.name' validation='eventForm' identifier='name' inp-type='text'>Event Name</input-with-validation>
+                                <input-with-validation model='eventInfo.eventName' validation='eventForm' identifier='name' inp-type='text'>Event Name</input-with-validation>
                             </div>
                         </div>
 
                         <div class='row'>
                             <div class='col-sm-12'>
                                 <label for='description'>Description (optional) </label>
-                                <textarea class='form-control' ng-model='event.description' rows='3' id='description' name='description'></textarea>
+                                <textarea class='form-control' ng-model='eventInfo.description' rows='3' id='description' name='description'></textarea>
                             </div>
                         </div>
                         <br>
 
                         <div class='row'>
                             <div class='col-sm-6'>
-                                <date-picker-input model='event.date' validation='eventForm' identifier='date' label='Date'><date-picker-input>
+                                <date-picker-input model='eventInfo.date' validation='eventForm' identifier='date' label='Date'><date-picker-input>
                             </div>
                         </div>
                         <div class='row'>
                             <div class='col-sm-6'>
-                                <timepicker-with-validation model='event.start' label='Start Time' identifier='start' validation='createEventForm'></time-picker-with-validation>
+                                <timepicker-with-validation model='eventInfo.startTime' label='Start Time' identifier='start' validation='createEventForm'></time-picker-with-validation>
                             </div>
                             <div class='col-sm-6'>
-                                <timepicker-with-validation model='event.end' label='End Time' identifier='end' validation='createEventForm'></time-picker-with-validation>
+                                <timepicker-with-validation model='eventInfo.endTime' label='End Time' identifier='end' validation='createEventForm'></time-picker-with-validation>
                             </div>
                         </div>
                         <div class='row'>
                             <div class='col-sm-12'>
-                                <input-with-validation model='event.location' validation='eventForm' identifier='location' inp-type='text'>Location</input-with-validation>
+                                <input-with-validation model='eventInfo.location' validation='eventForm' identifier='location' inp-type='text'>Location</input-with-validation>
                             </div>
                         </div>
 
@@ -49,7 +54,7 @@
                                 <div class='form-group' ng-class='{"has-error": !eventForm.capacity.$valid && eventForm.capacity.$dirty}'>
                                     <label>Capacity</label>
 
-                                    <input type='text' ng-model-options='{updateOn: "blur"}' ng-model='event.capacity' class='form-control' 
+                                    <input type='text' ng-model-options='{updateOn: "blur"}' ng-model='eventInfo.capacity' class='form-control' 
                                            ng-pattern='/^\d+$/'
                                            name='capacity' required>
 

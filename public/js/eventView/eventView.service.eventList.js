@@ -9,6 +9,7 @@
 			var _permissions = null
 			var _registration = null
 			var _eventInfo = null
+			var _eventPermissions = null
 
 			this.getEventList = function(cid) {
 
@@ -21,7 +22,7 @@
 						refresh(cid).then(function(resData) {
 							resolve(resData)
 						}, function(resData) {
-							reject(resData)
+							resolve(null)
 						})
 
 					}
@@ -39,7 +40,7 @@
 							_permissions = resData.data.permissions
 							resolve(_permissions)
 						}, function(resData) {
-							reject(resData)
+							resolve(null)
 						})
 					}
 				})
@@ -52,18 +53,18 @@
 						_registration = resData.data.registered
 						resolve(_registration)
 					}, function(resData) {
-						reject(resData)
+						resolve(null)
 					})
 				})
 			}
 
 			this.getEventInfo = function(cid) {
 				return $q(function(resolve, reject) {
-					ajax.serviceCall('Loading...', 'get', 'api/event/conference/' + cid + '?includeRegistration=1').then(function(resData) {
+					ajax.serviceCall('Loading...', 'get', 'api/event/conference/' + cid + '?includePermissions=1&includeRegistration=1').then(function(resData) {
 						_eventInfo = resData.data
 						resolve(_eventInfo)
 					}, function(resData) {
-						reject(resData)
+						resolve(null)
 					})
 				})
 			}
@@ -86,7 +87,7 @@
 
 					}, function(resData) {
 
-						reject(resData)
+						resolve(null)
 
 					})
 				})

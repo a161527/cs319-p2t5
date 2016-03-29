@@ -308,7 +308,14 @@
 				.state('dashboard.conferences.manage.createEvent', {
 					url: '/event/create',
 					templateUrl: 'js/createEvent/createEvent.view.html',
-					controller: 'createEventCtrl'
+					controller: 'createEventCtrl',
+					resolve: {
+						eventData: function(eventData, $q, $stateParams) {
+							return $q.all([
+								eventData.refresh($stateParams.eid)
+							])
+						}
+					}
 				})
 
 				/*
@@ -507,6 +514,22 @@
 						conferenceData: function(conferenceData, $q, $stateParams) {
 							return $q.all([
 								conferenceData.refresh($stateParams.cid)
+							])
+						}
+					}
+				})
+
+				/*
+				EDIT EVENT
+				*/
+				.state('dashboard.conferences.manage.editEvent', {
+					url: '/event/:eid/edit',
+					templateUrl: 'js/createEvent/createEvent.view.html',
+					controller: 'createEventCtrl',
+					resolve: {
+						eventData: function(eventData, $q, $stateParams) {
+							return $q.all([
+								eventData.refresh($stateParams.eid)
 							])
 						}
 					}

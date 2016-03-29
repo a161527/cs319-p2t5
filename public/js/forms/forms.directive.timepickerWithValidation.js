@@ -26,7 +26,7 @@
 					'</div>',	
 				link: function(scope, elem, attrs) {
 
-					scope.model = new Date()
+					//scope.model = new Date()
 
 				}
 			}

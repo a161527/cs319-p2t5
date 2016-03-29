@@ -83,13 +83,18 @@
 								<div class='col-md-12'>
 									<button ng-hide='event.isEventRegistered' 
 											class='btn btn-primary pull-right btn-block' 
-											ng-click='goToEventState("register", {eid: event.id});'>
+											ng-click='goToEventState("register", {eid: event.id})'>
 										<span class='glyphicon glyphicon-pencil'></span><br> Register
 									</button>
 									<button ng-show='event.isEventRegistered && isConfRegistered' 
 											class='btn btn-primary pull-right btn-block' 
 											disabled>
 										All attendees registered
+									</button>
+									<button ng-show='event.canEdit' 
+											class='btn btn-primary pull-right btn-block'
+											ng-click='showWidget("editEvent", {eid: event.id})'>
+											<span class='glyphicon glyphicon-pencil'></span><br> Edit Event
 									</button>
 								</div>
 							</div>
