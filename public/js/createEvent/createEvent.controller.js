@@ -41,7 +41,7 @@
 					eventInfo.conferenceID = $stateParams.cid
 
 					if ($scope.editMode) {
-						ajax.serviceCall('Updating event...', 'post', 'api/event/' + $stateParams.eid + '/update', eventInfo).then(function(resData) {
+						ajax.serviceCall('Updating event...', 'put', 'api/event/' + $stateParams.eid, eventInfo).then(function(resData) {
 
 							$state.go('dashboard.events', {cid: $stateParams.cid}, {reload: true})
 
