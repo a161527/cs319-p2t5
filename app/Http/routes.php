@@ -132,7 +132,6 @@ Route::group(['prefix' => 'api'], function()
         Route::get('/approved', 'InventoryController@approved');
         Route::post('/', 'InventoryController@addItem');
         Route::post('/reserve', 'InventoryController@reserveItem');
-        Route::delete('/reserve/{reservationId}', 'InventoryController@deleteReservation');
 
         Route::patch('/{itemId}', 'InventoryController@editItem');
         Route::delete('/{itemId}', 'InventoryController@deleteItem');
@@ -142,6 +141,7 @@ Route::group(['prefix' => 'api'], function()
     // user_inventory
     Route::group(['prefix' => 'userinventory/{id}'], function() {
         Route::get('/approve', 'InventoryController@approveRequest');
+        Route::delete('', 'InventoryController@deleteReservation');
     });
 
     // transportation
