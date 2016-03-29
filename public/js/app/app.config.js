@@ -83,6 +83,12 @@
 				*/
 				.state('dashboard.approveAccts', {
 					url: '/approve-accounts',
+					abstract: true,
+					template: '<div ui-view></div>'
+				})
+
+				.state('dashboard.approveAccts.1', {
+					url: '',
 					templateUrl: 'js/auditAccts/auditAccts.view.approve.html',
 					controller: 'approveAcctsCtrl',
 					resolve: {
@@ -90,6 +96,12 @@
 							return $http.get('api/unapprovedUsers')
 						}
 					}
+				})
+
+				.state('dashboard.approveAccts.2', {
+					url: '',
+					templateUrl: 'js/auditAccts/auditAccts.view.approve.html',
+					controller: 'viewApprovedAcctsCtrl',
 				})
 
 				/*
@@ -205,6 +217,41 @@
 					}
 				})
 
+				/*
+				TRANSPORTATION ASSIGNMENT
+				*/
+
+				.state('dashboard.conferences.manage.assign-transportation', {
+					url: '/assign-transportation',
+					abstract: true,
+					template: '<div ui-view></div>'
+				})
+
+				.state('dashboard.conferences.manage.assign-transportation.1', {
+					url: '',
+					templateUrl: 'js/assignTransportation/assignTransportation.view.users.html',
+					controller: 'transportationUsersCtrl',
+					resolve: {
+						users: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/transportationsummary')
+						}
+					}					
+				})
+
+				.state('dashboard.conferences.manage.assign-transportation.2', {
+					url: '',
+					templateUrl: 'js/assignTransportation/assignTransportation.view.transport.html',
+					controller: 'assignTransportationCtrl',
+					params: {
+						user: null
+					},
+					resolve: {
+						transport: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/transportation')
+						}
+					}					
+				})
+
 
 				/*
 				INVENTORY
@@ -228,11 +275,28 @@
 
 				.state('dashboard.conferences.manage.approve-inventory', {
 					url: '/approveInventory',
+					abstract: true,
+					template: '<div ui-view></div>'
+				})
+
+				.state('dashboard.conferences.manage.approve-inventory.1', {
+					url: '',
 					templateUrl: 'js/inventory/inventory.view.approve.html',
 					controller: 'approveInventoryCtrl',
 					resolve: {
 						unapprovedInventory: function($http, $stateParams) {
 							return $http.get('api/conferences/' + $stateParams.cid + '/inventory/unapproved')
+						}
+					}
+				})
+
+				.state('dashboard.conferences.manage.approve-inventory.2', {
+					url: '',
+					templateUrl: 'js/inventory/inventory.view.approve.html',
+					controller: 'viewApprovedInventoryCtrl',
+					resolve: {
+						approvedInventory: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/inventory/approved')
 						}
 					}
 				})
@@ -272,16 +336,45 @@
 					}
 				})
 
+				.state('dashboard.conferences.manage.room-allocate.3', {
+					url: '',
+					templateUrl: 'js/rooms/rooms.view.approved.html',
+					controller: 'ApprovedRoomsCtrl',
+					resolve: {
+						assignedRooms: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/residences/assign')
+						}
+					}
+				})
+
 				/*
 				REGISTRATION APPROVAL
 				*/
 				.state('dashboard.conferences.manage.approve-registration', {
 					url: '/approveRegistration',
+					abstract: true,
+					template: '<div ui-view></div>'
+				})
+
+				.state('dashboard.conferences.manage.approve-registration.1', {
+					url: '',
 					templateUrl: 'js/approveRegistration/approveRegistration.view.html',
 					controller: 'approveRegistrationCtrl',
 					resolve: {
 						unapproved: function($stateParams, getUnapprovedService) {
 							return getUnapprovedService.get($stateParams.cid)
+						}
+					}
+				})
+
+				//state for viewing approved registrations
+				.state('dashboard.conferences.manage.approve-registration.2', {
+					url: '',
+					templateUrl: 'js/approveRegistration/approveRegistration.view.html',
+					controller: 'conferenceApprovedUsersCtrl',
+					resolve: {
+						approved: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/register?include=approved')
 						}
 					}
 				})

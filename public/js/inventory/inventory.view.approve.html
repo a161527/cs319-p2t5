@@ -1,78 +1,110 @@
-<div ng-show='inventory.length === 0'>
-	No inventory requests requiring approval
+<div class='row'>
+	<div class='col-sm-9'>
+		<h4 ng-show='state1'>Approve Inventory Requests</h4>
+		<h4 ng-show='!state1'>Approved Inventory Requests</h4>
+	</div>
+	<div class='col-sm-3' ng-show='!state1'>
+		<button class='btn btn-info btn-block' 
+			ng-click='back()'>
+			Go to Approve Inventory
+		</button>
+	</div>
+	<div class='col-sm-3' ng-show='state1'>
+		<button class='btn btn-info btn-block' 
+			ng-click='viewApproved()'>
+			View Approved Inventory
+		</button>
+	</div>
 </div>
-<div ng-repeat= 'inv in inventory'>
-	<li class='list-group-item unselectable-text'>
-		<div class='row'>
-			<div class='col-sm-2'>
-				<span class='glyphicon glyphicon-apple glyphicon-large'></span>
+<div ng-show='inventory.length === 0'>
+	No inventory requests
+</div>
+<div ng-show='inventory.length > 0'>
+	<div class='form-group has-feedback'>
+		<label>Search by item name</label>
+		<input class='form-control' type='text' placeholder='Search by item name' ng-model='search.inventory.itemName'>
+		<span class="glyphicon glyphicon-search form-control-feedback"></span>
+	</div>
+	<div class='form-group has-feedback'>
+		<label>Search by user</label>
+		<input class='form-control' type='text' placeholder='Search by user' ng-model='search.user.fullName'>
+		<span class="glyphicon glyphicon-search form-control-feedback"></span>
+	</div>
+	Showing {{filtered.length}} of {{inventory.length}} requests
+	<div ng-repeat= 'inv in inventory | filter:search as filtered'>
+		<li class='list-group-item unselectable-text'>
+			<div class='row'>
+				<div class='col-sm-2'>
+					<span class='glyphicon glyphicon-apple glyphicon-large'></span>
+				</div>
+
+				<div class='col-sm-4'>
+					<h3><u>Item:</u></h3>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Name:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{inv.inventory.itemName}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Current Quantity:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{inv.inventory.currentQuantity}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Total Quantity:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{inv.inventory.totalQuantity}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Disposable:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{inv.inventory.disposable | yesNo}}
+						</div>
+					</div>
+				</div>
+				
+				<div class='col-sm-4'>
+					<h3><u>Request:</u></h3>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>User:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{inv.user.fullName}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Requested Units:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{inv.unitCount}}
+						</div>
+					</div>
+				</div>
+
+				<div class='col-sm-2'>
+
+					<button class='btn btn-success pull-right btn-block'
+						ng-click='approve(inv.id)'
+						ng-show='state1'>
+						<span class='glyphicon glyphicon-ok'></span><br> Approve
+					</button>
+
+				</div>
+
 			</div>
-
-			<div class='col-sm-4'>
-				<h3><u>Item:</u></h3>
-				<div class='row'>
-					<div class='col-sm-6'>
-						<b>Name:</b>
-					</div>
-					<div class='col-sm-6'>
-						{{inv.inventory.itemName}}
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-sm-6'>
-						<b>Current Quantity:</b>
-					</div>
-					<div class='col-sm-6'>
-						{{inv.inventory.currentQuantity}}
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-sm-6'>
-						<b>Total Quantity:</b>
-					</div>
-					<div class='col-sm-6'>
-						{{inv.inventory.totalQuantity}}
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-sm-6'>
-						<b>Disposable:</b>
-					</div>
-					<div class='col-sm-6'>
-						{{inv.inventory.disposable | yesNo}}
-					</div>
-				</div>
-			</div>
-			
-			<div class='col-sm-4'>
-				<h3><u>Request:</u></h3>
-				<div class='row'>
-					<div class='col-sm-6'>
-						<b>User:</b>
-					</div>
-					<div class='col-sm-6'>
-						{{inv.user.firstName}} {{inv.user.lastName}}
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-sm-6'>
-						<b>Requested Units:</b>
-					</div>
-					<div class='col-sm-6'>
-						{{inv.unitCount}}
-					</div>
-				</div>
-			</div>
-
-			<div class='col-sm-2'>
-
-				<button class='btn btn-success pull-right btn-block'
-					ng-click='approve(inv.id)'>
-					<span class='glyphicon glyphicon-ok'></span><br> Approve
-				</button>
-
-			</div>
-
-		</div>
-	</li>
+		</li>
+	</div>
 </div>

@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('rooms')
-		.controller('AllocateRoomsCtrl', function($scope, $state, $stateParams, roomDependents, dataFormat) {
+		.controller('AllocateRoomsCtrl', function($scope, $state, $http, $stateParams, roomDependents, dataFormat) {
 
 			$scope.noUsers = (roomDependents.length === 0)
 			$scope.dependents = {}
@@ -10,9 +10,12 @@
 
 			$scope.selectedDependents = []
 
-
 			if (roomDependents.length !== 0) {
 				$scope.dependents = dataFormat.dependentsFormat(roomDependents, 'userID')
+			}
+
+			$scope.viewApproved = function() {
+				$state.go('dashboard.conferences.manage.room-allocate.3')
 			}
 
 			//Select all checkboxes
