@@ -12,6 +12,8 @@
 			if ($scope.eventInfo) {
 
 				$scope.eventInfo.date = moment($scope.eventInfo.date, "YYYY-MM-DD").toDate()
+				$scope.startVal = $scope.eventInfo.startTime
+				$scope.endVal = $scope.eventInfo.endTime
 				$scope.eventInfo.startTime = moment($scope.eventInfo.startTime, "HH:mm:ss").toDate()
 				$scope.eventInfo.endTime = moment($scope.eventInfo.endTime, "HH:mm:ss").toDate()
 
