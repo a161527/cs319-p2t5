@@ -118,7 +118,7 @@ Route::group(['prefix' => 'api'], function()
     });
 
     // inventory management
-    Route::group(['prefix' => 'conferences/{conferenceId}/inventory'], function() {
+    Route::group(['prefix' => 'conferences/{confId}/inventory'], function() {
         Route::get('/', 'InventoryController@index');
         Route::get('/unapproved', 'InventoryController@unapproved');
         Route::get('/approved', 'InventoryController@approved');
@@ -130,15 +130,31 @@ Route::group(['prefix' => 'api'], function()
         Route::delete('/{itemId}', 'InventoryController@deleteItem');
     });
 
+    // user_inventory
     Route::group(['prefix' => 'userinventory/{id}'], function() {
         Route::get('/approve', 'InventoryController@approveRequest');
+    });
+
+    // transportation
+    Route::group(['prefix' => 'conferences/{confId}/transportation'], function() {
+        Route::get('/{id}', 'TransportationController@getTransport');
+        Route::post('/', 'TransportationController@addTransport');
+        Route::delete('/{id}', 'TransportationController@deleteTransport');
+        Route::patch('{id}', 'TransportationController@patchTransport');
+        // list all transports
+        Route::get('/', 'TransportationController@index');
+        // assign/unassign
+        Route::post('/{id}/assign', 'TransportationController@assignTransport');
+        Route::post('/{id}/unassign', 'TransportationController@unassignTransport');
+        // view users needing transport (conf id, time)
+        Route::get('/summary', 'TransportationController@transportSummary');
     });
 
 });
 
 // Routes for Event
 Route::get('/api/event/{id?}', 'Events@index');
-Route::get('/api/event/conference/{id?}', 'Events@getEventByConferenceID');
+Route::get('/api/event/conference/{id?}', 'Events@getEventByconfId');
 Route::post('/api/event/{id}', 'Events@store');
 Route::post('/api/event/{id}/update', 'Events@update');
 Route::post('/api/event/{id}/register', 'Events@register');
