@@ -353,7 +353,14 @@
 				.state('dashboard.conferences.manage.createResidence', {
 					url: '/residence/create',
 					templateUrl: 'js/createResidence/createResidence.view.html',
-					controller: 'createResidenceCtrl'
+					controller: 'createResidenceCtrl',
+					resolve: {
+						residenceData: function(residenceData, $q, $stateParams) {
+							return $q.all([
+								residenceData.refresh($stateParams.cid, $stateParams.rid)
+							])
+						}
+					}
 				})
 
 				/*
@@ -557,6 +564,22 @@
 						eventData: function(eventData, $q, $stateParams) {
 							return $q.all([
 								eventData.refresh($stateParams.eid)
+							])
+						}
+					}
+				})
+
+				/*
+				EDIT RESIDENCES
+				*/
+				.state('dashboard.conferences.manage.editResidence', {
+					url: '/residence/:rid/edit',
+					templateUrl: 'js/createResidence/createResidence.view.html',
+					controller: 'createResidenceCtrl',
+					resolve: {
+						residenceData: function(residenceData, $q, $stateParams) {
+							return $q.all([
+								residenceData.refresh($stateParams.cid, $stateParams.rid)
 							])
 						}
 					}

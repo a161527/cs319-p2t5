@@ -1,7 +1,10 @@
 <div class='container'>
     <div class='row'>
-        <div class='col-sm-9'>
+        <div class='col-sm-9' ng-show='!editMode'>
             <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Create Residence</h2>
+        </div>
+        <div class='col-sm-9' ng-show='editMode'>
+            <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> {{residenceInfo['1'].name}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Edit</h2>
         </div>
     </div>
     <br>
@@ -9,9 +12,9 @@
         <div class='col-sm-offset-3 col-sm-6'>
         	<h4>Residence Information</h4>
 			<form name='residenceForm' novalidate>
-				<div ng-repeat='(idx, value) in residence'>
-					<div class="panel panel-default" id='residence{{idx}}'>
-						<div class="panel-body" ng-model='residence[idx]'>
+				<div ng-repeat='(idx, value) in residenceInfo'>
+					<div class="panel panel-default" id='residenceInfo{{idx}}'>
+						<div class="panel-body" ng-model='residenceInfo[idx]'>
 							<div class='row' ng-show='showRemoveButton(idx)'>
 								<div class='col-sm-offset-11 col-sm-1'>
 									<div class='glyphicon glyphicon-remove hand-cursor remove-button' name='removeButton{{idx}}' ng-click='deleteResidence(idx)'></div>
@@ -20,13 +23,13 @@
 
 							<div class='row'>
 								<div class='col-sm-12'>
-									<input-with-validation model='residence[idx].name' validation='residenceForm' identifier='name{{idx}}' inp-type='text'>Residence Name</input-with-validation>
+									<input-with-validation model='residenceInfo[idx].name' validation='residenceForm' identifier='name{{idx}}' inp-type='text'>Residence Name</input-with-validation>
 								</div>
 							</div>
 
 							<div class='row'>
 								<div class='col-sm-12'>
-									<input-with-validation model='residence[idx].address' validation='residenceForm' identifier='address{{idx}}' inp-type='text'>Residence Address</input-with-validation>
+									<input-with-validation model='residenceInfo[idx].address' validation='residenceForm' identifier='address{{idx}}' inp-type='text'>Residence Address</input-with-validation>
 								</div>
 							</div>
 
@@ -34,7 +37,7 @@
 					</div>
 				</div>
 		
-				<button class='btn btn-success btn-block' ng-click='addResidence()'><span class="glyphicon glyphicon-plus"></span> Add Another Residence</button>
+				<button class='btn btn-success btn-block' ng-click='addResidence()'><span class="glyphicon glyphicon-plus" ng-show='!editMode'></span> Add Another Residence</button>
 				<br>
 				<div class='row'>
 					<div class='col-xs-6'>
