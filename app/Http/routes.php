@@ -36,6 +36,7 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
 
             Route::group(['prefix' => '{residenceId}'], function () {
                 Route::get('', 'RoomSetupController@getResidenceInfo');
+                Route::patch('', 'RoomSetupController@editResidence');
                 Route::get('roomSets', 'RoomSetupController@getResidenceRoomSets');
                 Route::get('roomTypes', 'RoomSetupController@getResidenceRoomTypes');
                 Route::post('roomSets', 'RoomSetupController@createRoomSet');
@@ -46,6 +47,7 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
 
             Route::get('roomSets/{setId}/rooms', 'RoomAssignmentController@roomsInSet');
             Route::get('roomSets/{setId}', 'RoomSetupController@getRoomSetInfo');
+            Route::patch('roomSets/{setId}', 'RoomSetupController@editRoomSet');
 
             Route::post('assign', 'RoomAssignmentController@assignRoom');
             Route::delete('assign/{assignId}', 'RoomAssignmentController@deleteAssignment');
@@ -125,7 +127,6 @@ Route::group(['prefix' => 'api'], function()
         Route::get('/unapproved', 'InventoryController@unapproved');
         Route::get('/approved', 'InventoryController@approved');
         Route::post('/', 'InventoryController@addItem');
-        Route::put('/', 'InventoryController@addItem');
         Route::post('/reserve', 'InventoryController@reserveItem');
 
         Route::patch('/{itemId}', 'InventoryController@editItem');
@@ -157,8 +158,8 @@ Route::group(['prefix' => 'api'], function()
 
 // Routes for Event
 Route::get('/api/event/{id?}', 'Events@index');
-Route::get('/api/event/conference/{id?}', 'Events@getEventByconfId');
-Route::post('/api/event/{id}', 'Events@store');
-Route::post('/api/event/{id}/update', 'Events@update');
+Route::get('/api/event/conference/{id?}', 'Events@getEventByConferenceID');
+Route::post('/api/event/{confId}', 'Events@store');
+Route::put('/api/event/{id}', 'Events@update');
 Route::post('/api/event/{id}/register', 'Events@register');
 Route::delete('/api/event/{id}', 'Events@destroy');
