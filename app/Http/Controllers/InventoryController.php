@@ -40,6 +40,15 @@ class InventoryController extends Controller
         return $validator;
     }
 
+    protected function itemEditValidator($req) {
+        return Validator::make($req,
+            [
+                'totalQuantity' => 'numeric|min:0',
+                'itemName' => 'regex:/^[a-zA-Z0-9()\s-]+$/',
+                'disposable' => 'boolean'
+            ]);
+    }
+
     /*
      * Get a validator for an incoming item array add request.
      */
@@ -59,7 +68,6 @@ class InventoryController extends Controller
     protected function insertItem($conferenceId, $data)
     {
         $item = new Inventory();
-        $item->currentQuantity = $data['currentQuantity'];
         $item->totalQuantity = $data['totalQuantity'];
         // $item->units = $data['units'];
         $item->itemName = $data['itemName'];
@@ -72,16 +80,6 @@ class InventoryController extends Controller
      * 
      * 
      */
-    protected function editTotalQuantity(&$item, $newValue)
-    {
-    	// TODO: reduce total qty and current qty by the difference, after doing checks 
-    	//       to make sure both do not go below zero
-    }
-
-    /*
-     *
-     *
-     */
     protected function createUserInventoryEntry($dependentId, $inventoryId, $quantity, $conferenceId)
     {
         $entry = new UserInventory();
@@ -90,6 +88,22 @@ class InventoryController extends Controller
         $entry->unitCount = $quantity;
         $entry->conferenceID = $conferenceId;
         $entry->save();
+    }
+
+    private function displayItems($itemList) {
+        $data = [];
+        foreach ($itemList as $i) {
+            $data[] = $this->displaySingleItem($i);
+        }
+
+        return $data;
+    }
+
+    private function displaySingleItem($item) {
+        //Include calculated currentQuantity field
+        $data = $item->toArray();
+        $data['currentQuantity'] = $item->currentQuantity;
+        return $data;
     }
 
     /*
@@ -105,6 +119,7 @@ class InventoryController extends Controller
         else
         {
             $inventory = Inventory::where('conferenceID', '=', $conf->id)->get();
+            $inventory = $this->displayItems($inventory);
             return response()->json(['message' => 'returned_inventory', 'inventory' => $inventory]);
         }
     }
@@ -114,7 +129,7 @@ class InventoryController extends Controller
         if (!isset($invItem)) {
             return response("",404);
         }
-        return $invItem;
+        return $this->displaySingleItem($invItem);
     }
 
     /*
@@ -201,17 +216,15 @@ class InventoryController extends Controller
         $reservations = $req->all();
         try
         {
-	        DB::beginTransaction();
-	        $validator = $this->reserveItemValidator($reservations);
-	        if ($validator->passes())
-	        {
-		        foreach ($reservations as $r)
-		        {
-		        	$item = Inventory::where('id', $r["id"])->where('conferenceID', $conferenceId)->first();
-		        	if ($r["quantity"] <= $item->currentQuantity)
-		        	{
-		        		$item->currentQuantity -= $r["quantity"];
-                        $item->save();
+            DB::beginTransaction();
+            $validator = $this->reserveItemValidator($reservations);
+            if ($validator->passes())
+            {
+                foreach ($reservations as $r)
+                {
+                    $item = Inventory::where('id', $r["id"])->where('conferenceID', $conferenceId)->first();
+                    if ($r["quantity"] <= $item->currentQuantity)
+                    {
                         $this->createUserInventoryEntry($r["dependentID"], $r["id"], $r["quantity"], $conferenceId);
 		        	}
 		        	else
@@ -252,11 +265,12 @@ class InventoryController extends Controller
                 // do updates
                 foreach ($changes as $field => $newValue)
                 {
-                    switch($field)
+                    //Need to cast because otherwise bad inputs get through and can cause weird results
+                    switch((string)$field)
                     {
-                        // case "totalQuantity":
-                        //     $this->editTotalQuantity($item, $newValue);
-                        //     break;
+                        case "totalQuantity":
+                            $item->totalQuantity = $newValue;
+                            break;
                         case "itemName":
                             $item->itemName = $newValue;
                             break;
@@ -267,6 +281,10 @@ class InventoryController extends Controller
                 }
             else
                 return response()->json(['message' => 'validation_failed', 'errors' => $validator->errors()], 422);
+        }
+
+        if ($item->currentQuantity < 0) {
+            return response()->json(['message' => 'causes_bad_current_quantity'], 400);
         }
 
         if ($item->save())
