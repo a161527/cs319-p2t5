@@ -28,7 +28,7 @@
 		})
 
 		.controller('viewApprovedAcctsCtrl', function($scope, $state, approvedDependents) {
-			console.log(approvedDependents)
+
 			$scope.state1 = false
 
 			$scope.back = function() {

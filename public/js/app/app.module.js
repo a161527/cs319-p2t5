@@ -12,6 +12,7 @@
 	angular.module('conferenceRegistration', [])
 	angular.module('inventory', [])
 	angular.module('rooms', [])
+	angular.module('assignTransportation', [])
 	angular.module('eventView', [])
 	angular.module('createEvent', [])
 	angular.module('dependents', [])
@@ -34,6 +35,7 @@
 		'rooms',
 		'dependents',
 		'eventView',
+		'assignTransportation',
 		'createEvent',
 		'eventRegistration',
 		'auditAccts',

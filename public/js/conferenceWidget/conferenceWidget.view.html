@@ -115,8 +115,8 @@
 					Assign Rooms
 				</button>
 			</div>
-			<div class='col-sm-2'>
-				<button class='btn btn-danger btn-block' ng-show='permissions["conference-transportation-edit"]'>
+			<div class='col-sm-2' ng-show='permissions["conference-transportation-edit"]'>
+				<button class='btn btn-danger btn-block' ng-click='showWidget("assign-transportation.1")'>
 					<span class='glyphicon glyphicon-send glyphicon-large'></span>
 					<br>
 					Assign Transportation 

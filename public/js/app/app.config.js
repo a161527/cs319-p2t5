@@ -102,7 +102,6 @@
 					url: '',
 					templateUrl: 'js/auditAccts/auditAccts.view.approve.html',
 					controller: 'viewApprovedAcctsCtrl',
-					
 				})
 
 				/*
@@ -266,6 +265,22 @@
 						}
 
 					}
+				})
+
+				/*
+				TRANSPORTATION ASSIGNMENT
+				*/
+
+				.state('dashboard.conferences.manage.assign-transportation', {
+					url: '/assign-transportation',
+					abstract: true,
+					template: '<div ui-view></div>'
+				})
+
+				.state('dashboard.conferences.manage.assign-transportation.1', {
+					url: '',
+					templateUrl: 'js/assignTransportation/assignTransportation.view.users.html',
+					controller: 'assignTransportationCtrl'					
 				})
 
 
