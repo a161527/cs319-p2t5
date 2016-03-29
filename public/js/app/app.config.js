@@ -280,7 +280,26 @@
 				.state('dashboard.conferences.manage.assign-transportation.1', {
 					url: '',
 					templateUrl: 'js/assignTransportation/assignTransportation.view.users.html',
-					controller: 'assignTransportationCtrl'					
+					controller: 'transportationUsersCtrl',
+					resolve: {
+						users: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/transportationsummary')
+						}
+					}					
+				})
+
+				.state('dashboard.conferences.manage.assign-transportation.2', {
+					url: '',
+					templateUrl: 'js/assignTransportation/assignTransportation.view.transport.html',
+					controller: 'assignTransportationCtrl',
+					params: {
+						user: null
+					},
+					resolve: {
+						transport: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/transportation')
+						}
+					}					
 				})
 
 

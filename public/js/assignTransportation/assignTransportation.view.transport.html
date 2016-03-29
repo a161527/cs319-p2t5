@@ -1,0 +1,64 @@
+<h4>Assign transportation for {{user.name}}</h4>
+<div class='form-group has-feedback'>
+	<label>Search by company</label>
+	<input class='form-control' type='text' placeholder='Search by company' ng-model='search.company'>
+	<span class="glyphicon glyphicon-search form-control-feedback"></span>
+</div>
+Showing {{filtered.length}} of {{transportation.length}}
+<ul class="list-group">
+	<div ng-repeat='t in transportation | filter: search'>
+		<li class='list-group-item unselectable-text'>
+			<div class='row'>
+
+				<div class='col-sm-3'>
+					<span class='glyphicon glyphicon-briefcase glyphicon-large'></span>
+				</div>
+				<div class='col-sm-6'>
+
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Company:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{t.company}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Name:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{t.name}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Capacity:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{t.capacity}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Phone:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{t.phone}}
+						</div>
+					</div>
+					
+				</div>
+				<div class='col-sm-3'>
+
+						<button class='btn btn-success pull-right btn-block'
+							ng-click='assign()'>
+							<span class='glyphicon glyphicon-ok'></span><br> Assign
+						</button>
+
+					</div>
+
+			</div>
+		</li>
+	</div>
+</ul>
