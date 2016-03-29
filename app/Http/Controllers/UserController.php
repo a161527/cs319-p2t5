@@ -176,4 +176,23 @@ class UserController extends Controller
         else
             return response()->json(['message' => 'user_could_not_be_deleted'], 500);
     }
+
+    /*
+     * GET api/accounts/{id}/dependents/approved
+     * - list of approved dependents
+     */
+    public function approvedDependents($accountID)
+    {
+        // TODO: add permission/role filter
+        $account = Account::where('id', '=', $accountID)->first();
+        if ($account === null)
+            return response()->json(['message' => 'account_not_found']);
+        else
+        {
+            $dependents = User::where('accountID', '=', $account->id)
+                              ->where('approved', '=', true)
+                              ->get();
+            return response()->json(['message' => 'returned_approved_dependents', 'dependents' => $dependents]);
+        }
+    }
 }

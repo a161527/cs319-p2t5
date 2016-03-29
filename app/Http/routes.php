@@ -114,12 +114,14 @@ Route::group(['prefix' => 'api'], function()
         Route::put('/', 'UserController@addDependents');
         Route::patch('/{depId}', 'UserController@editDependent');
         Route::delete('/{depId}', 'UserController@deleteDependent');
+        Route::get('/approved', 'UserController@approvedDependents');
     });
 
     // inventory management
     Route::group(['prefix' => 'conferences/{conferenceId}/inventory'], function() {
         Route::get('/', 'InventoryController@index');
         Route::get('/unapproved', 'InventoryController@unapproved');
+        Route::get('/approved', 'InventoryController@approved');
         Route::post('/', 'InventoryController@addItem');
         Route::put('/', 'InventoryController@addItem');
         Route::post('/reserve', 'InventoryController@reserveItem');
