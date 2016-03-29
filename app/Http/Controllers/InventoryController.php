@@ -221,27 +221,54 @@ class InventoryController extends Controller
                 foreach ($reservations as $r)
                 {
                     $item = Inventory::where('id', $r["id"])->where('conferenceID', $conferenceId)->first();
+                    if (!isset($item)) {
+                        DB::rollback();
+                        return response()->json(['message' => 'item_not_found', 'errors' => "item id={$r['id']} not found"], 404);
+                    }
                     if ($r["quantity"] <= $item->currentQuantity)
                     {
                         $this->createUserInventoryEntry($r["dependentID"], $r["id"], $r["quantity"], $conferenceId);
-		        	}
-		        	else
-		        	{
-		        		DB::rollback();
-		        		return response()->json(['message' => 'out_of_stock', 'errors' => 'item id='+$r["id"]+'has less items remaining than requested'], 422);
-		        	}
-		        }
-		    }
-		    else
-		    	return response()->json(['message' => 'validation_failed', 'errors' => $validator->errors()], 422);
-		    DB::commit();
-		    return response()->json(['message' => 'items_reserved']);
-	    } catch (ValidationException $e) {
-	    	return response()->json(['message' => 'validation_failed', 'errors' => $e->getMessage()], 422);
-	    } catch (\Exception $e) {
-	    	DB::rollback();
+                    }
+                    else
+                    {
+                        DB::rollback();
+                        return response()->json(['message' => 'out_of_stock', 'errors' => "item id={$r["id"]} has less items remaining than requested"], 422);
+                    }
+                }
+            }
+            else
+                return response()->json(['message' => 'validation_failed', 'errors' => $validator->errors()], 422);
+            DB::commit();
+            return response()->json(['message' => 'items_reserved']);
+        } catch (ValidationException $e) {
+            return response()->json(['message' => 'validation_failed', 'errors' => $e->getMessage()], 422);
+        } catch (\Exception $e) {
+            DB::rollback();
             return response()->json(['message' => 'unknown_error', 'errors' => $e->getMessage()], 500);
-	    }
+        }
+    }
+
+    /*
+     * DELETE
+     *  - delete an item reservation
+     */
+    public function deleteReservation($confId, $reservationId) {
+        $reservation = UserInventory::with('inventory')->find($reservationId);
+        if (is_null($reservation)) {
+            return response()->json(["message" => "reservation_deleted"]);
+        }
+
+        if ($reservation->inventory->conferenceID != $confId) {
+            return response()->json(["message" => "conference_request_mismatch"], 404);
+        }
+
+        if (!Entrust::can(PermissionNames::ConferenceInventoryEdit($confId))
+                && $reservation->userID != Auth::user()->id) {
+            return response()->json(["message" => "reservation_not_accessible"], 403);
+        }
+
+        $reservation->delete();
+        return response()->json(["message" => "reservation_deleted"]);
     }
 
     /*

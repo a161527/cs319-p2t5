@@ -246,6 +246,24 @@ class Events extends Controller {
                     ->whereIn("userID", $idList)->get();
     }
 
+    public function deleteRegistration(Request $req, $eventId,$id) {
+        $event = Event::find($id);
+        if (is_null($event)) {
+            return response()->json(["message"=>"no_such_event"], 404);
+        }
+        $registration = UserEvent::with('user')->find($id);
+        if (is_null($registration)) {
+            return response()->json(["message"=>"registration_deleted"]);
+        }
+        if (!Entrust::can(PermissionNames::ConferenceRegistrationApproval($event->conferenceID))
+                && $registration->user->accountID != Auth::user()->id) {
+            return response()->json(["message"=>"cannot_edit_registration"], 403);
+        }
+
+        $registration->delete();
+        return response()->json(["message"=>"registration_deleted"]);
+    }
+
     private function buildPermissionList($eventId) {
         $permissions = [];
         foreach (PermissionNames::AllEventPermissions($eventId) as $pname) {

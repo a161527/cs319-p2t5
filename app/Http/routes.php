@@ -132,6 +132,7 @@ Route::group(['prefix' => 'api'], function()
         Route::get('/approved', 'InventoryController@approved');
         Route::post('/', 'InventoryController@addItem');
         Route::post('/reserve', 'InventoryController@reserveItem');
+        Route::delete('/reserve/{reservationId}', 'InventoryController@deleteReservation');
 
         Route::patch('/{itemId}', 'InventoryController@editItem');
         Route::delete('/{itemId}', 'InventoryController@deleteItem');
@@ -167,4 +168,5 @@ Route::get('/api/event/conference/{id?}', 'Events@getEventByConferenceID');
 Route::post('/api/event/{confId}', 'Events@store');
 Route::put('/api/event/{id}', 'Events@update');
 Route::post('/api/event/{id}/register', 'Events@register');
+Route::delete('/api/event/{id}/register/{registrationId}', 'Events@deleteRegistration');
 Route::delete('/api/event/{id}', 'Events@destroy');
