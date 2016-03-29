@@ -126,6 +126,7 @@ Route::group(['prefix' => 'api'], function()
 
     // transportation
     Route::group(['prefix' => 'conferences/{confId}/transportation'], function() {
+        Route::get('/{id}', 'TransportationController@getTransport');
         Route::post('/', 'TransportationController@addTransport');
         Route::delete('/{id}', 'TransportationController@deleteTransport');
         Route::patch('{id}', 'TransportationController@patchTransport');

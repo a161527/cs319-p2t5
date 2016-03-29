@@ -289,6 +289,20 @@ class TransportationController extends Controller
     }
 
     /*
+     * GET /api/conferences/{confId}/transportation/{transportId}
+     *
+     */
+    public function getTransport($confId, $transportId)
+    {
+        $transport = Transportation::where('id', $transportId)
+                                   ->where('conferenceID', $confId)
+                                   ->first();
+        if ($transport === null)
+            return response()->json(['message' => 'transportation_not_found'], 404);
+        return response()->json(['message' => 'transportation_returned', 'transportation' => $transport], 200);
+    }
+
+    /*
      * GET /api/conferences/{confId}/transportation/summary/
      * - get transportation summary for a conference
      * 
