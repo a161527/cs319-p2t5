@@ -125,7 +125,6 @@ Route::group(['prefix' => 'api'], function()
         Route::get('/unapproved', 'InventoryController@unapproved');
         Route::get('/approved', 'InventoryController@approved');
         Route::post('/', 'InventoryController@addItem');
-        Route::put('/', 'InventoryController@addItem');
         Route::post('/reserve', 'InventoryController@reserveItem');
 
         Route::patch('/{itemId}', 'InventoryController@editItem');
