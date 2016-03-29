@@ -54,7 +54,8 @@ class InventoryController extends Controller
     {
         $validator = Validator::make($data, [
             '*.id' => 'required|numeric|min:1',
-            '*.quantity' => 'required|numeric|min:0'
+            '*.quantity' => 'required|numeric|min:0',
+            '*.dependentID' => 'required|numeric|min:0'
         ]);
 
         return $validator;
@@ -173,7 +174,6 @@ class InventoryController extends Controller
 
     /*
      * POST api/conferences/{conferenceId}/inventory
-     * PUT api/conferences/{conferenceId}/inventory
      * - takes a list of JSON objects
      * - add a list of items to a conference's inventory
      */
@@ -337,9 +337,19 @@ class InventoryController extends Controller
      * POST /api/userinventory/{id}/approve
      * - approves an item request
      */
-    public function approveRequest($userInventoryId)
+    public function approveRequest($conferenceId, $userInventoryId)
     {
-        $item = UserInventory::where('id', $userInventoryId)->first();
+        if (!Entrust::can(PermissionNames::ConferenceInventoryEdit($conferenceId))) {
+            return response()->json(['message' => 'inventory_list_edit_denied'], 403);
+        }
+
+        $item = UserInventory::with('inventory')->find($userInventoryId);
+        if (!isset($item)) {
+            return response()->json(['message' => 'request_not_found'],404);
+        }
+        if ($item->inventory->conferenceID != $conferenceId) {
+            return response()->json(['message' => 'request_not_found_for_conference'], 404);
+        }
         $item->approved = 1;
         if ($item->save())
             return response()->json(['message' => 'item_approved'], 200);
