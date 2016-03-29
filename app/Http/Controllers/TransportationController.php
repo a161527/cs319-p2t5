@@ -304,7 +304,7 @@ class TransportationController extends Controller
     }
 
     /*
-     * GET /api/conferences/{confId}/transportation/summary/
+     * GET /api/conferences/{confId}/transportationSummary/
      * - get transportation summary for a conference
      * 
      */
