@@ -114,7 +114,6 @@ class PermissionsController extends Controller
 
     private function manageableRoleNamesForUser() {
         $roles = $this->manageableRolesForUser();
-
         return array_map(
             function ($r) { return $r['name']; },
             $roles);
@@ -131,12 +130,11 @@ class PermissionsController extends Controller
 
 
     private function manageableRolesForUser() {
-        $roles = Role::with('perms')->get();
+        $roles = $this->roleResultToList(Role::with('perms')->get());
         if (Entrust::can(PermissionNames::ManageGlobalPermissions())) {
             return $roles;
         }
 
-        $roles = $this->roleResultToList($roles);
 
         //Filter out global permissions
         $roles = array_filter(
