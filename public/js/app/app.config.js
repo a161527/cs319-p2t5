@@ -98,6 +98,13 @@
 					}
 				})
 
+				.state('dashboard.approveAccts.2', {
+					url: '',
+					templateUrl: 'js/auditAccts/auditAccts.view.approve.html',
+					controller: 'viewApprovedAcctsCtrl',
+					
+				})
+
 				/*
 				ASSIGN PERMISSIONS
 				*/

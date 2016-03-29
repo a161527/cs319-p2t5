@@ -1,9 +1,9 @@
 <div class='row'>
 	<div class='col-sm-9'>
 		<h4 ng-show='state1'>Approve Conference Registration</h4>
-		<h4 ng-show='state2'>Registered Users</h4>
+		<h4 ng-show='!state1'>Registered Users</h4>
 	</div>
-	<div class='col-sm-3' ng-show='state2'>
+	<div class='col-sm-3' ng-show='!state1'>
 		<button class='btn btn-info btn-block' 
 			ng-click='back()'>
 			Go to Approve Users
@@ -19,7 +19,7 @@
 <div ng-show='unapprovedList.length === 0 && state1'>
 	No users requiring approval
 </div>
-<div ng-show='unapprovedList.length === 0 && state2'>
+<div ng-show='unapprovedList.length === 0 && !state1'>
 	No users currently approved
 </div>
 <div ng-show='unapprovedList.length > 0'>
