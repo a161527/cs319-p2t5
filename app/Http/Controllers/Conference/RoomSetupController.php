@@ -34,6 +34,19 @@ class RoomSetupController extends Controller
         return Residence::where("conferenceID", $confId)->get();
     }
 
+    public function getResidenceInfo($confId, $resId) {
+        if (!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
+            return response("", 403);
+        }
+
+        $result = Residence::where("conferenceID", $confId)->find($resId);
+        if(!isset($result)) {
+            return response("", 404);
+        }
+
+        return $result;
+    }
+
     public function uploadRoomData($confId) {
         return "NOTIMPLEMENTED";
     }
@@ -124,6 +137,22 @@ class RoomSetupController extends Controller
             }
             return response()->json($responses);
         });
+    }
+
+    public function getRoomSetInfo(Request $req, $confId, $setId) {
+        if(!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
+            return response("", 403);
+        }
+
+        $set = RoomSet::whereHas('residence', function ($q) use ($confId) {
+            $q->where('conferenceID', $confId);
+        })->find($setId);
+
+        if (!isset($set)) {
+            return response("", 404);
+        }
+
+        return $set;
     }
 
     private function validateResidence($req) {
