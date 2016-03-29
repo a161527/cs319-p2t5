@@ -128,6 +128,26 @@ class InventoryController extends Controller
         }
     }
 
+    /* GET api/conferences/{conferenceId}/inventory/approved
+     * - return a list showing the inventory of a conference
+     */
+    public function approved($conferenceId)
+    {
+        // TODO: add permission/role filter
+        $conf = Conference::where('id', '=', $conferenceId)->first();
+        if ($conf === null)
+            return response()->json(['message' => 'conference_not_found'], 404);
+        else
+        {
+            $inventory = UserInventory::where('conferenceID', $conf->id)
+                                    ->where('approved', 1)
+                                    ->with('user')
+                                    ->with('inventory')
+                                    ->get();
+            return response()->json(['message' => 'returned_approved_inventory', 'inventory' => $inventory]);
+        }
+    }
+
     /*
      * POST api/conferences/{conferenceId}/inventory
      * PUT api/conferences/{conferenceId}/inventory
