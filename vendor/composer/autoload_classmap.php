@@ -9,6 +9,7 @@ return array(
     'AccountTableSeeder' => $baseDir . '/database/seeds/AccountTableSeeder.php',
     'AddApprovedColumnToUserInventoryTable' => $baseDir . '/database/migrations/2016_03_26_035557_add_approved_column_to_user_inventory_table.php',
     'AddConferenceidColumnToUserInventory' => $baseDir . '/database/migrations/2016_03_26_045705_add_conferenceid_column_to_user_inventory.php',
+    'AddInfoColumnsToTransportationTable' => $baseDir . '/database/migrations/2016_03_27_084914_add_info_columns_to_transportation_table.php',
     'AddSoftDeletesToUsersTable' => $baseDir . '/database/migrations/2016_03_15_190220_add_soft_deletes_to_users_table.php',
     'AddTimestampsToInventoryTable' => $baseDir . '/database/migrations/2016_03_21_205420_add_timestamps_to_inventory_table.php',
     'ConferenceTableSeeder' => $baseDir . '/database/seeds/ConferenceTableSeeder.php',
