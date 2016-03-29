@@ -28,7 +28,7 @@
 									<b>Total Quantity:</b>
 								</div>
 								<div class='col-sm-4'>
-									{{inv.totalQuantity}} {{inv.units}}
+									{{inv.totalQuantity}}
 								</div>
 							</div>
 							<div class='row'>
@@ -36,7 +36,7 @@
 									<b>Remaining Quantity:</b>
 								</div>
 								<div class='col-sm-4'>
-									{{inv.currentQuantity}} {{inv.units}}
+									{{inv.currentQuantity}}
 								</div>
 							</div>
 							<div class='row'>
@@ -45,6 +45,15 @@
 								</div>
 								<div class='col-sm-4'>
 									{{inv.disposable | yesNo}}
+								</div>
+							</div>
+							<div class='row'>
+								<div class='col-md-12'>
+									<button ng-show='canEdit' 
+											class='btn btn-primary pull-right btn-block'
+											ng-click='showWidget("editInventory", {iid: inv.id})'>
+											<span class='glyphicon glyphicon-pencil'></span><br> Edit Inventory
+									</button>
 								</div>
 							</div>
 						</div>

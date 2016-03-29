@@ -2,11 +2,23 @@
 	'use strict'
 
 	angular.module('createInventory')
-		.controller('createInventoryCtrl', function($scope, $state, $stateParams, ajax, errorCodes, conferenceInfo) {
+		.controller('createInventoryCtrl', function($scope, $state, $stateParams, ajax, errorCodes, conferenceInfo, inventoryData) {
 
 			$scope.inventory = {'1':{}} 
 			$scope.showError = false
 			$scope.conferenceName = conferenceInfo.data.name
+
+			if (inventoryData[0]) {
+				$scope.inv = inventoryData[0]
+				$scope.inventory['1'] = inventoryData[0]
+				$scope.editMode = true
+
+			} else {
+
+				$scope.editMode = false
+
+			}
+			console.log($scope.inventory)
 
 			$scope.createInventory = function(form) {
 				$scope.showError = false
@@ -18,23 +30,37 @@
 						var inv = {}
 						inv.itemName = inventory.itemName
 						inv.totalQuantity = inventory.quantity
-						inv.units = inventory.units
 						inv.disposable = inventory.disposable || false
 						inv.conferenceID = $stateParams.cid
 
 						inventoryInfo.push(inv)
 					})
 
-					ajax.serviceCall('Creating inventory...', 'post', 'api/conferences/' + $stateParams.cid + '/inventory', inventoryInfo).then(function(resData) {
+					if ($scope.editMode) {
+						ajax.serviceCall('Updating inventory...', 'patch', 'api/conferences/' + $stateParams.cid + '/inventory/' + $stateParams.iid, inventoryInfo[0]).then(function(resData) {
 
-						$state.go('dashboard.conferences.manage.viewInventory', {'cid': $stateParams.cid}, {reload: true})
+							$state.go('dashboard.conferences.manage.viewInventory', {'cid': $stateParams.cid}, {reload: true})
 
-					}, function(resData) {
+						}, function(resData) {
 
-						$scope.showError = true
-						$scope.errorMessage = errorCodes[resData.data.message]
+							$scope.showError = true
+							$scope.errorMessage = errorCodes[resData.data.message]
 
-					})
+						})
+					} else {
+						ajax.serviceCall('Creating inventory...', 'post', 'api/conferences/' + $stateParams.cid + '/inventory', inventoryInfo).then(function(resData) {
+
+							$state.go('dashboard.conferences.manage.viewInventory', {'cid': $stateParams.cid}, {reload: true})
+
+						}, function(resData) {
+
+							$scope.showError = true
+							$scope.errorMessage = errorCodes[resData.data.message]
+
+						})
+					}
+
+						
 				} else {
 					setFormDirty(form)
 				}
@@ -46,7 +72,7 @@
 			}
 
 			$scope.cancel = function() {
-				$state.go('dashboard.conferences.manage', {'cid': $stateParams.cid}, {reload: true})
+				$state.go('dashboard.conferences.manage.viewInventory', {'cid': $stateParams.cid}, {reload: true})
 			}
 
 			$scope.addInventory = function() {

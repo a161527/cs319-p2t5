@@ -1,7 +1,10 @@
 <div class='container'>
     <div class='row'>
-        <div class='col-sm-9'>
+        <div class='col-sm-9' ng-show='!editMode'>
             <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Create Inventory</h2>
+        </div>
+        <div class='col-sm-9' ng-show='editMode'>
+            <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> {{inventory['1'].itemName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Edit</h2>
         </div>
     </div>
     <br>
@@ -29,7 +32,7 @@
                                     <div class='form-group' ng-class='{"has-error": !inventoryForm.quantity.$valid && inventoryForm.quantity.$dirty}'>
                                         <label>Quantity</label>
 
-                                        <input type='text' ng-model-options='{updateOn: "blur"}' ng-model='inventory[idx].quantity' class='form-control' 
+                                        <input type='text' ng-model-options='{updateOn: "blur"}' ng-model='inventory[idx].totalQuantity' class='form-control' 
                                         	   ng-pattern='/^\d+$/'
                                                name='quantity' required>
 
@@ -42,10 +45,6 @@
                                         </error-message>
                                     </div>
                                 </div>
-								<div class='col-sm-6'>
-									<label for='units{{idx}}'>Units (optional)</label>
-									<input type='text' class='form-control' ng-model='inventory[idx].units' id='units{{idx}}' name='units{{idx}}'></input>
-								</div>
 							</div>
 
 							<div class='row'>
@@ -58,7 +57,7 @@
 					</div>
 				</div>
 		
-				<button class='btn btn-success btn-block' ng-click='addInventory()'><span class="glyphicon glyphicon-plus"></span> Add Another Item</button>
+				<button class='btn btn-success btn-block' ng-click='addInventory()' ng-show='!editMode'><span class="glyphicon glyphicon-plus"></span> Add Another Item</button>
 				<br>
 				<div class='row'>
 					<div class='col-xs-6'>

@@ -339,15 +339,6 @@
 				})
 
 				/*
-				CREATE INVENTORY
-				*/
-				.state('dashboard.conferences.manage.createInventory', {
-					url: '/inventory/create',
-					templateUrl: 'js/createInventory/createInventory.view.html',
-					controller: 'createInventoryCtrl'
-				})
-
-				/*
 				CREATE RESIDENCE
 				*/
 				.state('dashboard.conferences.manage.createResidence', {
@@ -404,6 +395,22 @@
 					url: '',
 					templateUrl: 'js/createRoomSet/createRoomSet.view.reviewInfo.html',
 					controller: 'createRoomSetCtrl'
+				})
+
+				/*
+				CREATE INVENTORY
+				*/
+				.state('dashboard.conferences.manage.createInventory', {
+					url: '/inventory/create',
+					templateUrl: 'js/createInventory/createInventory.view.html',
+					controller: 'createInventoryCtrl',
+					resolve: {
+						inventoryData: function(inventoryData, $q, $stateParams) {
+							return $q.all([
+								inventoryData.refresh($stateParams.cid, $stateParams.iid)
+							])
+						}
+					}
 				})
 
 				/*
@@ -626,6 +633,22 @@
 					url: '',
 					templateUrl: 'js/createRoomSet/createRoomSet.view.reviewInfo.html',
 					controller: 'createRoomSetCtrl'
+				})
+
+				/*
+				EDIT INVENTORY
+				*/
+				.state('dashboard.conferences.manage.editInventory', {
+					url: '/inventory/:iid/edit',
+					templateUrl: 'js/createInventory/createInventory.view.html',
+					controller: 'createInventoryCtrl',
+					resolve: {
+						inventoryData: function(inventoryData, $q, $stateParams) {
+							return $q.all([
+								inventoryData.refresh($stateParams.cid, $stateParams.iid)
+							])
+						}
+					}
 				})
 
 				/*
