@@ -135,6 +135,9 @@
 					resolve: {
 						dependents: function(getDependentsService) {
 							return getDependentsService.getApproved()
+						},
+						registeredDependents: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '?includeRegistration=1')
 						}
 					}
 				})
@@ -194,6 +197,9 @@
 						},
 						inventory: function($stateParams, $http) {
 							return $http.get('api/conferences/' + $stateParams.cid + '/inventory')
+						},
+						numOfDependents: function(getDependentsService) {
+							return getDependentsService.getNumberOfApproved()
 						}
 
 					}
@@ -213,6 +219,20 @@
 						},
 						dependents: function($http, loginStorage) {
 							return $http.get('api/accounts/' + loginStorage.getId() + '/dependents')
+						},
+						registered: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '?includeRegistration=1')
+						}
+					}
+				})
+
+				.state('dashboard.conferences.manage.approve-inventory', {
+					url: '/approveInventory',
+					templateUrl: 'js/inventory/inventory.view.approve.html',
+					controller: 'approveInventoryCtrl',
+					resolve: {
+						unapprovedInventory: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/inventory/unapproved')
 						}
 					}
 				})

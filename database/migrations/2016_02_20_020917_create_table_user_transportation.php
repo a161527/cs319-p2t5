@@ -15,7 +15,7 @@ class CreateTableUserTransportation extends Migration
         Schema::create('user_transportation', function (Blueprint $table) {
           $table->increments('id');
           $table->integer('userconferenceID')->unsigned()->unique();
-          $table->integer('flightID')->unsigned();
+          // $table->integer('flightID')->unsigned();
           $table->integer('transportationID')->unsigned();
           // One-to-One
           $table->foreign('userconferenceID')
@@ -23,10 +23,10 @@ class CreateTableUserTransportation extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
           // Many-to-One
-          $table->foreign('flightID')
-                ->references('id')->on('flights')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+          // $table->foreign('flightID')
+          //       ->references('id')->on('flights')
+          //       ->onDelete('cascade')
+          //       ->onUpdate('cascade');
           // Many-to-One
           $table->foreign('transportationID')
                 ->references('id')->on('transportation')
