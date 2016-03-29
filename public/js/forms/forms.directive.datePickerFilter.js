@@ -36,7 +36,11 @@
 				link: function(scope, elem, attrs) {
 
 					scope.$watch('filterVal', function(value) {
-						scope.model = dataFormat.dateFormat(value)
+						if (value) {
+							scope.model = dataFormat.dateFormat(value)
+						} else {
+							scope.model = ''
+						}
 					}, true);
 
 					scope.calendar = {
