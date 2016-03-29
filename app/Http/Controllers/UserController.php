@@ -12,14 +12,13 @@ use Validator;
 use DB;
 use Entrust;
 use App\Utility\PermissionNames;
+use Auth;
 
 class UserController extends Controller
 {
      public function __construct()
      {
         $this->middleware('jwt.auth');
-        // provides an authorization header with each response
-        // $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token']]);
      }
 
     /*
@@ -199,7 +198,10 @@ class UserController extends Controller
      */
     public function approvedDependents($accountID)
     {
-        // TODO: add permission/role filter
+        if (!Entrust::can(PermissionNames::ApproveUserRegistration()) && Auth::user()->id != $accountID) {
+            return response()->json(["message" => "no_user_approval_access"]);
+        }
+
         $account = Account::where('id', '=', $accountID)->first();
         if ($account === null)
             return response()->json(['message' => 'account_not_found']);
@@ -210,5 +212,33 @@ class UserController extends Controller
                               ->get();
             return response()->json(['message' => 'returned_approved_dependents', 'dependents' => $dependents]);
         }
+    }
+
+    /*
+     * GET api/dependents/approved
+     * - returns all approved dependents
+     */
+    public function allApproved()
+    {
+        if (!Entrust::can(PermissionNames::ApproveUserRegistration()) && Auth::user()->id != $accountID) {
+            return response()->json(["message" => "no_user_approval_access"]);
+        }
+
+        $dependents = User::where('approved', 1)->get();
+        return response()->json(['message' => 'returned_approved_dependents', 'dependents' => $dependents]);
+    }
+
+    /*
+     * GET api/dependents/unapproved
+     * - returns all unapproved dependents
+     */
+    public function allUnapproved()
+    {
+        if (!Entrust::can(PermissionNames::ApproveUserRegistration()) && Auth::user()->id != $accountID) {
+            return response()->json(["message" => "no_user_approval_access"]);
+        }
+
+        $dependents = User::where('approved', 0)->get();
+        return response()->json(['message' => 'returned_unapproved_dependents', 'dependents' => $dependents]);
     }
 }
