@@ -130,6 +130,7 @@ Route::group(['prefix' => 'api'], function()
 
         Route::patch('/{itemId}', 'InventoryController@editItem');
         Route::delete('/{itemId}', 'InventoryController@deleteItem');
+        Route::get('/{itemId}',  'InventoryController@getItem');
     });
 
     // user_inventory
