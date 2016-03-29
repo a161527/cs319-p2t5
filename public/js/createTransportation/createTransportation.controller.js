@@ -4,14 +4,12 @@
 	angular.module('createTransportation')
 		.controller('createTransportationCtrl', function($scope, $state, $stateParams, ajax, errorCodes, conferenceInfo, transportationData) {
 
-			$scope.transportation = {'1':{}} 
+			$scope.transportationInfo = {'1':{}} 
 			$scope.showError = false
 			$scope.conferenceName = conferenceInfo.data.name
 
-			$scope.transportationInfo = transportationData[0]
-
-			if ($scope.transportationInfo) {
-
+			if (transportationData[0]) {
+				$scope.transportationInfo['1'] = transportationData[0]
 				$scope.editMode = true
 
 			} else {
@@ -26,7 +24,7 @@
 				if (form.$valid) {
 					var transportationInfo = []
 
-					angular.forEach($scope.transportation, function(transportation) {
+					angular.forEach($scope.transportationInfo, function(transportation) {
 						var trans = {}
 						trans.name = transportation.name
 						trans.company = transportation.company
@@ -37,16 +35,31 @@
 						transportationInfo.push(trans)
 					})
 
-					ajax.serviceCall('Creating transportation...', 'post', 'api/conferences/' + $stateParams.cid + '/transportation', transportationInfo).then(function(resData) {
+					if ($scope.editMode) {
+						ajax.serviceCall('Updating transportation...', 'patch', 'api/conferences/' + $stateParams.cid + '/transportation/' + $stateParams.tid, transportationInfo[0]).then(function(resData) {
 
-						$state.go('dashboard.conferences.manage.viewTransportation', {'cid': $stateParams.cid}, {reload: true})
+							$state.go('dashboard.conferences.manage.viewTransportation', {'cid': $stateParams.cid}, {reload: true})
 
-					}, function(resData) {
+						}, function(resData) {
 
-						$scope.showError = true
-						$scope.errorMessage = errorCodes[resData.data.message]
+							$scope.showError = true
+							$scope.errorMessage = errorCodes[resData.data.message]
 
-					})
+						})
+					} else {
+						ajax.serviceCall('Creating transportation...', 'post', 'api/conferences/' + $stateParams.cid + '/transportation', transportationInfo).then(function(resData) {
+
+							$state.go('dashboard.conferences.manage.viewTransportation', {'cid': $stateParams.cid}, {reload: true})
+
+						}, function(resData) {
+
+							$scope.showError = true
+							$scope.errorMessage = errorCodes[resData.data.message]
+
+						})
+					}
+
+						
 				} else {
 					setFormDirty(form)
 				}
@@ -63,16 +76,16 @@
 
 			$scope.addTransportation = function() {
 				var transportationIndex = 1
-				while($scope.transportation.hasOwnProperty(transportationIndex)) {
+				while($scope.transportationInfo.hasOwnProperty(transportationIndex)) {
 					transportationIndex += 1
 				}
-				$scope.transportation[transportationIndex] = {}
+				$scope.transportationInfo[transportationIndex] = {}
 			}
 
 			$scope.deleteTransportation = function(index) {
 				if (index != 1) {
-					if ($scope.transportation.hasOwnProperty(index)) {
-						delete $scope.transportation[index]
+					if ($scope.transportationInfo.hasOwnProperty(index)) {
+						delete $scope.transportationInfo[index]
 					}
 				}
 			}

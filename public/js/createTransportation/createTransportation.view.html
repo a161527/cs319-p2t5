@@ -4,7 +4,7 @@
             <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Create Transportation</h2>
         </div>
         <div class='col-sm-9' ng-show='editMode'>
-            <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> {{transportationInfo.name}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Edit</h2>
+            <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> {{transportationInfo['1'].name}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Edit</h2>
         </div>
     </div>
     <br>
@@ -12,9 +12,9 @@
         <div class='col-sm-offset-3 col-sm-6'>
         	<h4>Transportation Information</h4>
 			<form name='transportationForm' novalidate>
-				<div ng-repeat='(idx, value) in transportation'>
-					<div class="panel panel-default" id='transportation{{idx}}'>
-						<div class="panel-body" ng-model='transportation[idx]'>
+				<div ng-repeat='(idx, value) in transportationInfo'>
+					<div class="panel panel-default" id='transportationInfo{{idx}}'>
+						<div class="panel-body" ng-model='transportationInfo[idx]'>
 							<div class='row' ng-show='showRemoveButton(idx)'>
 								<div class='col-sm-offset-11 col-sm-1'>
 									<div class='glyphicon glyphicon-remove hand-cursor remove-button' name='removeButton{{idx}}' ng-click='deleteTransportation(idx)'></div>
@@ -23,14 +23,14 @@
 
 							<div class='row'>
 								<div class='col-sm-12'>
-									<input-with-validation model='transportation[idx].name' validation='transportationForm' identifier='name{{idx}}' inp-type='text'>Name</input-with-validation>
+									<input-with-validation model='transportationInfo[idx].name' validation='transportationForm' identifier='name{{idx}}' inp-type='text'>Name</input-with-validation>
 								</div>
 							</div>
 
 							<div class='row'>
 								<div class='col-sm-12'>
 									<label for='company{{idx}}'>Company (optional)</label>
-									<input type='text' class='form-control' ng-model='transportation[idx].company' id='company{{idx}}' name='units{{idx}}'></input>
+									<input type='text' class='form-control' ng-model='transportationInfo[idx].company' id='company{{idx}}' name='units{{idx}}'></input>
 								</div>
 							</div>
 							<br>
@@ -40,7 +40,7 @@
                                     <div class='form-group' ng-class='{"has-error": !transportationForm.phone.$valid && transportationForm.phone.$dirty}'>
                                         <label>Phone Number</label>
 
-                                        <input type='text' ng-model-options='{updateOn: "blur"}' ng-model='transportation[idx].phone' class='form-control' 
+                                        <input type='text' ng-model-options='{updateOn: "blur"}' ng-model='transportationInfo[idx].phone' class='form-control' 
                                         	   ng-pattern='/^\d+$/'
                                                name='phone' required>
 
@@ -57,7 +57,7 @@
                                     <div class='form-group' ng-class='{"has-error": !transportationForm.capacity.$valid && transportationForm.capacity.$dirty}'>
                                         <label>Capacity</label>
 
-                                        <input type='text' ng-model-options='{updateOn: "blur"}' ng-model='transportation[idx].capacity' class='form-control' 
+                                        <input type='text' ng-model-options='{updateOn: "blur"}' ng-model='transportationInfo[idx].capacity' class='form-control' 
                                         	   ng-pattern='/^\d+$/'
                                                name='capacity' required>
 
@@ -76,7 +76,7 @@
 					</div>
 				</div>
 		
-				<button class='btn btn-success btn-block' ng-click='addTransportation()'><span class="glyphicon glyphicon-plus"></span> Add Another Item</button>
+				<button class='btn btn-success btn-block' ng-click='addTransportation()' ng-show='!editMode'><span class="glyphicon glyphicon-plus"></span> Add Another Item</button>
 				<br>
 				<div class='row'>
 					<div class='col-xs-6'>

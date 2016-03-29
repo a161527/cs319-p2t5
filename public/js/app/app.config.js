@@ -551,9 +551,8 @@
 					controller: 'createTransportationCtrl',
 					resolve: {
 						transportationData: function(transportationData, $q, $stateParams) {
-							console.log('hello')
 							return $q.all([
-								transportationData.refresh($stateParams.tid)
+								transportationData.refresh($stateParams.cid, $stateParams.tid)
 							])
 						}
 					}

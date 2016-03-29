@@ -36,7 +36,7 @@
 
 						ajax.serviceCall('Loading...', 'get', _route).then(function(resData) {
 
-							_transportationData = resData.data
+							_transportationData = resData.data.transportation
 							resolve(_transportationData)
 
 						}, function(resData) {
