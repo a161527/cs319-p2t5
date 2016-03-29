@@ -29,7 +29,7 @@
 
 							<div class='row'>
 								<div class='col-sm-12'>
-									<input-with-validation model='residenceInfo[idx].address' validation='residenceForm' identifier='address{{idx}}' inp-type='text'>Residence Address</input-with-validation>
+									<input-with-validation model='residenceInfo[idx].location' validation='residenceForm' identifier='address{{idx}}' inp-type='text'>Residence Address</input-with-validation>
 								</div>
 							</div>
 
@@ -37,7 +37,7 @@
 					</div>
 				</div>
 		
-				<button class='btn btn-success btn-block' ng-click='addResidence()'><span class="glyphicon glyphicon-plus" ng-show='!editMode'></span> Add Another Residence</button>
+				<button class='btn btn-success btn-block' ng-click='addResidence()' ng-show='!editMode'><span class="glyphicon glyphicon-plus"></span> Add Another Residence</button>
 				<br>
 				<div class='row'>
 					<div class='col-xs-6'>

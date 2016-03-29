@@ -94,7 +94,7 @@ class RoomSetupController extends Controller
                     $res->name = $value;
                     break;
                 case "location":
-                    $res->name = $value;
+                    $res->location = $value;
             }
         }
 

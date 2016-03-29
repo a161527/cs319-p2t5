@@ -28,14 +28,14 @@
 					angular.forEach($scope.residenceInfo, function(residence) {
 						var res = {}
 						res.name = residence.name
-						res.location = residence.address
+						res.location = residence.location
 						res.conferenceID = $stateParams.cid
 
 						residenceInfo.push(res)
 					})
 
 					if ($scope.editMode) {
-						ajax.serviceCall('Updating residenceInfo...', 'post', 'api/conferences/' + $stateParams.cid + '/residences/' + $stateParams.rid, residenceInfo[0]).then(function(resData) {
+						ajax.serviceCall('Updating residence...', 'patch', 'api/conferences/' + $stateParams.cid + '/residences/' + $stateParams.rid, residenceInfo[0]).then(function(resData) {
 
 							$state.go('dashboard.conferences.manage.viewResidence', {'cid': $stateParams.cid}, {reload: true})
 
