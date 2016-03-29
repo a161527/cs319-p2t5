@@ -106,33 +106,6 @@
 					}
 				})
 
-
-				/*
-				CONFERENCE LIST
-				*/
-				.state('dashboard.conferences', {
-					url: '/conferences',
-					abstract: true,
-					template: '<div ui-view></div>'
-				})
-
-				.state('dashboard.conferences.list', {
-					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
-					controller: 'conferenceListCtrl',
-					url: '/list',
-					resolve: {
-						conferenceData: function(conferenceList, $q, loginStorage) {
-							return $q.all([
-								conferenceList.refresh(), 
-								loginStorage.getPermissions()
-							])
-						},
-						approvedDependents: function(getDependentsService) {
-							return getDependentsService.getNumberOfApproved()
-						}
-					}
-				}) 
-
 				/*
 				CONFERENCE MANAGEMENT
 				*/
@@ -150,29 +123,6 @@
 						}
 					}
 				})
-
-				/*
-				CONFERENCE CREATION
-				*/
-				.state('dashboard.conferences.create', {
-					url: '/create',
-					abstract: true,
-					templateUrl: 'js/createConference/createConference.view.html',
-					controller: 'createConferenceCtrl'
-				})
-
-				.state('dashboard.conferences.create.1', {
-					url: '',
-					templateUrl: 'js/createConference/createConference.view.conferenceInfo.html',
-					controller: 'createConferenceCtrl'
-				})
-
-				.state('dashboard.conferences.create.2', {
-					url: '',
-					templateUrl: 'js/createConference/createConference.view.reviewInfo.html',
-					controller: 'createConferenceCtrl'
-				})
-
 
 				/*
 				CONFERENCE REGISTRATION
@@ -317,28 +267,6 @@
 				})
 
 				/*
-				EVENT LIST
-				*/
-				.state('dashboard.events', {
-					url: '/:cid/events',
-					templateUrl: 'js/eventView/eventView.view.eventList.html',
-					controller: 'eventListCtrl',
-					resolve: {
-						eventData: function(eventList, $q, $stateParams) {
-							return $q.all([
-								eventList.refresh($stateParams.cid),
-								eventList.getPermissions($stateParams.cid),
-								eventList.getConferenceRegistration($stateParams.cid),
-								eventList.getEventInfo($stateParams.cid)
-							])
-						},
-						conferenceName: function(eventList, $stateParams) {
-							return eventList.getConferenceName($stateParams.cid)
-						}
-					}
-				})
-
-				/*
 				EVENT REGISTRATION
 				*/
 				.state('dashboard.events.register', {
@@ -354,6 +282,22 @@
 						},
 						eventData: function($http, $stateParams) {
 							return $http.get('api/event/' + $stateParams.eid + '?includeRegistration=1')
+						}
+					}
+				})
+
+				/*
+				CREATE CONFERENCE
+				*/
+				.state('dashboard.conferences.create', {
+					url: '/create',
+					templateUrl: 'js/createConference/createConference.view.html',
+					controller: 'createConferenceCtrl',
+					resolve: {
+						conferenceData: function(conferenceData, $q, $stateParams) {
+							return $q.all([
+								conferenceData.refresh($stateParams.cid)
+							])
 						}
 					}
 				})
@@ -438,6 +382,54 @@
 				})
 
 				/*
+				CONFERENCE LIST
+				*/
+				.state('dashboard.conferences', {
+					url: '/conferences',
+					abstract: true,
+					template: '<div ui-view></div>'
+				})
+
+				.state('dashboard.conferences.list', {
+					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
+					controller: 'conferenceListCtrl',
+					url: '/list',
+					resolve: {
+						conferenceData: function(conferenceList, $q, loginStorage) {
+							return $q.all([
+								conferenceList.refresh(), 
+								loginStorage.getPermissions()
+							])
+						},
+						approvedDependents: function(getDependentsService) {
+							return getDependentsService.getNumberOfApproved()
+						}
+					}
+				}) 
+
+				/*
+				EVENT LIST
+				*/
+				.state('dashboard.events', {
+					url: '/:cid/events',
+					templateUrl: 'js/eventView/eventView.view.eventList.html',
+					controller: 'eventListCtrl',
+					resolve: {
+						eventData: function(eventList, $q, $stateParams) {
+							return $q.all([
+								eventList.refresh($stateParams.cid),
+								eventList.getPermissions($stateParams.cid),
+								eventList.getConferenceRegistration($stateParams.cid),
+								eventList.getEventInfo($stateParams.cid)
+							])
+						},
+						conferenceName: function(eventList, $stateParams) {
+							return eventList.getConferenceName($stateParams.cid)
+						}
+					}
+				})
+
+				/*
 				RESIDENCE LIST
 				*/
 				.state('dashboard.conferences.manage.viewResidence', {
@@ -499,6 +491,22 @@
 						transportationData: function(transportationList, $q, $stateParams) {
 							return $q.all([
 								transportationList.refresh($stateParams.cid)
+							])
+						}
+					}
+				})
+
+				/*
+				EDIT CONFERENCE
+				*/
+				.state('dashboard.conferences.manage.editConference', {
+					url: '/edit',
+					templateUrl: 'js/createConference/createConference.view.html',
+					controller: 'createConferenceCtrl',
+					resolve: {
+						conferenceData: function(conferenceData, $q, $stateParams) {
+							return $q.all([
+								conferenceData.refresh($stateParams.cid)
 							])
 						}
 					}
