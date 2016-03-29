@@ -11,6 +11,8 @@ use App\UserInventory;
 use App\Conference;
 use Validator;
 use DB;
+use Entrust;
+use App\Utility\PermissionNames;
 
 class InventoryController extends Controller
 {
@@ -105,6 +107,14 @@ class InventoryController extends Controller
             $inventory = Inventory::where('conferenceID', '=', $conf->id)->get();
             return response()->json(['message' => 'returned_inventory', 'inventory' => $inventory]);
         }
+    }
+
+    public function getItem($conferenceId, $itemId) {
+        $invItem = Inventory::where('conferenceID', $conferenceId)->find($itemId);
+        if (!isset($invItem)) {
+            return response("",404);
+        }
+        return $invItem;
     }
 
     /*
