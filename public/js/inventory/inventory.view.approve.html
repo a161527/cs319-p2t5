@@ -1,5 +1,23 @@
+<div class='row'>
+	<div class='col-sm-9'>
+		<h4 ng-show='state1'>Approve Inventory Requests</h4>
+		<h4 ng-show='!state1'>Approved Inventory Requests</h4>
+	</div>
+	<div class='col-sm-3' ng-show='!state1'>
+		<button class='btn btn-info btn-block' 
+			ng-click='back()'>
+			Go to Approve Inventory
+		</button>
+	</div>
+	<div class='col-sm-3' ng-show='state1'>
+		<button class='btn btn-info btn-block' 
+			ng-click='viewApproved()'>
+			View Approved Inventory
+		</button>
+	</div>
+</div>
 <div ng-show='inventory.length === 0'>
-	No inventory requests requiring approval
+	No inventory requests
 </div>
 <div ng-show='inventory.length > 0'>
 	<div class='form-group has-feedback'>
@@ -79,7 +97,8 @@
 				<div class='col-sm-2'>
 
 					<button class='btn btn-success pull-right btn-block'
-						ng-click='approve(inv.id)'>
+						ng-click='approve(inv.id)'
+						ng-show='state1'>
 						<span class='glyphicon glyphicon-ok'></span><br> Approve
 					</button>
 
