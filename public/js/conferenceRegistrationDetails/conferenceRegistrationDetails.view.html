@@ -20,6 +20,7 @@
 						{{reg.needsTransportation | yesNo}}
 					</div>
 					<div ng-show='reg.flight'>
+						<h1>Flights:</h1>
 						<div>
 							<b>Airline:</b>
 							<br>
@@ -33,7 +34,7 @@
 						<div>
 							<b>Flight Number:</b>
 							<br>
-							{{reg.flight.number}}
+							{{reg.flight.flightNumber}}
 						</div>
 						<div>
 							<b>Arrival Date:</b>
@@ -46,13 +47,83 @@
 							{{reg.flight.arrivalTime}}
 						</div>
 					</div>
-<!-- 					<div ng-show='conf[reg.userID].room.length > 0'>
+					<div ng-show='conf[reg.userID].room.length > 0'>
 						<div>
-							<b>Room:</b>
-							<br>
-							{{conf[reg.userID].room}}
+							<h1>Accomodations:</h1>
 						</div>
-					</div> -->
+						<div>
+							<b>Residence:</b>
+							<br>
+							{{conf[reg.userID].room[0].room_set.residence.name}}
+						</div>
+						<div>
+							<b>Location:</b>
+							<br>
+							{{conf[reg.userID].room[0].room_set.residence.location}}
+						</div>
+						<div>
+							<b>Room Set Name:</b>
+							<br>
+							{{conf[reg.userID].room[0].room_set.name}}
+						</div>
+						<div>
+							<b>Room Name:</b>
+							<br>
+							{{conf[reg.userID].room[0].roomName}}
+						</div>
+					</div>
+
+					<div ng-show='conf[reg.userID].userInventory.length > 0'>
+						<div>
+							<h1>Inventory Requests:</h1>
+						</div>
+						<div ng-repeat='i in conf[reg.userID].userInventory'>
+							<div>
+								<b>Approved:</b>
+								<br>
+								{{i.approved | yesNo}}
+							</div>
+							<div>
+								<b>Name:</b>
+								<br>
+								{{i.inventory.itemName}}
+							</div>
+							<div>
+								<b>Unit Count:</b>
+								<br>
+								{{i.unitCount}}
+							</div>
+							<div>
+								<b>Unit Count:</b>
+								<br>
+								{{i.inventory.disposable | yesNo}}
+							</div>
+						</div>
+					</div>
+
+					<div ng-show='conf[reg.userID].userTransportation.length > 0'>
+						<div>
+							<h1>Transportation Assignments:</h1>
+						</div>
+						<div ng-repeat='t in conf[reg.userID].userTransportation'>
+							<div>
+								<b>Name:</b>
+								<br>
+								{{t.transportation.name}}
+							</div>
+							<div>
+								<b>Company:</b>
+								<br>
+								{{t.transportation.company}}
+							</div>
+							<div>
+								<b>Phone Number:</b>
+								<br>
+								{{t.transportation.phone}}
+							</div>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>
