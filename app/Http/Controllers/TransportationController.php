@@ -352,7 +352,9 @@ class TransportationController extends Controller
         if (!($this->isValidConference($confId)))
             return response()->json(['message' => 'conference_not_found'], 404);
 
-        $userConfs = UserConference::where('needsTransportation', '=', true)->where('conferenceID', $confId)
+        $userConfs = UserConference::where('needsTransportation', '=', true)
+                                   ->where('conferenceID', $confId)
+                                   ->where('approved', 1)
                                    ->with(array('user'=>function($q){
                                         $q->select('id','firstName','lastName','accountID','approved');
                                    }))
