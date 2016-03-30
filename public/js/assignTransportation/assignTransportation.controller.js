@@ -6,22 +6,22 @@
 
 			$scope.flights = []
 
-			console.log(users)
-
 			angular.forEach(users.data.flights, function(flight) {
 				angular.forEach(flight.accounts, function(account) {
 
 					angular.forEach(account.users, function(user) {
 
-						user.fullName = user.firstName + ' ' + user.lastName
-						user.uid = user.id
-						user.airline = flight.airline
-						user.airport = flight.airport
-						user.arrivalDate = flight.arrivalDate
-						user.arrivalTime = flight.arrivalTime
-						user.flightNumber = flight.flightNumber
+						if (!user.hasTransport) {
+							user.fullName = user.firstName + ' ' + user.lastName
+							user.uid = user.id
+							user.airline = flight.airline
+							user.airport = flight.airport
+							user.arrivalDate = flight.arrivalDate
+							user.arrivalTime = flight.arrivalTime
+							user.flightNumber = flight.flightNumber
 
-						$scope.flights.push(user)
+							$scope.flights.push(user)
+						}
 
 					})
 
