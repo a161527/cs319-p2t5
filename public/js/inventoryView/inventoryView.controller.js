@@ -25,6 +25,10 @@
 				confirmDeleteModal.open('Inventory', inventory.itemName, 'api/conferences/' + $stateParams.cid + '/inventory/' + inventory.id)
 			}
 
+			$scope.goToConference = function () {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
+			}
+
 		})
 
 })()

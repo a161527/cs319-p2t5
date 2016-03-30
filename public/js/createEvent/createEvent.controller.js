@@ -78,6 +78,14 @@
 				$state.go('dashboard.events', {'cid': $stateParams.cid}, {reload: true})	
 			}
 
+			$scope.goToConference = function () {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
+			}
+
+			$scope.goToEventList = function () {
+				$state.go('dashboard.events', {cid: $stateParams.cid})
+			}
+
 			var setFormDirty = function(form) {
 				angular.forEach(form.$error.required, function(field) {
 					field.$setDirty()

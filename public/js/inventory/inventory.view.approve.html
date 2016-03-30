@@ -1,8 +1,9 @@
 <div class='row'>
 	<div class='col-sm-9'>
-		<h4 ng-show='state1'>Approve Inventory Requests</h4>
-		<h4 ng-show='!state1'>Approved Inventory Requests</h4>
+		<h2 ng-show='state1'><a ng-click='goToConference()'>{{conferenceName}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> Approve Inventory Requests</h2>
+		<h2 ng-show='!state1'><a ng-click='goToConference()'>{{conferenceName}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> Approved Inventory Requests</h2>
 	</div>
+	<br>
 	<div class='col-sm-3' ng-show='!state1'>
 		<button class='btn btn-info btn-block' 
 			ng-click='back()'>

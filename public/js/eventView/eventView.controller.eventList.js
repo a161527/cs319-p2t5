@@ -29,6 +29,14 @@
 				$state.go(state, params, {reload: true})
 			}
 
+			$scope.deleteEvent = function(event) {
+				confirmDeleteModal.open('Event', event.eventName, 'api/event/' + event.id)
+			}
+
+			$scope.goToConference = function () {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
+			}
+
 			var formatEvents = function() {
 				
 				for (var i = $scope.events.length - 1; i >= 0; i--) {
@@ -70,10 +78,6 @@
 				else {
 					$scope.isEventRegistered = false
 				}
-			}
-
-			$scope.deleteEvent = function(event) {
-				confirmDeleteModal.open('Event', event.eventName, 'api/event/' + event.id)
 			}
 
 			getApprovedUsers()

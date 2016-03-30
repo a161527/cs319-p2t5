@@ -95,6 +95,14 @@
 				return index > 1
 			}
 
+			$scope.goToConference = function () {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
+			}
+
+			$scope.goToInventoryList = function () {
+				$state.go('dashboard.conferences.manage.viewInventory', {cid: $stateParams.cid})
+			}
+
 			var setFormDirty = function(form) {
 				angular.forEach(form.$error.required, function(field) {
 					field.$setDirty()

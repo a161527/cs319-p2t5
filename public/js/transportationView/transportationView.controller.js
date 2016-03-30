@@ -25,6 +25,10 @@
 				confirmDeleteModal.open('Transportation', transportation.name, 'api/conferences/' + $stateParams.cid + '/transportation/' + transportation.id)
 			}
 
+			$scope.goToConference = function () {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
+			}
+
 		})
 
 })()

@@ -1,12 +1,12 @@
 <div class='container'>
     <div class='row' ng-show='editMode'>
         <div class='col-sm-9'>
-            <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> {{eventInfo.eventName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Edit</h2>
+            <h2><a ng-click='goToConference()'>{{conferenceName}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> <a ng-click='goToEventList()'>{{eventInfo.eventName}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> Edit</h2>
         </div>
     </div>
     <div class='row' ng-show='!editMode'>
         <div class='col-sm-9'>
-            <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Create Event</h2>
+            <h2><a ng-click='goToConference()'>{{conferenceName}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> Create Event</h2>
         </div>
     </div>
     <br>

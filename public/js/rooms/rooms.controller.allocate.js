@@ -2,13 +2,15 @@
 	'use strict'
 
 	angular.module('rooms')
-		.controller('AllocateRoomsCtrl', function($scope, $state, $http, $stateParams, roomDependents, dataFormat) {
+		.controller('AllocateRoomsCtrl', function($scope, $state, $http, $stateParams, roomDependents, dataFormat, conferenceData) {
 
 			$scope.noUsers = (roomDependents.length === 0)
 			$scope.dependents = {}
 			$scope.noSelection = false
 
 			$scope.selectedDependents = []
+
+			$scope.conferenceName = conferenceData.data.name
 
 			if (roomDependents.length !== 0) {
 				$scope.dependents = dataFormat.dependentsFormat(roomDependents, 'userID')
@@ -44,6 +46,10 @@
 			}
 
 			$scope.cancel = function() {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
+			}
+
+			$scope.goToConference = function () {
 				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
 			}
 

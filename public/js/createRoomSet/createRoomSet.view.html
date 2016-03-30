@@ -1,10 +1,10 @@
 <div class='container'>
     <div class='row'>
         <div class='col-sm-9' ng-show='!editMode'>
-            <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> {{residenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Create Room Set</h2>
+            <h2><a ng-click='goToConference()'>{{conferenceName}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> <a ng-click='goToResidenceList()'>{{residenceName}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> Create Room Set</h2>
         </div>
         <div class='col-sm-9' ng-show='editMode'>
-            <h2>{{conferenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> {{residenceName}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> {{roomSetInfo['1'].name}} <i class='glyphicon glyphicon-chevron-right header-arrow' /> Edit</h2>
+            <h2><a ng-click='goToConference()'>{{conferenceName}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> <a ng-click='goToResidenceList()'>{{residenceName}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> <a ng-click='goToRoomSetList()'>{{roomSetInfo['1'].name}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> Edit</h2>
         </div>
     </div>
     <br>
