@@ -60,15 +60,19 @@ class TransportationController extends Controller
         $transport->save();
     }
 
-    private function buildSummaryJson($conferences, $flights, $userConfs)
+    private function buildSummaryJson($conferences, $flights, $userConfs, $transports)
     {
         $r = $conferences[0];
         $r['flights'] = $flights;
 
         foreach ($userConfs as &$user)
         {
-            if ($user['user_transportation'] != null)
+            $ut = $user['user_transportation'];
+            if ($ut != null)
+            {
                 $user['user']['hasTransport'] = 1;
+                $user['user']['transport'] = $transports[$ut['transportationID']];
+            }
             else 
                 $user['user']['hasTransport'] = 0;
 
@@ -375,11 +379,23 @@ class TransportationController extends Controller
                                    }))
                                    ->with('userTransportation');
 
+        $transports = [];
+        foreach ($userConfs->get() as &$userConf)
+        {
+            $ut = $userConf->userTransportation;
+            if ($ut != null)
+            {
+                $transport = Transportation::where('id', $ut->transportationID)->first();
+                $transports[$transport->id] = $transport;
+            }
+        }
+
         $flightsList = $userConfs->distinct()->lists('flightID');
         $flights = Flight::whereIn('id', $flightsList)->get()->keyBy('id')->toArray();
+        
         $conference = Conference::where('id', $confId)->get()->toArray();
 
-        $summary = $this->buildSummaryJson($conference, $flights, $userConfs->get()->toArray());
+        $summary = $this->buildSummaryJson($conference, $flights, $userConfs->get()->toArray(), $transports);
         return response()->json($summary, 200);
     }
 }
