@@ -257,6 +257,17 @@
 					}					
 				})
 
+				.state('dashboard.conferences.manage.assign-transportation.3', {
+					url: '',
+					templateUrl: 'js/assignTransportation/assignTransportation.view.users.html',
+					controller: 'viewAssignedTransportCtrl',
+					resolve: {
+						users: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/transportationsummary')
+						}
+					}					
+				})
+
 
 				/*
 				INVENTORY
