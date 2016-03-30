@@ -1,7 +1,8 @@
 <div ui-view>
 	<div class='row'>
 		<div class='col-sm-9'>
-			<h2><a ng-click="goToConference()">{{conferenceName}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> Events</h2>
+			<h2 ng-show='canCreateEvent || canEditEvent'><a ng-click="goToConference()">{{conferenceName}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> Events</h2>
+			<h2 ng-show='!canCreateEvent && !canEditEvent'><a ng-click="goToConferenceList()">{{conferenceName}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> Events</h2>
 		</div>
 		<div class='col-sm-3'>
 			<button id='createEventBtn' ng-show='canCreateEvent' ng-click='showWidget("createEvent")' class='btn btn-primary btn-block pull'><span class='glyphicon glyphicon-plus'></span><br> Create Event</button>
