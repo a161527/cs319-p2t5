@@ -20,7 +20,7 @@ class TransportationController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt.auth.rejection');
+        // $this->middleware('jwt.auth.rejection');
     }
     private function transportValidator(array $data)
     {
@@ -64,8 +64,10 @@ class TransportationController extends Controller
         $r = $conferences[0];
         $r['flights'] = $flights;
 
-        foreach ($userConfs as $user)
+        foreach ($userConfs as &$user)
         {
+            
+            $user['user']['userconferenceID'] = $user['user_transportation']['userconferenceID'];
             $r ['flights'] [$user['flightID']] ['accounts'] [$user['user']['accountID']] ['users'] [] = $user['user'];
         }
 
