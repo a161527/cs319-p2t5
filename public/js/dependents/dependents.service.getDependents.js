@@ -33,8 +33,16 @@
 				return $q(function(resolve, reject) {
 
 					$http.get('api/accounts/' + loginStorage.getId() + '/dependents').then(function(resData) {
+						
+						var approvedDependents = []
 
-						resolve(resData.data.dependents.length)
+						angular.forEach(resData.data.dependents, function(dep){
+							if (dep.approved) {
+								approvedDependents.push(dep)
+							}
+						}) 
+
+						resolve(approvedDependents.length)
 
 					}, function(resData) {
 						reject(resData)
