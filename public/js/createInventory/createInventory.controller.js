@@ -29,9 +29,9 @@
 					angular.forEach($scope.inventory, function(inventory) {
 						var inv = {}
 						inv.itemName = inventory.itemName
-						inv.totalQuantity = inventory.quantity
+						inv.totalQuantity = inventory.totalQuantity
 						inv.disposable = inventory.disposable || false
-						inv.conferenceID = $stateParams.cid
+						inv.conferenceID = parseInt($stateParams.cid)
 
 						inventoryInfo.push(inv)
 					})
