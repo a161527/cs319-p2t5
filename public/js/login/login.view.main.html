@@ -13,7 +13,7 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<!--Need to block HTML5 validation so it does not conflict with angular-->
-						<form name='loginForm' novalidate>
+						<form name='loginForm' ng-submit='login(loginForm.$valid)' novalidate>
 							<div ng-model='credentials'>
 
 								<input-with-validation validation='loginForm' model='credentials.email' identifier='email' inp-type='email' change-fn='removeMessage()'>Email</input-with-validation>
