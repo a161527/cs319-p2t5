@@ -14,7 +14,7 @@
 			}
 
 			$scope.goToCreateConference = function() {
-				$state.go('dashboard.conferences.create.1')
+				$state.go('dashboard.conferences.create', {reload: true})
 			}
 
 			$scope.goToManage = function(conference) {

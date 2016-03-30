@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class PermissionsController extends Controller
 {
     public function __construct() {
-        $this->middleware('jwt.auth');
+        $this->middleware('jwt.auth.rejection');
     }
 
     private function roleListJson($roles) {

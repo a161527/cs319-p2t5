@@ -37,7 +37,8 @@ class DefaultPermissionsSeeder extends Seeder
             self::pArray(PermissionNames::CreateConference(), "Create Conference"),
             self::pArray(PermissionNames::ManageGlobalPermissions(), "Manage Global Permissions"),
             self::pArray(PermissionNames::ApproveUserRegistration(), "Approve User Registration"),
-            self::pArray(PermissionNames::ViewSiteStatistics(), "View Site Statistics")
+            self::pArray(PermissionNames::ViewSiteStatistics(), "View Site Statistics"),
+            self::pArray(PermissionNames::ManageAccounts(), "Manage Accounts")
         );
 
         foreach ($permissions as $p) {

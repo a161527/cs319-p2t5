@@ -58,6 +58,9 @@
 						case 'approve-registration':
 							checkHasPermission('conference-registration-approval', permissions)
 							break
+						case 'assign-transportation':
+							checkHasPermission('conference-transportation-edit', permissions)
+							break
 						case 'approve-inventory':
 							checkHasPermission('conference-inventory-edit', permissions)
 							break
@@ -101,7 +104,6 @@
 
 							if (toStateParams.cid) {
 								loginStorage.getConferencePermissions(toStateParams.cid).then(function(resData) {
-									console.log(resData)
 
 									if (resData.length === 0) {
 										$state.go('dashboard.home')

@@ -27,6 +27,7 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
         //New registration request
         Route::post('register', 'RegistrationController@userRegistration');
         Route::post('register/{registryId}/approve', 'RegistrationController@approveRegistration');
+        Route::delete('register/{registryId}', 'RegistrationController@removeRequest');
         Route::get('register/{registryId}', 'RegistrationController@getRegistrationData');
         Route::get('register', 'RegistrationController@outstandingRegistrationRequests');
 
@@ -100,6 +101,7 @@ Route::group(['prefix' => 'api'], function()
 
     Route::post('login', 'AuthenticationController@authenticate');
     Route::post('register', 'RegistrationController@register');
+    Route::post('account/{email}/delete', 'RegistrationController@deleteAccount');
 
     Route::get('unapprovedUsers', 'RegistrationController@listUnapproved');
     Route::post('register/{id}/approve', 'RegistrationController@approveUser');
@@ -137,8 +139,9 @@ Route::group(['prefix' => 'api'], function()
     });
 
     // user_inventory
-    Route::group(['prefix' => 'userinventory/{id}'], function() {
-        Route::get('/approve', 'InventoryController@approveRequest');
+    Route::group(['prefix' => 'conferences/{confId}/userinventory/{id}'], function() {
+        Route::post('/approve', 'InventoryController@approveRequest');
+        Route::delete('', 'InventoryController@deleteReservation');
     });
 
     // transportation
@@ -165,4 +168,5 @@ Route::get('/api/event/conference/{id?}', 'Events@getEventByConferenceID');
 Route::post('/api/event/{confId}', 'Events@store');
 Route::put('/api/event/{id}', 'Events@update');
 Route::post('/api/event/{id}/register', 'Events@register');
+Route::delete('/api/event/{id}/register/{registrationId}', 'Events@deleteRegistration');
 Route::delete('/api/event/{id}', 'Events@destroy');

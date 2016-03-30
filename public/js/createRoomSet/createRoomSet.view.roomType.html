@@ -1,0 +1,41 @@
+<div class="progress">
+    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="25"
+    aria-valuemin="0" aria-valuemax="100" style="width:25%">
+        Step 1
+    </div>
+</div>
+
+<h4>Select Room Type</h4>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <form name='roomTypeForm' ng-show='hasRoomTypes' novalidate>
+            <div class='row'>
+                <div class='col-sm-12'>
+                    <div class='form-group' ng-class='{"has-error": !roomTypeForm["roomType"].$valid && roomTypeForm["roomType"].$dirty}'>
+                        <label for='roomType'>Room Type</label>
+                        <select class='form-control' ng-model='roomTypes.selectedOption' id='roomType' name='roomType' ng-options='rt.name for rt in roomTypes track by rt.id' required>
+                        </select>
+
+                        <error-message ng-show='roomTypeForm["roomType"].$error.required && roomTypeForm["roomType"].$dirty'>Room Type is required</error-message>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <span ng-show='!hasRoomTypes'>
+            There are no existing room types for this residence.
+            <br>
+            <br>
+            Please continue to the next step to create a new one.
+            <br>
+        </span>
+    </div>
+</div>
+
+<div class='row'>
+    <div class='col-xs-6'>
+        <button class='btn btn-default btn-block' ng-click='cancel()'>Cancel</button>
+    </div>
+    <div class='col-xs-6'>
+        <button class='btn btn-primary btn-block' ng-click='nextStep(roomTypeForm, "2", "setRoomType", "roomType")'>Next</button>
+    </div>
+</div>

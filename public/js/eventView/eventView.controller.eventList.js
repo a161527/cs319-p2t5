@@ -13,11 +13,20 @@
 
 			var regConference = []
 
-			$scope.goToEventState = function(state, params) {
-				if (!params) {
-					params = {}
+			$scope.showWidget = function(toState, params) {
+				var state = 'dashboard.conferences.manage.' + toState;
+				var allParams = {cid: $stateParams.cid}
+				if (params) {
+					angular.forEach(params, function(val, key) {
+						allParams[key] = val
+					})
 				}
-				$state.go('dashboard.events.' + state, params, {reload: true})
+				$state.go(state, allParams);
+			}
+
+			$scope.goToEventState = function(toState, params) {
+				var state = 'dashboard.events.' + toState;
+				$state.go(state, params, {reload: true})
 			}
 
 			var formatEvents = function() {
@@ -36,6 +45,12 @@
 							if (regEvent.registrations.length < regConference.length) {
 								$scope.events[i].isEventRegistered = false
 							}
+						}
+
+						if ($scope.events[i]) {
+							$scope.events[i].canEdit = true
+						} else {
+							$scope.events[i].canEdit = false
 						}
 					})
 				};

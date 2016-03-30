@@ -1,0 +1,45 @@
+<div class='row'>
+	<div class='col-sm-9'>
+		<h4>Room Assignments</h4>
+	</div>
+	<div class='col-sm-3'>
+		<button class='btn btn-info btn-block' 
+			ng-click='back()'>
+			Go to Assign Rooms
+		</button>
+	</div>
+</div>
+<div ng-show='roomsAssigned.length === 0'>No rooms assigned</div>
+<ul class="list-group">
+	<div ng-repeat='room in roomsAssigned'>
+		<li class='list-group-item unselectable-text'>
+			<div class='row'>
+
+				<div class='col-sm-3'>
+					<span class='glyphicon glyphicon-bed glyphicon-large'></span>
+				</div>
+				<div class='col-sm-6'>
+
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Name:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{room.registration.user.firstName}} {{room.registration.user.lastName}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Room Name:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{room.roomName}}
+						</div>
+					</div>
+					
+				</div>
+
+			</div>
+		</li>
+	</div>
+</ul>

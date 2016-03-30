@@ -16,7 +16,8 @@
 					validation: '=',
 					model: '=',
 					identifier: '@',
-					label: '@'
+					label: '@',
+					value: '@'
 				},
 				template: 
 					'<div>' +
@@ -26,7 +27,7 @@
 					'</div>',	
 				link: function(scope, elem, attrs) {
 
-					scope.model = new Date()
+					scope.model = moment(scope.value, 'HH:mm:ss').toDate()
 
 				}
 			}

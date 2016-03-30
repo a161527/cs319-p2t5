@@ -1,66 +1,92 @@
+<div class='row'>
+	<div class='col-sm-9'>
+		<h4 ng-show='state1'>Approve Users</h4>
+		<h4 ng-show='state2'>Approved Users</h4>
+	</div>
+	<div class='col-sm-3' ng-show='state2'>
+		<button class='btn btn-info btn-block' 
+			ng-click='back()'>
+			Go to Approve Users
+		</button>
+	</div>
+<!-- 	<div class='col-sm-3' ng-show='state1'>
+		<button class='btn btn-info btn-block' 
+			ng-click='viewApproved()'>
+			View Approved Users
+		</button>
+	</div> -->
+</div>
 <div ng-show='dependents.length === 0'>
 	No users requiring approval
 </div>
-<ul class="list-group">
-	<div ng-repeat='unapproved in dependents'>
-		<li class='list-group-item unselectable-text'>
-			<div class='row'>
-				<div class='col-sm-3'>
-					<span class='glyphicon glyphicon-user glyphicon-large'></span>
-				</div>
-				<div class='col-sm-6'>
-					<div class='row'>
-						<div class='col-sm-6'>
-							<b>Name:</b>
-						</div>
-						<div class='col-sm-6'>
-							{{unapproved.firstName}} {{unapproved.lastName}}
-						</div>
-					</div>
-					<div class='row'>
-						<div class='col-sm-6'>
-							<b>Date of Birth:</b>
-						</div>
-						<div class='col-sm-6'>
-							{{unapproved.dateOfBirth}}
-						</div>
-					</div>
-					<div class='row'>
-						<div class='col-sm-6'>
-							<b>Gender:</b>
-						</div>
-						<div class='col-sm-6'>
-							{{unapproved.gender}}
-						</div>
-					</div>
-					<div class='row'>
-						<div class='col-sm-6'>
-							<b>Location:</b>
-						</div>
-						<div class='col-sm-6'>
-							{{unapproved.location || 'None'}}
-						</div>
-					</div>
-					<div class='row' ng-show='unapproved.notes'>
-						<div class='col-sm-6'>
-							<b>Notes:</b>
-						</div>
-						<div class='col-sm-6'>
-							{{unapproved.notes}}
-						</div>
-					</div>
-				</div>
-
-				<div class='col-sm-3'>
-
-					<button class='btn btn-success pull-right btn-block'
-						ng-click='approve(unapproved.id)'>
-						<span class='glyphicon glyphicon-ok'></span><br> Approve
-					</button>
-
-				</div>
-
-			</div>
-		</li>
+<div ng-show='dependents.length > 0'>
+	<div class='form-group has-feedback'>
+		<label>Search by user</label>
+		<input class='form-control' type='text' placeholder='Search by user' ng-model='search.fullName'>
+		<span class="glyphicon glyphicon-search form-control-feedback"></span>
 	</div>
-</ul>
+	Showing {{filtered.length}} of {{dependents.length}} requests
+	<ul class="list-group">
+		<div ng-repeat='unapproved in dependents | filter: search as filtered'>
+			<li class='list-group-item unselectable-text'>
+				<div class='row'>
+					<div class='col-sm-3'>
+						<span class='glyphicon glyphicon-user glyphicon-large'></span>
+					</div>
+					<div class='col-sm-6'>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Name:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{unapproved.fullName}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Date of Birth:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{unapproved.dateOfBirth}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Gender:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{unapproved.gender}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Location:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{unapproved.location || 'None'}}
+							</div>
+						</div>
+						<div class='row' ng-show='unapproved.notes'>
+							<div class='col-sm-6'>
+								<b>Notes:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{unapproved.notes}}
+							</div>
+						</div>
+					</div>
+
+					<div class='col-sm-3'>
+
+						<button class='btn btn-success pull-right btn-block'
+							ng-click='approve(unapproved.id)'>
+							<span class='glyphicon glyphicon-ok'></span><br> Approve
+						</button>
+
+					</div>
+
+				</div>
+			</li>
+		</div>
+	</ul>
+</div>
