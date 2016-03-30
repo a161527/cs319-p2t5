@@ -67,7 +67,6 @@ class TransportationController extends Controller
         foreach ($userConfs as &$user)
         {
             $user['user']['userconferenceID'] = $user['id'];
-            dd($user);
             $r ['flights'] [$user['flightID']] ['accounts'] [$user['user']['accountID']] ['users'] [] = $user['user'];
         }
 
