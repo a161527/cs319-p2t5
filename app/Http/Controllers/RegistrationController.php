@@ -13,6 +13,7 @@ use Illuminate\Contracts\Logging\Log;
 use DB;
 use Hash;
 use Entrust;
+use Auth;
 use App\Utility\PermissionNames;
 
 class RegistrationController extends Controller
@@ -35,7 +36,7 @@ class RegistrationController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('jwt.auth', ["only" => ["listUnapproved", "approveUser"]]);
+        $this->middleware('jwt.auth.rejection', ["only" => ["listUnapproved", "approveUser", "deleteAccount"]]);
     }
 
     /**
@@ -130,6 +131,21 @@ class RegistrationController extends Controller
             // validation has failed, display error messages
             return response()->json(['message' => 'validation_failed', 'errors' => $accountValidator->errors()], 422);
         }
+    }
+
+    public function deleteAccount($email) {
+        $account = Account::where('email', $email)->get()->first();
+
+        if (!isset($account)) {
+            return response()->json(['message' => 'account_deleted']);
+        }
+
+        if (!Entrust::can(PermissionNames::ManageAccounts()) && $account->id != Auth::user()->id) {
+            return response()->json(['message' => 'cannot_manage_account'], 403);
+        }
+
+        $account->delete();
+        return ["message" => "account_deleted"];
     }
 
     public function checkEmail(Request $request) {

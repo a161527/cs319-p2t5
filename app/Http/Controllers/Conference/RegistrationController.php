@@ -36,7 +36,7 @@ class RegistrationController extends Controller
     const REGISTRATION_EDIT_ACCESS_TYPE = "edit";
 
     public function __construct() {
-        $this->middleware('jwt.auth');
+        $this->middleware('jwt.auth.rejection');
     }
 
     /*
@@ -220,6 +220,26 @@ class RegistrationController extends Controller
         }
     }
 
+    public function removeRequest($conferenceID, $registrationID) {
+        return DB::transaction(function () use ($conferenceID, $registrationID) {
+            $registration = UserConference::find($registrationID);
+            if (!isset($registration)) {
+                return response()->json(["message" => "request_removed"]);
+            }
+
+            if ($registration->conferenceID != $conferenceID) {
+                return response()->json(["message" => "request_not_in_conference"], 404);
+            }
+
+            if (is_null($this->determineAccessType($conferenceID, $registration))) {
+                return response()->json(["message" => "not_conference_registration_approver"], 403);
+            }
+
+            $registration->delete();
+            return response()->json(["message" => "request_removed"]);
+        });
+    }
+
     /*
      * Determines how much access (if any) the current user has for the
      * given conference and registration request.  Approvers for the conference
@@ -240,7 +260,7 @@ class RegistrationController extends Controller
      */
     public function getRegistrationData(Request $req, $conferenceID, $requestID) {
         $registration = UserConference::with("flight", "user")->find($requestID);
-        if ($conferenceID != $registration->conferenceID) {
+        if (!isset($registration) || $conferenceID != $registration->conferenceID) {
             return response("Registration request not found for conference.",  404);
         }
 
@@ -275,7 +295,7 @@ class RegistrationController extends Controller
 
         if($include === "pending") {
             $query->where("approved", false);
-        }else if ($include == "approved") {
+        }else if ($include === "approved") {
             $query->where("approved", true);
         }
 

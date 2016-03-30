@@ -23,7 +23,7 @@ use Illuminate\Foundation\Validation\ValidationException;
 class RoomSetupController extends Controller
 {
     public function __construct() {
-        $this->middleware('jwt.auth');
+        $this->middleware('jwt.auth.rejection');
     }
 
     public function getResidenceList($confId) {
@@ -103,6 +103,18 @@ class RoomSetupController extends Controller
         } else {
             return response()->json(["message" => "residence_update_failed"], 500);
         }
+    }
+
+    public function deleteResidence($confId, $residenceId) {
+        if (!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
+            return response("", 403);
+        }
+
+        $res = Residence::find($residenceId);
+        if (is_null($res) || $res->conferenceID != $confId) {
+            return response("", 404);
+        }
+        $res->delete();
     }
 
     public function getResidenceRoomSets($confId, $residenceId) {
@@ -263,6 +275,19 @@ class RoomSetupController extends Controller
         }
 
         return $set;
+    }
+
+    public function deleteRoomSet($confId, $roomSetId) {
+        if(!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
+            return response("", 403);
+        }
+
+        $set = RoomSet::with("residence")->find($roomSetId);
+        if (!isset($set) || $set->residence->conferenceID != $confId) {
+            return response("", 404);
+        }
+
+        $set->delete();
     }
 
     private function validateResidence($req) {

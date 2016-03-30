@@ -24,7 +24,7 @@ class MainController extends Controller
         //Allow info requests without a token.  May need to do extra
         //auth stuff if they want detailed info, but right now we don't
         //make that distinction
-        $this->middleware('jwt.auth', ['except' => ['getInfo', 'getInfoList']]);
+        $this->middleware('jwt.auth.rejection', ['except' => ['getInfo', 'getInfoList']]);
         $this->middleware('jwt.check', ['only' => ['getInfo', 'getInfoList']]);
         $this->middleware('permission:' . PermissionNames::CreateConference(), ['only' => ['createNew']]);
     }
