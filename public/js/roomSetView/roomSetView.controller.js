@@ -35,6 +35,14 @@
 				confirmDeleteModal.open('Room Set', roomSet.name, 'api/conferences/' + $stateParams.cid + '/residences/roomSets/' + roomSet.id)
 			}
 
+			$scope.goToConference = function () {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
+			}
+
+			$scope.goToResidence = function () {
+				$state.go('dashboard.conferences.manage.viewResidence', {cid: $stateParams.cid})
+			}
+
 		})
 
 })()

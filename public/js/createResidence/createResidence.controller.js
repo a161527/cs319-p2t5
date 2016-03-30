@@ -92,6 +92,14 @@
 				return index > 1
 			}
 
+			$scope.goToConference = function () {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
+			}
+
+			$scope.goToResidenceList = function () {
+				$state.go('dashboard.conferences.manage.viewResidence', {cid: $stateParams.cid})
+			}
+
 			var setFormDirty = function(form) {
 				angular.forEach(form.$error.required, function(field) {
 					field.$setDirty()

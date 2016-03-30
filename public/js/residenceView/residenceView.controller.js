@@ -25,6 +25,10 @@
 				confirmDeleteModal.open('Residence', residence.name, 'api/conferences/' + $stateParams.cid + '/residences/' + residence.id)
 			}
 
+			$scope.goToConference = function () {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
+			}
+
 		})
 
 })()

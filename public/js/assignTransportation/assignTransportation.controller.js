@@ -2,10 +2,11 @@
 	'use strict'
 
 	angular.module('assignTransportation')
-		.controller('transportationUsersCtrl', function($scope, $state, $http, users) {
+		.controller('transportationUsersCtrl', function($scope, $stateParams, $state, $http, users, conferenceData) {
 
 			$scope.state1 = true 
 			$scope.flights = []
+			$scope.conferenceName = conferenceData.data.name
 
 			angular.forEach(users.data.flights, function(flight) {
 				angular.forEach(flight.accounts, function(account) {
@@ -39,16 +40,22 @@
 				$state.go('dashboard.conferences.manage.assign-transportation.2', {user: param})
 			}
 
+			$scope.goToConference = function () {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
+			}
+
 			$scope.viewApproved = function() {
 				$state.go('dashboard.conferences.manage.assign-transportation.3')
+
 			}
 
 		})
 
-		.controller('assignTransportationCtrl', function($scope, $stateParams, $http, $state, transport, modal) {
+		.controller('assignTransportationCtrl', function($scope, $stateParams, $http, $state, transport, modal, conferenceData) {
 
 			$scope.transportation = transport.data.transportation
 			$scope.user = $stateParams.user
+			$scope.conferenceName = conferenceData.data.name
 
 			$scope.assign = function(id) {
 				console.log($scope.user.id)
@@ -62,6 +69,10 @@
 						$state.go('dashboard.conferences.manage.assign-transportation.1')
 					})
 				})
+			}
+
+			$scope.goToConference = function () {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
 			}
 
 		})

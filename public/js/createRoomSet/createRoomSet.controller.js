@@ -169,6 +169,18 @@
 				return index > 1
 			}
 
+			$scope.goToConference = function () {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
+			}
+
+			$scope.goToResidenceList = function () {
+				$state.go('dashboard.conferences.manage.viewResidence', {cid: $stateParams.cid})
+			}
+
+			$scope.goToRoomSetList = function () {
+				$state.go('dashboard.conferences.manage.viewResidence.viewRoomSet', {cid: $stateParams.cid, rid: $stateParams.rid})
+			}
+
 			var onNavigate = function(toState, set, model) {
 				roomSetFields[set]($scope[model])
 

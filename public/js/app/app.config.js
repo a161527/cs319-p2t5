@@ -229,7 +229,12 @@
 				.state('dashboard.conferences.manage.assign-transportation', {
 					url: '/assign-transportation',
 					abstract: true,
-					template: '<div ui-view></div>'
+					template: '<div ui-view></div>',
+					resolve: {
+						conferenceData: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid)
+						}
+					}
 				})
 
 				.state('dashboard.conferences.manage.assign-transportation.1', {
@@ -302,6 +307,9 @@
 					resolve: {
 						unapprovedInventory: function($http, $stateParams) {
 							return $http.get('api/conferences/' + $stateParams.cid + '/inventory/unapproved')
+						},
+						conferenceData: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid)
 						}
 					}
 				})
@@ -313,6 +321,9 @@
 					resolve: {
 						approvedInventory: function($http, $stateParams) {
 							return $http.get('api/conferences/' + $stateParams.cid + '/inventory/approved')
+						},
+						conferenceData: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid)
 						}
 					}
 				})
@@ -334,6 +345,9 @@
 					resolve: {
 						roomDependents: function($stateParams, getRoomUsersService) {
 							return getRoomUsersService.get($stateParams.cid)
+						},
+						conferenceData: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid)
 						}
 					}
 				})
@@ -348,6 +362,9 @@
 					resolve: {
 						residences: function($stateParams, $http) {
 							return $http.get('api/conferences/' + $stateParams.cid + '/residences')
+						},
+						conferenceData: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid)
 						}
 					}
 				})
@@ -379,6 +396,9 @@
 					resolve: {
 						unapproved: function($stateParams, getUnapprovedService) {
 							return getUnapprovedService.get($stateParams.cid)
+						},
+						conferenceData: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid)
 						}
 					}
 				})
@@ -391,6 +411,9 @@
 					resolve: {
 						approved: function($stateParams, $http) {
 							return $http.get('api/conferences/' + $stateParams.cid + '/register?include=approved')
+						},
+						conferenceData: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid)
 						}
 					}
 				})
