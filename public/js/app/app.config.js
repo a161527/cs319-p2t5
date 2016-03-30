@@ -47,7 +47,7 @@
 				.state('conferenceList', {
 					url: '/conferences',
 					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
-					controller: 'conferenceListCtrl',
+					controller: 'conferenceListPublicCtrl',
 					resolve: {
 						conferenceList: function($http) {
 							return $http.get('api/conferences')
