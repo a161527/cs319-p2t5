@@ -22,6 +22,7 @@
 									id='email' 
 									name='email' 
 									ng-pattern='/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/' 
+									placeholder='user@example.com'
 									required>
 
 							<div class='alert alert-success' ng-show='emailAvailable && createAcctForm.email.$dirty && showAvailMsg'><span class="glyphicon glyphicon-ok"></span> Email is available</div>

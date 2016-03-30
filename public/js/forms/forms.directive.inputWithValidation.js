@@ -20,6 +20,7 @@
 					model: '=',
 					identifier: '@',
 					inpType: '@',
+					placeholder: '@',
 					changeFn: '&'
 				},
 				template: 
@@ -31,7 +32,7 @@
 							"ng-model='model'" + 
 							"class='form-control'" + 
 							"id='{{identifier}}'" + 
-							"name='{{identifier}}' required>" +
+							"name='{{identifier}}' placeholder='{{placeholder}}' required>" +
 	
 						"<error-message ng-show='validation[identifier].$error[inpType] && validation.{{identifier}}.$dirty'>" +
 							"<span ng-transclude></span> is invalid" +

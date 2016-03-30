@@ -39,7 +39,7 @@
 							<div class='row'>
 								<div class='col-md-6'>
 
-									<date-picker-input model='dependents[idx].dateOfBirth' validation='dependentsForm' identifier='birthdate{{idx}}' label='Birth Date'><date-picker-input>
+									<date-picker-input model='dependents[idx].dateOfBirth' validation='dependentsForm' identifier='birthdate{{idx}}' label='Birth Date' placeholder='mm/dd/yyyy'><date-picker-input>
 
 								</div>
 
@@ -58,12 +58,12 @@
 
 							<div class='row'>
 								<div class='col-md-12'>
-									<input-with-validation model='dependents[idx].location' validation='dependentsForm' identifier='location{{idx}}' inp-type='text'>Location</input>
+									<input-with-validation model='dependents[idx].location' validation='dependentsForm' identifier='location{{idx}}' inp-type='text' placeholder='city, country'>Location</input>
 								</div>
 							</div>
 
 							<div class='form-group'>
-								<label for='accomodations{{idx}}'>Accomodations</label>
+								<label for='accomodations{{idx}}'>Accomodations (optional)</label>
 								<textarea class='form-control' ng-model='dependents[idx].accomodations' rows='3' id='accomodations{{idx}}' name='accomodations{{idx}}'></textarea>
 							</div>
 

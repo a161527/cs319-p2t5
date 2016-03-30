@@ -16,7 +16,8 @@
 					validation: '=',
 					model: '=',
 					identifier: '@',
-					label: '@'
+					label: '@',
+					placeholder: '@'
 				},
 				template: 
 					"<div class='form-group' ng-class='{" + '"has-error"' + ": !validation.{{identifier}}.$valid && validation.{{identifier}}.$dirty}'>" +
@@ -31,7 +32,8 @@
 								"is-open='calendar.opened' " +
 								"close-text='Close' " +
 								"name='{{identifier}}' " +
-								"id='{{identifier}}' required>" +
+								"id='{{identifier}}' " +
+								"placeholder='{{placeholder}}' required>" +
 
 							//Open date picker button
 							"<span class='input-group-btn'>" +
