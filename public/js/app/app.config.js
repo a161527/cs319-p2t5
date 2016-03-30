@@ -267,7 +267,7 @@
 
 				.state('dashboard.conferences.manage.assign-transportation.3', {
 					url: '',
-					templateUrl: 'js/assignTransportation/assignTransportation.view.users.html',
+					templateUrl: 'js/assignTransportation/assignTransportation.view.assigned.html',
 					controller: 'viewAssignedTransportCtrl',
 					resolve: {
 						users: function($http, $stateParams) {

@@ -1,16 +1,16 @@
 <div class='row'>
 	<div class='col-sm-9'>
-		<h2><a ng-click='goToConference()'>{{conferenceName}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> Assigned Transportation</h2>
+		<h2 ng-show='!state1'><a ng-click='goToConference()'>{{conferenceName}}</a> <i class='glyphicon glyphicon-chevron-right header-arrow' /> Assigned Transportation</h2>
 	</div>
 	<br>
-	<div class='col-sm-3'>
+	<div class='col-sm-3' ng-show='!state1'>
 		<button class='btn btn-info btn-block' 
-			ng-click='viewApproved()'>
-			View Assigned Transportation
+			ng-click='back()'>
+			Assign Transportation
 		</button>
 	</div>
 </div>
-<div ng-show='flights.length === 0'>No users requiring transportation</div>
+<div ng-show='flights.length === 0'>No users assigned transportation</div>
 <div ng-show='flights.length > 0'>
 	<div class='form-group has-feedback'>
 		<label>Search by name</label>
@@ -22,16 +22,18 @@
 		<date-picker-filter model='search.arrivalDate'></date-picker-filter>
 	</div>
 	Showing {{filtered.length}} of {{flights.length}} users
-	<div class="list-group">
-		<button type="button" 
+	<ul class="list-group">
+		<li
 			class="list-group-item" 
 			ng-repeat='flight in flights | filter: search as filtered'
 			ng-click='assign($index)'>
 			<div class='row'>
+
 				<div class='col-sm-3'>
 					<span class='glyphicon glyphicon-user glyphicon-large'></span>
 				</div>
-				<div class='col-sm-9'>
+
+				<div class='col-sm-6'>
 					<div class='row'>
 						<div class='col-sm-6'>
 							<b>Name:</b>
@@ -80,8 +82,53 @@
 							{{flight.flightNumber}}
 						</div>
 					</div>
+
+					<div ng-show='flight.transportation'>
+						<h1>Transportation:</h1>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Flight Number:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{flight.transportation.name}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Company:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{flight.transportation.company}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Phone Number:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{flight.transportation.phone}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Capacity:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{flight.transportation.capacity}}
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class='col-sm-3'>
+
+					<button class='btn btn-danger pull-right btn-block'
+						ng-click='remove(flight.transportation.id, flight.uid)'>
+						<span class='glyphicon glyphicon-trash'></span><br> Remove
+					</button>
+
 				</div>
 			</div>
-		</button>
-	</div>
+		</li>
+	</ul>
 </div>

@@ -4,7 +4,6 @@
 	angular.module('assignTransportation')
 		.controller('transportationUsersCtrl', function($scope, $stateParams, $state, $http, users, conferenceData) {
 
-			$scope.state1 = true 
 			$scope.flights = []
 			$scope.conferenceName = conferenceData.data.name
 
@@ -77,10 +76,45 @@
 
 		})
 
-		.controller('viewAssignedTransportCtrl', function($scope, users) {
+		.controller('viewAssignedTransportCtrl', function($scope, $state, $stateParams, $http, users, modal) {
 
-			$scope.state1 = false
-			console.log(users)
+			$scope.flights = []
+
+			$scope.back = function() {
+				$state.go('dashboard.conferences.manage.assign-transportation.1')
+			}
+
+			angular.forEach(users.data.flights, function(flight) {
+				angular.forEach(flight.accounts, function(account) {
+
+					angular.forEach(account.users, function(user) {
+
+						if (user.hasTransport) {
+							user.fullName = user.firstName + ' ' + user.lastName
+							user.uid = user.id
+							user.airline = flight.airline
+							user.airport = flight.airport
+							user.arrivalDate = flight.arrivalDate
+							user.arrivalTime = flight.arrivalTime
+							user.flightNumber = flight.flightNumber
+
+							$scope.flights.push(user)
+						}
+
+					})
+
+				})
+			})
+			
+			$scope.remove = function(id, uid) {
+				var route = 'api/conferences/' + $stateParams.cid + '/transportation/' + id + '/unassign'
+				$http.post(route, {userIDs: [uid]}).then(function(resData) {
+					$state.reload()
+				}, function(resData) {
+					console.log(resData)
+					modal.open('Error: ' + resData.data.message)
+				})
+			}
 		})
 
 })()
