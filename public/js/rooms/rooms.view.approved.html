@@ -31,6 +31,30 @@
 					</div>
 					<div class='row'>
 						<div class='col-sm-6'>
+							<b>Residence Name:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{room.room_set.residence.name}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Location:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{room.room_set.residence.location}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Room Set:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{room.room_set.name}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
 							<b>Room Name:</b>
 						</div>
 						<div class='col-sm-6'>
@@ -40,10 +64,12 @@
 					
 				</div>
 
-				<button ng-click='remove(room.id)'
-					class='btn btn-danger btn-block pull-left'>
-					<span class='glyphicon glyphicon-remove'></span><br> Remove
-				</button>
+				<div class='col-sm-3'>
+					<button ng-click='remove(room.id)'
+						class='btn btn-danger btn-block pull-left'>
+						<span class='glyphicon glyphicon-remove'></span><br> Remove
+					</button>
+				</div>
 
 			</div>
 		</li>

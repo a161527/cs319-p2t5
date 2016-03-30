@@ -375,7 +375,10 @@
 					controller: 'ApprovedRoomsCtrl',
 					resolve: {
 						assignedRooms: function($http, $stateParams) {
-							return $http.get('api/conferences/' + $stateParams.cid + '/residences/assign')
+							return $http.get('api/conferences/' + $stateParams.cid + '/residences/assign/listing')
+						},
+						conferenceData: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid)
 						}
 					}
 				})
