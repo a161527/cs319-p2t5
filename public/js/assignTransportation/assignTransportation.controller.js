@@ -6,8 +6,9 @@
 
 			$scope.flights = []
 
+			console.log(users)
+
 			angular.forEach(users.data.flights, function(flight) {
-				console.log(flight)
 				angular.forEach(flight.accounts, function(account) {
 
 					angular.forEach(account.users, function(user) {
@@ -44,10 +45,10 @@
 			$scope.transportation = transport.data.transportation
 			$scope.user = $stateParams.user
 
-			$scope.assign = function() {
+			$scope.assign = function(id) {
 				console.log($scope.user.id)
-				var route = 'api/conferences/' + $stateParams.cid + '/transportation/' + $scope.user.id + '/assign'
-				$http.post(route).then(function(resData) {
+				var route = 'api/conferences/' + $stateParams.cid + '/transportation/' + id + '/assign'
+				$http.post(route, {userConferenceIDs: [$scope.user.id]}).then(function(resData) {
 
 					$state.go('dashboard.conferences.manage.assign-transportation.1')
 
