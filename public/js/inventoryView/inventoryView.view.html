@@ -7,68 +7,74 @@
 			<button id='createInventoryBtn' ng-click='showWidget("createInventory")' class='btn btn-primary btn-block pull'><span class='glyphicon glyphicon-plus'></span><br> Create Inventory</button>
 		</div>
 	</div>
-
+	<br>
 	<div ng-show='noInventory'>There is no inventory listed for this conference at this time.</div>
-		<ul class="list-group">
-			<div ng-repeat='inv in inventory'>
-				<li class="list-group-item">
+	<div ng-show='!noInventory'>
+		<div class='form-group has-feedback'>
+		<input class='form-control' type='text' placeholder='Filter list by item name' ng-model='search.itemName'>
+			<span class="glyphicon glyphicon-search form-control-feedback"></span>
+		</div>
+		Showing {{filtered.length}} of {{inventory.length}} items
+	</div>
+	<ul class="list-group">
+		<div ng-repeat='inv in inventory | filter:search as filtered'>
+			<li class="list-group-item">
 
-					<div class='row'>
-						<div class='col-sm-4'>
-							<span class='glyphicon glyphicon-apple glyphicon-xlarge list-icon'></span>
+				<div class='row'>
+					<div class='col-sm-4'>
+						<span class='glyphicon glyphicon-apple glyphicon-xlarge list-icon'></span>
+					</div>
+
+					<div class='col-sm-5'>
+						<h1 style='margin-top:0px;'>{{inv.itemName}}</h1>
+					</div>
+
+					<div class='col-sm-3'>
+						<div class='row'>
+							<div class='col-sm-8'>
+								<b>Total Quantity:</b>
+							</div>
+							<div class='col-sm-4'>
+								{{inv.totalQuantity}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-sm-8'>
+								<b>Remaining Quantity:</b>
+							</div>
+							<div class='col-sm-4'>
+								{{inv.currentQuantity}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-sm-8'>
+								<b>Disposable:</b>
+							</div>
+							<div class='col-sm-4'>
+								{{inv.disposable | yesNo}}
+							</div>
 						</div>
 
-						<div class='col-sm-5'>
-							<h1 style='margin-top:0px;'>{{inv.itemName}}</h1>
-						</div>
-
-						<div class='col-sm-3'>
-							<div class='row'>
-								<div class='col-sm-8'>
-									<b>Total Quantity:</b>
-								</div>
-								<div class='col-sm-4'>
-									{{inv.totalQuantity}}
-								</div>
-							</div>
-							<div class='row'>
-								<div class='col-sm-8'>
-									<b>Remaining Quantity:</b>
-								</div>
-								<div class='col-sm-4'>
-									{{inv.currentQuantity}}
-								</div>
-							</div>
-							<div class='row'>
-								<div class='col-sm-8'>
-									<b>Disposable:</b>
-								</div>
-								<div class='col-sm-4'>
-									{{inv.disposable | yesNo}}
-								</div>
-							</div>
-
-							<br>
-							<div class='row'>
-								<div class='col-md-12'>
-									<button ng-show='canEdit' 
-											class='btn btn-primary pull-right btn-block'
-											ng-click='showWidget("editInventory", {iid: inv.id})'>
-											<span class='glyphicon glyphicon-edit'></span><br> Edit Inventory
-									</button>
-									<button ng-click='deleteInventory(inv)'
-											ng-show='canEdit' 
-											id='deleteInventoryBtn'
-											class='btn btn-danger btn-block pull-left'>
-										<span class='glyphicon glyphicon-trash'></span><br> Delete Inventory
-									</button>
-								</div>
+						<br>
+						<div class='row'>
+							<div class='col-md-12'>
+								<button ng-show='canEdit' 
+										class='btn btn-primary pull-right btn-block'
+										ng-click='showWidget("editInventory", {iid: inv.id})'>
+										<span class='glyphicon glyphicon-edit'></span><br> Edit Inventory
+								</button>
+								<button ng-click='deleteInventory(inv)'
+										ng-show='canEdit' 
+										id='deleteInventoryBtn'
+										class='btn btn-danger btn-block pull-left'>
+									<span class='glyphicon glyphicon-trash'></span><br> Delete Inventory
+								</button>
 							</div>
 						</div>
 					</div>
-				</li>
-			</div>
-		<ul>
-	</div>
+				</div>
+			</li>
+		</div>
+	<ul>
 </div>
 

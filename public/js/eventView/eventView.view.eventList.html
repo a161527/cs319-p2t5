@@ -7,109 +7,115 @@
 			<button id='createEventBtn' ng-show='canCreateEvent' ng-click='showWidget("createEvent")' class='btn btn-primary btn-block pull'><span class='glyphicon glyphicon-plus'></span><br> Create Event</button>
 		</div>
 	</div>
-
+	<br>
 	<div ng-show='noEvents'>There are no events listed for this conference at this time.</div>
-		<ul class="list-group">
-			<div ng-repeat='event in events'>
-				<li class="list-group-item">
-
-					<div class='row'>
-						<div class='col-md-4'>
-							<span class='glyphicon glyphicon-calendar glyphicon-xlarge list-icon'></span>
-						</div>
-
-						<div class='col-md-5'>
-							<h1 style='margin-top:0px;'>{{event.eventName}}</h1>
-							<div>{{event.description}}</div>
-						</div>
-
-						<div class='col-md-3'>
-							<div class='row'>
-								<div class='col-md-6'>
-									<b>Location:</b>
-								</div>
-								<div class='col-md-6'>
-									{{event.location}}
-								</div>
-							</div>
-
-							<div class='row'>
-								<div class='col-md-6'>
-									<b>Date:</b>
-								</div>
-								<div class='col-md-6'>
-									{{event.date}}
-								</div>
-							</div>
-
-							<div class='row'>
-								<div class='col-md-6'>
-									<b>Start Time:</b>
-								</div>
-								<div class='col-md-6'>
-									{{event.startTime}}
-								</div>
-							</div>
-
-							<div class='row'>
-								<div class='col-md-6'>
-									<b>End Time:</b>
-								</div>
-								<div class='col-md-6'>
-									{{event.endTime}}
-								</div>
-							</div>
-
-							<div class='row'>
-								<div class='col-md-6'>
-									<b>Capacity:</b>
-								</div>
-								<div class='col-md-6'>
-									{{event.capacity}}
-								</div>
-							</div>
-
-							<div class='row'>
-								<div class='col-md-6'>
-									<b>Seats Available:</b>
-								</div>
-								<div class='col-md-6'>
-									{{event.remainingCapacity}}
-								</div>
-							</div>
-
-							<br>
-							<div class='row'>
-								<div class='col-md-12'>
-									<button ng-hide='event.isEventRegistered' 
-											class='btn btn-primary pull-right btn-block' 
-											ng-click='goToEventState("register", {eid: event.id})'>
-										<span class='glyphicon glyphicon-pencil'></span><br> Register
-									</button>
-									<button ng-show='event.isEventRegistered && isConfRegistered' 
-											class='btn btn-primary pull-right btn-block' 
-											disabled>
-										All attendees registered
-									</button>
-									<button ng-show='event.canEdit' 
-											class='btn btn-primary pull-right btn-block'
-											ng-click='showWidget("editEvent", {eid: event.id})'>
-											<span class='glyphicon glyphicon-edit'></span><br> Edit Event
-									</button>
-									<button ng-click='deleteEvent(event)'
-											ng-show='event.permissions.indexOf("event-info-edit") !== -1' 
-											id='deleteEventBtn'
-											class='btn btn-danger btn-block pull-left'>
-										<span class='glyphicon glyphicon-trash'></span><br> Delete Event
-									</button>
-								</div>
-							</div>
-						</div>
-
-					</div>
-				</li>
-			</div>
-		<ul>
+	<div ng-show='!noEvents'>
+		<div class='form-group has-feedback'>
+			<input class='form-control' type='text' placeholder='Filter list by event name' ng-model='search.eventName'>
+			<span class="glyphicon glyphicon-search form-control-feedback"></span>
+		</div>
+		Showing {{filtered.length}} of {{events.length}} events
 	</div>
+	<ul class="list-group">
+		<div ng-repeat='event in events | filter:search as filtered'>
+			<li class="list-group-item">
+
+				<div class='row'>
+					<div class='col-md-4'>
+						<span class='glyphicon glyphicon-calendar glyphicon-xlarge list-icon'></span>
+					</div>
+
+					<div class='col-md-5'>
+						<h1 style='margin-top:0px;'>{{event.eventName}}</h1>
+						<div>{{event.description}}</div>
+					</div>
+
+					<div class='col-md-3'>
+						<div class='row'>
+							<div class='col-md-6'>
+								<b>Location:</b>
+							</div>
+							<div class='col-md-6'>
+								{{event.location}}
+							</div>
+						</div>
+
+						<div class='row'>
+							<div class='col-md-6'>
+								<b>Date:</b>
+							</div>
+							<div class='col-md-6'>
+								{{event.date}}
+							</div>
+						</div>
+
+						<div class='row'>
+							<div class='col-md-6'>
+								<b>Start Time:</b>
+							</div>
+							<div class='col-md-6'>
+								{{event.startTime}}
+							</div>
+						</div>
+
+						<div class='row'>
+							<div class='col-md-6'>
+								<b>End Time:</b>
+							</div>
+							<div class='col-md-6'>
+								{{event.endTime}}
+							</div>
+						</div>
+
+						<div class='row'>
+							<div class='col-md-6'>
+								<b>Capacity:</b>
+							</div>
+							<div class='col-md-6'>
+								{{event.capacity}}
+							</div>
+						</div>
+
+						<div class='row'>
+							<div class='col-md-6'>
+								<b>Seats Available:</b>
+							</div>
+							<div class='col-md-6'>
+								{{event.remainingCapacity}}
+							</div>
+						</div>
+
+						<br>
+						<div class='row'>
+							<div class='col-md-12'>
+								<button ng-hide='event.isEventRegistered' 
+										class='btn btn-primary pull-right btn-block' 
+										ng-click='goToEventState("register", {eid: event.id})'>
+									<span class='glyphicon glyphicon-pencil'></span><br> Register
+								</button>
+								<button ng-show='event.isEventRegistered && isConfRegistered' 
+										class='btn btn-primary pull-right btn-block' 
+										disabled>
+									All attendees registered
+								</button>
+								<button ng-show='event.canEdit' 
+										class='btn btn-primary pull-right btn-block'
+										ng-click='showWidget("editEvent", {eid: event.id})'>
+										<span class='glyphicon glyphicon-edit'></span><br> Edit Event
+								</button>
+								<button ng-click='deleteEvent(event)'
+										ng-show='event.permissions.indexOf("event-info-edit") !== -1' 
+										id='deleteEventBtn'
+										class='btn btn-danger btn-block pull-left'>
+									<span class='glyphicon glyphicon-trash'></span><br> Delete Event
+								</button>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</li>
+		</div>
+	<ul>
 </div>
 
