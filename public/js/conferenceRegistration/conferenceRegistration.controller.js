@@ -2,9 +2,11 @@
 	'use strict'
 
 	angular.module('conferenceRegistration')
-		.controller('conferenceRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat, modal, dependents, registeredDependents) {
+		.controller('conferenceRegistrationCtrl', function($scope, $state, $stateParams, ajax, dataFormat, modal, dependents, registeredDependents, conferenceData) {
 
 			$scope.dependents = dependents
+
+			$scope.conferenceName = conferenceData.data.name
 
 			//Check against all registered dependents and delete the ones that are registered
 			angular.forEach(registeredDependents.data.registered, function(dep) {
@@ -271,6 +273,10 @@
 
 			$scope.removeSubmitError = function() {
 				$scope.showSubmitError = false
+			}
+
+			$scope.goToConferenceList = function () {
+				$state.go('dashboard.conferences.list')
 			}
 
 			//Return a new object with the dependents based on a flag in the object

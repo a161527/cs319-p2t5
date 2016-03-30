@@ -10,6 +10,7 @@
 			$scope.conferenceName = conferenceName
 			$scope.canCreateEvent = (eventData[1].indexOf('conference-event-create') !== -1)
 			$scope.isConfRegistered = false
+			$scope.canEditEvent = false
 
 			var regConference = []
 
@@ -37,6 +38,10 @@
 				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
 			}
 
+			$scope.goToConferenceList = function () {
+				$state.go('dashboard.conferences.list')
+			}
+
 			var formatEvents = function() {
 				
 				for (var i = $scope.events.length - 1; i >= 0; i--) {
@@ -55,10 +60,8 @@
 							}
 						}
 
-						if ($scope.events[i]) {
-							$scope.events[i].canEdit = true
-						} else {
-							$scope.events[i].canEdit = false
+						if ($scope.events[i].permissions.indexOf("event-info-edit") !== -1) {
+							$scope.canEditEvent = true
 						}
 					})
 				};

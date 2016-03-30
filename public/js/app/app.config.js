@@ -155,6 +155,9 @@
 						},
 						registeredDependents: function($http, $stateParams) {
 							return $http.get('api/conferences/' + $stateParams.cid + '?includeRegistration=1')
+						},
+						conferenceData: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid)
 						}
 					}
 				})
