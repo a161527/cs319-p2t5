@@ -47,7 +47,7 @@
 				.state('conferenceList', {
 					url: '/conferences',
 					templateUrl: 'js/conferenceView/conferenceView.view.conferenceList.html',
-					controller: 'conferenceListCtrl',
+					controller: 'conferenceListPublicCtrl',
 					resolve: {
 						conferenceList: function($http) {
 							return $http.get('api/conferences')
@@ -102,6 +102,11 @@
 					url: '',
 					templateUrl: 'js/auditAccts/auditAccts.view.approve.html',
 					controller: 'viewApprovedAcctsCtrl',
+					resolve: {
+						approvedDependents: function($http) {
+							return $http.get('api/dependents/approved')
+						}
+					}
 				})
 
 				/*
@@ -253,6 +258,17 @@
 					resolve: {
 						transport: function($http, $stateParams) {
 							return $http.get('api/conferences/' + $stateParams.cid + '/transportation')
+						}
+					}					
+				})
+
+				.state('dashboard.conferences.manage.assign-transportation.3', {
+					url: '',
+					templateUrl: 'js/assignTransportation/assignTransportation.view.users.html',
+					controller: 'viewAssignedTransportCtrl',
+					resolve: {
+						users: function($http, $stateParams) {
+							return $http.get('api/conferences/' + $stateParams.cid + '/transportationsummary')
 						}
 					}					
 				})

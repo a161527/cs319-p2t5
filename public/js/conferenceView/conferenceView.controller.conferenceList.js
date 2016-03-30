@@ -8,6 +8,7 @@
 			$scope.noConferences = ($scope.conferences.length === 0)
 			$scope.canCreateConference = (conferenceData[1].indexOf('create-conference') !== -1)
 			$scope.hasApprovedDependents = approvedDependents > 0
+			$scope.publicPage = false
 
 			$scope.registered = function(registeredList) {
 				return registeredList.length > 0
@@ -28,6 +29,14 @@
 			$scope.deleteConference = function(conference) {
 				confirmDeleteModal.open('Conference', conference.name, 'api/conferences/' + conference.id)
 			}
+		})
+
+		.controller('conferenceListPublicCtrl', function($scope, conferenceList) {
+
+			$scope.conferences = conferenceList.data
+
+			$scope.publicPage = true
+
 		})
 
 })()

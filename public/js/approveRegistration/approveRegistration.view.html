@@ -72,16 +72,17 @@
 						</div>
 					</div>
 
-					<div class='col-md-3' ng-show='state1'>
+					<div class='col-md-3'>
 
 						<button class='btn btn-success pull-right btn-block'
-							ng-click='approve(unapproved.id)'>
+							ng-click='approve(unapproved.id)'
+							ng-show='state1'>
 							<span class='glyphicon glyphicon-ok'></span><br> Approve
 						</button>
 
-						<button ng-click=''
+						<button ng-click='reject(unapproved.id)'
 							class='btn btn-danger btn-block pull-left'>
-							<span class='glyphicon glyphicon-remove'></span><br> Reject
+							<span class='glyphicon glyphicon-remove'></span><br> {{rejectButtonTxt}}
 						</button>
 
 					</div>

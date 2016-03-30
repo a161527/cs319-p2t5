@@ -4,6 +4,7 @@
 	angular.module('assignTransportation')
 		.controller('transportationUsersCtrl', function($scope, $stateParams, $state, $http, users, conferenceData) {
 
+			$scope.state1 = true 
 			$scope.flights = []
 			$scope.conferenceName = conferenceData.data.name
 
@@ -43,6 +44,11 @@
 				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
 			}
 
+			$scope.viewApproved = function() {
+				$state.go('dashboard.conferences.manage.assign-transportation.3')
+
+			}
+
 		})
 
 		.controller('assignTransportationCtrl', function($scope, $stateParams, $http, $state, transport, modal, conferenceData) {
@@ -69,6 +75,12 @@
 				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
 			}
 
+		})
+
+		.controller('viewAssignedTransportCtrl', function($scope, users) {
+
+			$scope.state1 = false
+			console.log(users)
 		})
 
 })()
