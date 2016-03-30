@@ -12,13 +12,15 @@
 				$scope.inv = inventoryData[0]
 				$scope.inventory['1'] = inventoryData[0]
 				$scope.editMode = true
+				if ($scope.inv.disposable === 1) {
+					$scope.inv.disposable = true
+				}
 
 			} else {
 
 				$scope.editMode = false
 
 			}
-			console.log($scope.inventory)
 
 			$scope.createInventory = function(form) {
 				$scope.showError = false
