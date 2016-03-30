@@ -97,6 +97,15 @@ class TransportationController extends Controller
         return true;
     }
 
+    private function uniqueUserConferenceValidator($userconferenceID)
+    {
+        $validator = Validator::make(compact('userconferenceID'), [
+            'userconferenceID'        =>    'unique:user_transportation'
+        ]);
+
+        return $validator;
+    }
+
     /*
      * GET /api/conferences/{confId}/transportation ?flightID=123 (flightID is optional)
      * - gets a list of transportations 
@@ -242,13 +251,19 @@ class TransportationController extends Controller
         DB::beginTransaction();
         foreach ($data['userConferenceIDs'] as $userconferenceId)
         {
+            $validator = $this->uniqueUserConferenceValidator($userconferenceId);
+            if (!$validator->passes())
+            {
+                DB::rollback(); 
+                return response()->json(['message' => 'userconference_already_exists', 'error' => $validator->errors()], 422);
+            }
             $ut = new UserTransportation();
             $ut->userconferenceID = $userconferenceId;
             $ut->transportationID = $transportId;
             if (!$ut->save())
             {
                 DB::rollback();
-                return response()->json(['message' => 'error_assigning_transport'], 500);    
+                return response()->json(['message' => 'error_assigning_transport'], 500);
             }
         }
         
@@ -318,7 +333,7 @@ class TransportationController extends Controller
 
         $userConfs = UserConference::where('needsTransportation', '=', true)->where('conferenceID', $confId)
                                    ->with(array('user'=>function($q){
-                                        $q->select('id','firstName','lastName','accountID');
+                                        $q->select('id','firstName','lastName','accountID','approved');
                                    }))
                                    ->with('userTransportation');
 

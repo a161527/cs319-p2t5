@@ -11,6 +11,7 @@
 |
 */
 
+
 //All conference endpoints
 Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], function () {
     Route::get('', 'MainController@getInfoList');
@@ -64,12 +65,11 @@ Route::group(['prefix' => '/api/roles'], function() {
     Route::get('/assignable', 'PermissionsController@listAssignableRoles');
 });
 
-Route::get('/', function()
-{
-    // change login.html to whatever the index page for angular will be
-    return File::get(public_path() . '/index.html');
-});
-
+// Route::get('/', function()
+// {
+//     // change login.html to whatever the index page for angular will be
+//     return File::get(public_path() . '/index.html');
+// });
 
 // Route::get('/', function () {
 //     return view('welcome');
