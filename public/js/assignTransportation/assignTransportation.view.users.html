@@ -1,75 +1,96 @@
-<div class='form-group has-feedback'>
-	<label>Search by name</label>
-	<input class='form-control' type='text' placeholder='Search by name' ng-model='search.fullName'>
-	<span class="glyphicon glyphicon-search form-control-feedback"></span>
+<div class='row'>
+	<div class='col-sm-9'>
+		<h4 ng-show='state1'>Assign Transportation</h4>
+		<h4 ng-show='!state1'>Assigned Transportation</h4>
+	</div>
+	<div class='col-sm-3' ng-show='!state1'>
+		<button class='btn btn-info btn-block' 
+			ng-click='back()'>
+			Assign Transportation
+		</button>
+	</div>
+<!-- 	<div class='col-sm-3' ng-show='state1'>
+		<button class='btn btn-info btn-block' 
+			ng-click='viewApproved()'>
+			View Assigned Transportation
+		</button>
+	</div> -->
 </div>
-<div class='form-group has-feedback'>
-	<label>Search by date</label>
-	<date-picker-filter model='search.arrivalDate'></date-picker-filter>
-</div>
-Showing {{filtered.length}} of {{flights.length}} users
-<div class="list-group">
-	<button type="button" 
-		class="list-group-item" 
-		ng-repeat='flight in flights | filter: search as filtered'
-		ng-click='assign($index)'>
-		<div class='row'>
-<!-- 			<div class='col-sm-2'>
-				<input type="checkbox" ng-model='flights[$index].selected'>
-			</div> -->
-			<div class='col-sm-3'>
-				<span class='glyphicon glyphicon-user glyphicon-large'></span>
+<div ng-show='flights.length === 0'>No users requiring transportation</div>
+<div ng-show='flights.length > 0'>
+	<div class='form-group has-feedback'>
+		<label>Search by name</label>
+		<input class='form-control' type='text' placeholder='Search by name' ng-model='search.fullName'>
+		<span class="glyphicon glyphicon-search form-control-feedback"></span>
+	</div>
+	<div class='form-group has-feedback'>
+		<label>Search by date</label>
+		<date-picker-filter model='search.arrivalDate'></date-picker-filter>
+	</div>
+	Showing {{filtered.length}} of {{flights.length}} users
+	<div class="list-group">
+		<button type="button" 
+			class="list-group-item" 
+			ng-repeat='flight in flights | filter: search as filtered'
+			ng-click='assign($index)'>
+			<div class='row'>
+	<!-- 			<div class='col-sm-2'>
+					<input type="checkbox" ng-model='flights[$index].selected'>
+				</div> -->
+				<div class='col-sm-3'>
+					<span class='glyphicon glyphicon-user glyphicon-large'></span>
+				</div>
+				<div class='col-sm-9'>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Name:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{flight.fullName}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Arrival Date:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{flight.arrivalDate}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Arrival Time:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{flight.arrivalTime}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Airport:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{flight.airport}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Airline:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{flight.airline}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Flight Number:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{flight.flightNumber}}
+						</div>
+					</div>
+				</div>
 			</div>
-			<div class='col-sm-9'>
-				<div class='row'>
-					<div class='col-sm-6'>
-						<b>Name:</b>
-					</div>
-					<div class='col-sm-6'>
-						{{flight.fullName}}
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-sm-6'>
-						<b>Arrival Date:</b>
-					</div>
-					<div class='col-sm-6'>
-						{{flight.arrivalDate}}
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-sm-6'>
-						<b>Arrival Time:</b>
-					</div>
-					<div class='col-sm-6'>
-						{{flight.arrivalTime}}
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-sm-6'>
-						<b>Airport:</b>
-					</div>
-					<div class='col-sm-6'>
-						{{flight.airport}}
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-sm-6'>
-						<b>Airline:</b>
-					</div>
-					<div class='col-sm-6'>
-						{{flight.airline}}
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-sm-6'>
-						<b>Flight Number:</b>
-					</div>
-					<div class='col-sm-6'>
-						{{flight.flightNumber}}
-					</div>
-				</div>
-			</div>
-		</div>
-	</button>
+		</button>
+	</div>
 </div>

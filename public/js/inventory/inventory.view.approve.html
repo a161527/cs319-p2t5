@@ -38,7 +38,24 @@
 					<span class='glyphicon glyphicon-apple glyphicon-large'></span>
 				</div>
 
-				<div class='col-sm-4'>
+				<div class='col-sm-7'>
+					<h3><u>Request:</u></h3>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>User:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{inv.user.fullName}}
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-sm-6'>
+							<b>Requested Units:</b>
+						</div>
+						<div class='col-sm-6'>
+							{{inv.unitCount}}
+						</div>
+					</div>
 					<h3><u>Item:</u></h3>
 					<div class='row'>
 						<div class='col-sm-6'>
@@ -46,14 +63,6 @@
 						</div>
 						<div class='col-sm-6'>
 							{{inv.inventory.itemName}}
-						</div>
-					</div>
-					<div class='row'>
-						<div class='col-sm-6'>
-							<b>Current Quantity:</b>
-						</div>
-						<div class='col-sm-6'>
-							{{inv.inventory.currentQuantity}}
 						</div>
 					</div>
 					<div class='row'>
@@ -73,33 +82,17 @@
 						</div>
 					</div>
 				</div>
-				
-				<div class='col-sm-4'>
-					<h3><u>Request:</u></h3>
-					<div class='row'>
-						<div class='col-sm-6'>
-							<b>User:</b>
-						</div>
-						<div class='col-sm-6'>
-							{{inv.user.fullName}}
-						</div>
-					</div>
-					<div class='row'>
-						<div class='col-sm-6'>
-							<b>Requested Units:</b>
-						</div>
-						<div class='col-sm-6'>
-							{{inv.unitCount}}
-						</div>
-					</div>
-				</div>
 
-				<div class='col-sm-2'>
+				<div class='col-sm-3'>
 
 					<button class='btn btn-success pull-right btn-block'
 						ng-click='approve(inv.id)'
 						ng-show='state1'>
 						<span class='glyphicon glyphicon-ok'></span><br> Approve
+					</button>
+					<button class='btn btn-danger pull-right btn-block'
+						ng-click='reject(inv.id)'>
+						<span class='glyphicon glyphicon-remove'></span><br> {{rejectMsg}}
 					</button>
 
 				</div>

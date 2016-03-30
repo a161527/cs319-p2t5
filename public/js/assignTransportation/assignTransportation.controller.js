@@ -4,6 +4,7 @@
 	angular.module('assignTransportation')
 		.controller('transportationUsersCtrl', function($scope, $state, $http, users) {
 
+			$scope.state1 = true 
 			$scope.flights = []
 
 			angular.forEach(users.data.flights, function(flight) {
@@ -38,6 +39,10 @@
 				$state.go('dashboard.conferences.manage.assign-transportation.2', {user: param})
 			}
 
+			$scope.viewApproved = function() {
+				$state.go('dashboard.conferences.manage.assign-transportation.3')
+			}
+
 		})
 
 		.controller('assignTransportationCtrl', function($scope, $stateParams, $http, $state, transport, modal) {
@@ -59,6 +64,12 @@
 				})
 			}
 
+		})
+
+		.controller('viewAssignedTransportCtrl', function($scope, users) {
+
+			$scope.state1 = false
+			console.log(users)
 		})
 
 })()
