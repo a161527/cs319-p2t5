@@ -9,6 +9,9 @@
 			var approvedReg = []
 			var registered = []
 
+			$scope.conferenceName = conferenceData.data.name
+			$scope.eventName = eventData.data.eventName
+
 			// get users w/ approved conference registration
 			angular.forEach(conferenceData.data.registered, function(confReg) {
 				if (confReg.status == 'approved') {
@@ -104,6 +107,14 @@
 
 			$scope.removeSubmitError = function() {
 				$scope.showSubmitError = false
+			}
+
+			$scope.goToConferenceList = function () {
+				$state.go('dashboard.conferences.list')
+			}
+
+			$scope.goToEventList = function () {
+				$state.go('dashboard.events', {cid: $stateParams.cid})
 			}
 
 			//Return a new object with the dependents based on a flag in the object
