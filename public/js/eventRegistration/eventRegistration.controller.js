@@ -16,7 +16,8 @@
 			angular.forEach(conferenceData.data.registered, function(confReg) {
 				if (confReg.status == 'approved') {
 
-					approvedReg.push(confReg.id)
+					approvedReg.push(confReg.user)
+
 				}
 			})
 
@@ -27,7 +28,7 @@
 
 			// only show users who have approved conference registration and aren't already registered
 			angular.forEach(fullDepList, function(dep) {
-				if ((approvedReg.indexOf(dep.id) !== -1) && (registered.indexOf(dep.id) == -1)) {
+				if ((approvedReg.indexOf(dep.id) !== -1) && (registered.indexOf(dep.id) === -1)) {
 					$scope.dependents[dep.id] = dep
 				}
 			})
