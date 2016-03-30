@@ -7,70 +7,76 @@
 			<button id='createRoomSetBtn' ng-click='showWidget("createRoomSet.1", {rid: residence.id})' class='btn btn-primary btn-block pull'><span class='glyphicon glyphicon-plus'></span><br> Create Room Set</button>
 		</div>
 	</div>
-
+	<br>
 	<div ng-show='noRoomSets'>There are no room sets listed for this residence at this time.</div>
-		<ul class="list-group">
-			<div ng-repeat='roomSet in roomSets'>
-				<li class="list-group-item">
-
-					<div class='row'>
-						<div class='col-md-4'>
-							<span class='glyphicon glyphicon-bed glyphicon-xlarge list-icon'></span>
-						</div>
-
-						<div class='col-md-5'>
-							<h1 style='margin-top:0px;'>{{roomSet.name}}</h1>
-						</div>
-
-						<div class='col-md-3'>
-							<div class='row'>
-								<div class='col-md-6'>
-									<b>Room Type:</b>
-								</div>
-								<div class='col-md-6'>
-									{{roomSet.type.name}}
-									<br>
-								</div>
-							</div>
-							<div class='row'>
-								<div class='col-md-6'>
-									<b>Capacity:</b>
-								</div>
-								<div class='col-md-6'>
-									{{roomSet.type.capacity}}
-								</div>
-							</div>
-							<div class='row'>
-								<div class='col-md-6'>
-									<b>Accessible:</b>
-								</div>
-								<div class='col-md-6'>
-									{{roomSet.type.accessible | yesNo}}
-								</div>
-							</div>
-
-							<br>
-							<div class='row'>
-								<div class='col-md-12'>
-									<button class='btn btn-primary pull-right btn-block' 
-											ng-click='showWidget("editRoomSet.1", {rid: residence.id, rsid: roomSet.id})'
-											ng-show='canEdit'>
-										<span class='glyphicon glyphicon-edit'></span><br> Edit Room Set
-									</button>
-									<button ng-click='deleteRoomSet(roomSet)'
-											ng-show='canEdit' 
-											id='deleteRoomSetBtn'
-											class='btn btn-danger btn-block pull-left'>
-										<span class='glyphicon glyphicon-trash'></span><br> Delete Room Set
-									</button>
-								</div>
-							</div>
-						</div>
-
-					</div>
-				</li>
-			</div>
-		<ul>
+	<div ng-show='!noRoomSets'>
+		<div class='form-group has-feedback'>
+		<input class='form-control' type='text' placeholder='Filter list by room set name' ng-model='search.name'>
+			<span class="glyphicon glyphicon-search form-control-feedback"></span>
+		</div>
+		Showing {{filtered.length}} of {{roomSets.length}} roomSets
 	</div>
+	<ul class="list-group">
+		<div ng-repeat='roomSet in roomSets | filter:search as filtered'>
+			<li class="list-group-item">
+
+				<div class='row'>
+					<div class='col-md-4'>
+						<span class='glyphicon glyphicon-bed glyphicon-xlarge list-icon'></span>
+					</div>
+
+					<div class='col-md-5'>
+						<h1 style='margin-top:0px;'>{{roomSet.name}}</h1>
+					</div>
+
+					<div class='col-md-3'>
+						<div class='row'>
+							<div class='col-md-6'>
+								<b>Room Type:</b>
+							</div>
+							<div class='col-md-6'>
+								{{roomSet.type.name}}
+								<br>
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-md-6'>
+								<b>Capacity:</b>
+							</div>
+							<div class='col-md-6'>
+								{{roomSet.type.capacity}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-md-6'>
+								<b>Accessible:</b>
+							</div>
+							<div class='col-md-6'>
+								{{roomSet.type.accessible | yesNo}}
+							</div>
+						</div>
+
+						<br>
+						<div class='row'>
+							<div class='col-md-12'>
+								<button class='btn btn-primary pull-right btn-block' 
+										ng-click='showWidget("editRoomSet.1", {rid: residence.id, rsid: roomSet.id})'
+										ng-show='canEdit'>
+									<span class='glyphicon glyphicon-edit'></span><br> Edit Room Set
+								</button>
+								<button ng-click='deleteRoomSet(roomSet)'
+										ng-show='canEdit' 
+										id='deleteRoomSetBtn'
+										class='btn btn-danger btn-block pull-left'>
+									<span class='glyphicon glyphicon-trash'></span><br> Delete Room Set
+								</button>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</li>
+		</div>
+	<ul>
 </div>
 

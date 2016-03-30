@@ -7,68 +7,73 @@
 			<button id='createTransportationBtn' ng-click='showWidget("createTransportation")' class='btn btn-primary btn-block pull'><span class='glyphicon glyphicon-plus'></span><br> Create Transportation</button>
 		</div>
 	</div>
-
+	<br>
 	<div ng-show='noTransportation'>There is no transportation listed for this conference at this time.</div>
-		<ul class="list-group">
-			<div ng-repeat='trans in transportation'>
-				<li class="list-group-item">
+	<div ng-show='!noTransportation'>
+		<div class='form-group has-feedback'>
+		<input class='form-control' type='text' placeholder='Filter list by transportation name' ng-model='search.name'>
+			<span class="glyphicon glyphicon-search form-control-feedback"></span>
+		</div>
+		Showing {{filtered.length}} of {{transportation.length}} transportation
+	</div>
+	<ul class="list-group">
+		<div ng-repeat='trans in transportation | filter:search as filtered'>
+			<li class="list-group-item">
+				<div class='row'>
+					<div class='col-sm-4'>
+						<span class='glyphicon glyphicon-send glyphicon-xlarge list-icon'></span>
+					</div>
 
-					<div class='row'>
-						<div class='col-sm-4'>
-							<span class='glyphicon glyphicon-send glyphicon-xlarge list-icon'></span>
+					<div class='col-sm-5'>
+						<h1 style='margin-top:0px;'>{{trans.name}}</h1>
+					</div>
+
+					<div class='col-sm-3'>
+						<div class='row' ng-show='trans.company'>
+							<div class='col-sm-6'>
+								<b>Company:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{trans.company}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Phone:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{trans.phone}}
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-sm-6'>
+								<b>Capacity:</b>
+							</div>
+							<div class='col-sm-6'>
+								{{trans.capacity}}
+							</div>
 						</div>
 
-						<div class='col-sm-5'>
-							<h1 style='margin-top:0px;'>{{trans.name}}</h1>
-						</div>
-
-						<div class='col-sm-3'>
-							<div class='row' ng-show='trans.company'>
-								<div class='col-sm-6'>
-									<b>Company:</b>
-								</div>
-								<div class='col-sm-6'>
-									{{trans.company}}
-								</div>
-							</div>
-							<div class='row'>
-								<div class='col-sm-6'>
-									<b>Phone:</b>
-								</div>
-								<div class='col-sm-6'>
-									{{trans.phone}}
-								</div>
-							</div>
-							<div class='row'>
-								<div class='col-sm-6'>
-									<b>Capacity:</b>
-								</div>
-								<div class='col-sm-6'>
-									{{trans.capacity}}
-								</div>
-							</div>
-
-							<br>
-							<div class='row'>
-								<div class='col-md-12'>
-									<button ng-show='canEdit' 
-											class='btn btn-primary pull-right btn-block'
-											ng-click='showWidget("editTransportation", {tid: trans.id})'>
-											<span class='glyphicon glyphicon-edit'></span><br> Edit Transportation
-									</button>
-									<button ng-click='deleteTransportation(trans)'
-											ng-show='canEdit' 
-											id='deleteTransportationBtn'
-											class='btn btn-danger btn-block pull-left'>
-										<span class='glyphicon glyphicon-trash'></span><br> Delete Transportation
-									</button>
-								</div>
+						<br>
+						<div class='row'>
+							<div class='col-md-12'>
+								<button ng-show='canEdit' 
+										class='btn btn-primary pull-right btn-block'
+										ng-click='showWidget("editTransportation", {tid: trans.id})'>
+										<span class='glyphicon glyphicon-edit'></span><br> Edit Transportation
+								</button>
+								<button ng-click='deleteTransportation(trans)'
+										ng-show='canEdit' 
+										id='deleteTransportationBtn'
+										class='btn btn-danger btn-block pull-left'>
+									<span class='glyphicon glyphicon-trash'></span><br> Delete Transportation
+								</button>
 							</div>
 						</div>
 					</div>
-				</li>
-			</div>
-		<ul>
-	</div>
+				</div>
+			</li>
+		</div>
+	<ul>
 </div>
 

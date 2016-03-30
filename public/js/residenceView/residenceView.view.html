@@ -7,56 +7,62 @@
 			<button id='createResidenceBtn' ng-click='showWidget("createResidence")' class='btn btn-primary btn-block pull'><span class='glyphicon glyphicon-plus'></span><br> Create Residence</button>
 		</div>
 	</div>
-
+	<br>
 	<div ng-show='noResidences'>There are no residences listed for this conference at this time.</div>
-		<ul class="list-group">
-			<div ng-repeat='residence in residences'>
-				<li class="list-group-item">
+	<div ng-show='!noResidences'>
+		<div class='form-group has-feedback'>
+		<input class='form-control' type='text' placeholder='Filter list by residence name' ng-model='search.name'>
+			<span class="glyphicon glyphicon-search form-control-feedback"></span>
+		</div>
+		Showing {{filtered.length}} of {{residences.length}} residences
+	</div>
+	<ul class="list-group">
+		<div ng-repeat='residence in residences | filter:search as filtered'>
+			<li class="list-group-item">
 
-					<div class='row'>
-						<div class='col-md-4'>
-							<span class='glyphicon glyphicon-home glyphicon-xlarge list-icon'></span>
-						</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<span class='glyphicon glyphicon-home glyphicon-xlarge list-icon'></span>
+					</div>
 
-						<div class='col-md-5'>
-							<h1 style='margin-top:0px;'>{{residence.name}}</h1>
-						</div>
+					<div class='col-md-5'>
+						<h1 style='margin-top:0px;'>{{residence.name}}</h1>
+					</div>
 
-						<div class='col-md-3'>
-							<div class='row'>
-								<div class='col-md-6'>
-									<b>Location:</b>
-								</div>
-								<div class='col-md-6'>
-									{{residence.location}}
-								</div>
+					<div class='col-md-3'>
+						<div class='row'>
+							<div class='col-md-6'>
+								<b>Location:</b>
 							</div>
+							<div class='col-md-6'>
+								{{residence.location}}
+							</div>
+						</div>
 
-							<br>
-							<div class='row'>
-								<div class='col-md-12'>
-									<button class='btn btn-info pull-right btn-block' 
-											ng-click='showWidget("viewResidence.viewRoomSet", {rid: residence.id})'>
-										<span class='glyphicon glyphicon-bed'></span><br> View Room Sets
-									</button>
-									<button class='btn btn-primary pull-right btn-block' 
-											ng-click='showWidget("editResidence", {rid: residence.id})'
-											ng-show='canEdit'>
-										<span class='glyphicon glyphicon-edit'></span><br> Edit Residence
-									</button>
-									<button ng-click='deleteResidence(residence)'
-											ng-show='canEdit' 
-											id='deleteResidenceBtn'
-											class='btn btn-danger btn-block pull-left'>
-										<span class='glyphicon glyphicon-trash'></span><br> Delete Residence
-									</button>
-								</div>
+						<br>
+						<div class='row'>
+							<div class='col-md-12'>
+								<button class='btn btn-info pull-right btn-block' 
+										ng-click='showWidget("viewResidence.viewRoomSet", {rid: residence.id})'>
+									<span class='glyphicon glyphicon-bed'></span><br> View Room Sets
+								</button>
+								<button class='btn btn-primary pull-right btn-block' 
+										ng-click='showWidget("editResidence", {rid: residence.id})'
+										ng-show='canEdit'>
+									<span class='glyphicon glyphicon-edit'></span><br> Edit Residence
+								</button>
+								<button ng-click='deleteResidence(residence)'
+										ng-show='canEdit' 
+										id='deleteResidenceBtn'
+										class='btn btn-danger btn-block pull-left'>
+									<span class='glyphicon glyphicon-trash'></span><br> Delete Residence
+								</button>
 							</div>
 						</div>
 					</div>
-				</li>
-			</div>
-		<ul>
-	</div>
+				</div>
+			</li>
+		</div>
+	<ul>
 </div>
 

@@ -6,110 +6,116 @@
 		<button id='createConferenceBtn' ng-show='canCreateConference' ng-click='goToCreateConference()' class='btn btn-primary btn-block'><span class='glyphicon glyphicon-plus'></span><br> Create Conference</button>
 	</div>
 </div>
-
+<br>
 <div ng-show='noConferences'>No conferences at this time</div>
-	<ul class="list-group">
-		<div ng-repeat='conference in conferences'>
-			<li class="list-group-item">
-
-				<div class='row'>
-					<div class='col-md-4'>
-						<span class='glyphicon glyphicon-globe glyphicon-xlarge list-icon'></span>
-					</div>
-
-					<div class='col-md-5'>
-						<h1 style='margin-top:0px;'>{{conference.name}}</h1>
-						<div>{{conference.description}}</div>
-					</div>
-
-					<div class='col-md-3'>
-						<div class='row'>
-							<div class='col-md-6'>
-								<b>Location:</b>
-							</div>
-							<div class='col-md-6'>
-								{{conference.location}}
-							</div>
-						</div>
-
-						<div class='row'>
-							<div class='col-md-6'>
-								<b>Start:</b>
-							</div>
-							<div class='col-md-6'>
-								{{conference.start}}
-							</div>
-						</div>
-
-						<div class='row'>
-							<div class='col-md-6'>
-								<b>End:</b>
-							</div>
-							<div class='col-md-6'>
-								{{conference.end}}
-							</div>
-						</div>
-
-						<div class='row'>
-							<div class='col-md-6'>
-								<b>Transportation:</b>
-							</div>
-							<div class='col-md-6'>
-								{{conference.hasTransportation | yesNo}}
-							</div>
-						</div>
-
-						<div class='row'>
-							<div class='col-md-6'>
-								<b>Accommodations:</b>
-							</div>
-							<div class='col-md-6'>
-								{{conference.hasAccommodations | yesNo}}
-							</div>
-						</div>
-
-						<br>
-						<div class='row' ng-hide='publicPage'>
-							<div class='col-md-12'>
-								<a ui-sref='dashboard.events({cid: conference.id})'
-									id='viewEventBtn'
-									class='btn btn-info btn-block pull-left'>
-									<span class='glyphicon glyphicon-calendar'></span><br> View Events
-								</a>
-
-								<button class='btn btn-primary pull-right btn-block'
-									ng-show='!registered(conference.registered) && hasApprovedDependents'
-									ui-sref='dashboard.conferences.registration.1({cid: conference.id})'>
-									<span class='glyphicon glyphicon-pencil'></span><br> Register
-								</button>
-
-								<button class='btn btn-primary pull-right btn-block'
-									ng-show='registered(conference.registered)'
-									ng-click='goToDetails(conference)'>
-									<span class='glyphicon glyphicon-pencil'></span><br> Registration Details
-								</button>
-
-								<button ng-click='goToManage(conference)'
-									ng-show='conference.permissions.length > 0' 
-									id='manageConferenceBtn'
-									class='btn btn-primary btn-block pull-left'>
-									<span class='glyphicon glyphicon-cog'></span><br> Manage Conference
-								</button>
-
-								<button ng-click='deleteConference(conference)'
-									ng-show='conference.permissions.indexOf("conference-info-edit") !== -1' 
-									id='deleteConferenceBtn'
-									class='btn btn-danger btn-block pull-left'>
-									<span class='glyphicon glyphicon-trash'></span><br> Delete Conference
-								</button>
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</li>
-		</div>
-	<ul>
+<div ng-show='!noConferences'>
+	<div class='form-group has-feedback'>
+	<input class='form-control' type='text' placeholder='Filter list by conference name' ng-model='search.name'>
+		<span class="glyphicon glyphicon-search form-control-feedback"></span>
+	</div>
+	Showing {{filtered.length}} of {{conferences.length}} conferences
 </div>
+<ul class="list-group">
+	<div ng-repeat='conference in conferences | filter:search as filtered'>
+		<li class="list-group-item">
+
+			<div class='row'>
+				<div class='col-md-4'>
+					<span class='glyphicon glyphicon-globe glyphicon-xlarge list-icon'></span>
+				</div>
+
+				<div class='col-md-5'>
+					<h1 style='margin-top:0px;'>{{conference.name}}</h1>
+					<div>{{conference.description}}</div>
+				</div>
+
+				<div class='col-md-3'>
+					<div class='row'>
+						<div class='col-md-6'>
+							<b>Location:</b>
+						</div>
+						<div class='col-md-6'>
+							{{conference.location}}
+						</div>
+					</div>
+
+					<div class='row'>
+						<div class='col-md-6'>
+							<b>Start:</b>
+						</div>
+						<div class='col-md-6'>
+							{{conference.start}}
+						</div>
+					</div>
+
+					<div class='row'>
+						<div class='col-md-6'>
+							<b>End:</b>
+						</div>
+						<div class='col-md-6'>
+							{{conference.end}}
+						</div>
+					</div>
+
+					<div class='row'>
+						<div class='col-md-6'>
+							<b>Transportation:</b>
+						</div>
+						<div class='col-md-6'>
+							{{conference.hasTransportation | yesNo}}
+						</div>
+					</div>
+
+					<div class='row'>
+						<div class='col-md-6'>
+							<b>Accommodations:</b>
+						</div>
+						<div class='col-md-6'>
+							{{conference.hasAccommodations | yesNo}}
+						</div>
+					</div>
+
+					<br>
+					<div class='row' ng-hide='publicPage'>
+						<div class='col-md-12'>
+							<a ui-sref='dashboard.events({cid: conference.id})'
+								id='viewEventBtn'
+								class='btn btn-info btn-block pull-left'>
+								<span class='glyphicon glyphicon-calendar'></span><br> View Events
+							</a>
+
+							<button class='btn btn-primary pull-right btn-block'
+								ng-show='!registered(conference.registered) && hasApprovedDependents'
+								ui-sref='dashboard.conferences.registration.1({cid: conference.id})'>
+								<span class='glyphicon glyphicon-pencil'></span><br> Register
+							</button>
+
+							<button class='btn btn-primary pull-right btn-block'
+								ng-show='registered(conference.registered)'
+								ng-click='goToDetails(conference)'>
+								<span class='glyphicon glyphicon-pencil'></span><br> Registration Details
+							</button>
+
+							<button ng-click='goToManage(conference)'
+								ng-show='conference.permissions.length > 0' 
+								id='manageConferenceBtn'
+								class='btn btn-primary btn-block pull-left'>
+								<span class='glyphicon glyphicon-cog'></span><br> Manage Conference
+							</button>
+
+							<button ng-click='deleteConference(conference)'
+								ng-show='conference.permissions.indexOf("conference-info-edit") !== -1' 
+								id='deleteConferenceBtn'
+								class='btn btn-danger btn-block pull-left'>
+								<span class='glyphicon glyphicon-trash'></span><br> Delete Conference
+							</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</li>
+	</div>
+<ul>
 
 
