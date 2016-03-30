@@ -13,7 +13,7 @@
 						Select All
 					</label>
 				</th>
-				<th>
+<!-- 				<th>
 					<div>Needs Transportation?</div>
 					<label class='checkbox-inline'>
 						<input type="checkbox" 
@@ -22,13 +22,13 @@
 							selectAll("hasFlight", false, selectedDependents);'>
 						Select All
 					</label>
-				</th>
+				</th> -->
 				<th>
-					<div>Has Flight?</div>
+					<div>Needs Transportation?</div>
 					<label class='checkbox-inline'>
 						<input type="checkbox" 
 						ng-model='flightsSelectAll'
-						ng-click='selectAllFlights(flightsSelectAll, selectedDependents)'>
+						ng-click='selectAll("hasFlight", flightsSelectAll, selectedDependents)'>
 						Select All
 					</label>
 				</th>
@@ -41,15 +41,15 @@
 					<input type="checkbox" 
 					ng-model='selectedDependents[idx].needsAccommodation'>
 				</td>
-				<td>
+<!-- 				<td>
 					<input type="checkbox" 
 					ng-model='selectedDependents[idx].needsTransportation'
 					ng-change='selectedDependents[idx].hasFlight = false'>
-				</td>
+				</td> -->
 				<td>
 					<input type="checkbox" 
-					ng-model='selectedDependents[idx].hasFlight'
-					ng-disabled='!selectedDependents[idx].needsTransportation'>
+					ng-model='selectedDependents[idx].hasFlight'>
+					<!-- ng-disabled='!selectedDependents[idx].needsTransportation'> -->
 				</td>
 			</tr>
 		</tbody>
