@@ -54,8 +54,8 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
             Route::delete('roomSets/{setId}', 'RoomSetupController@deleteRoomSet');
 
             Route::post('assign', 'RoomAssignmentController@assignRoom');
+            Route::get('assign/listing', 'RoomAssignmentController@listAssignments');
             Route::delete('assign/{assignId}', 'RoomAssignmentController@deleteAssignment');
-            Route::get('assign', 'RoomAssignmentController@listAssignments');
             Route::get('assign/missing', 'RoomAssignmentController@missingAssignments');
         });
 

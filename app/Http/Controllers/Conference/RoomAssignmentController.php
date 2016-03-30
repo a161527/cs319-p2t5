@@ -103,17 +103,18 @@ class RoomAssignmentController extends Controller
         }
 
         if($req->input('all')){
-            return UserRoom::whereHas('registration', function($query) use ($confId) {
+            $selector = UserRoom::whereHas('registration', function($query) use ($confId) {
                 $query->where('conferenceID', $confId);
-            })->with('registration.user')->get();
+            });
         } else {
-            return UserRoom::whereHas('registration', function($query) use ($confId) {
+            $selector = UserRoom::whereHas('registration', function($query) use ($confId) {
                 $query->where('conferenceID', $confId);
                 $query->whereHas('user', function ($userQuery) {
                     $userQuery->where("accountID", Auth::user()->id);
                 });
-            })->with('registration.user')->get();
+            });
         }
+        return $selector->with('registration.user', 'roomSet.residence')->get();
     }
 
     public function deleteAssignment($confId, $assignmentId) {
