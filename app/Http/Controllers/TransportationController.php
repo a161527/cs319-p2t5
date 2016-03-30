@@ -20,7 +20,7 @@ class TransportationController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('jwt.auth.rejection');
+        $this->middleware('jwt.auth.rejection');
     }
     private function transportValidator(array $data)
     {
@@ -355,9 +355,9 @@ class TransportationController extends Controller
      */
     public function transportSummary($confId, Request $req)
     {
-        // if (!Entrust::can(PermissionNames::ConferenceTransportationEdit($confId))) {
-        //     return response()->json(['message' => 'cannot_manage_transport'], 403);
-        // }
+        if (!Entrust::can(PermissionNames::ConferenceTransportationEdit($confId))) {
+            return response()->json(['message' => 'cannot_manage_transport'], 403);
+        }
 
         if (!($this->isValidConference($confId)))
             return response()->json(['message' => 'conference_not_found'], 404);
