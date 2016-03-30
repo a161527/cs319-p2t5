@@ -139,8 +139,8 @@ Route::group(['prefix' => 'api'], function()
     });
 
     // user_inventory
-    Route::group(['prefix' => 'userinventory/{id}'], function() {
-        Route::get('/approve', 'InventoryController@approveRequest');
+    Route::group(['prefix' => 'conferences/{confId}/userinventory/{id}'], function() {
+        Route::post('/approve', 'InventoryController@approveRequest');
         Route::delete('', 'InventoryController@deleteReservation');
     });
 
