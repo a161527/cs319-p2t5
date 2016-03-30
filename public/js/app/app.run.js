@@ -79,9 +79,6 @@
 						case 'createTransportation':
 							checkHasPermission('conference-transportation-edit', permissions)
 							break
-						case 'editEvent':
-							checkHasPermission('conference-event-create', permissions)
-							break
 						case 'editResidence':
 							checkHasPermission('conference-room-edit', permissions)
 							break
@@ -93,6 +90,14 @@
 							break
 						case 'editTransportation':
 							checkHasPermission('conference-transportation-edit', permissions)
+							break
+					}
+				}
+
+				var checkEventPermissions = function(toState, permissions) {
+					switch(getStateName(toState)) {
+						case 'editEvent':
+							checkHasPermission('event-info-edit', permissions)
 							break
 					}
 				}
@@ -127,7 +132,7 @@
 
 					else {
 
-						//Check conference permissions
+						//Check conference & event permissions
 						if (checkIfManageState(toState)) {
 							
 							//check permissions
@@ -135,11 +140,27 @@
 							if (toStateParams.cid) {
 								loginStorage.getConferencePermissions(toStateParams.cid).then(function(resData) {
 
-									if (resData.length === 0) {
+									if (resData.length === 0 && toState.name !== "dashboard.conferences.manage.editEvent") {
 										$state.go('dashboard.home')
 									} else {
 
 										checkConferencePermissions(toState, resData)
+
+									}
+
+								}, function(resData) {
+									console.log('Something went wrong')
+								})
+							}
+
+							if (toStateParams.eid) {
+								loginStorage.getEventPermissions(toStateParams.eid).then(function(resData) {
+
+									if (resData.length === 0) {
+										$state.go('dashboard.home')
+									} else {
+
+										checkEventPermissions(toState, resData)
 
 									}
 
