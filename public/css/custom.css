@@ -6,6 +6,10 @@
 	font-size: 6em;
 }
 
+.glyphicon-xlarge {
+    font-size: 10em;
+}
+
 .hand-cursor {
 	cursor: pointer;
 	cursor: hand;
@@ -135,4 +139,18 @@ td.uib-day > button {
 
 .header-arrow {
     font-size: 20px;
+}
+
+@media (min-width: 768px) {
+    .list-icon {
+        display: block;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .list-icon {
+        display: block;
+        text-align: center;
+    }
 }
