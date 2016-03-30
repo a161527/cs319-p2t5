@@ -20,7 +20,7 @@ class TransportationController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('jwt.auth.rejection');
+        $this->middleware('jwt.auth.rejection');
     }
     private function transportValidator(array $data)
     {
@@ -66,8 +66,7 @@ class TransportationController extends Controller
 
         foreach ($userConfs as &$user)
         {
-            
-            $user['user']['userconferenceID'] = $user['user_transportation']['userconferenceID'];
+            $user['user']['userconferenceID'] = $user['id'];
             $r ['flights'] [$user['flightID']] ['accounts'] [$user['user']['accountID']] ['users'] [] = $user['user'];
         }
 
@@ -336,6 +335,10 @@ class TransportationController extends Controller
      */
     public function getTransport($confId, $transportId)
     {
+        if (!Entrust::can(PermissionNames::ConferenceTransportationEdit($confId))) {
+            return response()->json(['message' => 'cannot_manage_transport'], 403);
+        }
+
         $transport = Transportation::where('id', $transportId)
                                    ->where('conferenceID', $confId)
                                    ->first();
@@ -351,6 +354,10 @@ class TransportationController extends Controller
      */
     public function transportSummary($confId, Request $req)
     {
+        if (!Entrust::can(PermissionNames::ConferenceTransportationEdit($confId))) {
+            return response()->json(['message' => 'cannot_manage_transport'], 403);
+        }
+
         if (!($this->isValidConference($confId)))
             return response()->json(['message' => 'conference_not_found'], 404);
 
