@@ -98,7 +98,7 @@
 										disabled>
 									All attendees registered
 								</button>
-								<button ng-show='event.canEdit' 
+								<button ng-show='event.permissions.indexOf("event-info-edit") !== -1' 
 										class='btn btn-primary pull-right btn-block'
 										ng-click='showWidget("editEvent", {eid: event.id})'>
 										<span class='glyphicon glyphicon-edit'></span><br> Edit Event
