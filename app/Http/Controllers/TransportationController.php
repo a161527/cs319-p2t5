@@ -71,7 +71,7 @@ class TransportationController extends Controller
             if ($ut != null)
             {
                 $user['user']['hasTransport'] = 1;
-                $user['user']['transport'] = $transports[$ut['transportationID']];
+                $user['user']['transportation'] = $transports[$ut['transportationID']];
             }
             else 
                 $user['user']['hasTransport'] = 0;
