@@ -356,7 +356,7 @@ class TransportationController extends Controller
                                    ->where('conferenceID', $confId)
                                    ->where('approved', 1)
                                    ->with(array('user'=>function($q){
-                                        $q->select('id','firstName','lastName','accountID','approved');
+                                        $q->select('id','firstName','lastName','accountID');
                                    }))
                                    ->with('userTransportation');
 
