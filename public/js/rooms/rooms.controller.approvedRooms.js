@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('rooms')
-		.controller('ApprovedRoomsCtrl', function($scope, $state, $stateParams, $http, assignedRooms, conferenceData) {
+		.controller('ApprovedRoomsCtrl', function($scope, $state, $stateParams, $http, assignedRooms, conferenceData, modal) {
 
 			$scope.roomsAssigned = assignedRooms.data
 			$scope.conferenceName = conferenceData.data.name
@@ -19,7 +19,7 @@
 				$http.delete('api/conferences/' + $stateParams.cid + '/residences/' + id).then(function(resData) {
 					$state.reload()
 				}, function(resData) {
-
+					modal.open('Error: ' + resData.data.message)
 				})
 			}
 

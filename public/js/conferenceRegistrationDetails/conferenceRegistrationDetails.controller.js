@@ -11,7 +11,7 @@
 			})
 
 			$scope.allDependentsRegistered = numOfDependents === $scope.registered.length
-
+			console.log($scope.registered)
 			$scope.usersApprovedAndInvExists = function(registered) {
 				var numApproved = 0
 				angular.forEach(registered, function(dep) {
@@ -28,7 +28,7 @@
 			//Format into object indexed by dependent id for cross referencing
 			//This object currently contains info about rooms	
 			$scope.conf = dataFormat.dependentsFormat(confDetails.data.registered, 'user')
-
+			console.log($scope.conf)
 			$scope.requestInventory = function() {
 				$state.go('dashboard.conferences.inventoryRequest', {cid: $stateParams.cid})
 			}
