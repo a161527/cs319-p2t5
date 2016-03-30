@@ -6,7 +6,7 @@
 </div>
 Showing {{filtered.length}} of {{transportation.length}}
 <ul class="list-group">
-	<div ng-repeat='t in transportation | filter: search'>
+	<div ng-repeat='t in transportation | filter: search as filtered'>
 		<li class='list-group-item unselectable-text'>
 			<div class='row'>
 
@@ -52,7 +52,7 @@ Showing {{filtered.length}} of {{transportation.length}}
 				<div class='col-sm-3'>
 
 						<button class='btn btn-success pull-right btn-block'
-							ng-click='assign()'>
+							ng-click='assign(t.id)'>
 							<span class='glyphicon glyphicon-ok'></span><br> Assign
 						</button>
 
