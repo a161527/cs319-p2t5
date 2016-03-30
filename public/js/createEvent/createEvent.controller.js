@@ -34,8 +34,8 @@
 					eventInfo.eventName = $scope.eventInfo.eventName
 					eventInfo.description = $scope.eventInfo.description
 					eventInfo.date = moment($scope.eventInfo.date).format('YYYY-MM-DD')
-					eventInfo.startTime = moment($scope.eventInfo.start).format('HH:mm') + ':00'
-					eventInfo.endTime = moment($scope.eventInfo.end).format('HH:mm') + ':00'
+					eventInfo.startTime = moment($scope.eventInfo.startTime).format('HH:mm') + ':00'
+					eventInfo.endTime = moment($scope.eventInfo.endTime).format('HH:mm') + ':00'
 					eventInfo.location = $scope.eventInfo.location
 					eventInfo.capacity = $scope.eventInfo.capacity
 					eventInfo.conferenceID = $stateParams.cid
