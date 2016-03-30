@@ -20,7 +20,7 @@ class TransportationController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('jwt.auth.rejection');
+        $this->middleware('jwt.auth.rejection');
     }
     private function transportValidator(array $data)
     {
