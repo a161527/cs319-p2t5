@@ -102,6 +102,11 @@
 					url: '',
 					templateUrl: 'js/auditAccts/auditAccts.view.approve.html',
 					controller: 'viewApprovedAcctsCtrl',
+					resolve: {
+						approvedDependents: function($http) {
+							return $http.get('api/dependents/approved')
+						}
+					}
 				})
 
 				/*

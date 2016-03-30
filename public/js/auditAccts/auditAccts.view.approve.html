@@ -9,12 +9,12 @@
 			Go to Approve Users
 		</button>
 	</div>
-<!-- 	<div class='col-sm-3' ng-show='state1'>
+	<div class='col-sm-3' ng-show='state1'>
 		<button class='btn btn-info btn-block' 
 			ng-click='viewApproved()'>
 			View Approved Users
 		</button>
-	</div> -->
+	</div>
 </div>
 <div ng-show='dependents.length === 0'>
 	No users requiring approval
@@ -25,7 +25,7 @@
 		<input class='form-control' type='text' placeholder='Search by user' ng-model='search.fullName'>
 		<span class="glyphicon glyphicon-search form-control-feedback"></span>
 	</div>
-	Showing {{filtered.length}} of {{dependents.length}} requests
+	Showing {{filtered.length}} of {{dependents.length}} users
 	<ul class="list-group">
 		<div ng-repeat='unapproved in dependents | filter: search as filtered'>
 			<li class='list-group-item unselectable-text'>
@@ -79,7 +79,8 @@
 					<div class='col-sm-3'>
 
 						<button class='btn btn-success pull-right btn-block'
-							ng-click='approve(unapproved.id)'>
+							ng-click='approve(unapproved.id)'
+							ng-show='state1'>
 							<span class='glyphicon glyphicon-ok'></span><br> Approve
 						</button>
 
