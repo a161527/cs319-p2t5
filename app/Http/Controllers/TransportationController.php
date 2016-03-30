@@ -14,6 +14,7 @@ use App\UserTransportation;
 use DB;
 use Validator;
 use Entrust;
+use App\Utility\PermissionNames;
 
 class TransportationController extends Controller
 {
