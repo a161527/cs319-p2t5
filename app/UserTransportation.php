@@ -8,4 +8,8 @@ class UserTransportation extends Model
 {
     protected $table = 'user_transportation';
     public $timestamps = false;
+
+    public function transportation() {
+        return $this->hasOne('App\Transportation', 'id', 'transportationID');
+    }
 }
