@@ -15,7 +15,7 @@
 
 					<div class='row'>
 						<div class='col-md-4'>
-							<img src="https://pixabay.com/static/uploads/photo/2015/05/15/14/22/conference-room-768441_960_720.jpg" class="img-thumbnail img-responsive"/>
+							<span class='glyphicon glyphicon-calendar glyphicon-xlarge list-icon'></span>
 						</div>
 
 						<div class='col-md-5'>
@@ -94,7 +94,13 @@
 									<button ng-show='event.canEdit' 
 											class='btn btn-primary pull-right btn-block'
 											ng-click='showWidget("editEvent", {eid: event.id})'>
-											<span class='glyphicon glyphicon-pencil'></span><br> Edit Event
+											<span class='glyphicon glyphicon-edit'></span><br> Edit Event
+									</button>
+									<button ng-click='deleteEvent(event)'
+											ng-show='event.permissions.indexOf("event-info-edit") !== -1' 
+											id='deleteEventBtn'
+											class='btn btn-danger btn-block pull-left'>
+										<span class='glyphicon glyphicon-trash'></span><br> Delete Event
 									</button>
 								</div>
 							</div>

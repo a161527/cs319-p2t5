@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('residenceView')
-		.controller('residenceListCtrl', function($scope, $state, $stateParams, residenceData, ajax, conferenceInfo, permissions) {
+		.controller('residenceListCtrl', function($scope, $state, $stateParams, residenceData, ajax, conferenceInfo, permissions, confirmDeleteModal) {
 			
 			var cid = $stateParams.cid
 			$scope.residences = residenceData[0] || []
@@ -19,6 +19,10 @@
 					})
 				}
 				$state.go(state, allParams);
+			}
+
+			$scope.deleteResidence = function(residence) {
+				confirmDeleteModal.open('Residence', residence.name, 'api/conferences/' + $stateParams.cid + '/residences/' + residence.id)
 			}
 
 		})

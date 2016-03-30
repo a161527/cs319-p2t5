@@ -15,7 +15,7 @@
 
 					<div class='row'>
 						<div class='col-sm-4'>
-							<img src="https://pixabay.com/static/uploads/photo/2015/05/15/14/22/conference-room-768441_960_720.jpg" class="img-thumbnail img-responsive"/>
+							<span class='glyphicon glyphicon-send glyphicon-xlarge list-icon'></span>
 						</div>
 
 						<div class='col-sm-5'>
@@ -54,7 +54,13 @@
 									<button ng-show='canEdit' 
 											class='btn btn-primary pull-right btn-block'
 											ng-click='showWidget("editTransportation", {tid: trans.id})'>
-											<span class='glyphicon glyphicon-pencil'></span><br> Edit Transportation
+											<span class='glyphicon glyphicon-edit'></span><br> Edit Transportation
+									</button>
+									<button ng-click='deleteTransportation(trans)'
+											ng-show='canEdit' 
+											id='deleteTransportationBtn'
+											class='btn btn-danger btn-block pull-left'>
+										<span class='glyphicon glyphicon-trash'></span><br> Delete Transportation
 									</button>
 								</div>
 							</div>

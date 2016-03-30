@@ -13,28 +13,36 @@
 		<div class='row'>
 			<div class='col-sm-2' ng-show='permissions["conference-event-create"]'>
 				<button class='btn btn-primary btn-block' ng-click='showWidget("createEvent")'>
+					<br>
 					<span class='glyphicon glyphicon-calendar glyphicon-large'></span>
+					<br>
 					<br>
 					Add Event
 				</button>
 			</div>
 			<div class='col-sm-2' ng-show='permissions["conference-inventory-edit"]'>
 				<button class='btn btn-primary btn-block' ng-click='showWidget("createInventory")'>
+					<br>
 					<span class='glyphicon glyphicon-apple glyphicon-large'></span>
+					<br>
 					<br>
 					Add Inventory
 				</button>
 			</div>
 			<div class='col-sm-2' ng-show='permissions["conference-room-edit"]'>
 				<button class='btn btn-primary btn-block' ng-click='showWidget("createResidence")'>
-					<span class='glyphicon glyphicon-bed glyphicon-large'></span>
+					<br>
+					<span class='glyphicon glyphicon-home glyphicon-large'></span>
+					<br>
 					<br>
 					Add Residences
 				</button>
 			</div>
 			<div class='col-sm-2' ng-show='permissions["conference-transportation-edit"]'>
 				<button class='btn btn-primary btn-block' ng-click='showWidget("createTransportation")'>
+					<br>
 					<span class='glyphicon glyphicon-send glyphicon-large'></span>
+					<br>
 					<br>
 					Add Transportation
 				</button>
@@ -51,35 +59,45 @@
 		<div class='row'>
 			<div class='col-sm-2' ng-show='permissions["conference-info-edit"]'>
 				<button class='btn btn-info btn-block' ng-click='showWidget("editConference")'>
+					<br>
 					<span class='glyphicon glyphicon-globe glyphicon-large'></span>
+					<br>
 					<br>
 					Edit Conference
 				</button>
 			</div>
 			<div class='col-sm-2' ng-show='permissions["conference-info-edit"]'>
 				<button class='btn btn-info btn-block' ng-click='showEventList()'>
+					<br>
 					<span class='glyphicon glyphicon-calendar glyphicon-large'></span>
+					<br>
 					<br>
 					Edit Events
 				</button>
 			</div>
 			<div class='col-sm-2' ng-show='permissions["conference-inventory-edit"]'>
 				<button class='btn btn-info btn-block' ng-click='showWidget("viewInventory")'>
+					<br>
 					<span class='glyphicon glyphicon-apple glyphicon-large'></span>
+					<br>
 					<br>
 					Edit Inventory
 				</button>
 			</div>
 			<div class='col-sm-2' ng-show='permissions["conference-room-edit"]'>
 				<button class='btn btn-info btn-block' ng-click='showWidget("viewResidence")'>
-					<span class='glyphicon glyphicon-bed glyphicon-large'></span>
+					<br>
+					<span class='glyphicon glyphicon-home glyphicon-large'></span>
+					<br>
 					<br>
 					Edit Residences
 				</button>
 			</div>
 			<div class='col-sm-2' ng-show='permissions["conference-transportation-edit"]'>
 				<button class='btn btn-info btn-block' ng-click='showWidget("viewTransportation")'>
+					<br>
 					<span class='glyphicon glyphicon-send glyphicon-large'></span>
+					<br>
 					<br>
 					Edit Transportation
 				</button>
@@ -96,30 +114,38 @@
 		<div class='row'>
 			<div class='col-sm-2' ng-show='permissions["conference-registration-approval"]'>
 				<button class='btn btn-danger btn-block' ng-click='showWidget("approve-registration.1")'>
+					<br>
 					<span class='glyphicon glyphicon-user glyphicon-large'></span>
 					<br>
-					Attendee Registration
+					Attendee 
+					<br>Registration
 				</button>
 			</div>
 			<div class='col-sm-2' ng-show='permissions["conference-inventory-edit"]'>
 				<button class='btn btn-danger btn-block' ng-click='showWidget("approve-inventory.1")'>
+					<br>
 					<span class='glyphicon glyphicon-apple glyphicon-large'></span>
+					<br>
 					<br>
 					Inventory Requests
 				</button>
 			</div>
 			<div class='col-sm-2' ng-show='permissions["conference-room-edit"]'>
 				<button class='btn btn-danger btn-block' ng-click='showWidget("room-allocate.1")'>
+					<br>
 					<span class='glyphicon glyphicon-bed glyphicon-large'></span>
+					<br>
 					<br>
 					Assign Rooms
 				</button>
 			</div>
 			<div class='col-sm-2' ng-show='permissions["conference-transportation-edit"]'>
 				<button class='btn btn-danger btn-block' ng-click='showWidget("assign-transportation.1")'>
+					<br>
 					<span class='glyphicon glyphicon-send glyphicon-large'></span>
 					<br>
-					Assign Transportation 
+					Assign
+					<br>Transportation 
 				</button>
 			</div>
 		</div>
@@ -127,13 +153,15 @@
 
 	<div ng-show='permissions["conference-view-statistics"]'>
 		<br>
-		<h4><i class='glyphicon glyphicon-stats' /> Statistics</h4>
+		<h4><i class='glyphicon glyphicon-download-alt' /> Download</h4>
 		<div class='row'>
 			<div class='col-sm-2' ng-show='permissions["conference-view-statistics"]'>
 				<button class='btn btn-warning btn-block'>
-					<span class='glyphicon glyphicon-signal glyphicon-large'></span>
 					<br>
-					Statistics
+					<span class='glyphicon glyphicon-list-alt glyphicon-large'></span>
+					<br>
+					<br>
+					Reports
 				</button>
 			</div>
 		</div>

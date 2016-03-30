@@ -39,6 +39,7 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
             Route::group(['prefix' => '{residenceId}'], function () {
                 Route::get('', 'RoomSetupController@getResidenceInfo');
                 Route::patch('', 'RoomSetupController@editResidence');
+                Route::delete('', 'RoomSetupController@deleteResidence');
                 Route::get('roomSets', 'RoomSetupController@getResidenceRoomSets');
                 Route::get('roomTypes', 'RoomSetupController@getResidenceRoomTypes');
                 Route::post('roomSets', 'RoomSetupController@createRoomSet');
@@ -50,6 +51,7 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
             Route::get('roomSets/{setId}/rooms', 'RoomAssignmentController@roomsInSet');
             Route::get('roomSets/{setId}', 'RoomSetupController@getRoomSetInfo');
             Route::patch('roomSets/{setId}', 'RoomSetupController@editRoomSet');
+            Route::delete('roomSets/{setId}', 'RoomSetupController@deleteRoomSet');
 
             Route::post('assign', 'RoomAssignmentController@assignRoom');
             Route::delete('assign/{assignId}', 'RoomAssignmentController@deleteAssignment');

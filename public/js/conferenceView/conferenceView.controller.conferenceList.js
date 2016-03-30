@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('conferenceView')
-		.controller('conferenceListCtrl', function($scope, $state, $http, conferenceData, approvedDependents, $q) {
+		.controller('conferenceListCtrl', function($scope, $state, $http, conferenceData, approvedDependents, $q, confirmDeleteModal) {
 
 			$scope.conferences = conferenceData[0] || []
 			$scope.noConferences = ($scope.conferences.length === 0)
@@ -23,6 +23,10 @@
 
 			$scope.goToDetails = function(conference) {
 				$state.go('dashboard.conferences.registrationDetails', {cid: conference.id, conference: conference})
+			}
+
+			$scope.deleteConference = function(conference) {
+				confirmDeleteModal.open('Conference', conference.name, 'api/conferences/' + conference.id)
 			}
 		})
 

@@ -14,7 +14,7 @@
 
 				<div class='row'>
 					<div class='col-md-4'>
-						<img src="https://pixabay.com/static/uploads/photo/2015/05/15/14/22/conference-room-768441_960_720.jpg" class="img-thumbnail img-responsive"/>
+						<span class='glyphicon glyphicon-globe glyphicon-xlarge list-icon'></span>
 					</div>
 
 					<div class='col-md-5'>
@@ -93,7 +93,14 @@
 									ng-show='conference.permissions.length > 0' 
 									id='manageConferenceBtn'
 									class='btn btn-primary btn-block pull-left'>
-									<span class='glyphicon glyphicon-info-sign'></span><br> Manage Conference
+									<span class='glyphicon glyphicon-cog'></span><br> Manage Conference
+								</button>
+
+								<button ng-click='deleteConference(conference)'
+									ng-show='conference.permissions.indexOf("conference-info-edit") !== -1' 
+									id='deleteConferenceBtn'
+									class='btn btn-danger btn-block pull-left'>
+									<span class='glyphicon glyphicon-trash'></span><br> Delete Conference
 								</button>
 							</div>
 						</div>

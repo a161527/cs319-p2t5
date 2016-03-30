@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('eventView')
-		.controller('eventListCtrl', function($scope, $state, $stateParams, eventData, ajax, conferenceName) {
+		.controller('eventListCtrl', function($scope, $state, $stateParams, eventData, ajax, conferenceName, confirmDeleteModal) {
 			
 			var cid = $stateParams.cid
 			$scope.events = eventData[0] || []
@@ -70,6 +70,10 @@
 				else {
 					$scope.isEventRegistered = false
 				}
+			}
+
+			$scope.deleteEvent = function(event) {
+				confirmDeleteModal.open('Event', event.eventName, 'api/event/' + event.id)
 			}
 
 			getApprovedUsers()
