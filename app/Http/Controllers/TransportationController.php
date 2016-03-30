@@ -22,6 +22,7 @@ class TransportationController extends Controller
     {
         $this->middleware('jwt.auth.rejection');
     }
+
     private function transportValidator(array $data)
     {
         $validator = Validator::make($data, [
@@ -66,10 +67,15 @@ class TransportationController extends Controller
 
         foreach ($userConfs as &$user)
         {
+            if ($user['user_transportation'] != null)
+                $user['user']['hasTransport'] = 1;
+            else 
+                $user['user']['hasTransport'] = 0;
+
             $user['user']['userconferenceID'] = $user['id'];
             $r ['flights'] [$user['flightID']] ['accounts'] [$user['user']['accountID']] ['users'] [] = $user['user'];
         }
-
+        
         foreach ($r['flights'] as &$fl)
         {
             $fl['count'] = 0;
