@@ -56,6 +56,12 @@
 											ng-click='showWidget("editTransportation", {tid: trans.id})'>
 											<span class='glyphicon glyphicon-edit'></span><br> Edit Transportation
 									</button>
+									<button ng-click='deleteTransportation(trans)'
+											ng-show='canEdit' 
+											id='deleteTransportationBtn'
+											class='btn btn-danger btn-block pull-left'>
+										<span class='glyphicon glyphicon-trash'></span><br> Delete Transportation
+									</button>
 								</div>
 							</div>
 						</div>

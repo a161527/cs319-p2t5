@@ -95,6 +95,13 @@
 									class='btn btn-primary btn-block pull-left'>
 									<span class='glyphicon glyphicon-cog'></span><br> Manage Conference
 								</button>
+
+								<button ng-click='deleteConference(conference)'
+									ng-show='conference.permissions.indexOf("conference-info-edit") !== -1' 
+									id='deleteConferenceBtn'
+									class='btn btn-danger btn-block pull-left'>
+									<span class='glyphicon glyphicon-trash'></span><br> Delete Conference
+								</button>
 							</div>
 						</div>
 					</div>

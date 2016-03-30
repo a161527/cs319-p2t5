@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('inventoryView')
-		.controller('inventoryListCtrl', function($scope, $state, $stateParams, inventoryData, ajax, conferenceInfo, permissions) {
+		.controller('inventoryListCtrl', function($scope, $state, $stateParams, inventoryData, ajax, conferenceInfo, permissions, confirmDeleteModal) {
 			
 			var cid = $stateParams.cid
 			$scope.inventory = inventoryData[0].inventory || []
@@ -19,6 +19,10 @@
 					})
 				}
 				$state.go(state, allParams);
+			}
+
+			$scope.deleteInventory = function(inventory) {
+				confirmDeleteModal.open('Inventory', inventory.itemName, 'api/conferences/' + $stateParams.cid + '/inventory/' + inventory.id)
 			}
 
 		})

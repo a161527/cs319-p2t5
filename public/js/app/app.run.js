@@ -64,6 +64,36 @@
 						case 'approve-inventory':
 							checkHasPermission('conference-inventory-edit', permissions)
 							break
+						case 'createEvent':
+							checkHasPermission('conference-event-create', permissions)
+							break
+						case 'createResidence':
+							checkHasPermission('conference-room-edit', permissions)
+							break
+						case 'createRoomSet':
+							checkHasPermission('conference-room-edit', permissions)
+							break
+						case 'createInventory':
+							checkHasPermission('conference-inventory-edit', permissions)
+							break
+						case 'createTransportation':
+							checkHasPermission('conference-transportation-edit', permissions)
+							break
+						case 'editEvent':
+							checkHasPermission('conference-event-create', permissions)
+							break
+						case 'editResidence':
+							checkHasPermission('conference-room-edit', permissions)
+							break
+						case 'editRoomSet':
+							checkHasPermission('conference-room-edit', permissions)
+							break
+						case 'editInventory':
+							checkHasPermission('conference-inventory-edit', permissions)
+							break
+						case 'editTransportation':
+							checkHasPermission('conference-transportation-edit', permissions)
+							break
 					}
 				}
 

@@ -96,6 +96,12 @@
 											ng-click='showWidget("editEvent", {eid: event.id})'>
 											<span class='glyphicon glyphicon-edit'></span><br> Edit Event
 									</button>
+									<button ng-click='deleteEvent(event)'
+											ng-show='event.permissions.indexOf("event-info-edit") !== -1' 
+											id='deleteEventBtn'
+											class='btn btn-danger btn-block pull-left'>
+										<span class='glyphicon glyphicon-trash'></span><br> Delete Event
+									</button>
 								</div>
 							</div>
 						</div>

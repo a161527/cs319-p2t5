@@ -56,6 +56,12 @@
 											ng-click='showWidget("editInventory", {iid: inv.id})'>
 											<span class='glyphicon glyphicon-edit'></span><br> Edit Inventory
 									</button>
+									<button ng-click='deleteInventory(inv)'
+											ng-show='canEdit' 
+											id='deleteInventoryBtn'
+											class='btn btn-danger btn-block pull-left'>
+										<span class='glyphicon glyphicon-trash'></span><br> Delete Inventory
+									</button>
 								</div>
 							</div>
 						</div>

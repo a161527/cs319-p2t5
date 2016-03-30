@@ -2,7 +2,7 @@
 	'use strict'
 
 	angular.module('roomSetView')
-		.controller('roomSetListCtrl', function($scope, $state, $stateParams, roomSetData, residenceData, ajax, conferenceInfo, roomTypes, permissions) {
+		.controller('roomSetListCtrl', function($scope, $state, $stateParams, roomSetData, residenceData, ajax, conferenceInfo, roomTypes, permissions, confirmDeleteModal) {
 			var residence = {}
 
 			for (var i = residenceData[0].length - 1; i >= 0; i--) {
@@ -29,6 +29,10 @@
 					})
 				}
 				$state.go(state, allParams);
+			}
+
+			$scope.deleteRoomSet = function(roomSet) {
+				confirmDeleteModal.open('Room Set', roomSet.name, 'api/conferences/' + $stateParams.cid + '/residences/roomSets/' + roomSet.id)
 			}
 
 		})
