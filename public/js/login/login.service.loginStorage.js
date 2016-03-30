@@ -8,6 +8,7 @@
 			this.tokenKey = 'satellizer_token'
 			var _permissions = null
 			var _confPerm = null
+			var _eventPerm = null
 
 			this.storeCreds = function(email, id) {
 				$window.localStorage.setItem(this.credKey, JSON.stringify({email: email, id: id}))
@@ -86,6 +87,30 @@
 
 				})
 
+			}
+
+			this.getEventPermissions = function(eid) {
+				return $q(function(resolve, reject) {
+
+					if (_eventPerm && _eventPerm.eid === eid && _eventPerm.permissions) {
+
+						resolve(_eventPerm.permissions)
+
+					} else {
+						var route = '/api/event/' + eid + '?includePermissions=1'
+
+						ajax.serviceCall('Loading ...', 'get', route).then(function(resData) {
+							var permissions = resData.data.permissions
+
+							_eventPerm = {eid: eid, permissions: permissions}
+
+							resolve(permissions)
+
+						}, function(resData) {
+							reject(resData)
+						})
+					}
+				})
 			}
 
 

@@ -1,7 +1,7 @@
 <label>Input an Email</label>
 <div class='row'>
 	<div class='col-sm-9'>
-		<form name='emailInp'>
+		<form name='emailInp' ng-submit='checkEmailExists(email)'>
 			<div class="form-group" ng-class='{"has-error": !validEmail.value && emailInp.email.$dirty && email}' >
 				<input class='form-control'
 					name='email'
