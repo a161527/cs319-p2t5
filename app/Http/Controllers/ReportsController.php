@@ -10,9 +10,12 @@ use App\Event;
 use App\UserConference;
 use App\UserInventory;
 use App\UserRoom;
+use App\UserEvent;
 
 use Response;
 use Log;
+use Entrust;
+use App\Utility\PermissionNames;
 
 class ReportsController extends Controller
 {
@@ -41,9 +44,14 @@ class ReportsController extends Controller
         $conf = Conference::find($confId);
         if (is_null($conf)) {
             return response()->json(["message" => "report_target_conference_not_found"], 404);
-        } else {
-            $this->filename = $conf->name . "_" . $reportName;
         }
+
+        if (!Entrust::can(PermissionNames::ConferenceViewReports($confId))) {
+            return response()->json(["message" => "report_not_accessible"], 403);
+        }
+
+        $this->filename = $conf->conferenceName . "_" . $reportName;
+
         switch ((string) $reportName) {
             case "ConferenceRegistration.csv":
                 return $this->generateConferenceRegistrationReport($confId);
@@ -55,12 +63,20 @@ class ReportsController extends Controller
     }
 
     private function handleEventReport($confId, $evtId, $reportName) {
-        $evt = Event::find($evtId);
+        $evt = Event::with('conference')->find($evtId);
         if (is_null($evt) || $evt->conferenceID != $confId) {
             return response()->json(["message" => "report_target_event_not_found"], 404);
         }
 
+        if (!Entrust::can(PermissionNames::EventDetailView($evtId))) {
+            return response()->json(["message" => "report_not_accessible"], 403);
+        }
+
+        $this->filename = $evt->conference->conferenceName . "_" . $evt->eventName . "_" . $reportName;
+
         switch ((string)  $reportName) {
+            case "EventRegistration.csv":
+                return $this->generateEventRegistrationReport($evtId);
             default:
                 return response()->json(["message" => "no_such_event_report"], 404);
         }
@@ -112,6 +128,19 @@ class ReportsController extends Controller
                 is_null($uconf->room) ? "" : $uconf->room->roomName,
                 $a->unitCount,
                 $a->inventory->itemName];
+        }
+
+        return $this->writeCSVResponse($data);
+    }
+
+    private function generateEventRegistrationReport($eventId) {
+        $attendance = UserEvent::where('eventID', $eventId)->with('user')->get();
+
+        $data = [];
+        foreach ($attendance as $a) {
+            $data[] = [
+                $a->user->firstName . " " . $a->user->lastName
+            ];
         }
 
         return $this->writeCSVResponse($data);
