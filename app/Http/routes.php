@@ -54,8 +54,8 @@ Route::group(['prefix' => 'api/conferences', 'namespace' => 'Conference'], funct
             Route::delete('roomSets/{setId}', 'RoomSetupController@deleteRoomSet');
 
             Route::post('assign', 'RoomAssignmentController@assignRoom');
+            Route::get('assign/listing', 'RoomAssignmentController@listAssignments');
             Route::delete('assign/{assignId}', 'RoomAssignmentController@deleteAssignment');
-            Route::get('assign', 'RoomAssignmentController@listAssignments');
             Route::get('assign/missing', 'RoomAssignmentController@missingAssignments');
         });
 
@@ -68,11 +68,11 @@ Route::group(['prefix' => '/api/roles'], function() {
     Route::get('/assignable', 'PermissionsController@listAssignableRoles');
 });
 
-// Route::get('/', function()
-// {
-//     // change login.html to whatever the index page for angular will be
-//     return File::get(public_path() . '/index.html');
-// });
+Route::get('/', function()
+{
+    // change login.html to whatever the index page for angular will be
+    return File::get(public_path() . '/index.html');
+});
 
 // Route::get('/', function () {
 //     return view('welcome');

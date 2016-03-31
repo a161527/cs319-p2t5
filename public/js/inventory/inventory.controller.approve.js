@@ -14,7 +14,7 @@
 			})
 
 			$scope.approve = function(id) {
-				var route = 'api/conferences/' + $stateParams.cid +'/userinventory/' + 1000 + '/approve'
+				var route = 'api/conferences/' + $stateParams.cid +'/userinventory/' + id + '/approve'
 				ajax.serviceCall('Approving...', 'post', route).then(function(resData) {
 
 					$state.reload()

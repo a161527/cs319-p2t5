@@ -267,7 +267,7 @@
 
 				.state('dashboard.conferences.manage.assign-transportation.3', {
 					url: '',
-					templateUrl: 'js/assignTransportation/assignTransportation.view.users.html',
+					templateUrl: 'js/assignTransportation/assignTransportation.view.assigned.html',
 					controller: 'viewAssignedTransportCtrl',
 					resolve: {
 						users: function($http, $stateParams) {
@@ -378,7 +378,10 @@
 					controller: 'ApprovedRoomsCtrl',
 					resolve: {
 						assignedRooms: function($http, $stateParams) {
-							return $http.get('api/conferences/' + $stateParams.cid + '/residences/assign')
+							return $http.get('api/conferences/' + $stateParams.cid + '/residences/assign/listing')
+						},
+						conferenceData: function($stateParams, $http) {
+							return $http.get('api/conferences/' + $stateParams.cid)
 						}
 					}
 				})
