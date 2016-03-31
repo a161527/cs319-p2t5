@@ -40,7 +40,7 @@
 									 'filename': conferenceData.name + '_AssignedInventory.csv'})
 				$scope.reports.push({'label': 'Transportation Schedule', 
 									 'route': '/reports/' + conferenceData.id + '_TransportationSchedule.csv',
-									 'filename': conferenceData.name + '_ConferenceRegistration.csv'})
+									 'filename': conferenceData.name + '_TransportationSchedule.csv'})
 
 			}
 
