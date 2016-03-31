@@ -151,17 +151,26 @@
 		</div>
 	</div>
 
-	<div ng-show='permissions["conference-view-statistics"]'>
+	<div ng-show='permissions["conference-view-reports"] || permissions["conference-view-event-reports"]'>
 		<br>
-		<h4><i class='glyphicon glyphicon-download-alt' /> Download</h4>
+		<h4><i class='glyphicon glyphicon-list-alt' /> Reports</h4>
 		<div class='row'>
-			<div class='col-sm-2' ng-show='permissions["conference-view-statistics"]'>
-				<button class='btn btn-warning btn-block'>
+			<div class='col-sm-2' ng-show='permissions["conference-view-reports"]'>
+				<button class='btn btn-warning btn-block' ng-click='showWidget("viewConferenceReport")'>
 					<br>
-					<span class='glyphicon glyphicon-list-alt glyphicon-large'></span>
+					<span class='glyphicon glyphicon-globe glyphicon-large'></span>
 					<br>
 					<br>
-					Reports
+					Conference Reports
+				</button>
+			</div>
+			<div class='col-sm-2' ng-show='permissions["conference-view-event-reports"]'>
+				<button class='btn btn-warning btn-block' ng-click='showWidget("viewEventReport")'>
+					<br>
+					<span class='glyphicon glyphicon-calendar glyphicon-large'></span>
+					<br>
+					<br>
+					Event Reports
 				</button>
 			</div>
 		</div>

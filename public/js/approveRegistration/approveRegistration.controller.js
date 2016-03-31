@@ -7,6 +7,7 @@
 			$scope.state1 = true
 			$scope.state2 = !$scope.state1
 			$scope.rejectButtonTxt = 'Reject'
+			$scope.rejectButtonIcon = 'remove'
 
 			$scope.unapprovedList = unapproved
 			$scope.conferenceName = conferenceData.data.name
@@ -50,6 +51,7 @@
 
 			$scope.unapprovedList = approved.data
 			$scope.rejectButtonTxt = 'Remove'
+			$scope.rejectButtonIcon = 'trash'
 
 			$scope.conferenceName = conferenceData.data.name
 

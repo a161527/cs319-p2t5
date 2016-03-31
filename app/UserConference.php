@@ -18,7 +18,7 @@ class UserConference extends Model
     }
 
     public function room() {
-        return $this->belongsTo('App\UserRoom', 'id', 'registrationId');
+        return $this->belongsTo('App\UserRoom', 'id', 'registrationID');
     }
 
     public function userTransportation() {
