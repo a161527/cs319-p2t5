@@ -23,5 +23,9 @@ class User extends Model
         return $this->hasOne('App\Models\Account', 'id', 'accountID');
     }
 
+    public function registrations() {
+        return $this->hasMany('App\UserConference', 'userID', 'id');
+    }
+
     protected $dates = ['deleted_at'];
 }

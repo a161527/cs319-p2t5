@@ -8,6 +8,8 @@ use App\Http\Requests;
 use App\Conference;
 use App\Event;
 use App\UserConference;
+use App\UserInventory;
+use App\UserRoom;
 
 use Response;
 use Log;
@@ -45,6 +47,8 @@ class ReportsController extends Controller
         switch ((string) $reportName) {
             case "ConferenceRegistration.csv":
                 return $this->generateConferenceRegistrationReport($confId);
+            case "AssignedInventory.csv":
+                return $this->generateAssignedInventoryReport($confId);
             default:
                 return response()->json(["message" => "no_such_conference_report"], 404);
         }
@@ -75,7 +79,7 @@ class ReportsController extends Controller
                 $u->needsAccommodation ? "true" : "false",
                 is_null($u->room) ? "" : $u->room->roomSet->residence->name,
                 is_null($u->room) ? "" : $u->room->roomSet->name,
-                is_null($u->room) ? "" : $u->room->name,
+                is_null($u->room) ? "" : $u->room->roomName,
                 $u->needsTransportation,
                 is_null($u->userTransportation) ? "" : $u->userTransportation->transportation->name,
                 is_null($u->userTransportation) ? "" : $u->userTransportation->transportation->company,
@@ -85,6 +89,31 @@ class ReportsController extends Controller
                 is_null($u->flightID) ? "" : $u->flight->arrivalTime
             ];
         }
+        return $this->writeCSVResponse($data);
+    }
+
+    private function generateAssignedInventoryReport($confId) {
+        $assigned = UserInventory::whereHas('inventory', function ($query) use ($confId) {
+            $query->where('conferenceID', $confId);
+        })->where('approved',true)
+        ->with('inventory')
+        ->with(['user.registrations' => function ($query) use ($confId){
+            $query->where('conferenceID', $confId);
+            $query->with('room.roomSet.residence');
+        }])->get();
+
+        $data = [];
+        foreach ($assigned as $a) {
+            $uconf = $a->user->registrations->first();
+            $data[] = [
+                $a->user->firstName . " " . $a->user->lastName,
+                is_null($uconf->room) ? "" : $uconf->room->roomSet->residence->name,
+                is_null($uconf->room) ? "" : $uconf->room->roomSet->name,
+                is_null($uconf->room) ? "" : $uconf->room->roomName,
+                $a->unitCount,
+                $a->inventory->itemName];
+        }
+
         return $this->writeCSVResponse($data);
     }
 
