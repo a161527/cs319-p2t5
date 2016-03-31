@@ -10,6 +10,7 @@ use App\Event;
 use App\UserConference;
 
 use Response;
+use Log;
 
 class ReportsController extends Controller
 {
@@ -84,7 +85,7 @@ class ReportsController extends Controller
                 is_null($u->flightID) ? "" : $u->flight->arrivalTime
             ];
         }
-        $this->writeCSVResponse($data);
+        return $this->writeCSVResponse($data);
     }
 
     private function writeCSVResponse($dataArray) {
@@ -98,13 +99,14 @@ class ReportsController extends Controller
         ];
 
         $cb = function () use ($dataArray) {
+            Log::info("Running callback for CSV report");
             $handle = fopen("php://output", "w");
-            print_r($dataArray);
             foreach ($dataArray as $row) {
                 fputcsv($handle, $row);
             }
             fclose($handle);
         };
-        return Response::stream($cb, 200, $headers);
+
+        return response()->stream($cb,200,$headers);
     }
 }
