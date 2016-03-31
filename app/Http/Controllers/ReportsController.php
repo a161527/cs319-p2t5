@@ -24,10 +24,11 @@ class ReportsController extends Controller
     private $filename = null;
 
     public function __construct() {
-        $this->middleware('jwt.auth.rejection');
+        $this->middleware('jwt.auth.downloadurl');
     }
 
     public function getReport($reportName) {
+        Log::info("Serving report.  Full name is " . $reportName);
         $parts = explode("_", $reportName);
         if (sizeof($parts) == 1) {
             return response()->json(["message" => "no_report_parameter_found"], 404);
@@ -225,7 +226,7 @@ class ReportsController extends Controller
         $headers = [
             'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
             'Content-Type'        => 'text/csv',
-            'Content-Disposition' => 'attachment; filename=' . $fname,
+            'Content-Disposition' => 'attachment; filename="' . $fname . '"',
             'Expires'             => '0',
             'Pragma'              => 'public'
         ];
@@ -238,6 +239,8 @@ class ReportsController extends Controller
             }
             fclose($handle);
         };
+
+        Log::info("Serving " . $fname . " report.");
 
         return response()->stream($cb,200,$headers);
     }
