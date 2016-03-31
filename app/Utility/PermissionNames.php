@@ -77,8 +77,8 @@ class PermissionNames {
         return "conference-announce." . $confId;
     }
 
-    public static function ConferenceViewStatistics($confId) {
-        return "conference-view-statistics." . $confId;
+    public static function ConferenceViewReports($confId) {
+        return "conference-view-reports." . $confId;
     }
 
     public static function AllConferencePermissions($confId) {
@@ -91,7 +91,7 @@ class PermissionNames {
                 self::ConferenceRoomEdit($confId),
                 self::ConferenceTransportationEdit($confId),
                 self::ConferenceAnnounce($confId),
-                self::ConferenceViewStatistics($confId)];
+                self::ConferenceViewReports($confId)];
     }
 
     public static function ExclusiveConferencePermissions($confId) {

@@ -19,6 +19,8 @@ use App\Event;
 use App\Models\Permission;
 use Config;
 
+use App\Event;
+
 class MainController extends Controller
 {
 
@@ -203,6 +205,14 @@ class MainController extends Controller
                 $pname,
                 $permissions);
          }
+
+         foreach(Event::where('conferenceID', $confId)->get() as $e) {
+             if (Entrust::can(PermissionNames::EventDetailView($e->id))) {
+                $permissions[] = 'conference-view-event-reports';
+                break;
+             }
+         }
+
          return $permissions;
     }
 
