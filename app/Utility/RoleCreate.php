@@ -76,15 +76,13 @@ class RoleCreate {
 
     public static function deleteEventRoles($eventIdList) {
         if (!is_array($eventIdList)) {
-            $eventIdIList = [$eventIdList];
+            $eventIdList = [$eventIdList];
         }
         $rnames = [];
         foreach ($eventIdList as $e) {
             $rnames = array_merge($rnames, PermissionNames::AllEventPermissions($e));
             $rnames[] = RoleNames::EventManager($e);
         }
-
-        print_r($rnames);
 
         Role::whereIn('name', $rnames)->delete();
     }
