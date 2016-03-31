@@ -57,6 +57,8 @@ class ReportsController extends Controller
                 return $this->generateConferenceRegistrationReport($confId);
             case "AssignedInventory.csv":
                 return $this->generateAssignedInventoryReport($confId);
+            case "ConferenceDemographics.csv":
+                return $this->generateConferenceDemographicsReport($confId);
             default:
                 return response()->json(["message" => "no_such_conference_report"], 404);
         }
@@ -128,6 +130,23 @@ class ReportsController extends Controller
                 is_null($uconf->room) ? "" : $uconf->room->roomName,
                 $a->unitCount,
                 $a->inventory->itemName];
+        }
+
+        return $this->writeCSVResponse($data);
+    }
+
+    private function generateConferenceDemographicsReport($confId) {
+        $attendees = UserConference::where('conferenceID', $confId)->with('user')->get();
+
+        $data = [];
+        foreach ($attendees as $a) {
+            $u = $a->user;
+            $data[] = [
+                $u->firstName . " " . $u->lastName,
+                $u->dateOfBirth,
+                $u->gender,
+                $u->location
+            ];
         }
 
         return $this->writeCSVResponse($data);
