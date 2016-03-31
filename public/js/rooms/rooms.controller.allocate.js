@@ -55,9 +55,10 @@
 
 		})
 
-		.controller('ResidenceSelectCtrl', function($scope, $http, $stateParams, $state, modal, residences) {
+		.controller('ResidenceSelectCtrl', function($scope, $http, $stateParams, $state, modal, residences, conferenceData) {
 
 			$scope.residences = residences.data
+			$scope.conferenceName = conferenceData.data.name
 
 			$scope.rooms = []
 			$scope.roomSets = []
@@ -154,6 +155,10 @@
 
 			$scope.removeMessage = function() {
 				$scope.showError = false
+			}
+
+			$scope.goToConference = function () {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
 			}
 
 		})
