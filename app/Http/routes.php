@@ -172,3 +172,6 @@ Route::put('/api/event/{id}', 'Events@update');
 Route::post('/api/event/{id}/register', 'Events@register');
 Route::delete('/api/event/{id}/register/{registrationId}', 'Events@deleteRegistration');
 Route::delete('/api/event/{id}', 'Events@destroy');
+
+
+Route::get('/api/reports/{filename}', 'ReportsController@getReport');
