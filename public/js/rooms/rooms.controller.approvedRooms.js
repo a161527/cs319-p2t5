@@ -16,7 +16,7 @@
 			}
 
 			$scope.remove = function(id) {
-				$http.delete('api/conferences/' + $stateParams.cid + '/residences/' + id).then(function(resData) {
+				$http.delete('api/conferences/' + $stateParams.cid + '/residences/assign/' + id).then(function(resData) {
 					$state.reload()
 				}, function(resData) {
 					modal.open('Error: ' + resData.data.message)
