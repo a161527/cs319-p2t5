@@ -174,4 +174,4 @@ Route::delete('/api/event/{id}/register/{registrationId}', 'Events@deleteRegistr
 Route::delete('/api/event/{id}', 'Events@destroy');
 
 
-Route::get('/api/reports/{filename}', 'ReportsController@getReport');
+Route::get('/reports/{filename}', 'ReportsController@getReport');
