@@ -15,4 +15,12 @@ class Flight extends Model
         'arrivalTime',
         'airport',
         'isChecked'];
+
+    public function userConferences() {
+        return $this->hasMany('App\UserConference', 'flightID', 'id');
+    }
+
+    public function getUserCountAttribute() {
+        return $this->userConferences()->count();
+    }
 }

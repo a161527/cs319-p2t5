@@ -12,4 +12,8 @@ class UserTransportation extends Model
     public function transportation() {
         return $this->hasOne('App\Transportation', 'id', 'transportationID');
     }
+
+    public function userConference() {
+        return $this->hasOne('App\UserConference', 'id', 'userconferenceID');
+    }
 }

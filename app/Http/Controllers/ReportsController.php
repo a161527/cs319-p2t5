@@ -11,6 +11,8 @@ use App\UserConference;
 use App\UserInventory;
 use App\UserRoom;
 use App\UserEvent;
+use App\Transportation;
+use App\Flight;
 
 use Response;
 use Log;
@@ -59,6 +61,8 @@ class ReportsController extends Controller
                 return $this->generateAssignedInventoryReport($confId);
             case "ConferenceDemographics.csv":
                 return $this->generateConferenceDemographicsReport($confId);
+            case "TransportationSchedule.csv":
+                return $this->generateTransportationScheduleReport($confId);
             default:
                 return response()->json(["message" => "no_such_conference_report"], 404);
         }
@@ -149,6 +153,33 @@ class ReportsController extends Controller
                 $u->gender,
                 $u->location
             ];
+        }
+
+        return $this->writeCSVResponse($data);
+    }
+
+    private function generateTransportationScheduleReport($confId) {
+        $transports = Transportation::where('conferenceID', $confId)->with('userTransportations')->get();
+
+        $data = [];
+        foreach ($transports as $t) {
+            $flights = Flight::whereHas('userConferences', function ($query) use ($t) {
+                $query->whereHas('userTransportation', function ($query) use ($t) {
+                    $query->where('id', $t->id);
+                });
+            })->get();
+
+            foreach ($flights as $f) {
+                $data[] = [
+                    $t->name,
+                    $t->company,
+                    $t->phone,
+                    $f->userCount,
+                    $f->airport,
+                    $f->airline,
+                    $f->arrivalDate,
+                    $f->arrivalTime];
+            }
         }
 
         return $this->writeCSVResponse($data);
