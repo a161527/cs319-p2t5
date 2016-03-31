@@ -13,10 +13,24 @@
 			        <form name='createConferenceForm' novalidate>
 			            <div ng-model='conferenceInfo'>
 			                <div class='row'>
-			                    <div class='col-md-12'>
-			                        <input-with-validation model='conferenceInfo.name' validation='createConferenceForm' identifier='name' inp-type='text'>Conference Name</input-with-validation>
-			                    </div>
-			                </div>
+	                            <div class='col-sm-12'>
+	                                <div class='form-group' ng-class='{"has-error": !createConferenceForm.name.$valid && createConferenceForm.name.$dirty}'>
+	                                    <label>Conference Name</label>
+
+	                                    <input type='text' ng-model-options='{updateOn: "blur"}' ng-model='conferenceInfo.name' class='form-control' 
+	                                           ng-pattern='/^[a-zA-Z0-9\s]+$/'
+	                                           name='name' required>
+
+	                                    <error-message ng-show='createConferenceForm.name.$error.pattern && !createConferenceForm.name.$error.required'>
+	                                        Input may only contain numbers, letters, and spaces
+	                                    </error-message>
+
+	                                    <error-message ng-show='createConferenceForm.name.$error.required && createConferenceForm.name.$dirty'>
+	                                        Event Name is required
+	                                    </error-message>
+	                                </div>
+	                            </div>
+	                        </div>
 			                <div class='row'>
 			                    <div class='col-md-12'>
 			                        <label for='description'>Description (optional) </label>

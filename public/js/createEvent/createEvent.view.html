@@ -18,7 +18,21 @@
                     <div class="panel-body" ng-model='eventInfo'>
                         <div class='row'>
                             <div class='col-sm-12'>
-                                <input-with-validation model='eventInfo.eventName' validation='eventForm' identifier='name' inp-type='text'>Event Name</input-with-validation>
+                                <div class='form-group' ng-class='{"has-error": !eventForm.name.$valid && eventForm.name.$dirty}'>
+                                    <label>Event Name</label>
+
+                                    <input type='text' ng-model-options='{updateOn: "blur"}' ng-model='eventInfo.eventName' class='form-control' 
+                                           ng-pattern='/^[a-zA-Z0-9\s]+$/'
+                                           name='name' required>
+
+                                    <error-message ng-show='eventForm.name.$error.pattern && !eventForm.name.$error.required'>
+                                        Input may only contain numbers, letters, and spaces
+                                    </error-message>
+
+                                    <error-message ng-show='eventForm.name.$error.required && eventForm.name.$dirty'>
+                                        Event Name is required
+                                    </error-message>
+                                </div>
                             </div>
                         </div>
 
