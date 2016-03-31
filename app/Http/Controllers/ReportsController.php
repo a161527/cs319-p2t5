@@ -79,6 +79,8 @@ class ReportsController extends Controller
         switch ((string)  $reportName) {
             case "EventRegistration.csv":
                 return $this->generateEventRegistrationReport($evtId);
+            case "EventDemographics.csv":
+                return $this->generateEventDemographicsReport($evtId);
             default:
                 return response()->json(["message" => "no_such_event_report"], 404);
         }
@@ -160,6 +162,28 @@ class ReportsController extends Controller
             $data[] = [
                 $a->user->firstName . " " . $a->user->lastName
             ];
+        }
+
+        return $this->writeCSVResponse($data);
+    }
+
+    private function generateEventDemographicsReport($eventId) {
+        $attendance = UserEvent::where('eventID', $eventId)->with('user', 'event')->get();
+
+        $data = [];
+        foreach($attendance as $a) {
+            $uniqueCount = UserEvent::where('userID', $a->userID)
+                ->whereHas('event', function ($query) use ($a){
+                    $query->where('conferenceID', $a->event->conferenceID);
+                })->count();
+            $u = $a->user;
+
+            $data[] = [
+                $u->firstName . " " . $u->lastName,
+                $u->dateOfBirth,
+                $u->gender,
+                $u->location,
+                $uniqueCount];
         }
 
         return $this->writeCSVResponse($data);
