@@ -225,7 +225,7 @@ class ReportsController extends Controller
         $headers = [
             'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
             'Content-Type'        => 'text/csv',
-            'Content-Disposition' => 'attachment; filename=' . $fname,
+            'Content-Disposition' => 'attachment; filename="' . $fname . '"',
             'Expires'             => '0',
             'Pragma'              => 'public'
         ];
