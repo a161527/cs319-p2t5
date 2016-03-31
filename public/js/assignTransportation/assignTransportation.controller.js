@@ -74,6 +74,10 @@
 				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
 			}
 
+			$scope.back = function() {
+				$state.go('dashboard.conferences.manage.assign-transportation.1')
+			}
+
 		})
 
 		.controller('viewAssignedTransportCtrl', function($scope, $state, $stateParams, $http, users, modal) {
@@ -114,6 +118,10 @@
 					console.log(resData)
 					modal.open('Error: ' + resData.data.message)
 				})
+			}
+
+			$scope.goToConference = function () {
+				$state.go('dashboard.conferences.manage', {cid: $stateParams.cid})
 			}
 		})
 
