@@ -19,6 +19,8 @@ use App\Utility\RoleNames;
 use App\Utility\CheckDependents;
 use App\Utility\ConferenceRegistrationUtils;
 
+use App\Models\Permission;
+
 class Events extends Controller {
 
     public function __construct() {
@@ -182,13 +184,17 @@ class Events extends Controller {
             return response("Permission not found", 403);
         }
 
-        $event = Event::find($id);
-        if (is_null($event)) {
-            return response("No event for id {$id}.", 404);
-        }
+        return DB::transaction(function () use ($id) {
+            $event = Event::find($id);
+            if (is_null($event)) {
+                return response("No event for id {$id}.", 404);
+            }
 
-        $event->delete();
-        return response()->json(['id' => $event->id]);
+            $event->delete();
+            Permission::whereIn('name', PermissionNames::AllEventPermissions($id))->delete();
+            RoleCreate::deleteEventRoles($id);
+            return response()->json(['id' => $event->id]);
+        });
     }
 
     private function validateInputIDs($req) {
