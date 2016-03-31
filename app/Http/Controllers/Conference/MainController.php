@@ -19,8 +19,6 @@ use App\Event;
 use App\Models\Permission;
 use Config;
 
-use App\Event;
-
 class MainController extends Controller
 {
 
