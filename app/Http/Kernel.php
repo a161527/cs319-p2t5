@@ -50,6 +50,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 
         'jwt.auth.rejection' => \App\Http\Middleware\JWTAuthWithRejection::class,
+        'jwt.auth.downloadurl' => \App\Http\Middleware\JWTDownloadURLToken::class,
         'jwt.refresh' => \Tymon\JWTAuth\Http\Middleware\RefreshToken::class,
         'jwt.check' => \Tymon\JWTAuth\Http\Middleware\Check::class,
 
