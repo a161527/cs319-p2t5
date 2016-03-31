@@ -13,7 +13,8 @@
 				"conference-room-edit": false,
 				"conference-transportation-edit": false,
 				"conference-announce": false,
-				"conference-view-statistics": false
+				"conference-view-reports": false,
+				"conference-view-event-reports": false
 			}
 
 			$scope.conferenceName = conferenceInfo.data.name

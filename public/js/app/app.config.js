@@ -804,6 +804,45 @@
 						}
 					}
 				})
+
+				/*
+				VIEW CONFERENCE REPORTS
+				*/
+				.state('dashboard.conferences.manage.viewConferenceReport', {
+					url: '/reports',
+					templateUrl: 'js/reportView/reportView.view.html',
+					controller: 'reportViewCtrl',
+					resolve: {
+						conferenceData: function(conferenceData, $stateParams) {
+							return conferenceData.refresh($stateParams.cid)
+						},
+						viewReport: function() {
+							return 'conference'
+						}
+					}
+				})
+
+				/*
+				VIEW EVENT REPORTS
+				*/
+				.state('dashboard.conferences.manage.viewEventReport', {
+					url: '/events/reports',
+					templateUrl: 'js/reportView/reportView.view.html',
+					controller: 'reportViewCtrl',
+					resolve: {
+						eventData: function(eventList, $q, $stateParams) {
+							return $q.all([
+								eventList.getEventInfo($stateParams.cid)
+							])
+						},
+						conferenceData: function(conferenceData, $stateParams) {
+							return conferenceData.refresh($stateParams.cid)
+						},
+						viewReport: function() {
+							return 'event'
+						}
+					}
+				})
 		})
 
 })()

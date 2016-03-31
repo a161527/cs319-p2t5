@@ -91,6 +91,12 @@
 						case 'editTransportation':
 							checkHasPermission('conference-transportation-edit', permissions)
 							break
+						case 'viewConferenceReport':
+							checkHasPermission('conference-view-reports', permissions)
+							break
+						case 'viewEventReport':
+							checkHasPermission('conference-view-event-reports', permissions)
+							break
 					}
 				}
 
