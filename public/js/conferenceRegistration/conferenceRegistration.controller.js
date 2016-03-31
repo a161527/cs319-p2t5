@@ -117,7 +117,8 @@
 
 					//If dependent has any of these fields, set to the value of the field, otherwise set to false
 					obj['hasFlight'] = dependent.hasOwnProperty('hasFlight')? dataFormat.trueFalseFormat(dependent['hasFlight']) : dataFormat.trueFalseFormat(false)
-					obj['needsTransportation'] = dependent.hasOwnProperty('needsTransportation')? dataFormat.trueFalseFormat(dependent['needsTransportation']) : dataFormat.trueFalseFormat(false)
+					// obj['needsTransportation'] = dependent.hasOwnProperty('needsTransportation')? dataFormat.trueFalseFormat(dependent['needsTransportation']) : dataFormat.trueFalseFormat(false)
+					obj['needsTransportation'] = obj['hasFlight'] 
 					obj['needsAccommodation'] = dependent.hasOwnProperty('needsAccommodation')? dataFormat.trueFalseFormat(dependent['needsAccommodation']) : dataFormat.trueFalseFormat(false)
 
 

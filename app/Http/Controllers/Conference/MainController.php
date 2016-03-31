@@ -15,7 +15,11 @@ use App\Utility\RoleCreate;
 use App\Utility\PermissionNames;
 use App\Utility\RoleNames;
 use App\Utility\ConferenceRegistrationUtils;
+use App\Event;
+use App\Models\Permission;
 use Config;
+
+use App\Event;
 
 class MainController extends Controller
 {
@@ -160,10 +164,31 @@ class MainController extends Controller
      * Deletes a conference.
      */
     public function delete($id) {
-        if (!Entrust::hasRole(RoleNames::ConferenceManager($id))) {
+        if (!Entrust::can(PermissionNames::ConferenceInfoEdit($id))) {
             return response("", 403);
         }
-        Conference::destroy($id);
+        DB::transaction(function () use ($id) { 
+            $events = Event::where('conferenceID', $id)->get();
+
+            $pnames =
+                array_merge(PermissionNames::AllConferencePermissions($id),
+                            PermissionNames::ExclusiveConferencePermissions($id));
+            $evtIds = [];
+            foreach ($events as $e) {
+                $pnames = array_merge($pnames, PermissionNames::AllEventPermissions($e->id));
+                echo $e;
+                $evtIds[] = $e->id;
+            }
+
+            Permission::whereIn('name', $pnames)->delete();
+
+            RoleCreate::deleteConferenceRoles($id);
+
+            RoleCreate::deleteEventRoles($evtIds);
+
+            Conference::destroy($id);
+        });
+
         return '';
     }
 
@@ -180,6 +205,14 @@ class MainController extends Controller
                 $pname,
                 $permissions);
          }
+
+         foreach(Event::where('conferenceID', $confId)->get() as $e) {
+             if (Entrust::can(PermissionNames::EventDetailView($e->id))) {
+                $permissions[] = 'conference-view-event-reports';
+                break;
+             }
+         }
+
          return $permissions;
     }
 

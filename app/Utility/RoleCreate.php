@@ -37,6 +37,14 @@ class RoleCreate {
         }
     }
 
+    public static function deleteConferenceRoles($id) {
+        $rnames = [RoleNames::ConferenceManager($id)];
+        $rnames = array_merge($rnames, PermissionNames::AllConferencePermissions($id));
+        $rnames = array_merge($rnames, PermissionNames::ExclusiveConferencePermissions($id));
+
+        Role::whereIn('name', $rnames)->delete();
+    }
+
     public static function AllConferenceRoles($confId) {
         return DB::transaction(function() use ($confId) {
             $permissionList = PermissionNames::AllConferencePermissions($confId);
@@ -64,6 +72,19 @@ class RoleCreate {
         $role->attachPermissions($permissions);
 
         return $role;
+    }
+
+    public static function deleteEventRoles($eventIdList) {
+        if (!is_array($eventIdList)) {
+            $eventIdList = [$eventIdList];
+        }
+        $rnames = [];
+        foreach ($eventIdList as $e) {
+            $rnames = array_merge($rnames, PermissionNames::AllEventPermissions($e));
+            $rnames[] = RoleNames::EventManager($e);
+        }
+
+        Role::whereIn('name', $rnames)->delete();
     }
 
     public static function AllEventRoles($eventId) {
