@@ -13,7 +13,7 @@
 				<br>
 				<div class='row' ng-repeat='report in reports'>
 					<div class='col-sm-12'>
-						<span class='glyphicon glyphicon-download-alt pad-right'></span>  <a ng-click='getReport(report.route)'>{{report.label}}</a>
+						<span class='glyphicon glyphicon-download-alt pad-right'></span>  <a ng-href="{{report.route}}" download="{{report.filename}}" target="_self">{{report.label}}</a>
 						<br>
 						<br>
 					</div>
@@ -38,7 +38,7 @@
 					<div class='row' ng-repeat='report in event.reports' ng-show='(event.permissions.indexOf("event-detail-view") !== -1)'>
 						<br>
 						<div class='col-sm-12'>
-							<span class='glyphicon glyphicon-download-alt pad-right'></span>  <a ng-click='getReport(report.route)'>{{report.label}}</a>
+							<span class='glyphicon glyphicon-download-alt pad-right'></span>  <a ng-href="{{report.route}}" download="{{report.filename}}" target="_self">{{report.label}}</a>
 							<br>
 							<br>
 						</div>
