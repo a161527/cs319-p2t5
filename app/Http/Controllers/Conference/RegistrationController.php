@@ -11,6 +11,7 @@ use DB;
 use JWTAuth;
 use Validator;
 
+use Log;
 use App\Flight;
 use App\User;
 use App\UserConference;
@@ -299,6 +300,7 @@ class RegistrationController extends Controller
             $query->where("approved", true);
         }
 
-        return $query->get();
+        Log::info("Building final registration request data");
+        return array_map(function($uc) { $uc['hasFlight'] = isset($uc['flightID']); return $uc;},$query->get()->toArray());
     }
 }
