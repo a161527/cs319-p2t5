@@ -3,8 +3,9 @@
 
 	angular.module('app')
 		.config(function($stateProvider, $urlRouterProvider, $authProvider, $locationProvider) {
-
+			$locationProvider.html5Mode(true);
 			$authProvider.loginUrl = '/api/login';
+			$urlRouterProvider.otherwise('/dashboard/home');
 
 			$stateProvider
 				.state('login', {
@@ -55,7 +56,7 @@
 					}
 				})
 
-				/* 
+				/*
 				DASHBOARD TEMPLATE
 				*/
 				.state('dashboard', {
@@ -193,7 +194,7 @@
 					},
 					resolve: {
 						confDetails: function($stateParams, $http, $q) {
-							
+
 							//If the object is already passed, no need to make api call
 							if ($stateParams.conference) {
 
@@ -248,7 +249,7 @@
 						users: function($http, $stateParams) {
 							return $http.get('api/conferences/' + $stateParams.cid + '/transportationsummary')
 						}
-					}					
+					}
 				})
 
 				.state('dashboard.conferences.manage.assign-transportation.2', {
@@ -262,7 +263,7 @@
 						transport: function($http, $stateParams) {
 							return $http.get('api/conferences/' + $stateParams.cid + '/transportation')
 						}
-					}					
+					}
 				})
 
 				.state('dashboard.conferences.manage.assign-transportation.3', {
@@ -273,7 +274,7 @@
 						users: function($http, $stateParams) {
 							return $http.get('api/conferences/' + $stateParams.cid + '/transportationsummary')
 						}
-					}					
+					}
 				})
 
 
@@ -510,7 +511,7 @@
 						}
 					}
 				})
-				
+
 				.state('dashboard.conferences.manage.createRoomSet.1', {
 					url: '',
 					templateUrl: 'js/createRoomSet/createRoomSet.view.roomType.html',
@@ -583,7 +584,7 @@
 					resolve: {
 						conferenceData: function(conferenceList, $q, loginStorage) {
 							return $q.all([
-								conferenceList.refresh(), 
+								conferenceList.refresh(),
 								loginStorage.getPermissions()
 							])
 						},
@@ -591,7 +592,7 @@
 							return getDependentsService.getNumberOfApproved()
 						}
 					}
-				}) 
+				})
 
 				/*
 				EVENT LIST
@@ -665,7 +666,7 @@
 						}
 					}
 				})
-				
+
 				/*
 				TRANSPORTATION LIST
 				*/
