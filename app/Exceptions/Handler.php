@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use File;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -61,6 +62,11 @@ class Handler extends ExceptionHandler
             }
             $message = $message . "]";
             return response($message, 400)->header("Content-Type", "application/json");
+        } else if ($e instanceof HttpException) {
+            if ($e->getStatusCode() == 404) {
+                return response(File::get(public_path() . '/index.html'));
+            }
+            return $this->renderHttpException($e);
         }
 
         return parent::render($request, $e);
