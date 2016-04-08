@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Entrust;
 use DB;
+use Log;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -56,17 +57,22 @@ class RoomSetupController extends Controller
         if (!Entrust::can(PermissionNames::ConferenceRoomEdit($confId))) {
             return response("", 403);
         }
-        $responses = [];
-        foreach ($req->all() as $request) {
-            $this->validateResidence($request);
-            $residence = new Residence;
-            $residence->name = $request['name'];
-            $residence->location = $request['location'];
-            $residence->conferenceID = $confId;
-            $residence->save();
+        $responses = DB::transaction(function () use ($req, $confId) {
+            $responses = [];
+            foreach ($req->all() as $request) {
+                $this->validateResidence($request);
+                $residence = new Residence;
+                $residence->name = $request['name'];
+                $residence->location = $request['location'];
+                $residence->conferenceID = $confId;
+                $residence->save();
 
-            $responses[] = ["id" => $residence->id, "name" => $residence->name];
-        }
+                $responses[] = ["id" => $residence->id, "name" => $residence->name];
+            }
+            return $responses;
+        });
+
+        Log::info("Created " . sizeof($responses) . " residences for conferences {$confId}.");
 
         return response()->json($responses);
     }
@@ -100,8 +106,10 @@ class RoomSetupController extends Controller
         }
 
         if ($res->save()) {
+            Log::info("Updated residence {$res->id}");
             return response()->json(["message" => "residence_updated"]);
         } else {
+            Log::warning("Database save failed while updating residence {$res->id}");
             return response()->json(["message" => "residence_update_failed"], 500);
         }
     }
@@ -116,6 +124,8 @@ class RoomSetupController extends Controller
             return response("", 404);
         }
         $res->delete();
+
+        Log::info("Residence {$residenceId} deleted");
     }
 
     public function getResidenceRoomSets($confId, $residenceId) {
@@ -183,6 +193,7 @@ class RoomSetupController extends Controller
                 $set->save();
                 $responses[] = ['name' => $set->name, 'id' => $set->id, 'typeID' => $type];
             }
+            Log::info("Created " . sizeof($responses) . " new room sets in residence {$res->name} for conference {$confId}");
             return response()->json($responses);
         });
     }
@@ -289,6 +300,8 @@ class RoomSetupController extends Controller
         }
 
         $set->delete();
+
+        Log::info("Room set {$roomSetId} of conference {$confId} deleted");
     }
 
     private function validateResidence($req) {
