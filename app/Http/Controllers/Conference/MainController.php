@@ -20,6 +20,9 @@ use App\Models\Permission;
 use Config;
 use Log;
 
+use App\UserConference;
+use App\Jobs\SendUpdateEmail;
+
 class MainController extends Controller
 {
 
@@ -160,6 +163,23 @@ class MainController extends Controller
         $this->assignInputToConference($req, $conf);
         $conf->save();
         Log::info("Conference info for " . $conf->conferenceName . " edited.");
+
+        $recipientModels = UserConference::where('conferenceID', $id)->with('user.account')->get();
+        $recipients=[];
+
+        foreach($recipientModels as $model) {
+            if($model->user->account->receiveUpdates) {
+                $recipients[] = $model->user->account->email;
+            } else {
+                Log::debug("Discarding {$model->user->account->email} as updates aren't enabled");
+            }
+        }
+
+        Log::info("Dispatching conference update for " . sizeof($recipients) . " recipients");
+
+        $this->dispatch(new SendUpdateEmail("Conference Updated", "update-notification",
+                          ['typestr' => 'conference', 'name' => $conf->conferenceName, 'link' => config('app.url') . '/dashboard/conferences/list'],
+                          $recipients));
         return '';
     }
 
