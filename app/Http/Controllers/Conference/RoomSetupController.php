@@ -19,6 +19,7 @@ use App\Utility\PermissionNames;
 use Validator;
 
 use Illuminate\Foundation\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class RoomSetupController extends Controller
 {
@@ -169,9 +170,9 @@ class RoomSetupController extends Controller
                     $type = $request['typeID'];
                 } else {
                     $tyVal = new RoomType;
-                    $tyVal->name = $request['type.name'];
-                    $tyVal->capacity = $request['type.capacity'];
-                    $tyVal->accessible = $request['type.accessible'];
+                    $tyVal->name = $request['type']['name'];
+                    $tyVal->capacity = $request['type']['capacity'];
+                    $tyVal->accessible = $request['type']['accessible'];
                     $tyVal->save();
                     $type = $tyVal->id;
                 }
@@ -291,6 +292,9 @@ class RoomSetupController extends Controller
     }
 
     private function validateResidence($req) {
+        if (!is_array($req)) {
+            throw new BadRequestHttpException("Request did not have list of residences");
+        }
         $v = Validator::make($req, [
             'name' => 'required|string',
             'location' => 'required|string'
@@ -301,6 +305,9 @@ class RoomSetupController extends Controller
     }
 
     private function validateRoomSet($req) {
+        if (!is_array($req)) {
+            throw new BadRequestHttpException("Request did not have list of room sets");
+        }
         $v = Validator::make($req, [
             'name' => 'required|string',
             'typeID' => 'numeric',
