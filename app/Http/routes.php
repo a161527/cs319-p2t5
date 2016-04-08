@@ -93,6 +93,8 @@ Route::group(['prefix' => 'api'], function()
     // test GET for a page that requires a token to be submitted
     Route::resource('login', 'AuthenticationController', ['only' => ['index']]);
 
+    Route::post('resetPassword', 'AuthenticationController@resetPassword');
+
     Route::get('permissions', 'AuthenticationController@permissionList');
 
     Route::post('login', 'AuthenticationController@authenticate');

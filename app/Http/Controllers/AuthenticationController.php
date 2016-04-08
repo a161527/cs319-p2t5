@@ -10,9 +10,11 @@ use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Models\Account;
 use App\Models\Permission;
+use App\Jobs\ResetPassword;
 use Auth;
 use Entrust;
 use App\Utility\PermissionNames;
+use Log;
 
 
 class AuthenticationController extends Controller
@@ -24,10 +26,9 @@ class AuthenticationController extends Controller
         // except for the authenticate method. We don't want to prevent
         // the user from retrieving their token if they don't already have it
 
-        $this->middleware('jwt.auth.rejection', ['except' => ['authenticate', 'token']]);
+        $this->middleware('jwt.auth.rejection', ['except' => ['authenticate', 'token', 'resetPassword']]);
         // provides an authorization header with each response
-        $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token']]);
-
+        $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token', 'resetPassword']]);
     }
 
     public function index(Request $request)
@@ -81,6 +82,21 @@ class AuthenticationController extends Controller
             return response()->json(['message' => 'token_invalid'], 401);
         }
         return response()->json(['token'=>$token]);
+    }
+
+    public function resetPassword(Request $request) {
+        if (!$request->has('email')) {
+            return response()->json(['message' => 'no_email_given'], 400);
+        }
+
+        $account = Account::where('email', $request->input('email'))->get()->first();
+        if (!isset($account)) {
+            return response()->json(['message' => 'account_not_found'], 400);
+        }
+
+        $this->dispatch(new ResetPassword($account));
+
+        return ["message" => "email_pending"];
     }
 
     // Add the token to the blacklist
