@@ -291,7 +291,9 @@ class Events extends Controller {
     private function buildPermissionList($eventId) {
         $permissions = [];
         foreach (PermissionNames::AllEventPermissions($eventId) as $pname) {
+            Log::debug("Checking permission {$pname} for " . Auth::user()->email);
             if (Entrust::can($pname)) {
+                Log::debug("Permission enabled");
                 $permissions[] = PermissionNames::normalizePermissionName($pname);
             }
         }
