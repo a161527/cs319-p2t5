@@ -2,20 +2,26 @@
 	'use strict'
 
 	angular.module('login')
-		.controller('loginCtrl', function($scope, $state, ajax, errorCodes, loginStorage) {
+		.controller('loginCtrl', function($scope, $location, $state, ajax, errorCodes, loginStorage) {
+			if($location.search()['token']) {
+				console.log("Got token")
+				ajax.loginWithToken($location.search()['token'])
+				ajax.serviceCall("Getting login info", 'get', '/api/login').then(function(resData) {
+					loginStorage.storeCreds(resData.data.email, resData.data.accountID)
+					$state.go('dashboard.home')
+				}, function(resData) {
+					$scope.showError = true
+					$scope.errorMessage = "Your token doesn't seem to work."
+				})
+				return
+			}
 
 			$scope.credentials = {}
 			$scope.errorMessage = ''
 			$scope.showError = false
-			$scope.doResetInstead = false
 
 			$scope.login = function() {
 				$scope.showError = false
-
-				console.log("running login")
-
-				console.log($scope.loginForm.email.$valid)
-				console.log($scope.loginForm.password.$valid)
 
 				if ($scope.loginForm.$valid) {
 

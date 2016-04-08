@@ -31,16 +31,10 @@ class AuthenticationController extends Controller
 
     public function index(Request $request)
     {
-        // token must be submitted with request in order for this to no throw error "token_not_provided"
+        $permissions = $this->buildPermissionsJson();
+        $accountID = Auth::user()->id;
 
-        // returns the logged-in user
-        // must call JWTAuth::authenticate() and then you can use Laravel's Auth::user()->id
-        // source: https://github.com/tymondesigns/jwt-auth/issues/125
-
-        $account = JWTAuth::parseToken()->authenticate();
-        $accountID = $account->id;
-
-        return $account;
+        return response()->json(['message' => 'successful_login', 'token' => JWTAuth::fromUser(Auth::user()), 'permissions' => $permissions, 'accountID' => $accountID, 'email' => Auth::user()->email]);
     }
 
     public function authenticate(Request $request)
@@ -58,10 +52,10 @@ class AuthenticationController extends Controller
         }
 
         $permissions = $this->buildPermissionsJson();
-        $accountID = Account::where('email', '=', $credentials['email'])->select('id')->first()['id'];
+        $accountID = Auth::user()->id;
 
         // if no errors are encountered we can return a JWT
-        return response()->json(['message' => 'successful_login', 'token' => $token, 'permissions' => $permissions, 'accountID' => $accountID]);
+        return response()->json(['message' => 'successful_login', 'token' => $token, 'permissions' => $permissions, 'accountID' => $accountID, 'email' => Auth::user()->email]);
     }
 
     public function token()
