@@ -3,17 +3,29 @@
 
 	angular.module('editAcct')
 		.controller('editAcctCtrl', function ($scope, $state, ajax) {
+			if($location.search()['token']) {
+				console.log("Got token")
+				ajax.loginWithToken($location.search()['token'])
+				ajax.serviceCall("Getting login info", 'get', '/api/login').then(function(resData) {
+					loginStorage.storeCreds(resData.data.email, resData.data.accountID)
+					$state.go('dashboard.home')
+				}, function(resData) {
+					$scope.showError = true
+					$scope.errorMessage = "Your token doesn't seem to work."
+				})
+				return
+			}
 			$scope.showError = false
 			$scope.showChangeMessage = false
 			$scope.errorMessage = ""
 			$scope.account = {}
 
-                        ajax.serviceCall('Loading...', 'get', '/api/receiveUpdates').then(
-                                function(resData) {
-                                        //Need to convert to boolean so do this
-                                        $scope.account.receiveUpdates = resData.data.receiveUpdates ? true : false
-                                },
-                                function(resData){})
+			ajax.serviceCall('Loading...', 'get', '/api/receiveUpdates').then(
+				function(resData) {
+					//Need to convert to boolean so do this
+					$scope.account.receiveUpdates = resData.data.receiveUpdates ? true : false
+				},
+				function(resData){})
 
 			$scope.saveAccountData = function(account) {
 

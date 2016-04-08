@@ -185,7 +185,7 @@ class Events extends Controller {
         Log::info("Dispatching event update for " . sizeof($recipients) . " recipients");
 
         $this->dispatch(new SendUpdateEmail("Event Updated", "update-notification",
-                          ['typestr' => 'event', 'name' => $event->eventName,
+                          ['typestr' => 'event', 'name' => $event->eventName . " for conference " . $event->conference->conferenceName,
                            'link' => config('app.url') . '/dashboard/' . $event->conferenceID . '/events'],
                           $recipients));
 
