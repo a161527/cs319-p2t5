@@ -18,6 +18,7 @@
 				scope: {
 					validation: '=',
 					model: '=',
+					modelOptions: '=',
 					identifier: '@',
 					inpType: '@',
 					placeholder: '@',
@@ -28,7 +29,7 @@
 						"validation.{{identifier}}.$dirty}'>" +
 						"<label for='{{identifier}}'><div ng-transclude></div></label>" +
 
-						"<input type='{{inpType}}' ng-model-options='{updateOn:" + '"blur"' + "}'" + 
+						"<input type='{{inpType}}' ng-model-options='" + 'modelOptions || {debounce: {default : 500}}\'' + 
 							"ng-model='model'" + 
 							"class='form-control'" + 
 							"id='{{identifier}}'" + 

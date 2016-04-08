@@ -7,11 +7,17 @@
 			$scope.credentials = {}
 			$scope.errorMessage = ''
 			$scope.showError = false
+			$scope.doResetInstead = false
 
-			$scope.login = function(fieldsFilled) {
+			$scope.login = function() {
 				$scope.showError = false
 
-				if (fieldsFilled) {
+				console.log("running login")
+
+				console.log($scope.loginForm.email.$valid)
+				console.log($scope.loginForm.password.$valid)
+
+				if ($scope.loginForm.$valid) {
 
 					ajax.login($scope.credentials).then(function(resData) {
 
@@ -29,6 +35,24 @@
 					angular.forEach($scope.loginForm.$error.required, function(field) {
 						field.$setDirty()
 					})
+				}
+			}
+
+			$scope.resetPassword = function() {
+				$scope.showError = false
+				if($scope.loginForm.email.$valid) {
+					var route = 'api/resetPassword'
+					var obj = {}
+					obj['email'] = $scope.credentials.email
+					ajax.serviceCall('Requesting Reset...', 'post', route, obj).then(function(resData) {
+						$scope.showResetMessage = true
+					}, function(resData) {
+						$scope.showError = true
+						$scope.errorMessage = "Password reset request failed."
+					})
+				} else {
+					$scope.showError = true
+					$scope.errorMessage = "A valid email is required for password reset."
 				}
 			}
 

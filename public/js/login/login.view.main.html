@@ -13,21 +13,26 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<!--Need to block HTML5 validation so it does not conflict with angular-->
-						<form name='loginForm' ng-submit='login(loginForm.$valid)' novalidate>
+						<form name='loginForm' novalidate>
 							<div ng-model='credentials'>
 
 								<input-with-validation validation='loginForm' model='credentials.email' identifier='email' inp-type='email' change-fn='removeMessage()'>Email</input-with-validation>
 
-								<input-with-validation validation='loginForm' model='credentials.password' identifier='password' inp-type='password' change-fn='removeMessage()'>Password</input-with-validation>
+								<input-with-validation validation='loginForm' model='credentials.password' identifier='password' inp-type='password' change-fn='removeMessage()' model-options='{debounce : {default:0}}'>Password</input-with-validation>
 
 							</div>
 
 							<error-message ng-show='showError'>{{errorMessage}}<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeMessage()'></span></error-message>
 
+							<div class="alert alert-info" ng-show="showResetMessage">
+								<button type="button" class="close" data-ng-click="switchBool('showResetMessage')" >×</button>
+								Password Reset Sent
+							</div>
 							<div class='form-group'>
 								<a ui-sref='createAccount.1' class='btn btn-default pull-left'>Create Account</a>
-								<!--Pass in loginForm.$valid to see if input fields are empty-->
-								<button class='btn btn-primary pull-right' id='loginButton' ng-click='login(loginForm.$valid)'>Log In</button>
+								<button class='btn btn-primary pull-right' id='loginButton' ng-click='login()'>Log In</button>
+								<br/>
+								<button class='btn btn-primary pull-right' id='passwordResetButton' ng-click="resetPassword()">Reset Password</button>
 							</div>
 						</form>
 					</div>
