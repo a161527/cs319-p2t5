@@ -33,11 +33,14 @@ class ResetPassword extends Job implements ShouldQueue
     public function handle()
     {
         $token = JWTAuth::fromUser($this->account);
+        Log::info("Generated token: " . $token);
         $link = config('app.url') . "?token={$token}";
 
         Mail::send('email-reset', ['link' => $link], function($msg) {
             $msg->to($this->account->email);
         });
+
+        JWTAuth::manager()->decode(new \Tymon\JWTAuth\Token($token));
 
         Log::info("Sent password reset to {$this->account->email}");
     }

@@ -27,8 +27,6 @@ class AuthenticationController extends Controller
         // the user from retrieving their token if they don't already have it
 
         $this->middleware('jwt.auth.rejection', ['except' => ['authenticate', 'token', 'resetPassword']]);
-        // provides an authorization header with each response
-        $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token', 'resetPassword']]);
     }
 
     public function index(Request $request)

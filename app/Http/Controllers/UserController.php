@@ -16,11 +16,11 @@ use Auth;
 
 class UserController extends Controller
 {
-     public function __construct() 
+     public function __construct()
      {
         $this->middleware('jwt.auth.rejection');
      }
-    
+
     /*
      * Get a validator for an incoming registration request.
      */
@@ -71,7 +71,7 @@ class UserController extends Controller
     // TODO: isOwner() and isAdmin(), to set permission/role filters on managing dependents
     //
 
-    /* 
+    /*
      * GET api/accounts/{id}/dependents
      * - list all dependents
      */
@@ -97,7 +97,7 @@ class UserController extends Controller
     {
         $dependents = $req->all();
         try
-        {   
+        {
             DB::beginTransaction();
             foreach ($dependents as $d)
             {
@@ -131,7 +131,7 @@ class UserController extends Controller
                     ->first();
         if (!$user)
             return response()->json(['message' => 'user_does_not_exist'], 422);
-        else 
+        else
         {
             $validator = $this->dependentEditValidator($changes);
             if ($validator->passes())
