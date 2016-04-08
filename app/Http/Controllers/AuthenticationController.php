@@ -71,6 +71,10 @@ class AuthenticationController extends Controller
         return response()->json(['message' => 'account_updated']);
     }
 
+    public function receiveUpdates() {
+        return response()->json(['receiveUpdates' => Auth::user()->receiveUpdates]);
+    }
+
     public function token()
     {
         $token = JWTAuth::getToken();

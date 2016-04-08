@@ -6,7 +6,14 @@
 			$scope.showError = false
 			$scope.showChangeMessage = false
 			$scope.errorMessage = ""
-			$scope.editAcct = {}
+			$scope.account = {}
+
+                        ajax.serviceCall('Loading...', 'get', '/api/receiveUpdates').then(
+                                function(resData) {
+                                        //Need to convert to boolean so do this
+                                        $scope.account.receiveUpdates = resData.data.receiveUpdates ? true : false
+                                },
+                                function(resData){})
 
 			$scope.saveAccountData = function(account) {
 
