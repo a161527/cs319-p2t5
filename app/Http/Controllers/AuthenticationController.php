@@ -15,7 +15,7 @@ use Auth;
 use Entrust;
 use App\Utility\PermissionNames;
 use Log;
-
+use Hash;
 
 class AuthenticationController extends Controller
 {
@@ -56,6 +56,19 @@ class AuthenticationController extends Controller
 
         // if no errors are encountered we can return a JWT
         return response()->json(['message' => 'successful_login', 'token' => $token, 'permissions' => $permissions, 'accountID' => $accountID, 'email' => Auth::user()->email]);
+    }
+
+    public function editAccount(Request $req) {
+        $user = Auth::user();
+        if ($req->has('password')) {
+            $user->password = Hash::make($req->input('password'));
+        }
+
+        if ($req->has('receiveUpdates')) {
+            $user->receiveUpdates = $req->input('receiveUpdates') ? true : false;
+        }
+        $user->save();
+        return response()->json(['message' => 'account_updated']);
     }
 
     public function token()

@@ -94,6 +94,7 @@ Route::group(['prefix' => 'api'], function()
     Route::resource('login', 'AuthenticationController', ['only' => ['index']]);
 
     Route::post('resetPassword', 'AuthenticationController@resetPassword');
+    Route::post('editAccount', 'AuthenticationController@editAccount');
 
     Route::get('permissions', 'AuthenticationController@permissionList');
 
