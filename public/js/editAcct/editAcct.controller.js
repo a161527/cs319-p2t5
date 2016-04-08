@@ -6,6 +6,7 @@
 			$scope.showError = false
 			$scope.showChangeMessage = false
 			$scope.errorMessage = ""
+			$scope.editAcct = {}
 
 			$scope.saveAccountData = function(account) {
 

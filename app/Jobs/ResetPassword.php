@@ -38,6 +38,7 @@ class ResetPassword extends Job implements ShouldQueue
 
         Mail::send('email-reset', ['link' => $link], function($msg) {
             $msg->to($this->account->email);
+            $msg->subject("Password Reset");
         });
 
         JWTAuth::manager()->decode(new \Tymon\JWTAuth\Token($token));
