@@ -25,6 +25,11 @@
 				loginStorage.logout()
 				$state.go('login')
 			}
+
+			$scope.goEditAcct = function() {
+                                console.log("Go to edit")
+				$state.go('editAcct')
+			}
 		})
 
 })()

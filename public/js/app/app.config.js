@@ -14,6 +14,12 @@
 					controller: 'loginCtrl'
 				})
 
+				.state('dashboard.editAcct', {
+					url: '/edit',
+					templateUrl: 'js/editAcct/editAcct.view.html',
+					controller: 'editAcctCtrl'
+				})
+
 				.state('createAccount', {
 					url: '/create',
 					abstract: true,

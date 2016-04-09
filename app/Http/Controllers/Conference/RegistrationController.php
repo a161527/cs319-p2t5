@@ -44,6 +44,7 @@ class RegistrationController extends Controller
      * Registers a group of attendees for a conference.
      */
     private function registerAttendees($confID, $users, $needsTransport, $needsAccommodation, $flight) {
+        Log::info("Registering " . sizeof($users) . " attendees for conference {$confID}.");
         $registryIDs = [];
         foreach ($users as $attendee) {
             $newRegistryID = $this->addConferenceRegistration($confID, $attendee, $needsTransport, $needsAccommodation, $flight);
@@ -92,6 +93,7 @@ class RegistrationController extends Controller
 
             //If the request explicitly doesn't have a flight, just register attendees without one
             if (isset($req['hasFlight'])) {
+                Log::debug("Attendees being registered without a flight.");
                 if (!$req['hasFlight']) {
                    return $this->registerAttendees($conferenceID, $attendees, $needsTransport, $needsAccommodation, null);
                 }
@@ -114,6 +116,7 @@ class RegistrationController extends Controller
             if(sizeof($flights) >= 1) {
                 foreach($flights as $row) {
                     if ($row->arrivalTime == $arrivalTime && $row->airport == $airport) {
+                        Log::info("Attendees using {$row->airline} flight {$row->flightNumber} being registered using existing flight");
                         return $this->registerAttendees($conferenceID, $attendees, $needsTransport, $needsAccommodation, $row->id);
                     }
                 }
@@ -130,6 +133,8 @@ class RegistrationController extends Controller
                 $flight->isChecked = false;
 
                 $flight->save();
+
+                Log::info("Attendees using {$flight->airline} flight {$flight->flightNumber} being registered using new flight");
                 return $this->registerAttendees($conferenceID, $attendees, $needsTransport, $needsAccommodation, $flight->id);
             }
         });
@@ -161,6 +166,8 @@ class RegistrationController extends Controller
         foreach ($req->all() as $request) {
             $this->validateRegistrationRequest($request);
         }
+        Log::debug("Got " . sizeof($req->all()) . " registration requests, all valid");
+
         foreach ($req->all() as $request) {
             $data[] = $this->processRegistration($request, $conferenceID, $user->id);
         }
@@ -170,6 +177,7 @@ class RegistrationController extends Controller
         //return a 200 status code.
         foreach ($data as $d) {
             if ($d["code"] != 200) {
+                Log::info("Had a failed registration request: " . $d["message"]);
                 return response()->json($data, $d["code"]);
             }
         }
@@ -211,9 +219,12 @@ class RegistrationController extends Controller
                 $flight->isChecked = true;
                 $flight->save();
             }
+
+            Log::info("Registration request {$requestID} of conference {$conferenceID} approved.");
             return true;
         });
         if ($success) {
+            Log::debug("Launching flight aggregation job");
             $this->dispatch(new RegistrationFlightAggregator($requestID));
             return response("", 200);
         } else {
@@ -237,6 +248,8 @@ class RegistrationController extends Controller
             }
 
             $registration->delete();
+
+            Log::info("Registration request {$registrationID} of conference {$conferenceID} removed.");
             return response()->json(["message" => "request_removed"]);
         });
     }
@@ -300,7 +313,7 @@ class RegistrationController extends Controller
             $query->where("approved", true);
         }
 
-        Log::info("Building final registration request data");
+        Log::info("Building final registration request list data");
         return array_map(function($uc) { $uc['hasFlight'] = isset($uc['flightID']); return $uc;},$query->get()->toArray());
     }
 }

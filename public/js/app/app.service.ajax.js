@@ -24,6 +24,10 @@
 
 			}
 
+			this.loginWithToken = function(token)  {
+				$auth.setToken(token)
+			}
+
 			/*
 			@Params:
 				loadMessage: string - message to display when loading

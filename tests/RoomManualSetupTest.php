@@ -13,9 +13,9 @@ class RoomManualSetupTest extends TestCase
         $this->assertResponseOK();
         $decoded = json_decode($this->response->getContent());
         $this->assertTrue(
-            isset($decoded->id),
+            isset($decoded[0]->id),
             "ID field not set");
-        return $decoded->id;
+        return $decoded[0]->id;
     }
 
     public function testCanGetSeededResidences(){
@@ -35,7 +35,7 @@ class RoomManualSetupTest extends TestCase
         $this->json(
             'POST',
             '/api/conferences/1/residences',
-            $data);
+            [$data]);
 
         $id = $this->assertGetResponseID();
 
@@ -53,9 +53,10 @@ class RoomManualSetupTest extends TestCase
             ]
         ];
 
-        $this->json('POST', '/api/conferences/1/residences/1/roomSets', $data);
+        $this->json('POST', '/api/conferences/1/residences/1/roomSets', [$data]);
+        echo $this->response;
         $id = $this->assertGetResponseID();
-        $data['type']['id'] = json_decode($this->response->getContent())->typeID;
+        $data['type']['id'] = json_decode($this->response->getContent())[0]->typeID;
 
         $this->get("/api/conferences/1/residences/1/roomSets")
              ->seeJson($data);

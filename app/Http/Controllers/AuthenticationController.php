@@ -10,10 +10,12 @@ use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Models\Account;
 use App\Models\Permission;
+use App\Jobs\ResetPassword;
 use Auth;
 use Entrust;
 use App\Utility\PermissionNames;
-
+use Log;
+use Hash;
 
 class AuthenticationController extends Controller
 {
@@ -24,24 +26,15 @@ class AuthenticationController extends Controller
         // except for the authenticate method. We don't want to prevent
         // the user from retrieving their token if they don't already have it
 
-        $this->middleware('jwt.auth.rejection', ['except' => ['authenticate', 'token']]);
-        // provides an authorization header with each response
-        $this->middleware('jwt.refresh', ['except' => ['authenticate', 'token']]);
-
+        $this->middleware('jwt.auth.rejection', ['except' => ['authenticate', 'token', 'resetPassword']]);
     }
 
     public function index(Request $request)
     {
-        // token must be submitted with request in order for this to no throw error "token_not_provided"
+        $permissions = $this->buildPermissionsJson();
+        $accountID = Auth::user()->id;
 
-        // returns the logged-in user
-        // must call JWTAuth::authenticate() and then you can use Laravel's Auth::user()->id
-        // source: https://github.com/tymondesigns/jwt-auth/issues/125
-
-        $account = JWTAuth::parseToken()->authenticate();
-        $accountID = $account->id;
-
-        return $account;
+        return response()->json(['message' => 'successful_login', 'token' => JWTAuth::fromUser(Auth::user()), 'permissions' => $permissions, 'accountID' => $accountID, 'email' => Auth::user()->email]);
     }
 
     public function authenticate(Request $request)
@@ -59,10 +52,27 @@ class AuthenticationController extends Controller
         }
 
         $permissions = $this->buildPermissionsJson();
-        $accountID = Account::where('email', '=', $credentials['email'])->select('id')->first()['id'];
+        $accountID = Auth::user()->id;
 
         // if no errors are encountered we can return a JWT
-        return response()->json(['message' => 'successful_login', 'token' => $token, 'permissions' => $permissions, 'accountID' => $accountID]);
+        return response()->json(['message' => 'successful_login', 'token' => $token, 'permissions' => $permissions, 'accountID' => $accountID, 'email' => Auth::user()->email]);
+    }
+
+    public function editAccount(Request $req) {
+        $user = Auth::user();
+        if ($req->has('password')) {
+            $user->password = Hash::make($req->input('password'));
+        }
+
+        if ($req->has('receiveUpdates')) {
+            $user->receiveUpdates = $req->input('receiveUpdates') ? true : false;
+        }
+        $user->save();
+        return response()->json(['message' => 'account_updated']);
+    }
+
+    public function receiveUpdates() {
+        return response()->json(['receiveUpdates' => Auth::user()->receiveUpdates]);
     }
 
     public function token()
@@ -81,6 +91,21 @@ class AuthenticationController extends Controller
             return response()->json(['message' => 'token_invalid'], 401);
         }
         return response()->json(['token'=>$token]);
+    }
+
+    public function resetPassword(Request $request) {
+        if (!$request->has('email')) {
+            return response()->json(['message' => 'no_email_given'], 400);
+        }
+
+        $account = Account::where('email', $request->input('email'))->get()->first();
+        if (!isset($account)) {
+            return response()->json(['message' => 'account_not_found'], 400);
+        }
+
+        $this->dispatch(new ResetPassword($account));
+
+        return ["message" => "email_pending"];
     }
 
     // Add the token to the blacklist

@@ -28,6 +28,7 @@
 	angular.module('inventoryView', [])
 	angular.module('transportationView', [])
 	angular.module('reportView', [])
+	angular.module('editAcct', [])
 
 
 	angular.module('app', [
@@ -62,6 +63,7 @@
 		'roomSetView',
 		'inventoryView',
 		'transportationView',
-		'reportView'
+		'reportView',
+		'editAcct'
 	])
 })()

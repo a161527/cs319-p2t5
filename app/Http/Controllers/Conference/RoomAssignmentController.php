@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Entrust;
 use Auth;
+use Log;
 
 use App\UserConference;
 use App\UserRoom;
@@ -59,6 +60,7 @@ class RoomAssignmentController extends Controller
 
         foreach ($currentUsers as $userRoom) {
             if ($userRoom->roomSetID != $roomSet->id) {
+                Log::info("Got a room assignment request for {$roomName} which didn't match existing room");
                 return response()->json(["message"=>'name_not_in_set'], 400);
             }
         }
@@ -80,6 +82,8 @@ class RoomAssignmentController extends Controller
         }
 
         UserRoom::insert($roomAssignments);
+
+        Log::info("Assigned " . sizeof($registrationIDs) . " users to room {$roomName} of conference {$confId}");
 
         return UserRoom::whereIn('registrationID', $registrationIDs)->where('roomSetID', $roomSet->id)->select('id', 'registrationID')->get();
     }
@@ -128,6 +132,8 @@ class RoomAssignmentController extends Controller
         }
 
         $assignment->delete();
+
+        Log::info("Removed room assignment for room {$assignment->roomName} in conference {$confId}.");
     }
 
     public function missingAssignments($confId) {

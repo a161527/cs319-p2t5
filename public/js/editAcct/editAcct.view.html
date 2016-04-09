@@ -1,0 +1,30 @@
+<div>
+	<div class='col-sm-3'>
+		<form name='accountData' novalidate>
+			<div ng-model='account'>
+				<label>New Password</label>
+				<br/>
+				<input
+					ng-model='account.password'
+					name='password'
+					type='password'
+					ng-model-options="{debounce:0}"/>
+				<br/>
+				<input class ='pull-left' type='checkbox' ng-model='account.receiveUpdates'>Receive Updates</input>
+			</div>
+			<button class='btn btn-success pull-right' ng-click='saveAccountData(account)'>Save</button>
+		</form>
+	</div>
+
+	<div class='col-sm-3'>
+		<error-message ng-show='showError'>{{errorMessage}}<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeMessage()'></span></error-message>
+
+		<div  ng-show="showChangeMessage">
+			<div class="alert alert-success">
+				<button type="button" class="close" ng-click="removeChangeMessage()" >×</button>
+				Account Data Changed
+			</div>
+		</div>
+	</div>
+
+</div>

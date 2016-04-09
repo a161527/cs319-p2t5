@@ -18,6 +18,8 @@ use App\Utility\PermissionNames;
 use App\Utility\RoleNames;
 use App\Utility\CheckDependents;
 use App\Utility\ConferenceRegistrationUtils;
+use Log;
+use App\Jobs\SendUpdateEmail;
 
 use App\Models\Permission;
 
@@ -171,6 +173,22 @@ class Events extends Controller {
         $event->conferenceID = $request->input('conferenceID');
         $event->save();
 
+        $recipientModels = UserEvent::where('eventID', $id)->with('user.account')->get();
+        $recipients=[];
+
+        foreach($recipientModels as $model) {
+            if($model->user->account->receiveUpdates) {
+                $recipients[] = $model->user->account->email;
+            }
+        }
+
+        Log::info("Dispatching event update for " . sizeof($recipients) . " recipients");
+
+        $this->dispatch(new SendUpdateEmail("Event Updated", "update-notification",
+                          ['typestr' => 'event', 'name' => $event->eventName . " for conference " . $event->conference->conferenceName,
+                           'link' => config('app.url') . '/dashboard/' . $event->conferenceID . '/events'],
+                          $recipients));
+
         return response()->json(['id' => $event->id]);
     }
 
@@ -273,7 +291,9 @@ class Events extends Controller {
     private function buildPermissionList($eventId) {
         $permissions = [];
         foreach (PermissionNames::AllEventPermissions($eventId) as $pname) {
+            Log::debug("Checking permission {$pname} for " . Auth::user()->email);
             if (Entrust::can($pname)) {
+                Log::debug("Permission enabled");
                 $permissions[] = PermissionNames::normalizePermissionName($pname);
             }
         }

@@ -19,7 +19,7 @@
                     <li class="dropdown">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{userName}}<span class="caret"></span></a>
                         <ul class="dropdown-menu navbar-dropdown">
-                            <li class="sidebar-pill"><a href="#/dashboard"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Edit Profile</a></li>
+                            <li class="sidebar-pill"><a href='' ng-click='showWidget("editAcct")'><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Edit Profile</a></li>
                             <li class="sidebar-pill"><a href='' ng-click='logout()'><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Log Out</a></li>
                         </ul>
                     </li>
@@ -56,7 +56,7 @@
                     <div class="collapse navbar-collapse" id="mobileNav">
                         <ul class="nav nav-pills nav-stacked nav-sidebar">
                             <li class="sidebar-pill">
-                                <a href="#/dashboard">
+                                <a href="" ng-click='showWidget("editAcct")'>
                                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
                                     Edit Profile
                                     <span class="pull-right">{{userName}}</span>

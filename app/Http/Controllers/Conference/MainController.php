@@ -18,6 +18,10 @@ use App\Utility\ConferenceRegistrationUtils;
 use App\Event;
 use App\Models\Permission;
 use Config;
+use Log;
+
+use App\UserConference;
+use App\Jobs\SendUpdateEmail;
 
 class MainController extends Controller
 {
@@ -99,6 +103,8 @@ class MainController extends Controller
     public function createNew(Request $req) {
         $this->validateConferenceJson($req);
 
+        Log::info("Creating new conference " . $req->input('name'));
+
         return DB::transaction(function () use ($req) {
             $conf = new Conference;
             $this->assignInputToConference($req, $conf);
@@ -120,6 +126,7 @@ class MainController extends Controller
         $conference = Conference::find($id);
 
         if (is_null($conference)) {
+            Log::debug("Got a request for non-existant conference ID " . $id);
             return response("No conference for id {$id}.", 404);
         }
 
@@ -155,6 +162,24 @@ class MainController extends Controller
         }
         $this->assignInputToConference($req, $conf);
         $conf->save();
+        Log::info("Conference info for " . $conf->conferenceName . " edited.");
+
+        $recipientModels = UserConference::where('conferenceID', $id)->with('user.account')->get();
+        $recipients=[];
+
+        foreach($recipientModels as $model) {
+            if($model->user->account->receiveUpdates) {
+                $recipients[] = $model->user->account->email;
+            } else {
+                Log::debug("Discarding {$model->user->account->email} as updates aren't enabled");
+            }
+        }
+
+        Log::info("Dispatching conference update for " . sizeof($recipients) . " recipients");
+
+        $this->dispatch(new SendUpdateEmail("Conference Updated", "update-notification",
+                          ['typestr' => 'conference', 'name' => $conf->conferenceName, 'link' => config('app.url') . '/dashboard/conferences/list'],
+                          $recipients));
         return '';
     }
 
@@ -165,7 +190,7 @@ class MainController extends Controller
         if (!Entrust::can(PermissionNames::ConferenceInfoEdit($id))) {
             return response("", 403);
         }
-        DB::transaction(function () use ($id) { 
+        DB::transaction(function () use ($id) {
             $events = Event::where('conferenceID', $id)->get();
 
             $pnames =
@@ -186,6 +211,8 @@ class MainController extends Controller
 
             Conference::destroy($id);
         });
+
+        Log::info("Conference with ID {$id} deleted");
 
         return '';
     }
