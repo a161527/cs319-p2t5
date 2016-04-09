@@ -26,7 +26,7 @@
 			ng-model='assignedRoles.value'
 			ng-disabled="disabled">
 
-			<ui-select-match placeholder="Select roles"><span uib-tooltip='This is a placeholder for description'>{{$item.displayName}} {{$item.forName}}</span></ui-select-match>
+			<ui-select-match placeholder="Select roles">{{$item.displayName}} {{$item.forName}}</ui-select-match>
 			<ui-select-choices repeat="role in availableRoles | filter:$select.search">
 				{{role.displayName}} {{role.forName}}
 			</ui-select-choices>
