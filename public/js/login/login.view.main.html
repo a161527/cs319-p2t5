@@ -25,7 +25,7 @@
 							<error-message ng-show='showError'>{{errorMessage}}<span class="glyphicon glyphicon-remove pull-right hand-cursor" ng-click='removeMessage()'></span></error-message>
 
 							<div class="alert alert-info" ng-show="showResetMessage">
-								<button type="button" class="close" data-ng-click="switchBool('showResetMessage')" >×</button>
+								<button type="button" class="close" ng-click="showResetMessage=false" >×</button>
 								Password Reset Sent
 							</div>
 							<div class='form-group'>
